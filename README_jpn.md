@@ -90,11 +90,11 @@ Xcode プロジェクトは `project.yml` から XcodeGen で生成します。�
 **A.R.M.O.R.**（Autonomous Radar & Multimodal Observation Range）は、独立したリポジトリで構成される周界警備システムです。各リポジトリには独自のバージョン、テスト、README があります。ファミリーは次のとおりです：
 
 * **[ARMOR-COMMON](https://github.com/JuanenRac/ARMOR-COMMON)** - メッセージ契約、検証ツール、適合ベクトル、生成された型
-* **[ARMOR-RADAR](https://github.com/JuanenRac/ARMOR-RADAR)** - 3 つのレーダーと独自の Web パネルを備えた ESP32-S3 フィールドノードのファームウェア
-* **[ARMOR-SOLAR](https://github.com/JuanenRac/ARMOR-SOLAR)** - 太陽光インバーターとバッテリーのプロトコル、およびゲートウェイノードのメッセージ
-* **[ARMOR-ELECTRICAL](https://github.com/JuanenRac/ARMOR-ELECTRICAL)** - 電気ノード：メーター、電力網の測定値メッセージ、切り替えルール
-* **[ARMOR-ALARM](https://github.com/JuanenRac/ARMOR-ALARM)** - 警報ノードと警報盤：ゾーン、警戒、遅延、サイレン、PIN。サーバーの有無を問いません
-* **[ARMOR-HMI](https://github.com/JuanenRac/ARMOR-HMI)** - タッチパネル：壁面スクリーンでのシステム状態、警戒と確認、音声アシスタントの拠点
+* **[ARMOR-NODE-RADAR](https://github.com/JuanenRac/ARMOR-NODE-RADAR)** - 3 つのレーダーと独自の Web パネルを備えた ESP32-S3 フィールドノードのファームウェア
+* **[ARMOR-NODE-SOLAR](https://github.com/JuanenRac/ARMOR-NODE-SOLAR)** - 太陽光インバーターとバッテリーのプロトコル、およびゲートウェイノードのメッセージ
+* **[ARMOR-NODE-ELECTRICAL](https://github.com/JuanenRac/ARMOR-NODE-ELECTRICAL)** - 電気ノード：メーター、電力網の測定値メッセージ、切り替えルール
+* **[ARMOR-NODE-ALARM](https://github.com/JuanenRac/ARMOR-NODE-ALARM)** - 警報ノードと警報盤：ゾーン、警戒、遅延、サイレン、PIN。サーバーの有無を問いません
+* **[ARMOR-NODE-HMI](https://github.com/JuanenRac/ARMOR-NODE-HMI)** - タッチパネル：壁面スクリーンでのシステム状態、警戒と確認、音声アシスタントの拠点
 * **[ARMOR-NETWORK](https://github.com/JuanenRac/ARMOR-NETWORK)** - ローカルネットワーク：デバイス、インターネット、変化
 * **[ARMOR-SERVER](https://github.com/JuanenRac/ARMOR-SERVER)** - 中央コーディネーター：テレメトリ、警報、デバイス、太陽光の測定値、カメラ
 * **[ARMOR-STUDIO](https://github.com/JuanenRac/ARMOR-STUDIO)** - Web コンソール：カメラ、レーダー、警報、太陽光発電、2D/3D サイトデザイナー

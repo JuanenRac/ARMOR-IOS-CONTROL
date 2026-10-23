@@ -90,11 +90,11 @@ Das Xcode-Projekt wird aus `project.yml` mit XcodeGen erzeugt. Wählen Sie ein S
 **A.R.M.O.R.** (Autonomous Radar & Multimodal Observation Range) ist ein Perimeter-Sicherheitssystem aus unabhängigen Repositories. Jedes hat eine eigene Version, eigene Tests und ein eigenes README; hier die Familie:
 
 * **[ARMOR-COMMON](https://github.com/JuanenRac/ARMOR-COMMON)** - Nachrichtenverträge, Validatoren, Konformitätsvektoren und generierte Typen
-* **[ARMOR-RADAR](https://github.com/JuanenRac/ARMOR-RADAR)** - Feldknoten-Firmware für ESP32-S3 mit drei Radaren und eigenem Web-Panel
-* **[ARMOR-SOLAR](https://github.com/JuanenRac/ARMOR-SOLAR)** - Protokolle für Solar-Wechselrichter und Batterien sowie die Nachrichten eines Gateway-Knotens
-* **[ARMOR-ELECTRICAL](https://github.com/JuanenRac/ARMOR-ELECTRICAL)** - Elektro-Knoten: Zähler, die Nachricht der Netzmesswerte und die Schaltregeln
-* **[ARMOR-ALARM](https://github.com/JuanenRac/ARMOR-ALARM)** - Alarmknoten und Zentrale: Zonen, Scharfschaltung, Verzögerungen, Sirene und PIN, mit oder ohne Server
-* **[ARMOR-HMI](https://github.com/JuanenRac/ARMOR-HMI)** - Touch-Panel: der Systemzustand auf einem Wandbildschirm, Scharfschalten und Quittieren, und das Zuhause des Sprachassistenten
+* **[ARMOR-NODE-RADAR](https://github.com/JuanenRac/ARMOR-NODE-RADAR)** - Feldknoten-Firmware für ESP32-S3 mit drei Radaren und eigenem Web-Panel
+* **[ARMOR-NODE-SOLAR](https://github.com/JuanenRac/ARMOR-NODE-SOLAR)** - Protokolle für Solar-Wechselrichter und Batterien sowie die Nachrichten eines Gateway-Knotens
+* **[ARMOR-NODE-ELECTRICAL](https://github.com/JuanenRac/ARMOR-NODE-ELECTRICAL)** - Elektro-Knoten: Zähler, die Nachricht der Netzmesswerte und die Schaltregeln
+* **[ARMOR-NODE-ALARM](https://github.com/JuanenRac/ARMOR-NODE-ALARM)** - Alarmknoten und Zentrale: Zonen, Scharfschaltung, Verzögerungen, Sirene und PIN, mit oder ohne Server
+* **[ARMOR-NODE-HMI](https://github.com/JuanenRac/ARMOR-NODE-HMI)** - Touch-Panel: der Systemzustand auf einem Wandbildschirm, Scharfschalten und Quittieren, und das Zuhause des Sprachassistenten
 * **[ARMOR-NETWORK](https://github.com/JuanenRac/ARMOR-NETWORK)** - Das lokale Netz: seine Geräte, das Internet und was sich ändert
 * **[ARMOR-SERVER](https://github.com/JuanenRac/ARMOR-SERVER)** - Zentraler Koordinator: Telemetrie, Alarme, Geräte, Solarwerte und Kameras
 * **[ARMOR-STUDIO](https://github.com/JuanenRac/ARMOR-STUDIO)** - Web-Konsole: Kameras, Radar, Alarme, Solarenergie und der 2D/3D-Standortdesigner

@@ -90,11 +90,11 @@ Xcode 工程由 `project.yml` 通过 XcodeGen 生成。请选择签名团队、�
 **A.R.M.O.R.**（Autonomous Radar & Multimodal Observation Range）是由独立仓库组成的周界安防系统。每个仓库都有自己的版本、测试和 README；家族如下：
 
 * **[ARMOR-COMMON](https://github.com/JuanenRac/ARMOR-COMMON)** - 消息契约、校验器、一致性向量和生成的类型
-* **[ARMOR-RADAR](https://github.com/JuanenRac/ARMOR-RADAR)** - 带三个雷达和自带网页面板的 ESP32-S3 现场节点固件
-* **[ARMOR-SOLAR](https://github.com/JuanenRac/ARMOR-SOLAR)** - 太阳能逆变器和电池协议以及网关节点的消息
-* **[ARMOR-ELECTRICAL](https://github.com/JuanenRac/ARMOR-ELECTRICAL)** - 电气节点：电表、电网读数消息和切换规则
-* **[ARMOR-ALARM](https://github.com/JuanenRac/ARMOR-ALARM)** - 报警节点与主机：防区、布防、延时、警笛和 PIN，有无服务器均可
-* **[ARMOR-HMI](https://github.com/JuanenRac/ARMOR-HMI)** - 触摸面板：墙面屏幕上的系统状态、布防与确认，以及语音助手的家
+* **[ARMOR-NODE-RADAR](https://github.com/JuanenRac/ARMOR-NODE-RADAR)** - 带三个雷达和自带网页面板的 ESP32-S3 现场节点固件
+* **[ARMOR-NODE-SOLAR](https://github.com/JuanenRac/ARMOR-NODE-SOLAR)** - 太阳能逆变器和电池协议以及网关节点的消息
+* **[ARMOR-NODE-ELECTRICAL](https://github.com/JuanenRac/ARMOR-NODE-ELECTRICAL)** - 电气节点：电表、电网读数消息和切换规则
+* **[ARMOR-NODE-ALARM](https://github.com/JuanenRac/ARMOR-NODE-ALARM)** - 报警节点与主机：防区、布防、延时、警笛和 PIN，有无服务器均可
+* **[ARMOR-NODE-HMI](https://github.com/JuanenRac/ARMOR-NODE-HMI)** - 触摸面板：墙面屏幕上的系统状态、布防与确认，以及语音助手的家
 * **[ARMOR-NETWORK](https://github.com/JuanenRac/ARMOR-NETWORK)** - 本地网络：其设备、互联网以及变化
 * **[ARMOR-SERVER](https://github.com/JuanenRac/ARMOR-SERVER)** - 中央协调器：遥测、警报、设备、太阳能读数和摄像头
 * **[ARMOR-STUDIO](https://github.com/JuanenRac/ARMOR-STUDIO)** - 网页控制台：摄像头、雷达、警报、太阳能和 2D/3D 现场设计器
