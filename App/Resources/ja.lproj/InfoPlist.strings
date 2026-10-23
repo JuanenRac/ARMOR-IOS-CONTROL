@@ -1,0 +1,3 @@
+"CFBundleDisplayName" = "A.R.M.O.R.";
+"NSFaceIDUsageDescription" = "警報を設定・解除・消音する前に、ご本人であることを確認します。";
+"NSLocalNetworkUsageDescription" = "ご自宅のネットワーク上の A.R.M.O.R. サーバーに接続します。";

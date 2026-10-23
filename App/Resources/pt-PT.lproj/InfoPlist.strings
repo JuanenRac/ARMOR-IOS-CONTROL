@@ -1,0 +1,3 @@
+"CFBundleDisplayName" = "A.R.M.O.R.";
+"NSFaceIDUsageDescription" = "Confirma que é você antes de armar, desarmar ou silenciar um alarme.";
+"NSLocalNetworkUsageDescription" = "Liga ao seu servidor A.R.M.O.R. na rede de casa.";

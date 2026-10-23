@@ -1,0 +1,3 @@
+"CFBundleDisplayName" = "A.R.M.O.R.";
+"NSFaceIDUsageDescription" = "Bestätigt, dass Sie es sind, bevor ein Alarm scharf geschaltet, deaktiviert oder stummgeschaltet wird.";
+"NSLocalNetworkUsageDescription" = "Verbindet mit Ihrem A.R.M.O.R.-Server im Heimnetz.";

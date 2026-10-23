@@ -1,0 +1,54 @@
+# ARMOR-IOS-CONTROL - the Xcode project, described for XcodeGen (https://github.com/yonaskolb/XcodeGen).
+# On a Mac:  brew install xcodegen && xcodegen generate && open ARMOR-IOS-CONTROL.xcodeproj
+# The rules of the app live in the Swift package of this folder (ArmorCore); the app target only holds the screens and what needs the phone (Keychain, Face ID, certificates, push).
+name: ARMOR-IOS-CONTROL
+options:
+  bundleIdPrefix: es.electrohobby3d
+  deploymentTarget:
+    iOS: "16.0"
+  developmentLanguage: es
+  createIntermediateGroups: true
+packages:
+  ArmorCore:
+    path: .
+  Firebase:
+    url: https://github.com/firebase/firebase-ios-sdk
+    from: 11.0.0
+targets:
+  ARMOR:
+    type: application
+    platform: iOS
+    sources:
+      - path: App
+    dependencies:
+      - package: ArmorCore
+        product: ArmorCore
+      - package: Firebase
+        product: FirebaseMessaging
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: A.R.M.O.R.
+        CFBundleShortVersionString: "0.0.1"
+        CFBundleVersion: "1"
+        CFBundleDevelopmentRegion: es
+        CFBundleLocalizations: [en, es, de, fr, it, ja, zh-Hans, pt-PT]
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait, UIInterfaceOrientationLandscapeLeft, UIInterfaceOrientationLandscapeRight]
+        UIBackgroundModes: [remote-notification]
+        NSFaceIDUsageDescription: Confirms that it is you before arming, disarming or silencing an alarm.
+        NSLocalNetworkUsageDescription: Reaches your A.R.M.O.R. server on your home network.
+        NSAppTransportSecurity:
+          # plain http is allowed only for addresses of the local network; the app itself refuses http to anything else
+          NSAllowsLocalNetworking: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: es.electrohobby3d.armor.ios
+        MARKETING_VERSION: "0.0.1"
+        CURRENT_PROJECT_VERSION: "1"
+        SWIFT_VERSION: "5.9"
+        TARGETED_DEVICE_FAMILY: "1,2"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+    scheme:
+      testTargets: []
