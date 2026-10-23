@@ -60,7 +60,7 @@ class FakeApi: ArmorApi, @unchecked Sendable {
     func commandDevice(_ origin: String, id: String, command: String, confirm: Bool) async throws { calls.append("device:\(id):\(command)") }
     func cameraViews(_ origin: String) async throws -> [CameraView] { [] }
     func cameraStatus(_ origin: String) async throws -> [CameraHealth] { [] }
-    func streamTicket(_ origin: String, cameraId: String) async throws -> String { origin + "/api/v1/cameras/\(cameraId)/stream?ticket=t" }
+    func streamTicket(_ origin: String, cameraId: String, quality: String) async throws -> String { origin + "/api/v1/cameras/\(cameraId)/stream?ticket=t" }
     func snapshot(_ origin: String, cameraId: String) async throws {}
     func ptz(_ origin: String, cameraId: String, command: String) async throws {}
     func voiceAvailable(_ origin: String) async throws -> Bool { true }

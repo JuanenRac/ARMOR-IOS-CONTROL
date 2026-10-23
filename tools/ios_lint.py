@@ -26,7 +26,7 @@ LITERAL = re.compile(r'"((?:[^"\\]|\\.)*)"')
 REQUIRED = (
     "Package.swift", "project.yml", "armor.project.json", "CHANGELOG.md", "LICENSE", ".gitignore",
     "Sources/ArmorCore/ArmorApi.swift", "Sources/ArmorCore/ArmorApiClient.swift", "Sources/ArmorCore/ArmorController.swift",
-    "Sources/ArmorCore/DeviceLock.swift", "Sources/ArmorCore/Tr.swift", "Sources/ArmorCore/Trust.swift", "Sources/ArmorCore/Reach.swift",
+    "Sources/ArmorCore/AlarmCodes.swift", "Sources/ArmorCore/Resources/alarm_codes.json", "Sources/ArmorCore/DeviceLock.swift", "Sources/ArmorCore/Tr.swift", "Sources/ArmorCore/Trust.swift", "Sources/ArmorCore/Reach.swift",
     "App/ArmorApp.swift", "App/AppModel.swift", "App/RootView.swift", "App/LoginView.swift", "App/HomeView.swift", "App/AlarmsView.swift",
     "App/CamerasView.swift", "App/AssistantView.swift", "App/MoreView.swift", "App/LockedView.swift", "App/HelpView.swift",
     "App/Platform/BiometricAuth.swift", "App/Platform/KeychainSecrets.swift", "App/Platform/TrustDelegate.swift", "App/Platform/Push.swift",
@@ -154,6 +154,27 @@ def check_languages(problems: list[str]) -> None:
                     problems.append(f"{path.name}:{number}: text outside tr(): {match.group(1)[:40]!r}")
 
 
+def check_alarm_codes(problems: list[str]) -> None:
+    """The table of alarm codes is the one of ARMOR-COMMON, with every code in the eight languages."""
+    path = ROOT / "Sources" / "ArmorCore" / "Resources" / "alarm_codes.json"
+    if not path.is_file():
+        return
+    table = json.loads(path.read_text(encoding="utf-8")).get("codes", {})
+    if len(table) < 58:
+        problems.append(f"the table of alarm codes has {len(table)} codes (58 or more expected)")
+    for code, texts in table.items():
+        for language in ("en", "es", "de", "fr", "it", "ja", "zh", "pt"):
+            if not str(texts.get(language, "")).strip():
+                problems.append(f"alarm code {code} has no text in {language}")
+    shared = ROOT.parent / "ARMOR-COMMON" / "src" / "armor_common" / "alarm_codes.json"
+    if shared.is_file() and normalised(shared) != normalised(path):
+        problems.append("the table of alarm codes differs from the one in ARMOR-COMMON")
+
+
+def normalised(path: Path) -> str:
+    return path.read_text(encoding="utf-8").replace(chr(13) + chr(10), chr(10))
+
+
 def server_paths_of_swift() -> set[str]:
     paths: set[str] = set()
     source = (ROOT / "Sources/ArmorCore/ArmorApiClient.swift").read_text(encoding="utf-8")
@@ -210,6 +231,7 @@ def main() -> int:
     check_structure(problems)
     check_languages(problems)
     check_contract(problems)
+    check_alarm_codes(problems)
     check_secrets(problems)
     check_public_text(problems)
     if problems:

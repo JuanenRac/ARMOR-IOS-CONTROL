@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-110 -110 220 220" role="img" aria-label="ARMOR-IOS-CONTROL">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%"><stop stop-color="#07090C"/><stop offset="1" stop-color="#12161C"/></linearGradient>
+    <filter id="g"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect x="-110" y="-110" width="220" height="220" rx="36" fill="url(#bg)"/>
+  <g transform="scale(0.95)" filter="url(#g)" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke="#00E5FF" stroke-width="4">
+    <path d="M0,-84 L66,-58 V4 C66,48 34,72 0,88 C-34,72 -66,48 -66,4 V-58 Z"/>
+    <g transform="scale(.78) translate(0 4)" stroke-width="4">
+    <rect x="-24" y="-46" width="48" height="90" rx="12"/><rect x="-9" y="-40" width="18" height="6" rx="3" stroke-width="2"/>
+    <circle r="6" cy="-4" stroke-width="2" opacity=".6"/><circle r="15" cy="-4" stroke-width="2" opacity=".6"/><path d="M0,-4 L11,-15" stroke="#FFB020" stroke-width="3"/>
+    <path d="M-8,36 h16" stroke="#00E5FF" stroke-width="3"/>
+    </g>
+  </g>
+</svg>

@@ -108,8 +108,9 @@ public final class ArmorApiClient: ArmorApi, @unchecked Sendable {
     public func snapshot(_ origin: String, cameraId: String) async throws { _ = try await send(origin, "/api/v1/cameras/\(Self.part(cameraId))/snapshot", "POST", nil, [201]) }
     public func ptz(_ origin: String, cameraId: String, command: String) async throws { _ = try await send(origin, "/api/v1/cameras/\(Self.part(cameraId))/ptz", "POST", ["command": command], [200]) }
 
-    public func streamTicket(_ origin: String, cameraId: String) async throws -> String {
-        let data = try await send(origin, "/api/v1/cameras/\(Self.part(cameraId))/stream-ticket", "POST", nil, [200, 201])
+    public func streamTicket(_ origin: String, cameraId: String, quality: String) async throws -> String {
+        let asked = CameraQuality.accepted.contains(quality) ? quality : "auto"
+        let data = try await send(origin, "/api/v1/cameras/\(Self.part(cameraId))/stream-ticket", "POST", ["quality": asked], [200, 201])
         let path = try Json.object(data).str("path")
         guard path.hasPrefix("/api/v1/cameras/") else { throw ArmorApiError(message: "The server gave no stream ticket", status: nil) }
         return Self.trimmed(origin) + path

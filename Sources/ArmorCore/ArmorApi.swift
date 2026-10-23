@@ -32,7 +32,8 @@ public protocol ArmorApi: Sendable {
     func cameraViews(_ origin: String) async throws -> [CameraView]
     func cameraStatus(_ origin: String) async throws -> [CameraHealth]
     /// A ticket to watch one camera; the address to open is the origin plus the path the server gives.
-    func streamTicket(_ origin: String, cameraId: String) async throws -> String
+    /// `quality` is what the app asks for explicitly: "low" (the lighter picture), "normal" or "auto" (the server decides by where the person came from).
+    func streamTicket(_ origin: String, cameraId: String, quality: String) async throws -> String
     func snapshot(_ origin: String, cameraId: String) async throws
     func ptz(_ origin: String, cameraId: String, command: String) async throws
     func voiceAvailable(_ origin: String) async throws -> Bool
@@ -53,4 +54,19 @@ public protocol ArmorApi: Sendable {
     /// Tells the server the token APNs gave this phone, so it can push alarms to it (a server with push off answers 409, which is not a failure of the app).
     func registerPush(_ origin: String, token: String) async throws
     func unregisterPush(_ origin: String, token: String) async throws
+}
+
+extension ArmorApi {
+    /// A ticket with the quality left to the server.
+    func streamTicket(_ origin: String, cameraId: String) async throws -> String {
+        try await streamTicket(origin, cameraId: cameraId, quality: "auto")
+    }
+}
+
+/// The picture quality the app asks the server for when it opens a camera.
+public enum CameraQuality {
+    public static let accepted: Set<String> = ["low", "normal", "auto"]
+
+    /// A tile of the grid asks for the lighter picture from outside the house and the normal one at home; the full view lets the server decide ("auto") because the person came to look closely.
+    public static func requested(away: Bool, tile: Bool) -> String { tile ? (away ? "low" : "normal") : "auto" }
 }

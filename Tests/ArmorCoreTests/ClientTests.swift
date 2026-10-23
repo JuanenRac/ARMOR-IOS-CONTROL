@@ -103,6 +103,17 @@ final class ClientTests: XCTestCase {
         XCTAssertEqual(url, origin + "/api/v1/cameras/cam%201/stream?ticket=t")
         do { _ = try await api.streamTicket(origin, cameraId: "evil"); XCTFail("accepted a foreign path") } catch {}
     }
+    func testStreamTicketAsksForTheQualityThatWasChosenAndAnUnknownOneBecomesAuto() async throws {
+        StubProtocol.routes["POST /api/v1/cameras/cam 1/stream-ticket"] = (200, #"{"path":"/api/v1/cameras/cam%201/stream?ticket=t"}"#)
+        _ = try await api.streamTicket(origin, cameraId: "cam 1", quality: "low")
+        _ = try await api.streamTicket(origin, cameraId: "cam 1")
+        _ = try await api.streamTicket(origin, cameraId: "cam 1", quality: "ultra")
+        let asked = try StubProtocol.bodies.map { try Json.object(Data($0.utf8)).str("quality") }
+        XCTAssertEqual(asked, ["low", "auto", "auto"])
+        XCTAssertEqual(CameraQuality.requested(away: true, tile: true), "low")
+        XCTAssertEqual(CameraQuality.requested(away: false, tile: true), "normal")
+        XCTAssertEqual(CameraQuality.requested(away: true, tile: false), "auto")
+    }
     func testPathPiecesAreEscaped() {
         XCTAssertEqual(ArmorApiClient.part("cam 1"), "cam%201")
         XCTAssertEqual(ArmorApiClient.part("a/b"), "a%2Fb")

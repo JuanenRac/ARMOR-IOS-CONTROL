@@ -83,7 +83,7 @@ struct CameraTile: View {
 
     private func update() {
         if live && camera.liveVideoAvailable, let origin = model.activeOrigin {
-            stream.start(api: model.controller.api, trust: model.trust, origin: origin, cameraId: camera.id)
+            stream.start(api: model.controller.api, trust: model.trust, origin: origin, cameraId: camera.id, quality: CameraQuality.requested(away: model.place == .away, tile: true))
         } else { stream.stop() }
     }
 }
@@ -182,14 +182,14 @@ final class MjpegStream: ObservableObject {
     private var loader: MjpegLoader?
     private var runningFor: String?
 
-    func start(api: ArmorApi, trust: TrustDelegate, origin: String, cameraId: String) {
+    func start(api: ArmorApi, trust: TrustDelegate, origin: String, cameraId: String, quality: String = "auto") {
         if runningFor == cameraId, task != nil { return }
         stop()
         runningFor = cameraId
         task = Task { [weak self] in
             var backoff = Backoff()
             while !Task.isCancelled {
-                if let address = try? await api.streamTicket(origin, cameraId: cameraId), let url = URL(string: address) {
+                if let address = try? await api.streamTicket(origin, cameraId: cameraId, quality: quality), let url = URL(string: address) {
                     await self?.run(url: url, trust: trust, backoff: &backoff)
                 }
                 if Task.isCancelled { break }

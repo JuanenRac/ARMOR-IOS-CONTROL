@@ -57,7 +57,9 @@ public enum AlarmText {
         "duress_disarm": "El sistema se desarmó con el PIN de coacción: puede que alguien esté siendo obligado",
     ]
 
-    public static func text(_ code: String, _ translator: Translator) -> String {
+    /// The sentence of an alarm code: from the table every client shares (in the language of the app) and, for a code that table lacks, from the phrases above; an unknown code is shown as it comes.
+    public static func text(_ code: String, _ translator: Translator, table: [String: [String: String]] = AlarmCodes.shared) -> String {
+        if let texts = table[code], let said = texts[translator.language] ?? texts["en"] { return said }
         guard let phrase = phrases[code] else { return code }
         return translator.tr(phrase)
     }
