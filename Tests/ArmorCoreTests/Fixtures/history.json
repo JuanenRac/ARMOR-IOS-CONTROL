@@ -1,0 +1,67 @@
+{
+  "events": [
+    {
+      "type": "alarm",
+      "alarm_id": "alm-00002",
+      "state": "raised",
+      "severity": "warning",
+      "source": "simulator-1",
+      "source_type": "node",
+      "code": "node_down",
+      "id": 26,
+      "at": "2030-01-01T00:00:00.000Z"
+    },
+    {
+      "type": "node",
+      "node_id": "simulator-1",
+      "from": "online",
+      "to": "stale",
+      "id": 24,
+      "at": "2030-01-01T00:00:00.000Z"
+    },
+    {
+      "type": "alarm",
+      "alarm_id": "alm-00001",
+      "state": "raised",
+      "severity": "high",
+      "source": "simulator-1",
+      "source_type": "node",
+      "code": "intrusion",
+      "id": 22,
+      "at": "2030-01-01T00:00:00.000Z"
+    },
+    {
+      "type": "alert",
+      "node_id": "simulator-1",
+      "from": "review",
+      "to": "high",
+      "targets": 2,
+      "id": 21,
+      "at": "2030-01-01T00:00:00.000Z"
+    },
+    {
+      "type": "alert",
+      "node_id": "simulator-1",
+      "from": "normal",
+      "to": "review",
+      "targets": 2,
+      "id": 20,
+      "at": "2030-01-01T00:00:00.000Z"
+    },
+    {
+      "type": "node",
+      "node_id": "simulator-1",
+      "from": null,
+      "to": "online",
+      "id": 18,
+      "at": "2030-01-01T00:00:00.000Z"
+    },
+    {
+      "type": "mode",
+      "mode": "armed",
+      "id": 16,
+      "at": "2030-01-01T00:00:00.000Z"
+    }
+  ],
+  "next_before": 16
+}

@@ -1,0 +1,35 @@
+{
+  "mode": "armed",
+  "revision": 18,
+  "nodes": {
+    "simulator-1": {
+      "node_id": "simulator-1",
+      "online": false,
+      "timestamp_ms": 1893456009000,
+      "lux": 5639.89,
+      "target_count": 2,
+      "targets": [
+        {
+          "sensor_id": 2,
+          "track_id": 1,
+          "x_mm": -200,
+          "y_mm": 2201,
+          "speed_mm_s": 900,
+          "counted": true
+        },
+        {
+          "sensor_id": 2,
+          "track_id": 2,
+          "x_mm": 200,
+          "y_mm": 2370,
+          "speed_mm_s": 900,
+          "counted": true
+        }
+      ],
+      "alert_level": "high",
+      "stale": true,
+      "panel": null
+    }
+  },
+  "updated_at": "2030-01-01T00:00:00.000Z"
+}

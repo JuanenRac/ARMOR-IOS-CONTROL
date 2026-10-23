@@ -1,0 +1,27 @@
+{
+  "active": [
+    {
+      "id": "alm-00002",
+      "key": "node:simulator-1:down",
+      "source": {
+        "type": "node",
+        "id": "simulator-1"
+      },
+      "severity": "warning",
+      "code": "node_down",
+      "raised_at": "2030-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "alm-00001",
+      "key": "node:simulator-1:intrusion",
+      "source": {
+        "type": "node",
+        "id": "simulator-1"
+      },
+      "severity": "high",
+      "code": "intrusion",
+      "raised_at": "2030-01-01T00:00:00.000Z"
+    }
+  ],
+  "recent": []
+}
