@@ -1,0 +1,24 @@
+# Changelog
+
+All notable changes to this project are documented here.
+
+## [Unreleased]
+
+## [0.0.1] - The iPhone client of ARMOR-SERVER
+
+- **A SwiftUI app for the iPhone** with the same job as the Android one: sign in to the server of the house, see whether the system is armed, arm and disarm it, confirm alarms, command the alarm panels and watch the cameras. It speaks the same HTTP contract as the Android client and Studio, and nothing else.
+- **The rules live in a Swift package (`ArmorCore`) with no UIKit or SwiftUI in it**, so they are tested without a phone and on Linux: the HTTP client, the models and their tolerant parsing, the choice of address, the lock of the phone, the vault of the session, the trust in the certificate, the alarm policy, the use cases (`ArmorController`) and the cutting of a live MJPEG stream. 98 unit tests, run with `swift test`.
+- **Two addresses, at home and away:** the private address on the home Wi-Fi, the one for away from home (a name that follows the house, or the VPN) on mobile data; if the chosen one does not answer the other is tried, and the message says exactly what failed ("home cannot be reached", a changed certificate, no network).
+- **Plain HTTP only to the local network:** a host that merely starts like a private address, a leading zero or a public address is refused, and the sign-in explains why and what to use instead (https, a dynamic DNS name).
+- **Trust in the certificate of the installation:** the key of the certificate authority (or of the server's own certificate) is remembered the first time, or paired by pasting the text of the QR code of Studio; if it changes the connection is refused and the person told. Several keys can be kept for a renewal.
+- **Lock with the phone (Face ID, Touch ID or the passcode):** asked before arming, disarming, silencing a siren, unlocking, ordering a device and confirming an assistant command (on by default only when the phone has Face ID or Touch ID), and, if the person turns it on, to open the app, with a time away after which it locks again. The server can raise it (`client.device_lock`) and never lower it, a phone with no passcode is never shut out, and the locked screen always offers "I cannot: sign in with the password".
+- **Optional, off by default and with a visible warning:** the saved session and the remembered sign-in readable only while the phone is unlocked; what is kept is left alone while the phone is locked and moved to the other class when the switch is turned, which is asked with the lock of the phone.
+- **Remember me** keeps the user and the password in the Keychain of the phone (this phone only, no backup, no iCloud); without the tick nothing of them is kept. The session cookie is kept the same way and renewed while in use.
+- **Second factor and proof of identity:** the code of the authenticator app (or a recovery code) when the account has it, and the new proof of identity the server asks for critical actions from outside the house.
+- **The assistant,** written commands to the voice service of the server with the confirmation bound to the person for arming and disarming, behind the lock.
+- **Alarms that reach the phone:** notices for a node reaching HIGH, a silent camera, a device or equipment alarm and, while armed, a node that goes offline or silent; the alarm of a duress PIN is never shown or announced. Each event is announced once whether it arrives by reading or by push (the id of the event is the key), and the first reading only records where the history stands. Pushes through Firebase are optional and need the Firebase file of the installation.
+- **Cameras:** a grid where only the pictures on screen run (six at most), a full view with a pad to move the camera and a snapshot, and a stream that is asked for again after 1, 2, 4... seconds (30 at most) when it drops. The picture comes from the server: the app never has a camera password or an RTSP address.
+- **Devices** with On / Off, a confirmation for a circuit or a critical device, and the status, history and preflight of arming ("what would be left blind or noisy").
+- **Eight languages** (English, Spanish, German, French, Italian, Japanese, Chinese and Portuguese of Portugal) for every text, the help, and the permission texts of the system; a check keeps every phrase of the sources in all the tables.
+- **Checks that need no Mac:** `tools/ios_lint.py` verifies the structure of the project, the eight tables against the phrases of the sources, that the app calls only paths the Android client calls (and that the OpenAPI of the common repository knows them), the permissions, and that no secret or camera address is in the sources.
+- **What it does not do:** it does not watch in the background (iOS does not allow a closed app to query the server), so alarms reach a closed app only through push; it has not been run on a device yet.

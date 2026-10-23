@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "ecosystem": "A.R.M.O.R.",
+  "name": "ARMOR-IOS-CONTROL",
+  "version": "0.0.1",
+  "role": "iPhone operator client",
+  "stack": "Swift / SwiftUI",
+  "technologies": [
+    "Swift",
+    "SwiftUI",
+    "Face ID / Touch ID",
+    "Keychain",
+    "MJPEG",
+    "HTTP Studio session"
+  ],
+  "deployment_target": "iOS 16+",
+  "maturity": "scaffolding",
+  "family": "Clients",
+  "parent": "ARMOR-SERVER",
+  "native_version": "0.0.1",
+  "build": "python tools/ios_lint.py && swift test",
+  "notes": "The iPhone client authenticates to ARMOR-SERVER with the user-facing Studio session, like the Android client. Camera credentials and RTSP URLs remain server-side. The rules of the app are in the ArmorCore Swift package, tested without a phone; the screens are built with Xcode (XcodeGen description in project.yml) and have not been run on a device yet."
+}

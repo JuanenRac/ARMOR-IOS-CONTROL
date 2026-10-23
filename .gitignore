@@ -1,0 +1,12 @@
+.build/
+.swiftpm/
+*.xcodeproj
+xcuserdata/
+DerivedData/
+build/
+__pycache__/
+*.pyc
+# the installation's own Firebase file: never in the repository
+GoogleService-Info.plist
+# made by XcodeGen from project.yml
+App/Info.plist

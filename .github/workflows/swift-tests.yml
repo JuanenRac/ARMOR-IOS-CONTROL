@@ -1,0 +1,47 @@
+# =============================================================================
+# A.R.M.O.R. - the Swift tests of ArmorCore, and (on demand) the build of the iPhone app
+# Copyright (C) 2026 JuanenRac (Electro Hobby 3D)
+# GPL-3.0-or-later - see LICENSE
+# =============================================================================
+# The baseline workflow (ci.yml) checks the manifest, the documents, the eight language tables and
+# the structure of the project on Linux. This one runs the unit tests of the Swift package, which
+# need a Swift toolchain, on macOS. Building the app itself needs Xcode and a project made by
+# XcodeGen; that job runs only when asked for (Run workflow), so it costs nothing on every push.
+name: Swift tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      build_app:
+        description: "Also build the iPhone app for the simulator"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  core-tests:
+    name: swift test (ArmorCore)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Run the unit tests
+        run: swift test
+
+  app-build:
+    name: Build the app for the simulator
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.build_app }}
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Make the Xcode project
+        run: |
+          brew install xcodegen
+          xcodegen generate
+      - name: Build
+        run: |
+          xcodebuild -project ARMOR-IOS-CONTROL.xcodeproj -scheme ARMOR -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO build
