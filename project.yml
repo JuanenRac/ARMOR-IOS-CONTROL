@@ -26,7 +26,7 @@ targets:
       - package: Firebase
         product: FirebaseMessaging
     info:
-      path: App/Info.plist
+      path: Generated/Info.plist
       properties:
         CFBundleDisplayName: A.R.M.O.R.
         CFBundleShortVersionString: "0.0.1"

@@ -128,13 +128,14 @@ struct CameraDetail: View {
 }
 
 struct PtzPad: View {
+    @EnvironmentObject var model: AppModel
     let action: (String) -> Void
     var body: some View {
         VStack(spacing: 6) {
-            key("chevron.up", "up", "Arriba")
-            HStack(spacing: 6) { key("chevron.left", "left", "Izquierda"); key("stop.fill", "stop", "Parar"); key("chevron.right", "right", "Derecha") }
-            key("chevron.down", "down", "Abajo")
-            HStack(spacing: 6) { key("minus.magnifyingglass", "zoomOut", "Alejar"); key("plus.magnifyingglass", "zoomIn", "Acercar") }
+            key("chevron.up", "up", model.tr("Arriba"))
+            HStack(spacing: 6) { key("chevron.left", "left", model.tr("Izquierda")); key("stop.fill", "stop", model.tr("Parar")); key("chevron.right", "right", model.tr("Derecha")) }
+            key("chevron.down", "down", model.tr("Abajo"))
+            HStack(spacing: 6) { key("minus.magnifyingglass", "zoomOut", model.tr("Alejar")); key("plus.magnifyingglass", "zoomIn", model.tr("Acercar")) }
         }
     }
     private func key(_ symbol: String, _ command: String, _ label: String) -> some View {
