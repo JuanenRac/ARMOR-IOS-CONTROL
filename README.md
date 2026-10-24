@@ -43,6 +43,22 @@
 | Stack | Swift / SwiftUI |
 | On real hardware | Not run on an iPhone yet; the rules are tested on Linux |
 
+## 🚦 Project status
+
+Each line is one part of this repository and the light says how far it is today. It is written from what the repository can show (tests, builds, runs), not from what is planned.
+
+🟢 Done and verified · 🟡 Works, with known limits · 🟠 Partly done or not verified yet · 🔴 Not done or not working
+
+| Area | State | What it means here |
+|---|---|---|
+| Software | 🟠 | The rules of the app are a Swift package (`ArmorCore`); the SwiftUI screens have not been built in Xcode. |
+| Tests | 🟡 | 103 unit tests pass with `swift test` on macOS or Linux, and `tools/ios_lint.py` checks the structure, the eight language tables and the contract without a Mac; no test runs on a device. |
+| Interface | 🟠 | The SwiftUI screens are written but have not been built in Xcode or run on an iPhone. |
+| Hardware | 🔴 | It has not run on an iPhone: the rules are tested on Linux only. |
+| Security | 🟠 | The lock of the phone, the session vault and the trust in the certificate are rules tested on Linux; Face ID, the Keychain and the certificate rules have not run on a device. |
+| Integration | 🟠 | Live camera and push through Firebase have not been tried; the server link and the parsing are tested against the shared contract. |
+| Documentation | 🟢 | Eight languages and the changelog are up to date. |
+
 ## 🎯 Overview
 
 * **Sign in with the server's own login:** the addresses of the house (at home and away), user and password; the password creates an HttpOnly session; it is kept only if you tick **Remember me** (in the Keychain of this phone, never backed up). A **viewer** role only looks: every button that changes something is off.

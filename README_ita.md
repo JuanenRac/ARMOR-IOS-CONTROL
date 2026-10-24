@@ -43,6 +43,22 @@
 | Tecnologia | Swift / SwiftUI |
 | Su hardware reale | Non ancora eseguito su un iPhone; le regole sono testate su Linux |
 
+## 🚦 Stato del progetto
+
+Ogni riga è una parte di questo repository e il semaforo dice a che punto è oggi. È scritta in base a ciò che il repository può mostrare (test, compilazioni, esecuzioni), non a ciò che è previsto.
+
+🟢 Fatto e verificato · 🟡 Funziona, con limiti noti · 🟠 Fatto a metà o non ancora verificato · 🔴 Non fatto o non funzionante
+
+| Area | Stato | Cosa significa qui |
+|---|---|---|
+| Software | 🟠 | Le regole dell'app sono un pacchetto Swift (`ArmorCore`); le schermate SwiftUI non sono state compilate in Xcode. |
+| Test | 🟡 | Superano 103 test unitari con `swift test` su macOS o Linux, e `tools/ios_lint.py` controlla la struttura, le tabelle delle otto lingue e il contratto senza un Mac; nessun test gira su un dispositivo. |
+| Interfaccia | 🟠 | Le schermate SwiftUI sono scritte ma non sono state compilate in Xcode né eseguite su un iPhone. |
+| Hardware | 🔴 | Non ha girato su un iPhone: le regole sono provate solo su Linux. |
+| Sicurezza | 🟠 | Il blocco del telefono, il deposito della sessione e la fiducia nel certificato sono regole provate su Linux; Face ID, il portachiavi e le regole del certificato non sono stati eseguiti su un dispositivo. |
+| Integrazione | 🟠 | La telecamera dal vivo e il push tramite Firebase non sono stati provati; il collegamento al server e il parsing sono provati contro il contratto condiviso. |
+| Documentazione | 🟢 | Otto lingue e il registro delle modifiche sono aggiornati. |
+
 ## 🎯 Panoramica
 
 * **Accedi con il login del server stesso:** gli indirizzi di casa (in casa e fuori), utente e password; la password crea una sessione HttpOnly; viene conservata solo se spunti **Ricordami** (nel portachiavi di questo telefono, mai nel backup). Il ruolo **viewer** guarda soltanto: ogni pulsante che cambia qualcosa è spento.

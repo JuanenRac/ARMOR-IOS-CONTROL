@@ -43,6 +43,22 @@
 | Technologie | Swift / SwiftUI |
 | Sur matériel réel | Pas encore exécuté sur un iPhone ; les règles sont testées sous Linux |
 
+## 🚦 État du projet
+
+Chaque ligne est une partie de ce dépôt et le feu dit où elle en est aujourd'hui. Elle est écrite d'après ce que le dépôt peut montrer (tests, compilations, exécutions), pas d'après ce qui est prévu.
+
+🟢 Fait et vérifié · 🟡 Fonctionne, avec des limites connues · 🟠 À moitié fait ou pas encore vérifié · 🔴 Pas fait ou ne fonctionne pas
+
+| Domaine | État | Ce que cela veut dire ici |
+|---|---|---|
+| Logiciel | 🟠 | Les règles de l'application forment un paquet Swift (`ArmorCore`) ; les écrans SwiftUI n'ont pas été compilés dans Xcode. |
+| Tests | 🟡 | 103 tests unitaires réussissent avec `swift test` sous macOS ou Linux, et `tools/ios_lint.py` vérifie la structure, les tables des huit langues et le contrat sans Mac ; aucun test ne tourne sur un appareil. |
+| Interface | 🟠 | Les écrans SwiftUI sont écrits mais n'ont été ni compilés dans Xcode ni exécutés sur un iPhone. |
+| Matériel | 🔴 | Elle n'a pas tourné sur un iPhone : les règles ne sont testées que sous Linux. |
+| Sécurité | 🟠 | Le verrouillage du téléphone, le coffre de la session et la confiance dans le certificat sont des règles testées sous Linux ; Face ID, le trousseau et les règles du certificat n'ont pas tourné sur un appareil. |
+| Intégration | 🟠 | La caméra en direct et le push via Firebase n'ont pas été essayés ; la liaison au serveur et l'analyse sont testées contre le contrat partagé. |
+| Documentation | 🟢 | Huit langues et le journal des modifications sont à jour. |
+
 ## 🎯 Présentation
 
 * **Connexion avec l'identifiant du serveur lui-même :** les adresses de la maison (à la maison et à l'extérieur), utilisateur et mot de passe ; le mot de passe crée une session HttpOnly ; il n'est conservé que si vous cochez **Se souvenir de moi** (dans le trousseau de ce téléphone, jamais sauvegardé). Le rôle **viewer** regarde seulement : tout bouton qui modifie quelque chose est désactivé.
