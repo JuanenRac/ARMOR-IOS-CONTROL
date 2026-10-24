@@ -234,33 +234,33 @@
       <text x="12" y="-2" font-family="'Inter', 'Segoe UI', 'Roboto', sans-serif" font-weight="700" font-size="11" fill="#00FF88" letter-spacing="2.5">A.R.M.O.R. · APP</text>
     </g>
 
-    <text x="0" y="142" font-family="'Inter', 'Segoe UI', 'Roboto', sans-serif" font-weight="900" font-size="36" fill="#FFFFFF" letter-spacing="2.5">ARMOR-IOS-CONTROL</text>
+    <text x="0" y="142" font-family="'Inter', 'Segoe UI', 'Roboto', sans-serif" font-weight="900" font-size="53" fill="#FFFFFF" letter-spacing="5">ARMOR-IOS-CONTROL</text>
 
     <text x="0" y="182" font-family="'Inter', 'Segoe UI', 'Roboto', sans-serif" font-weight="700" font-size="22" fill="url(#greenGlow)" letter-spacing="4" filter="url(#glowGreen)">CLIENTS</text>
 
     <text x="0" y="212" font-family="'Inter', 'Segoe UI', 'Roboto', sans-serif" font-weight="500" font-size="12" fill="#8B949E" letter-spacing="1.5">SWIFT · SWIFTUI · MJPEG · HTTP STUDIO SESSION</text>
 
     <g transform="translate(0, 232)">
-      <rect x="0" y="0" width="73" height="22" rx="11" fill="#161B22" stroke="#30363D" stroke-width="1"/>
+      <rect x="0" y="0" width="67" height="22" rx="11" fill="#161B22" stroke="#30363D" stroke-width="1"/>
       <circle cx="11" cy="11" r="4" fill="#00FF88">
         <animate attributeName="opacity" values="0.5;1;0.5" dur="2.0s" repeatCount="indefinite"/>
       </circle>
       <text x="22" y="15" font-family="sans-serif" font-weight="600" font-size="10" fill="#C9D1D9" letter-spacing="0.5">SWIFT</text>
-      <rect x="83" y="0" width="133" height="22" rx="11" fill="#161B22" stroke="#30363D" stroke-width="1"/>
-      <circle cx="94" cy="11" r="4" fill="#FF9900">
+      <rect x="77" y="0" width="80" height="22" rx="11" fill="#161B22" stroke="#30363D" stroke-width="1"/>
+      <circle cx="88" cy="11" r="4" fill="#FF9900">
         <animate attributeName="opacity" values="0.5;1;0.5" dur="2.2s" repeatCount="indefinite"/>
       </circle>
-      <text x="105" y="15" font-family="sans-serif" font-weight="600" font-size="10" fill="#C9D1D9" letter-spacing="0.5">SWIFTUI</text>
-      <rect x="226" y="0" width="67" height="22" rx="11" fill="#161B22" stroke="#30363D" stroke-width="1"/>
-      <circle cx="237" cy="11" r="4" fill="#00E5FF">
+      <text x="99" y="15" font-family="sans-serif" font-weight="600" font-size="10" fill="#C9D1D9" letter-spacing="0.5">SWIFTUI</text>
+      <rect x="167" y="0" width="67" height="22" rx="11" fill="#161B22" stroke="#30363D" stroke-width="1"/>
+      <circle cx="178" cy="11" r="4" fill="#00E5FF">
         <animate attributeName="opacity" values="0.5;1;0.5" dur="2.4s" repeatCount="indefinite"/>
       </circle>
-      <text x="248" y="15" font-family="sans-serif" font-weight="600" font-size="10" fill="#C9D1D9" letter-spacing="0.5">MJPEG</text>
-      <rect x="303" y="0" width="159" height="22" rx="11" fill="#161B22" stroke="#30363D" stroke-width="1"/>
-      <circle cx="314" cy="11" r="4" fill="#FF0055">
+      <text x="189" y="15" font-family="sans-serif" font-weight="600" font-size="10" fill="#C9D1D9" letter-spacing="0.5">MJPEG</text>
+      <rect x="244" y="0" width="159" height="22" rx="11" fill="#161B22" stroke="#30363D" stroke-width="1"/>
+      <circle cx="255" cy="11" r="4" fill="#FF0055">
         <animate attributeName="opacity" values="0.5;1;0.5" dur="2.6s" repeatCount="indefinite"/>
       </circle>
-      <text x="325" y="15" font-family="sans-serif" font-weight="600" font-size="10" fill="#C9D1D9" letter-spacing="0.5">HTTP STUDIO SESSION</text>
+      <text x="266" y="15" font-family="sans-serif" font-weight="600" font-size="10" fill="#C9D1D9" letter-spacing="0.5">HTTP STUDIO SESSION</text>
     </g>
   </g>
 
