@@ -84,7 +84,8 @@ ARMOR-IOS-CONTROL/
 ├── App/   SwiftUI: ArmorApp, AppModel, Root, Login, Home, Alarms, Cameras, Assistant, More, Locked, Help
 │   ├── Platform/   Keychain, Face ID / Touch ID, certificate rules, push
 │   └── Resources/   assets and the permission texts in eight languages
-├── project.yml (XcodeGen)   Package.swift
+├── Package.swift   the Swift package (ArmorCore and its tests)
+├── project.yml     XcodeGen: the app's Xcode project is generated from it
 ├── tools/ios_lint.py   structure, languages, contract, secrets (no Mac needed)
 └── docs/CLIENT_BOUNDARY.md
 ```
