@@ -1,0 +1,149 @@
+{
+  "repo": "ARMOR-IOS-CONTROL",
+  "ecosystem": "armor",
+  "tagline": "The iPhone window on ARMOR-SERVER: the rules are a Swift package tested on Linux, the screens and the phone parts have never run on an iPhone.",
+  "description": "ARMOR-IOS-CONTROL reads and orders through ARMOR-SERVER and nothing else. The rules of the app are the Swift package ArmorCore (103 tests, run with swift test on macOS or Linux); the SwiftUI screens and the parts that need an iPhone (Face ID, the Keychain, the certificate rules, live camera and push) have not been built in Xcode or run.",
+  "columns": [
+    "WHO USES IT",
+    "THIS REPOSITORY",
+    "WHAT IT TALKS TO"
+  ],
+  "nodes": [
+    {
+      "id": "user",
+      "column": 0,
+      "level": "external",
+      "title": "The operator",
+      "lines": [
+        "an iPhone on the home Wi-Fi",
+        "or away, with the server's",
+        "own login"
+      ]
+    },
+    {
+      "id": "screens",
+      "column": 1,
+      "level": "untested",
+      "title": "App/ (SwiftUI)",
+      "lines": [
+        "Login, Home, Alarms, Cameras,",
+        "Assistant, More, Locked, Help;",
+        "never built in Xcode"
+      ],
+      "code": [
+        "App/AppModel.swift",
+        "App/HelpView.swift"
+      ]
+    },
+    {
+      "id": "core",
+      "column": 1,
+      "level": "tested",
+      "title": "ArmorCore",
+      "lines": [
+        "server link, parsing, two",
+        "addresses, MJPEG cutting;",
+        "103 tests with swift test"
+      ],
+      "code": [
+        "Sources/ArmorCore/ArmorController.swift",
+        "Sources/ArmorCore/Connector.swift",
+        "Sources/ArmorCore/MjpegParser.swift"
+      ]
+    },
+    {
+      "id": "safe",
+      "column": 1,
+      "level": "contract",
+      "title": "Lock, vault, trust",
+      "lines": [
+        "DeviceLock, SessionVault,",
+        "Trust, AlarmPolicy: the rules",
+        "that protect the phone"
+      ],
+      "code": [
+        "Sources/ArmorCore/DeviceLock.swift",
+        "Sources/ArmorCore/SessionVault.swift",
+        "Sources/ArmorCore/Trust.swift",
+        "Sources/ArmorCore/AlarmPolicy.swift"
+      ]
+    },
+    {
+      "id": "platform",
+      "column": 1,
+      "level": "untested",
+      "title": "App/Platform",
+      "lines": [
+        "Keychain, Face ID and Touch ID,",
+        "certificate rules, push:",
+        "need a real iPhone"
+      ],
+      "code": [
+        "App/Platform/KeychainSecrets.swift",
+        "App/Platform/BiometricAuth.swift",
+        "App/Platform/TrustDelegate.swift",
+        "App/Platform/Push.swift"
+      ]
+    },
+    {
+      "id": "server",
+      "column": 2,
+      "level": "external",
+      "title": "ARMOR-SERVER",
+      "lines": [
+        "HTTP /api/v1 (26 paths checked",
+        "by ios_lint.py) and MJPEG;",
+        "the same contract as Android"
+      ]
+    },
+    {
+      "id": "push",
+      "column": 2,
+      "level": "config",
+      "title": "Push (Firebase)",
+      "lines": [
+        "only when the server has push",
+        "on and the installation brings",
+        "its own GoogleService-Info.plist"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "user",
+      "to": "screens",
+      "label": "",
+      "level": "untested"
+    },
+    {
+      "from": "screens",
+      "to": "core",
+      "label": "",
+      "level": "tested"
+    },
+    {
+      "from": "screens",
+      "to": "safe",
+      "label": "",
+      "level": "tested"
+    },
+    {
+      "from": "safe",
+      "to": "platform",
+      "label": "",
+      "level": "untested"
+    },
+    {
+      "from": "core",
+      "to": "server",
+      "label": "HTTP",
+      "level": "contract"
+    },
+    {
+      "from": "platform",
+      "to": "push",
+      "label": "",
+      "level": "config"
+    }
+  ]
+}

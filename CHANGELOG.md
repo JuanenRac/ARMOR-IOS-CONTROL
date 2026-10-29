@@ -4,6 +4,7 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+- **The README follows the universal layout:** security, interfaces, configuration, testing, troubleshooting and roadmap sections and the architecture and repository-structure pictures, in the eight languages.
 - **The layout of the README is checked in the CI:** the validator runs the shared `tools/universal_readme_check.py` and lists, as a warning, what differs from the universal layout of the README.
 - **One table of alarm codes for every client:** the sentence of each alarm code (58 of them, in the eight languages) comes from a copy of the table that the server and Studio share, checked against the original by `tools/ios_lint.py` and by a test.
 - **The quality of the camera picture is asked for explicitly:** a tile of the grid asks the server for the lighter picture from outside the house and the normal one at home, the full view lets the server decide.

@@ -18,7 +18,7 @@
 ### ARMOR-SERVER の iPhone オペレータークライアント：状態、警戒、警報、警報盤、カメラ、アシスタント。8 言語対応
 
 <p align="center">
-  <img src="https://img.shields.io/badge/License-GPL%203.0-blue.svg" alt="GPL 3.0">
+  <img src="https://img.shields.io/badge/License-GPL%203.0--or--later-blue.svg" alt="GPL 3.0 or later">
   <img src="https://img.shields.io/badge/Language-Swift-f05138.svg" alt="Language">
   <img src="https://img.shields.io/badge/UI-SwiftUI-0a84ff.svg" alt="UI">
   <img src="https://img.shields.io/badge/Languages-8-00E5FF.svg" alt="Languages">
@@ -39,9 +39,15 @@
 |---|---|
 | バージョン | `0.0.1` |
 | 成熟度 | 足場段階 |
+| 役割 | ARMOR-SERVER 用の iPhone オペレーター向けクライアント（ファミリー：Clients、親：ARMOR-SERVER） |
+| 技術 | Swift 5.9+ / SwiftUI, iOS 16+ |
 | テスト | 103 (`swift test`) |
-| 技術 | Swift / SwiftUI |
+| 言語 | 8（言語ごとに 241 フレーズ、`ios_lint.py` が検査） |
+| 動作環境 | iOS 16+ の iPhone。テストは macOS または Linux で実行 |
 | 実機での確認 | iPhone ではまだ実行していません。ルールは Linux でテスト済みです |
+| ライセンス | GPL-3.0-or-later |
+
+**移動先：** [概要](#-概要) · [アーキテクチャ](#-アーキテクチャ) · [セキュリティ](#-セキュリティと安全) · [インターフェース](#-インターフェース) · [設定](#-設定) · [クイックスタート](#-クイックスタート) · [テスト](#-テスト) · [トラブルシューティング](#-トラブルシューティング) · [構成](#-リポジトリの構成) · [関連](#-関連プロジェクト)
 
 ## 🚦 プロジェクトの状況
 
@@ -74,25 +80,56 @@
 
 ARMOR-IOS-CONTROL は、[ARMOR-STUDIO](https://github.com/JuanenRac/ARMOR-STUDIO) と [ARMOR-ANDROID-CONTROL](https://github.com/JuanenRac/ARMOR-ANDROID-CONTROL) が使うのと同じ [ARMOR-SERVER](https://github.com/JuanenRac/ARMOR-SERVER) への iPhone の窓口です。読み取りも命令もサーバー経由のみで、Android アプリと同じ契約を使います。
 
-## 📂 リポジトリの構成
+| 名前 | 方法 | 用途 |
+|---|---|---|
+| ARMOR-SERVER | HTTP `/api/v1`, MJPEG | アプリが読み取り・命令するすべて。他とは通信しません |
+| ARMOR-ANDROID-CONTROL | 同じコントラクト | `ios_lint.py` が、アプリが Android クライアントも呼ぶパスだけを呼ぶことを検査 |
+| ARMOR-STUDIO | QR | 設置環境の証明書の鍵をペアリング |
 
-```text
-ARMOR-IOS-CONTROL/
-├── Sources/ArmorCore/   Tr, ServerEndpoint, Models, ArmorApi(+Client), ArmorController, DeviceLock, SessionVault, Trust, Reach, Connector, AlarmPolicy, AlarmText, AlarmCodes (+ alarm_codes.json), MjpegParser
-│   └── Resources/i18n/   en, de, fr, it, ja, zh, pt (es is the source text)
-├── Tests/ArmorCoreTests/   103 tests + fixtures of a real server
-├── App/   SwiftUI: ArmorApp, AppModel, Root, Login, Home, Alarms, Cameras, Assistant, More, Locked, Help
-│   ├── Platform/   Keychain, Face ID / Touch ID, certificate rules, push
-│   └── Resources/   assets and the permission texts in eight languages
-├── Package.swift   the Swift package (ArmorCore and its tests)
-├── project.yml     XcodeGen: the app's Xcode project is generated from it
-├── tools/ios_lint.py   structure, languages, contract, secrets (no Mac needed)
-└── docs/CLIENT_BOUNDARY.md
-```
+## 🏛️ アーキテクチャ
 
-## 🛠️ 開発環境
+<p align="center">
+  <img src="images/architecture.svg" alt="ARMOR-IOS-CONTROL のアーキテクチャ：呼び出し元、内部、依存先" width="100%">
+</p>
 
-**必要なもの:** アプリのビルドには Xcode 15+ と iOS 16+ を備えた Mac、テストには Swift 5.9+（macOS または Linux）、検査には Python 3.11
+## 🔒 セキュリティと安全
+
+| 脅威 | 対策 |
+|---|---|
+| 電話上のパスワード | *ログイン状態を保持* のときだけこの電話のキーチェーンに保存し、バックアップされません。セッションはサーバーの HttpOnly Cookie です |
+| 電話が他人の手にあるときの重要な命令 | アーム、ディスアーム、サイレン停止、解錠などの重要な命令の前に Face ID、Touch ID またはパスコードを要求します。管理者は必須にできますが、選んだ水準を下げることはできません。パスコードのない電話が締め出されることはありません |
+| 変更または偽造された証明書 | 設置環境の証明書の鍵は初回に記憶するか Studio の QR でペアリングします。変わると接続を拒否して知らせます |
+| 平文で送られるパスワード | 平文 HTTP はプライベートネットワークまたはループバックのアドレスのみ（`NSAllowsLocalNetworking`）。それ以外は https が必要で、そうでなければアプリはパスワードを送りません |
+| 電話上のカメラのパスワード | カメラはサーバー経由で、アプリにはカメラのパスワードも RTSP アドレスもありません |
+| 閲覧者が何かを変更する | *閲覧者* ロールは見るだけで、何かを変えるボタンはすべて無効です。サーバーも再確認します |
+| アシスタントが誤ってアーム・ディスアームする | 入力したコマンドのみ（音声入力はキーボードのマイク）。アームとディスアームには、あなたに結び付いた確認が必要で、電話のロックの内側で行います |
+
+権限のテキスト（Face ID、ローカルネットワーク）は 8 言語すべてにあります。ここにあるものは iPhone では一度も動いていません。Face ID、キーチェーン、証明書ルールは実機で未検証です。[docs/CLIENT_BOUNDARY.md](docs/CLIENT_BOUNDARY.md) と [SECURITY.md](SECURITY.md) を参照してください。
+
+## 🔌 インターフェース
+
+これはクライアントです。ARMOR-SERVER の 26 のパスを呼び出し（`tools/ios_lint.py` が数え、Android クライアントも呼ぶことを検査）、カメラの MJPEG ストリームを独自のパーサー（`MjpegParser.swift`）で切り出します。
+
+| 部分 | 設定内容 |
+|---|---|
+| 2 つのアドレス | 自宅 Wi-Fi ではプライベートアドレス、外出先のモバイル通信では動的 DNS 名または VPN のアドレスを使います。片方が応答しなければもう片方を試し、何が失敗したかをメッセージで伝えます（`Reach.swift`、`Connector.swift`） |
+| カメラ | 画面に出ている映像だけが動くグリッド、カメラを動かすパッドとスナップショット付きの全画面表示、切れたら待ち時間を延ばしながら再要求するストリーム |
+| プッシュ | 閉じたアプリにアラームが届くのはプッシュ（`Push.swift`、Firebase）経由のみで、サーバーでプッシュが有効かつ設置環境が自前の `GoogleService-Info.plist` を用意した場合に限ります。未検証です |
+
+## ⚙️ 設定
+
+| 名前 | 値 | 設定内容 |
+|---|---|---|
+| iOS | 16.0+ | 最低バージョン（`project.yml` で設定） |
+| Xcode / Swift | 15+ / 5.9+ | アプリのビルド／テスト実行用 |
+| `MARKETING_VERSION`, `CURRENT_PROJECT_VERSION` | 0.0.1, 1 | アプリのバージョン（`project.yml` より） |
+| `GoogleService-Info.plist` | プッシュ用 | 設置環境ごとのファイル。リポジトリには置きません |
+
+アプリ内：2 つのアドレス、*ログイン状態を保持*、電話のロック、言語（8 言語または電話に従う）は *その他 > 言語* にあります。
+
+## 🚀 クイックスタート
+
+**必要なもの:** アプリのビルドには Xcode 15+ と iOS 16+ の Mac、テストには Swift 5.9+（macOS または Linux）、検査には Python 3.11。
 
 ```sh
 swift test                  # 103 tests of ArmorCore (macOS or Linux)
@@ -102,39 +139,123 @@ xcodegen generate           # then open ARMOR-IOS-CONTROL.xcodeproj in Xcode (on
 
 Xcode プロジェクトは `project.yml` から XcodeGen で生成します。署名チームを選び、アプリアイコンを追加し、プッシュにはインストール専用の `GoogleService-Info.plist` を追加してください（リポジトリには保存しません）。[クライアントの境界](docs/CLIENT_BOUNDARY.md)を参照してください。
 
+## 🧪 テスト
+
+```sh
+swift test                  # macOS or Linux
+python tools/ios_lint.py    # any system, no Mac needed
+python -I tools/armor_ci_validate.py
+```
+
+| テストファイル | テスト数 | 対象 |
+|---|---|---|
+| `ControllerTests.swift` | 15 | コントローラーのユースケース |
+| `ClientTests.swift` | 14 | サーバーとの接続とその解析 |
+| `LockTests.swift` | 12 | 電話のロック |
+| `ModelsTests.swift` | 12 | サーバーから読むモデル |
+| `ReachTests.swift` | 11 | 2 つのアドレスの選択 |
+| `SecurityTests.swift` | 8 | セッション保管庫と証明書への信頼 |
+| `EndpointTests.swift`, `MjpegTests.swift`, `TranslatorTests.swift` | 7 + 7 + 7 | アドレス解析、MJPEG の切り出し、翻訳 |
+| `PolicyTests.swift`, `AlarmCodesTests.swift` | 6 + 4 | アラームポリシーとアラームコード |
+
+103 件のテストは実サーバーのデータで動きます。`tools/ios_lint.py` は Mac なしで通ります：Swift ファイル 31、8 言語の 241 フレーズ、サーバーパス 26。実機で動くテストはありません。
+
+## 🏗️ ビルドとリリース
+
+Xcode プロジェクトは XcodeGen で `project.yml` から生成します。署名チームを選び、アプリのアイコンを `App/Resources/Assets.xcassets/AppIcon.appiconset` に、プッシュ用に設置環境の `GoogleService-Info.plist` を追加してください。Xcode でビルドしたことはありません。
+
+## 🩺 トラブルシューティング
+
+| 症状 | 原因 | 対処 |
+|---|---|---|
+| 接続が拒否され通知される | 設置環境の証明書の鍵が変わった | 意図して変えたなら Studio の QR で再ペアリング |
+| どちらのアドレスも応答しない | アドレスの誤り、ネットワークなし、または自宅外への http（拒否：パスワードは平文で送りません） | 両方のアドレスを確認し、外出先では https を使う |
+| `wrong_pin`、`pin_locked`、`pin_not_set` | サーバーが解除 PIN を拒否。アプリはコードをあなたの言語で表示します | PIN を入れ直すかロック解除を待つ。PIN は Studio で設定 |
+
+## 📂 リポジトリの構成
+
+<p align="center">
+  <img src="images/repository-structure.svg" alt="ARMOR-IOS-CONTROL のリポジトリ構造" width="100%">
+</p>
+
+<details>
+<summary>ツリーのテキスト版</summary>
+
+```text
+ARMOR-IOS-CONTROL/
+├── Sources/ArmorCore/                   アプリのルール：Swift パッケージ
+├── App/                                 SwiftUI 画面と iPhone が必要な部分
+├── Tests/                               103 件のテストと実サーバーのデータ
+├── docs/                                このリポジトリのガイド
+├── tools/                               共通の CI チェックとプロジェクトツール
+├── .github/                             CI ワークフローと Issue・Pull Request のテンプレート
+├── images/                              バナー、アイコン、この README の 2 つの図
+├── armor.project.json                   マニフェスト：バージョン、役割、成熟度、ビルドコマンド
+├── CHANGELOG.md                         各バージョンの変更点
+├── SECURITY.md SUPPORT.md LICENSE       セキュリティポリシー、サポート、ライセンス
+├── CONTRIBUTING.md CODE_OF_CONDUCT.md   貢献方法と行動規範
+├── Package.swift                        Swift パッケージ：ArmorCore とそのテスト
+├── project.yml                          XcodeGen：ここから Xcode プロジェクトを生成
+└── .gitattributes .gitignore            Git の設定
+```
+
+</details>
+
+## 🗺️ ロードマップと既知の制限
+
+**現時点の既知の制限**
+
+* iPhone では何も動いていません。SwiftUI 画面は Xcode でビルドしておらず、Face ID、キーチェーン、証明書ルール、ライブカメラ、Firebase のプッシュは未検証です。
+* テスト済みなのはルール（`ArmorCore`）だけで、Linux 上のみです。
+* アプリはバックグラウンドで監視しません。iOS では閉じたアプリがサーバーに問い合わせることはできません。
+
+**今後**
+
+* Xcode で画面をビルドし、iPhone で CM5 テストベンチに対してアプリを動かす。
+* Face ID、キーチェーン、証明書ルール、ライブカメラ、プッシュを試す。
+
+## 🌍 言語
+
+README とテキストは、英語、スペイン語、フランス語、イタリア語、ドイツ語、中国語、日本語、ヨーロッパポルトガル語で提供されています。
+
 ## 🔗 関連プロジェクト
 
-**A.R.M.O.R.**（Autonomous Radar & Multimodal Observation Range）は、独立したリポジトリで構成される周辺警備システムです。それぞれに独自のバージョン、テスト、README があります。ファミリーは次のとおりです：
+**A.R.M.O.R.**（Autonomous Radar & Multimodal Observation Range）は、独立したリポジトリで構成される境界セキュリティシステムです。各リポジトリは独自のバージョン、テスト、README を持ちます。ファミリーは次のとおりです：
 
-* **[ARMOR-COMMON](https://github.com/JuanenRac/ARMOR-COMMON)** - メッセージ契約、検証器、適合性ベクトル、生成された型
-* **[ARMOR-NODE-RADAR](https://github.com/JuanenRac/ARMOR-NODE-RADAR)** - ESP32-S3 用フィールドノードのファームウェア。レーダー 3 基と独自の Web パネル付き
-* **[ARMOR-NODE-SOLAR](https://github.com/JuanenRac/ARMOR-NODE-SOLAR)** - 太陽光インバーターとバッテリーのプロトコル、およびゲートウェイノードのメッセージ
-* **[ARMOR-NODE-ELECTRICAL](https://github.com/JuanenRac/ARMOR-NODE-ELECTRICAL)** - 電気ノード：電力量計、電力網の計測メッセージ、開閉のルール
-* **[ARMOR-NODE-ALARM](https://github.com/JuanenRac/ARMOR-NODE-ALARM)** - 警報ノードと警報盤：警戒区域、警戒セット、遅延、サイレン、PIN。サーバーがあってもなくても
-* **[ARMOR-NODE-HMI](https://github.com/JuanenRac/ARMOR-NODE-HMI)** - タッチパネル：壁面ディスプレイでのシステム状態表示、警戒・確認操作、音声アシスタントの拠点
-* **[ARMOR-NETWORK](https://github.com/JuanenRac/ARMOR-NETWORK)** - ローカルネットワーク：機器、インターネット、そして変化
-* **[ARMOR-SERVER](https://github.com/JuanenRac/ARMOR-SERVER)** - 中央コーディネーター：テレメトリ、アラーム、デバイス、太陽光の測定値、カメラ
-* **[ARMOR-STUDIO](https://github.com/JuanenRac/ARMOR-STUDIO)** - Web コンソール：カメラ、レーダー、アラーム、太陽光発電、2D/3D サイト設計
-* **[ARMOR-ANDROID-CONTROL](https://github.com/JuanenRac/ARMOR-ANDROID-CONTROL)** - リアルタイム 2D/3D レーダー付きの Android オペレータークライアント
-* **ARMOR-IOS-CONTROL** (このリポジトリ) - iPhone オペレータークライアント
-* **[ARMOR-SERVER-AI](https://github.com/JuanenRac/ARMOR-SERVER-AI)** - 判断を説明し、決して動作しない視覚推論ポリシー
-* **[ARMOR-VISION](https://github.com/JuanenRac/ARMOR-VISION)** - Jetson Orin NX 向けのカメラのゾーン、マスク、検知ルール
-* **[ARMOR-VOICE-AI](https://github.com/JuanenRac/ARMOR-VOICE-AI)** - 偽造できない確認を備えたオフライン音声インテント
-* **[ARMOR-HARDWARE](https://github.com/JuanenRac/ARMOR-HARDWARE)** - 筐体、電子部品、ベンチ受け入れマトリクス
+* **[ARMOR-COMMON](https://github.com/JuanenRac/ARMOR-COMMON)** - メッセージのコントラクト、バリデーター、適合ベクトル、生成された型
+* **[ARMOR-NODE-RADAR](https://github.com/JuanenRac/ARMOR-NODE-RADAR)** - 3 つのレーダーと独自の Web パネルを備えた ESP32-S3 向けフィールドノードのファームウェア
+* **[ARMOR-NODE-SOLAR](https://github.com/JuanenRac/ARMOR-NODE-SOLAR)** - ソーラーインバーターとバッテリーのプロトコル、ゲートウェイノードのメッセージ
+* **[ARMOR-NODE-ELECTRICAL](https://github.com/JuanenRac/ARMOR-NODE-ELECTRICAL)** - 電気ノード：メーター、系統の読み取り値のメッセージ、切り替えのルール
+* **[ARMOR-NODE-ALARM](https://github.com/JuanenRac/ARMOR-NODE-ALARM)** - 警報ノードとパネル：ゾーン、警戒、遅延、サイレン、PIN。サーバーありでもなしでも動作
+* **[ARMOR-NODE-HMI](https://github.com/JuanenRac/ARMOR-NODE-HMI)** - タッチパネル：壁面画面でのシステムの状態、警戒と確認応答、そして音声アシスタントの置き場
+* **[ARMOR-NETWORK](https://github.com/JuanenRac/ARMOR-NETWORK)** - ローカルネットワーク：そのデバイス、インターネット、そして変化
+* **[ARMOR-SERVER](https://github.com/JuanenRac/ARMOR-SERVER)** - 中央コーディネーター：テレメトリ、警報、デバイス、ソーラーの読み取り値、カメラ
+* **[ARMOR-STUDIO](https://github.com/JuanenRac/ARMOR-STUDIO)** - Web コンソール：カメラ、レーダー、警報、太陽光エネルギー、2D/3D のサイトデザイナー
+* **[ARMOR-ANDROID-CONTROL](https://github.com/JuanenRac/ARMOR-ANDROID-CONTROL)** - ライブの 2D/3D レーダーを備えた Android オペレータークライアント
+* **ARMOR-IOS-CONTROL**（このリポジトリ） - iPhone オペレータークライアント
+* **[ARMOR-SERVER-AI](https://github.com/JuanenRac/ARMOR-SERVER-AI)** - 判断を説明し、決して作動させない視覚推論ポリシー
+* **[ARMOR-VISION](https://github.com/JuanenRac/ARMOR-VISION)** - Jetson Orin NX 向けのカメラゾーン、マスク、検出ルール
+* **[ARMOR-VOICE-AI](https://github.com/JuanenRac/ARMOR-VOICE-AI)** - 偽造できない確認つきのオフライン音声インテント
+* **[ARMOR-HARDWARE](https://github.com/JuanenRac/ARMOR-HARDWARE)** - 筐体、電子回路、ベンチ受け入れマトリクス
 * **[ARMOR-DEVOPS](https://github.com/JuanenRac/ARMOR-DEVOPS)** - デプロイ、CM5 テストベンチ、バックアップ、TLS
-* **[ARMOR-SIMULATOR](https://github.com/JuanenRac/ARMOR-SIMULATOR)** - 再現可能な故障を備えたオフラインのテレメトリシミュレーター
-* **[ARMOR-UPDATER](https://github.com/JuanenRac/ARMOR-UPDATER)** - エコシステム自身のリポジトリを検出し、インストールし、更新する
-* **[ARMOR-DOCS](https://github.com/JuanenRac/ARMOR-DOCS)** - アーキテクチャ、セキュリティ基準、機能マトリクス
+* **[ARMOR-SIMULATOR](https://github.com/JuanenRac/ARMOR-SIMULATOR)** - 再現可能な障害を持つオフラインのテレメトリシミュレーター
+* **[ARMOR-UPDATER](https://github.com/JuanenRac/ARMOR-UPDATER)** - エコシステム自身のリポジトリを検出、インストール、更新
+* **[ARMOR-DOCS](https://github.com/JuanenRac/ARMOR-DOCS)** - アーキテクチャ、セキュリティのベースライン、機能マトリクス
 
-## 📚 ドキュメントとコミュニティ
+## 📚 ドキュメント
 
-詳しくは：
-
-* [機能マトリクス：実証済みのものとそうでないもの](https://github.com/JuanenRac/ARMOR-DOCS/blob/main/docs/CAPABILITY_MATRIX.md)
-* [プロジェクト一覧：バージョンとリポジトリ間の依存関係](https://github.com/JuanenRac/ARMOR-DOCS/blob/main/docs/PROJECT_CATALOG.md)
+* [クライアントの境界](docs/CLIENT_BOUNDARY.md)：クライアントがすることとしないこと、ビルド方法
+* [機能マトリクス：何が証明され、何が証明されていないか](https://github.com/JuanenRac/ARMOR-DOCS/blob/main/docs/CAPABILITY_MATRIX.md)
+* [プロジェクトカタログ：バージョンと、リポジトリ同士の依存関係](https://github.com/JuanenRac/ARMOR-DOCS/blob/main/docs/PROJECT_CATALOG.md)
 * [このリポジトリの変更履歴](CHANGELOG.md)
-* [ライセンス（GPL-3.0-or-later）](LICENSE)
-* 質問・提案・報告：electrohobby3d@gmail.com
+
+## 🤝 コントリビュートとコミュニティ
+
+* Pull Request の前に `swift test` and `python tools/ios_lint.py` and `python -I tools/armor_ci_validate.py` を実行してください。通る必要があります。[CONTRIBUTING.md](CONTRIBUTING.md) と[行動規範](CODE_OF_CONDUCT.md)を参照してください。
+* README は 8 言語で提供され、ARMOR-DOCS のソースから生成されます。文面の変更はそちらで行います。
+* コンポーネント間のメッセージの変更は ARMOR-COMMON から始めます。
+* ビルドしただけのものを、ボード上で動いているかのように書かないでください。
+* 脆弱性は非公開で報告してください：[SECURITY.md](SECURITY.md)。質問、アイデア、報告：electrohobby3d@gmail.com（[SUPPORT.md](SUPPORT.md)）。
 
 ## 👤 作者
 
@@ -142,4 +263,4 @@ Xcode プロジェクトは `project.yml` から XcodeGen で生成します。�
 
 ## 📜 ライセンス
 
-GPL-3.0-or-later - [LICENSE](LICENSE) を参照。
+GPL-3.0-or-later - [LICENSE](LICENSE) を参照してください。

@@ -1,0 +1,402 @@
+{
+  "repo": "ARMOR-IOS-CONTROL",
+  "ecosystem": "armor",
+  "svg": "en",
+  "cards": [
+    {
+      "name": "Sources/ArmorCore/",
+      "tree": {
+        "en": "the rules of the app: a Swift package",
+        "es": "las reglas de la app: un paquete Swift",
+        "de": "die Regeln der App: ein Swift-Paket",
+        "fr": "les règles de l'app : un paquet Swift",
+        "it": "le regole dell'app: un pacchetto Swift",
+        "ja": "アプリのルール：Swift パッケージ",
+        "zh": "应用的规则：一个 Swift 包",
+        "pt": "as regras da app: um pacote Swift"
+      },
+      "sub": {
+        "en": "the rules of the app (Swift package)",
+        "es": "las reglas de la app (paquete Swift)",
+        "de": "die Regeln der App (Swift-Paket)",
+        "fr": "les règles de l'app (paquet Swift)",
+        "it": "le regole dell'app (pacchetto Swift)",
+        "ja": "アプリのルール（Swift パッケージ）",
+        "zh": "应用的规则（Swift 包）",
+        "pt": "as regras da app (pacote Swift)"
+      },
+      "span": 3,
+      "accent": "a",
+      "rows": [
+        {
+          "desc": {
+            "en": "ArmorApi, ArmorController, Models: the link to the server and the use cases",
+            "es": "ArmorApi, ArmorController, Models: el enlace con el servidor y los casos de uso",
+            "de": "ArmorApi, ArmorController, Models: Serververbindung und Anwendungsfälle",
+            "fr": "ArmorApi, ArmorController, Models : le lien avec le serveur et les cas d'usage",
+            "it": "ArmorApi, ArmorController, Models: il collegamento al server e i casi d'uso",
+            "ja": "ArmorApi、ArmorController、Models：サーバー接続とユースケース",
+            "zh": "ArmorApi、ArmorController、Models：服务器连接与用例",
+            "pt": "ArmorApi, ArmorController, Models: a ligação ao servidor e os casos de uso"
+          }
+        },
+        {
+          "desc": {
+            "en": "ServerEndpoint, Reach, Connector: safe addresses, home and away",
+            "es": "ServerEndpoint, Reach, Connector: direcciones seguras, casa y fuera",
+            "de": "ServerEndpoint, Reach, Connector: sichere Adressen, daheim und unterwegs",
+            "fr": "ServerEndpoint, Reach, Connector : adresses sûres, maison et extérieur",
+            "it": "ServerEndpoint, Reach, Connector: indirizzi sicuri, casa e fuori",
+            "ja": "ServerEndpoint、Reach、Connector：安全なアドレス（自宅と外出先）",
+            "zh": "ServerEndpoint、Reach、Connector：安全地址，家中与外出",
+            "pt": "ServerEndpoint, Reach, Connector: endereços seguros, casa e fora"
+          }
+        },
+        {
+          "desc": {
+            "en": "DeviceLock, SessionVault, Trust: phone lock, session vault, certificate trust",
+            "es": "DeviceLock, SessionVault, Trust: bloqueo, almacén de sesión, confianza en el certificado",
+            "de": "DeviceLock, SessionVault, Trust: Sperre, Sitzungstresor, Zertifikatsvertrauen",
+            "fr": "DeviceLock, SessionVault, Trust : verrouillage, coffre de session, confiance du certificat",
+            "it": "DeviceLock, SessionVault, Trust: blocco, deposito sessione, fiducia nel certificato",
+            "ja": "DeviceLock、SessionVault、Trust：ロック、セッション保管庫、証明書の信頼",
+            "zh": "DeviceLock、SessionVault、Trust：手机锁、会话保险库、证书信任",
+            "pt": "DeviceLock, SessionVault, Trust: bloqueio, cofre da sessão, confiança no certificado"
+          }
+        },
+        {
+          "desc": {
+            "en": "AlarmPolicy, AlarmText, AlarmCodes: what an alarm asks and how it is worded",
+            "es": "AlarmPolicy, AlarmText, AlarmCodes: qué pide una alarma y cómo se redacta",
+            "de": "AlarmPolicy, AlarmText, AlarmCodes: was ein Alarm verlangt und wie er lautet",
+            "fr": "AlarmPolicy, AlarmText, AlarmCodes : ce qu'une alarme demande et sa formulation",
+            "it": "AlarmPolicy, AlarmText, AlarmCodes: cosa chiede un allarme e come è formulato",
+            "ja": "AlarmPolicy、AlarmText、AlarmCodes：アラームの要求内容と文言",
+            "zh": "AlarmPolicy、AlarmText、AlarmCodes：报警的要求与措辞",
+            "pt": "AlarmPolicy, AlarmText, AlarmCodes: o que um alarme pede e como é redigido"
+          }
+        },
+        {
+          "desc": {
+            "en": "MjpegParser, Tr, Resources/i18n: MJPEG cutting and the language tables",
+            "es": "MjpegParser, Tr, Resources/i18n: corte MJPEG y tablas de idioma",
+            "de": "MjpegParser, Tr, Resources/i18n: MJPEG-Zerlegung und Sprachtabellen",
+            "fr": "MjpegParser, Tr, Resources/i18n : découpage MJPEG et tables de langue",
+            "it": "MjpegParser, Tr, Resources/i18n: taglio MJPEG e tabelle di lingua",
+            "ja": "MjpegParser、Tr、Resources/i18n：MJPEG の切り出しと言語表",
+            "zh": "MjpegParser、Tr、Resources/i18n：MJPEG 切分与语言表",
+            "pt": "MjpegParser, Tr, Resources/i18n: corte MJPEG e tabelas de língua"
+          }
+        }
+      ]
+    },
+    {
+      "name": "App/",
+      "span": 3,
+      "accent": "b",
+      "tree": {
+        "en": "the SwiftUI screens and the parts that need an iPhone",
+        "es": "las pantallas SwiftUI y las partes que necesitan un iPhone",
+        "de": "die SwiftUI-Bildschirme und die Teile, die ein iPhone brauchen",
+        "fr": "les écrans SwiftUI et les parties qui exigent un iPhone",
+        "it": "le schermate SwiftUI e le parti che richiedono un iPhone",
+        "ja": "SwiftUI 画面と iPhone が必要な部分",
+        "zh": "SwiftUI 界面和需要 iPhone 的部分",
+        "pt": "os ecrãs SwiftUI e as partes que precisam de um iPhone"
+      },
+      "sub": {
+        "en": "SwiftUI",
+        "es": "SwiftUI",
+        "de": "SwiftUI",
+        "fr": "SwiftUI",
+        "it": "SwiftUI",
+        "ja": "SwiftUI",
+        "zh": "SwiftUI",
+        "pt": "SwiftUI"
+      },
+      "rows": [
+        {
+          "desc": {
+            "en": "Platform/: Keychain, Face ID, certificate rules, push",
+            "es": "Platform/: Keychain, Face ID, reglas de certificado, push",
+            "de": "Platform/: Keychain, Face ID, Zertifikatsregeln, Push",
+            "fr": "Platform/ : Keychain, Face ID, règles de certificat, push",
+            "it": "Platform/: Keychain, Face ID, regole del certificato, push",
+            "ja": "Platform/：キーチェーン、Face ID、証明書ルール、プッシュ",
+            "zh": "Platform/：钥匙串、Face ID、证书规则、推送",
+            "pt": "Platform/: Keychain, Face ID, regras de certificado, push"
+          }
+        },
+        {
+          "desc": {
+            "en": "Login, Home, Alarms, Cameras, Assistant, More, Locked, Help",
+            "es": "Login, Home, Alarms, Cameras, Assistant, More, Locked, Help",
+            "de": "Login, Home, Alarms, Cameras, Assistant, More, Locked, Help",
+            "fr": "Login, Home, Alarms, Cameras, Assistant, More, Locked, Help",
+            "it": "Login, Home, Alarms, Cameras, Assistant, More, Locked, Help",
+            "ja": "Login、Home、Alarms、Cameras、Assistant、More、Locked、Help",
+            "zh": "Login、Home、Alarms、Cameras、Assistant、More、Locked、Help",
+            "pt": "Login, Home, Alarms, Cameras, Assistant, More, Locked, Help"
+          }
+        },
+        {
+          "desc": {
+            "en": "Resources/: assets and the permission texts in eight languages",
+            "es": "Resources/: recursos y textos de permisos en ocho idiomas",
+            "de": "Resources/: Ressourcen und Berechtigungstexte in acht Sprachen",
+            "fr": "Resources/ : ressources et textes d'autorisation en huit langues",
+            "it": "Resources/: risorse e testi dei permessi in otto lingue",
+            "ja": "Resources/：アセットと 8 言語の権限テキスト",
+            "zh": "Resources/：资源与八种语言的权限文字",
+            "pt": "Resources/: recursos e textos de permissões em oito línguas"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tests/",
+      "span": 1,
+      "tree": {
+        "en": "103 tests and fixtures of a real server",
+        "es": "103 pruebas y datos de un servidor real",
+        "de": "103 Tests und Daten eines echten Servers",
+        "fr": "103 tests et données d'un vrai serveur",
+        "it": "103 test e dati di un server reale",
+        "ja": "103 件のテストと実サーバーのデータ",
+        "zh": "103 个测试和真实服务器的数据",
+        "pt": "103 testes e dados de um servidor real"
+      },
+      "rows": [
+        {
+          "name": "ArmorCoreTests/",
+          "desc": {
+            "en": "11 files of tests",
+            "es": "11 ficheros de pruebas",
+            "de": "11 Testdateien",
+            "fr": "11 fichiers de tests",
+            "it": "11 file di test",
+            "ja": "11 個のテストファイル",
+            "zh": "11 个测试文件",
+            "pt": "11 ficheiros de testes"
+          }
+        }
+      ]
+    },
+    {
+      "name": "docs/",
+      "span": 1,
+      "tree": {
+        "en": "the guides of this repository",
+        "es": "las guías de este repositorio",
+        "de": "die Anleitungen dieses Repositorys",
+        "fr": "les guides de ce dépôt",
+        "it": "le guide di questo repository",
+        "ja": "このリポジトリのガイド",
+        "zh": "本仓库的指南",
+        "pt": "os guias deste repositório"
+      },
+      "rows": [
+        {
+          "name": "CLIENT_BOUNDARY.md",
+          "desc": {
+            "en": "what the client does and never does",
+            "es": "qué hace y qué nunca hace el cliente",
+            "de": "was der Client tut und nie tut",
+            "fr": "ce que le client fait et ne fait jamais",
+            "it": "cosa fa e non fa mai il client",
+            "ja": "クライアントがすることとしないこと",
+            "zh": "客户端做什么、绝不做什么",
+            "pt": "o que o cliente faz e nunca faz"
+          }
+        }
+      ]
+    },
+    {
+      "name": "tools/",
+      "span": 1,
+      "tree": {
+        "en": "the shared CI checks and project tooling",
+        "es": "las comprobaciones de CI compartidas y las herramientas del proyecto",
+        "de": "die gemeinsamen CI-Prüfungen und Projektwerkzeuge",
+        "fr": "les contrôles CI partagés et les outils du projet",
+        "it": "i controlli CI condivisi e gli strumenti del progetto",
+        "ja": "共通の CI チェックとプロジェクトツール",
+        "zh": "共享的 CI 检查和项目工具",
+        "pt": "as verificações de CI partilhadas e as ferramentas do projeto"
+      },
+      "rows": [
+        {
+          "name": "ios_lint.py",
+          "desc": {
+            "en": "checks without a Mac",
+            "es": "comprobaciones sin Mac",
+            "de": "Prüfungen ohne Mac",
+            "fr": "contrôles sans Mac",
+            "it": "verifiche senza Mac",
+            "ja": "Mac 不要の検査",
+            "zh": "无需 Mac 的检查",
+            "pt": "verificações sem Mac"
+          }
+        },
+        {
+          "name": "armor_ci_validate.py",
+          "desc": {
+            "en": "the CI validation",
+            "es": "la validación de CI",
+            "de": "die CI-Prüfung",
+            "fr": "la validation CI",
+            "it": "la validazione CI",
+            "ja": "CI 検証",
+            "zh": "CI 验证",
+            "pt": "a validação de CI"
+          }
+        }
+      ]
+    },
+    {
+      "name": ".github/ images/",
+      "kind": "group",
+      "span": 3,
+      "columns": 2,
+      "rows": [
+        {
+          "name": ".github/",
+          "desc": {
+            "en": "CI workflow, issue and pull-request templates",
+            "es": "flujo de CI y plantillas de issues y pull requests",
+            "de": "CI-Workflow sowie Vorlagen für Issues und Pull Requests",
+            "fr": "workflow CI et modèles d'issues et de pull requests",
+            "it": "workflow CI e modelli per issue e pull request",
+            "ja": "CI ワークフローと Issue・Pull Request のテンプレート",
+            "zh": "CI 工作流以及 Issue 和 Pull Request 模板",
+            "pt": "fluxo de CI e modelos de issues e pull requests"
+          }
+        },
+        {
+          "name": "images/",
+          "desc": {
+            "en": "banner, icon and the two pictures of this README",
+            "es": "banner, icono y las dos imágenes de este README",
+            "de": "Banner, Symbol und die zwei Bilder dieses READMEs",
+            "fr": "bannière, icône et les deux images de ce README",
+            "it": "banner, icona e le due immagini di questo README",
+            "ja": "バナー、アイコン、この README の 2 つの図",
+            "zh": "横幅、图标和本 README 的两幅图",
+            "pt": "faixa, ícone e as duas imagens deste README"
+          }
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Files at the root",
+        "es": "Ficheros en la raíz",
+        "de": "Dateien im Wurzelverzeichnis",
+        "fr": "Fichiers à la racine",
+        "it": "File nella radice",
+        "ja": "ルートのファイル",
+        "zh": "根目录的文件",
+        "pt": "Ficheiros na raiz"
+      },
+      "kind": "group",
+      "span": 3,
+      "columns": 2,
+      "rows": [
+        {
+          "name": "armor.project.json",
+          "desc": {
+            "en": "manifest: version, role, maturity, build command",
+            "es": "manifiesto: versión, rol, madurez, comando de build",
+            "de": "Manifest: Version, Rolle, Reifegrad, Build-Befehl",
+            "fr": "manifeste : version, rôle, maturité, commande de build",
+            "it": "manifesto: versione, ruolo, maturità, comando di build",
+            "ja": "マニフェスト：バージョン、役割、成熟度、ビルドコマンド",
+            "zh": "清单：版本、角色、成熟度、构建命令",
+            "pt": "manifesto: versão, função, maturidade, comando de build"
+          }
+        },
+        {
+          "name": "CHANGELOG.md",
+          "desc": {
+            "en": "what changed in each version",
+            "es": "qué cambió en cada versión",
+            "de": "was sich in jeder Version geändert hat",
+            "fr": "ce qui a changé à chaque version",
+            "it": "cosa è cambiato in ogni versione",
+            "ja": "各バージョンの変更点",
+            "zh": "每个版本的变化",
+            "pt": "o que mudou em cada versão"
+          }
+        },
+        {
+          "name": "SECURITY.md  SUPPORT.md  LICENSE",
+          "tree_name": "SECURITY.md SUPPORT.md LICENSE",
+          "desc": {
+            "en": "security policy, support and license",
+            "es": "política de seguridad, soporte y licencia",
+            "de": "Sicherheitsrichtlinie, Support und Lizenz",
+            "fr": "politique de sécurité, support et licence",
+            "it": "politica di sicurezza, supporto e licenza",
+            "ja": "セキュリティポリシー、サポート、ライセンス",
+            "zh": "安全策略、支持和许可证",
+            "pt": "política de segurança, apoio e licença"
+          }
+        },
+        {
+          "name": "CONTRIBUTING.md  CODE_OF_CONDUCT.md",
+          "tree_name": "CONTRIBUTING.md CODE_OF_CONDUCT.md",
+          "desc": {
+            "en": "how to contribute and the code of conduct",
+            "es": "cómo contribuir y el código de conducta",
+            "de": "Mitwirkung und Verhaltenskodex",
+            "fr": "comment contribuer et le code de conduite",
+            "it": "come contribuire e il codice di condotta",
+            "ja": "貢献方法と行動規範",
+            "zh": "如何贡献与行为准则",
+            "pt": "como contribuir e o código de conduta"
+          }
+        },
+        {
+          "name": "Package.swift",
+          "desc": {
+            "en": "the Swift package: ArmorCore and its tests",
+            "es": "el paquete Swift: ArmorCore y sus pruebas",
+            "de": "das Swift-Paket: ArmorCore und seine Tests",
+            "fr": "le paquet Swift : ArmorCore et ses tests",
+            "it": "il pacchetto Swift: ArmorCore e i suoi test",
+            "ja": "Swift パッケージ：ArmorCore とそのテスト",
+            "zh": "Swift 包：ArmorCore 及其测试",
+            "pt": "o pacote Swift: ArmorCore e os seus testes"
+          }
+        },
+        {
+          "name": "project.yml",
+          "desc": {
+            "en": "XcodeGen: the Xcode project is generated from it",
+            "es": "XcodeGen: de aquí se genera el proyecto de Xcode",
+            "de": "XcodeGen: daraus wird das Xcode-Projekt erzeugt",
+            "fr": "XcodeGen : le projet Xcode en est généré",
+            "it": "XcodeGen: da qui si genera il progetto Xcode",
+            "ja": "XcodeGen：ここから Xcode プロジェクトを生成",
+            "zh": "XcodeGen：由此生成 Xcode 项目",
+            "pt": "XcodeGen: daqui gera-se o projeto Xcode"
+          }
+        },
+        {
+          "name": ".gitattributes  .gitignore",
+          "desc": {
+            "en": "Git settings",
+            "es": "ajustes de Git",
+            "de": "Git-Einstellungen",
+            "fr": "réglages Git",
+            "it": "impostazioni di Git",
+            "ja": "Git の設定",
+            "zh": "Git 设置",
+            "pt": "definições do Git"
+          },
+          "tree_name": ".gitattributes .gitignore"
+        }
+      ]
+    }
+  ]
+}

@@ -18,7 +18,7 @@
 ### iPhone operator client for ARMOR-SERVER: status, arming, alarms, alarm panels, cameras and the assistant, in eight languages
 
 <p align="center">
-  <img src="https://img.shields.io/badge/License-GPL%203.0-blue.svg" alt="GPL 3.0">
+  <img src="https://img.shields.io/badge/License-GPL%203.0--or--later-blue.svg" alt="GPL 3.0 or later">
   <img src="https://img.shields.io/badge/Language-Swift-f05138.svg" alt="Language">
   <img src="https://img.shields.io/badge/UI-SwiftUI-0a84ff.svg" alt="UI">
   <img src="https://img.shields.io/badge/Languages-8-00E5FF.svg" alt="Languages">
@@ -39,9 +39,15 @@
 |---|---|
 | Version | `0.0.1` |
 | Maturity | Scaffolding |
+| Role | iPhone operator client for ARMOR-SERVER (family: Clients, parent: ARMOR-SERVER) |
+| Stack | Swift 5.9+ / SwiftUI, iOS 16+ |
 | Tests | 103 (`swift test`) |
-| Stack | Swift / SwiftUI |
+| Languages | 8 (241 phrases per language, checked by `ios_lint.py`) |
+| Runs on | An iPhone with iOS 16+; the tests run on macOS or Linux |
 | On real hardware | Not run on an iPhone yet; the rules are tested on Linux |
+| License | GPL-3.0-or-later |
+
+**Jump to:** [Overview](#-overview) · [Architecture](#-architecture) · [Security](#-security--safety) · [Interfaces](#-interfaces) · [Configuration](#-configuration) · [Quick start](#-quick-start) · [Testing](#-testing) · [Troubleshooting](#-troubleshooting) · [Structure](#-repository-structure) · [Related](#-related-projects)
 
 ## 🚦 Project status
 
@@ -74,25 +80,56 @@ Each line is one part of this repository and the light says how far it is today.
 
 ARMOR-IOS-CONTROL is the iPhone's window on the same [ARMOR-SERVER](https://github.com/JuanenRac/ARMOR-SERVER) that [ARMOR-STUDIO](https://github.com/JuanenRac/ARMOR-STUDIO) and [ARMOR-ANDROID-CONTROL](https://github.com/JuanenRac/ARMOR-ANDROID-CONTROL) use: it reads and orders through it and nothing else, and it speaks the same contract as the Android app.
 
-## 📂 Repository Structure
+| Name | How | What for |
+|---|---|---|
+| ARMOR-SERVER | HTTP `/api/v1`, MJPEG | Everything the app reads and orders; the app talks to nothing else |
+| ARMOR-ANDROID-CONTROL | same contract | `ios_lint.py` checks that the app calls only paths the Android client calls |
+| ARMOR-STUDIO | QR | Pairs the key of the certificate of the installation |
 
-```text
-ARMOR-IOS-CONTROL/
-├── Sources/ArmorCore/   Tr, ServerEndpoint, Models, ArmorApi(+Client), ArmorController, DeviceLock, SessionVault, Trust, Reach, Connector, AlarmPolicy, AlarmText, AlarmCodes (+ alarm_codes.json), MjpegParser
-│   └── Resources/i18n/   en, de, fr, it, ja, zh, pt (es is the source text)
-├── Tests/ArmorCoreTests/   103 tests + fixtures of a real server
-├── App/   SwiftUI: ArmorApp, AppModel, Root, Login, Home, Alarms, Cameras, Assistant, More, Locked, Help
-│   ├── Platform/   Keychain, Face ID / Touch ID, certificate rules, push
-│   └── Resources/   assets and the permission texts in eight languages
-├── Package.swift   the Swift package (ArmorCore and its tests)
-├── project.yml     XcodeGen: the app's Xcode project is generated from it
-├── tools/ios_lint.py   structure, languages, contract, secrets (no Mac needed)
-└── docs/CLIENT_BOUNDARY.md
-```
+## 🏛️ Architecture
 
-## 🛠️ Development Environment
+<p align="center">
+  <img src="images/architecture.svg" alt="ARMOR-IOS-CONTROL architecture: who calls it, what it holds and what it depends on" width="100%">
+</p>
 
-**Requirements:** a Mac with Xcode 15+ and iOS 16+ to build the app; Swift 5.9+ (macOS or Linux) for the tests; Python 3.11 for the checks
+## 🔒 Security & Safety
+
+| Threat | Defence |
+|---|---|
+| The password on the phone | Kept only with *Remember me*, in the Keychain of this phone and never backed up; the session is an HttpOnly cookie of the server |
+| A critical order with the phone in other hands | Face ID, Touch ID or the passcode before arming, disarming, silencing a siren, unlocking and the other critical orders; the administrator can require it, never lower what you chose; a phone with no passcode is never shut out |
+| A changed or forged certificate | The key of the installation's certificate is remembered the first time or paired with the QR of Studio; if it changes the connection is refused and you are told |
+| The password sent in clear | Plain HTTP only for a private-network or loopback address (`NSAllowsLocalNetworking`); anything else needs https and the app refuses to send the password otherwise |
+| A camera password on the phone | The cameras pass through the server: the app has no camera password and no RTSP address |
+| A viewer changes something | The *viewer* role only looks: every button that changes something is off; the server checks it again |
+| The assistant arms or disarms by mistake | Written commands only (the keyboard's microphone dictates); arming and disarming need a confirmation bound to you, behind the lock of the phone |
+
+Permission texts (Face ID, local network) exist in all eight languages. Nothing here has run on an iPhone: Face ID, the Keychain and the certificate rules are untested on a device. Read [docs/CLIENT_BOUNDARY.md](docs/CLIENT_BOUNDARY.md) and [SECURITY.md](SECURITY.md).
+
+## 🔌 Interfaces
+
+It is a client: it calls 26 paths of ARMOR-SERVER (`tools/ios_lint.py` counts them and checks that the Android client calls them too), and cuts the MJPEG stream of the cameras with its own parser (`MjpegParser.swift`).
+
+| Part | What it sets |
+|---|---|
+| Two addresses | The private one on the home Wi-Fi and the one for away (a dynamic DNS name or the VPN) on mobile data; if one does not answer the other is tried, and the message says what failed (`Reach.swift`, `Connector.swift`) |
+| Cameras | A grid where only the pictures on screen run, a full view with a pad to move the camera and a snapshot, and a stream asked for again with growing waits when it drops |
+| Push | Alarms reach a closed app only through push (`Push.swift`, Firebase), and only when the server has push on and the installation brings its own `GoogleService-Info.plist`; not tried |
+
+## ⚙️ Configuration
+
+| Name | Value | What it sets |
+|---|---|---|
+| iOS | 16.0+ | Minimum version, set in `project.yml` |
+| Xcode / Swift | 15+ / 5.9+ | To build the app / to run the tests |
+| `MARKETING_VERSION`, `CURRENT_PROJECT_VERSION` | 0.0.1, 1 | The version of the app, from `project.yml` |
+| `GoogleService-Info.plist` | for push | The installation's own file, never kept in the repository |
+
+In the app: the two addresses, *Remember me*, the lock of the phone and the language (the eight languages or following the phone) in *More > Language*.
+
+## 🚀 Quick start
+
+**Requirements:** a Mac with Xcode 15+ and iOS 16+ to build the app; Swift 5.9+ (macOS or Linux) for the tests; Python 3.11 for the checks.
 
 ```sh
 swift test                  # 103 tests of ArmorCore (macOS or Linux)
@@ -101,6 +138,85 @@ xcodegen generate           # then open ARMOR-IOS-CONTROL.xcodeproj in Xcode (on
 ```
 
 The Xcode project is made from `project.yml` with XcodeGen. Choose a signing team, add the app icon and, for push, the installation's `GoogleService-Info.plist` (never kept in the repository). See the [client boundary](docs/CLIENT_BOUNDARY.md).
+
+## 🧪 Testing
+
+```sh
+swift test                  # macOS or Linux
+python tools/ios_lint.py    # any system, no Mac needed
+python -I tools/armor_ci_validate.py
+```
+
+| Test file | Tests | What it covers |
+|---|---|---|
+| `ControllerTests.swift` | 15 | The use cases of the controller |
+| `ClientTests.swift` | 14 | The link to the server and its parsing |
+| `LockTests.swift` | 12 | The lock of the phone |
+| `ModelsTests.swift` | 12 | The models read from the server |
+| `ReachTests.swift` | 11 | The choice between the two addresses |
+| `SecurityTests.swift` | 8 | The session vault and the trust in the certificate |
+| `EndpointTests.swift`, `MjpegTests.swift`, `TranslatorTests.swift` | 7 + 7 + 7 | The address parsing, the MJPEG cutting and the translator |
+| `PolicyTests.swift`, `AlarmCodesTests.swift` | 6 + 4 | The alarm policy and the alarm codes |
+
+The 103 tests run with fixtures of a real server. `tools/ios_lint.py` passes without a Mac: 31 Swift files, 241 phrases in 8 languages, 26 server paths. No test runs on a device.
+
+## 🏗️ Build & Release
+
+The Xcode project is generated from `project.yml` with XcodeGen: choose a signing team, add the app icon to `App/Resources/Assets.xcassets/AppIcon.appiconset` and, for push, the installation's `GoogleService-Info.plist`. It has never been built in Xcode.
+
+## 🩺 Troubleshooting
+
+| You see | Because | Do |
+|---|---|---|
+| The connection is refused and you are told | The key of the installation's certificate changed | Pair again with the QR of Studio if you changed it on purpose |
+| Neither address answers | Wrong address, no network, or http to a place outside the home (refused: the password is not sent in clear) | Check both addresses; use https away from home |
+| `wrong_pin`, `pin_locked`, `pin_not_set` | The server refuses the disarm PIN; the app shows the code in your language | Type the PIN again or wait for the lock to end; set it in Studio |
+
+## 📂 Repository Structure
+
+<p align="center">
+  <img src="images/repository-structure.svg" alt="Repository structure of ARMOR-IOS-CONTROL" width="100%">
+</p>
+
+<details>
+<summary>Text version of the tree</summary>
+
+```text
+ARMOR-IOS-CONTROL/
+├── Sources/ArmorCore/                   the rules of the app: a Swift package
+├── App/                                 the SwiftUI screens and the parts that need an iPhone
+├── Tests/                               103 tests and fixtures of a real server
+├── docs/                                the guides of this repository
+├── tools/                               the shared CI checks and project tooling
+├── .github/                             CI workflow, issue and pull-request templates
+├── images/                              banner, icon and the two pictures of this README
+├── armor.project.json                   manifest: version, role, maturity, build command
+├── CHANGELOG.md                         what changed in each version
+├── SECURITY.md SUPPORT.md LICENSE       security policy, support and license
+├── CONTRIBUTING.md CODE_OF_CONDUCT.md   how to contribute and the code of conduct
+├── Package.swift                        the Swift package: ArmorCore and its tests
+├── project.yml                          XcodeGen: the Xcode project is generated from it
+└── .gitattributes .gitignore            Git settings
+```
+
+</details>
+
+## 🗺️ Roadmap & Known limits
+
+**Known limits today**
+
+* Nothing has run on an iPhone: the SwiftUI screens have not been built in Xcode; Face ID, the Keychain, the certificate rules, the live camera and push through Firebase are untested.
+* Only the rules (`ArmorCore`) are tested, and only on Linux.
+* The app does not watch in the background: iOS does not let a closed app query the server.
+
+**Next**
+
+* Build the screens in Xcode and run the app on an iPhone against the CM5 test bench.
+* Try Face ID, the Keychain, the certificate rules, the live camera and push.
+
+## 🌍 Languages
+
+README and texts exist in English, Spanish, French, Italian, German, Chinese, Japanese and European Portuguese.
 
 ## 🔗 Related Projects
 
@@ -126,15 +242,20 @@ The Xcode project is made from `project.yml` with XcodeGen. Choose a signing tea
 * **[ARMOR-UPDATER](https://github.com/JuanenRac/ARMOR-UPDATER)** - Detects, installs and updates the ecosystem's own repositories
 * **[ARMOR-DOCS](https://github.com/JuanenRac/ARMOR-DOCS)** - Architecture, security baseline and the capability matrix
 
-## 📚 Documentation & Community
+## 📚 Documentation
 
-Where to read more:
-
+* [Client boundary](docs/CLIENT_BOUNDARY.md): what the client does and never does, and how to build it
 * [Capability matrix: what is proven and what is not](https://github.com/JuanenRac/ARMOR-DOCS/blob/main/docs/CAPABILITY_MATRIX.md)
 * [Project catalogue: versions and how the repositories depend on each other](https://github.com/JuanenRac/ARMOR-DOCS/blob/main/docs/PROJECT_CATALOG.md)
 * [Changelog of this repository](CHANGELOG.md)
-* [License (GPL-3.0-or-later)](LICENSE)
-* Questions, ideas and reports: electrohobby3d@gmail.com
+
+## 🤝 Contributing & Community
+
+* Before a pull request run `swift test` and `python tools/ios_lint.py` and `python -I tools/armor_ci_validate.py`: it must pass. See [CONTRIBUTING.md](CONTRIBUTING.md) and the [code of conduct](CODE_OF_CONDUCT.md).
+* The README exists in eight languages and is generated from the sources in ARMOR-DOCS: a change to the text is made there.
+* A change to a message between components starts in ARMOR-COMMON.
+* Do not describe as working on a board what has only been built.
+* Report a vulnerability privately: [SECURITY.md](SECURITY.md). Questions, ideas and reports: electrohobby3d@gmail.com ([SUPPORT.md](SUPPORT.md)).
 
 ## 👤 AUTHOR
 
