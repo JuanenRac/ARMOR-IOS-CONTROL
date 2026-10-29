@@ -42,6 +42,11 @@ final class AppModel: ObservableObject {
     @Published var tiedToUnlock: Bool
     @Published var pendingElevation: ElevationRequest?
     @Published var rememberedUser: String = ""
+    // what the person chose about the notices (kept in the preferences of the app)
+    @Published var notices = NoticeSettings()
+    @Published var sounds = SoundSettings()
+    @Published var voice = VoiceSettings()
+    @Published var speaksAlarms = false
 
     /// A screen asks the person to prove who they are again; the model waits for the answer.
     final class ElevationRequest: Identifiable {
@@ -69,6 +74,10 @@ final class AppModel: ObservableObject {
         self.language = code
         self.installation = SavedInstallation.load(from: prefs)
         self.lockStatus = policy.status()
+        self.notices = NoticePreferences.load(prefs)
+        self.sounds = SoundPreferences.load(prefs)
+        self.voice = VoicePreferences.load(prefs)
+        self.speaksAlarms = VoicePreferences.speaks(prefs)
         self.tiedToUnlock = vault.tiedToUnlock
         monitor.pathUpdateHandler = { [weak self] path in
             let place: NetworkPlace = path.usesInterfaceType(.wifi) || path.usesInterfaceType(.wiredEthernet) ? .home : (path.usesInterfaceType(.cellular) ? .away : .unknown)
@@ -234,14 +243,40 @@ final class AppModel: ObservableObject {
     }
 
     private func post(_ notice: AlarmNotice) {
+        // What the person chose comes first: some notices are not wanted at all, and some are wanted without sound.
+        let decision = notices.decide(notice)
+        if decision == .hide { return }
         let content = UNMutableNotificationContent()
         content.title = notice.title
         content.body = notice.text
-        content.sound = notice.severity == "critical" ? .defaultCritical : .default
         content.threadIdentifier = "armor-alarms"
-        content.interruptionLevel = notice.severity == "critical" ? .timeSensitive : .active
+        let critical = notice.severity == "critical"
+        if decision == .silent {
+            content.sound = nil
+            content.interruptionLevel = .passive
+        } else {
+            content.interruptionLevel = critical ? .timeSensitive : .active
+            if let file = sounds.fileFor(severity: notice.severity, kind: notice.kind), AlarmSounds.shared.exists(file) {
+                let name = UNNotificationSoundName(rawValue: file)
+                content.sound = critical ? UNNotificationSound.criticalSoundNamed(name) : UNNotificationSound(named: name)
+            } else {
+                content.sound = critical ? .defaultCritical : .default
+            }
+        }
         let request = UNNotificationRequest(identifier: "armor-\(notice.id)", content: content, trigger: nil)   // the event id: a push for the same event replaces it
         UNUserNotificationCenter.current().add(request)
+        if AlarmSpeech.shouldSpeak(decision, enabled: speaksAlarms, voice: voice, severity: notice.severity) {
+            AlarmSpeaker.shared.say("\(notice.title). \(notice.text)", voice: voice, language: language)
+        }
+    }
+
+    func setNotices(_ next: NoticeSettings) { notices = next; NoticePreferences.save(prefs, next) }
+    func setVoice(_ next: VoiceSettings) { voice = next; VoicePreferences.save(prefs, next) }
+    func setSpeaksAlarms(_ on: Bool) { speaksAlarms = on; VoicePreferences.setSpeaks(prefs, on) }
+    func setSounds(_ next: SoundSettings) {
+        sounds = next
+        SoundPreferences.save(prefs, next)
+        AlarmSounds.shared.prune(keeping: next)
     }
 
     // MARK: orders

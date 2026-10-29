@@ -22,14 +22,14 @@
   <img src="https://img.shields.io/badge/Language-Swift-f05138.svg" alt="Language">
   <img src="https://img.shields.io/badge/UI-SwiftUI-0a84ff.svg" alt="UI">
   <img src="https://img.shields.io/badge/Languages-8-00E5FF.svg" alt="Languages">
-  <img src="https://img.shields.io/badge/Tests-103%20passing-2ea44f.svg" alt="Tests">
+  <img src="https://img.shields.io/badge/Tests-146%20passing-2ea44f.svg" alt="Tests">
   <img src="https://img.shields.io/badge/Version-0.0.1-0f6cbd.svg" alt="Version">
   <img src="https://img.shields.io/badge/Maturity-scaffolding-FFB020.svg" alt="Maturity">
 </p>
 
 ---
 
-**Verificação de honestidade - o que funciona hoje:** as regras da app (ligação ao servidor, leitura das respostas, escolha do endereço, bloqueio do telemóvel, cofre da sessão, confiança no certificado, política de alarmes, casos de uso, corte do MJPEG) são o pacote Swift `ArmorCore`, coberto por 103 testes unitários que correm com `swift test` em macOS ou Linux, e `tools/ios_lint.py` verifica a estrutura, as oito tabelas de idiomas e o contrato sem Mac. O que **ainda não** está provado: os ecrãs SwiftUI e as partes que precisam de um iPhone (Face ID, porta-chaves, regras de certificado, câmara em direto, push com Firebase) não foram compilados no Xcode nem executados num dispositivo.
+**Verificação de honestidade - o que funciona hoje:** as regras da app (ligação ao servidor, leitura das respostas, escolha do endereço, bloqueio do telemóvel, cofre da sessão, confiança no certificado, política de alarmes, casos de uso, corte do MJPEG) são o pacote Swift `ArmorCore`, coberto por 146 testes unitários que correm com `swift test` em macOS ou Linux, e `tools/ios_lint.py` verifica a estrutura, as oito tabelas de idiomas e o contrato sem Mac. O que **ainda não** está provado: os ecrãs SwiftUI e as partes que precisam de um iPhone (Face ID, porta-chaves, regras de certificado, câmara em direto, push com Firebase) não foram compilados no Xcode nem executados num dispositivo.
 
 ---
 
@@ -41,7 +41,7 @@
 | Maturidade | Estrutura inicial |
 | Função | Cliente de operador para iPhone do ARMOR-SERVER (família: Clients, pai: ARMOR-SERVER) |
 | Tecnologia | Swift 5.9+ / SwiftUI, iOS 16+ |
-| Testes | 103 (`swift test`) |
+| Testes | 146 (`swift test`) |
 | Línguas | 8 (241 frases por língua, verificadas pelo `ios_lint.py`) |
 | Funciona em | Um iPhone com iOS 16+; os testes correm em macOS ou Linux |
 | Em hardware real | Ainda não foi executado num iPhone; as regras são testadas em Linux |
@@ -58,7 +58,7 @@ Cada linha é uma parte deste repositório e a luz diz até onde chega hoje. É 
 | Área | Estado | O que significa aqui |
 |---|---|---|
 | Software | 🟠 | As regras da app são um pacote Swift (`ArmorCore`); os ecrãs SwiftUI não foram compilados no Xcode. |
-| Testes | 🟡 | Passam 103 testes unitários com `swift test` em macOS ou Linux, e o `tools/ios_lint.py` verifica a estrutura, as tabelas dos oito idiomas e o contrato sem um Mac; nenhum teste corre num dispositivo. |
+| Testes | 🟡 | Passam 146 testes unitários com `swift test` em macOS ou Linux, e o `tools/ios_lint.py` verifica a estrutura, as tabelas dos oito idiomas e o contrato sem um Mac; nenhum teste corre num dispositivo. |
 | Interface | 🟠 | Os ecrãs SwiftUI estão escritos, mas não foram compilados no Xcode nem executados num iPhone. |
 | Hardware | 🔴 | Não correu num iPhone: as regras só são testadas em Linux. |
 | Segurança | 🟠 | O bloqueio do telefone, o cofre da sessão e a confiança no certificado são regras testadas em Linux; o Face ID, o porta-chaves e as regras do certificado não correram num dispositivo. |
@@ -72,6 +72,7 @@ Cada linha é uma parte deste repositório e a luz diz até onde chega hoje. É 
 * **Bloqueio com o telemóvel:** Face ID, Touch ID ou o código antes de armar, desarmar, silenciar uma sirene, desbloquear e as outras ordens críticas (ativo por defeito só com Face ID ou Touch ID) e, se o ativar, para abrir a app. O administrador pode exigi-lo, nunca baixar o que escolheu; um telemóvel sem código nunca fica de fora e o ecrã de bloqueio oferece sempre entrar com a palavra-passe. Opcionalmente (desligado, com aviso) a sessão guardada só se lê com o telemóvel desbloqueado.
 * **Armar e desarmar** depois de verificar o que ficaria cego ou ruidoso, com o PIN para desarmar; **alarmes** a confirmar, com contador; as **centrais de alarme** (armar ausente ou em casa, desarmar, silenciar a sirene) e o **histórico**; **dispositivos** com Ligar / Desligar e confirmação para circuitos e críticos.
 * **Câmaras** através do servidor (a app nunca tem a palavra-passe da câmara): uma grelha onde só correm as imagens visíveis, uma vista completa com cruzeta para mover a câmara e foto, e um fluxo pedido de novo com esperas crescentes se se cortar.
+* **Avisos à tua medida:** silenciar tudo ou mostrá-lo sem som; desligar gravidades e tipos (um alarme crítico nunca é escondido, a não ser com o interruptor que silencia tudo); um ficheiro de som teu para cada gravidade e cada tipo, com botão de reprodução; e a voz que diz os alarmes (mulher, homem, idade, estilo, velocidade, avisos de baixa gravidade), com botão de teste. Uma câmara com duas lentes numa só imagem aparece como duas janelas.
 * **O assistente:** ordens escritas (o microfone do teclado dita), com uma confirmação ligada a si para armar e desarmar, atrás do bloqueio.
 * **Confiança no certificado:** a chave do certificado da instalação é memorizada na primeira vez ou emparelhada com o QR do Studio; se mudar, a ligação é recusada e é avisado.
 * **Oito idiomas** (inglês, espanhol, alemão, francês, italiano, japonês, chinês e português de Portugal), a escolher em *Mais > Idioma* ou a seguir o telemóvel, com ajuda para cada ecrã.
@@ -132,7 +133,7 @@ Na app: os dois endereços, *Lembrar-me*, o bloqueio do telemóvel e a língua (
 **Requisitos:** um Mac com Xcode 15+ e iOS 16+ para compilar a app; Swift 5.9+ (macOS ou Linux) para os testes; Python 3.11 para as verificações.
 
 ```sh
-swift test                  # 103 tests of ArmorCore (macOS or Linux)
+swift test                  # 146 tests of ArmorCore (macOS or Linux)
 python tools/ios_lint.py    # structure, eight languages, contract (any system)
 xcodegen generate           # then open ARMOR-IOS-CONTROL.xcodeproj in Xcode (on a Mac)
 ```
@@ -158,7 +159,7 @@ python -I tools/armor_ci_validate.py
 | `EndpointTests.swift`, `MjpegTests.swift`, `TranslatorTests.swift` | 7 + 7 + 7 | A leitura de endereços, o corte MJPEG e o tradutor |
 | `PolicyTests.swift`, `AlarmCodesTests.swift` | 6 + 4 | A política de alarmes e os códigos de alarme |
 
-Os 103 testes usam dados de um servidor real. O `tools/ios_lint.py` passa sem Mac: 31 ficheiros Swift, 241 frases em 8 línguas, 26 caminhos do servidor. Nenhum teste corre num dispositivo.
+Os 146 testes usam dados de um servidor real. O `tools/ios_lint.py` passa sem Mac: 31 ficheiros Swift, 241 frases em 8 línguas, 26 caminhos do servidor. Nenhum teste corre num dispositivo.
 
 ## 🏗️ Compilação e publicação
 
@@ -185,7 +186,7 @@ O projeto Xcode gera-se a partir de `project.yml` com o XcodeGen: escolha uma eq
 ARMOR-IOS-CONTROL/
 ├── Sources/ArmorCore/                   as regras da app: um pacote Swift
 ├── App/                                 os ecrãs SwiftUI e as partes que precisam de um iPhone
-├── Tests/                               103 testes e dados de um servidor real
+├── Tests/                               146 testes e dados de um servidor real
 ├── docs/                                os guias deste repositório
 ├── tools/                               as verificações de CI partilhadas e as ferramentas do projeto
 ├── .github/                             fluxo de CI e modelos de issues e pull requests
@@ -205,7 +206,7 @@ ARMOR-IOS-CONTROL/
 
 **Limites conhecidos hoje**
 
-* Nada correu num iPhone: os ecrãs SwiftUI não foram compilados no Xcode; o Face ID, o Keychain, as regras de certificado, a câmara em direto e o push via Firebase não foram testados.
+* Nada correu num iPhone: os ecrãs SwiftUI não foram compilados no Xcode; o Face ID, o Keychain, as regras de certificado, a câmara em direto, os sons dos avisos, a voz e o push via Firebase não foram testados.
 * Só as regras (`ArmorCore`) estão testadas, e só em Linux.
 * A app não vigia em segundo plano: o iOS não deixa uma app fechada consultar o servidor.
 

@@ -33,7 +33,8 @@ struct CamerasView: View {
                     Text(model.tr("Sin cámaras")).foregroundColor(Theme.muted).padding()
                 }
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 10)], spacing: 10) {
-                    ForEach(list.cameras) { camera in
+                    // a camera with two lenses in one picture is two windows, each with its half
+                    ForEach(withLensWindows(list.cameras, model.translator)) { camera in
                         NavigationLink {
                             CameraDetail(camera: camera)
                         } label: {
@@ -44,7 +45,7 @@ struct CamerasView: View {
                                 HStack {
                                     Text(camera.name).font(.caption.weight(.semibold)).foregroundColor(.white)
                                     Spacer()
-                                    Circle().fill(list.health[camera.id] == "online" ? Theme.ok : Theme.amber).frame(width: 8, height: 8)
+                                    Circle().fill(list.health[camera.serverId] == "online" ? Theme.ok : Theme.amber).frame(width: 8, height: 8)
                                 }
                             }
                         }
@@ -83,7 +84,8 @@ struct CameraTile: View {
 
     private func update() {
         if live && camera.liveVideoAvailable, let origin = model.activeOrigin {
-            stream.start(api: model.controller.api, trust: model.trust, origin: origin, cameraId: camera.id, quality: CameraQuality.requested(away: model.place == .away, tile: true))
+            stream.half = camera.lens
+            stream.start(api: model.controller.api, trust: model.trust, origin: origin, cameraId: camera.serverId, quality: CameraQuality.requested(away: model.place == .away, tile: true))
         } else { stream.stop() }
     }
 }
@@ -112,18 +114,18 @@ struct CameraDetail: View {
         .padding()
         .background(Theme.background)
         .navigationTitle(camera.name)
-        .onAppear { if let origin = model.activeOrigin { stream.start(api: model.controller.api, trust: model.trust, origin: origin, cameraId: camera.id) } }
+        .onAppear { if let origin = model.activeOrigin { stream.half = camera.lens; stream.start(api: model.controller.api, trust: model.trust, origin: origin, cameraId: camera.serverId) } }
         .onDisappear { stream.stop() }
     }
 
     private func snapshot() async {
         guard let origin = model.activeOrigin else { return }
-        await model.order(model.tr("Foto guardada.")) { _ in try await model.controller.api.snapshot(origin, cameraId: camera.id) }
+        await model.order(model.tr("Foto guardada.")) { _ in try await model.controller.api.snapshot(origin, cameraId: camera.serverId) }
     }
 
     private func ptz(_ command: String) async {
         guard let origin = model.activeOrigin else { return }
-        try? await model.controller.api.ptz(origin, cameraId: camera.id, command: command)
+        try? await model.controller.api.ptz(origin, cameraId: camera.serverId, command: command)
     }
 }
 
@@ -178,6 +180,8 @@ final class MjpegLoader: NSObject, URLSessionDataDelegate {
 @MainActor
 final class MjpegStream: ObservableObject {
     @Published var image: UIImage?
+    /// The part of the picture this window shows: a camera with two lenses in one stream has a window for each half.
+    var half: LensHalf = .whole
     private var task: Task<Void, Never>?
     private var loader: MjpegLoader?
     private var runningFor: String?
@@ -206,7 +210,7 @@ final class MjpegStream: ObservableObject {
             let once = Once(done)
             let made = MjpegLoader(trust: trust, onFrame: { [weak self] data in
                 // one picture decoded at a time, the newest wins: a slow phone drops pictures instead of piling them up
-                if let picture = UIImage(data: data) { Task { @MainActor in self?.image = picture } }
+                if let picture = UIImage(data: data) { Task { @MainActor in if let stream = self { stream.image = picture.showing(stream.half) } } }
                 gotPicture = true
             }, onEnd: { once.finish() })
             loader = made
@@ -225,4 +229,16 @@ final class Once: @unchecked Sendable {
     private let lock = NSLock()
     init(_ continuation: CheckedContinuation<Void, Never>) { self.continuation = continuation }
     func finish() { lock.lock(); let c = continuation; continuation = nil; lock.unlock(); c?.resume() }
+}
+
+extension UIImage {
+    /// The part of the picture a window of a camera with two lenses shows (the whole of it for an ordinary camera).
+    func showing(_ half: LensHalf) -> UIImage {
+        guard half != .whole, let source = cgImage else { return self }
+        let crop = LensCrop.of(half)
+        let height = CGFloat(source.height)
+        let rectangle = CGRect(x: 0, y: (CGFloat(crop.y) * height).rounded(), width: CGFloat(source.width), height: (CGFloat(crop.height) * height).rounded())
+        guard let part = source.cropping(to: rectangle) else { return self }
+        return UIImage(cgImage: part, scale: scale, orientation: imageOrientation)
+    }
 }

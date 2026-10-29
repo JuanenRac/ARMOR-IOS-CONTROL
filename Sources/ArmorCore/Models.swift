@@ -297,11 +297,26 @@ public enum AlarmPanelsParser {
 public struct CameraView: Equatable, Sendable, Identifiable {
     public let id: String, name: String
     public let liveVideoAvailable: Bool
+    /// "split": the stream carries two lenses, one above the other, and the app shows them in two windows (see `withLensWindows`).
+    public let layout: String?
+    /// Which part of the picture a window shows: all of it, or the upper or the lower lens of a camera with two lenses in one stream.
+    public let lens: LensHalf
+    /// The real camera behind a window (the identifier the server knows).
+    public let sourceId: String?
+
+    public init(id: String, name: String, liveVideoAvailable: Bool, layout: String? = nil, lens: LensHalf = .whole, sourceId: String? = nil) {
+        self.id = id; self.name = name; self.liveVideoAvailable = liveVideoAvailable; self.layout = layout; self.lens = lens; self.sourceId = sourceId
+    }
+
+    /// The identifier that the server knows for a camera of the list: what the stream, the snapshot and the movement ask for.
+    public var serverId: String { sourceId ?? id }
+
     public static func parse(_ root: JSON) -> [CameraView] {
         root.objects("cameras").compactMap { camera in
             let id = camera.str("id")
             if id.isEmpty { return nil }
-            return CameraView(id: id, name: camera.str("name", id), liveVideoAvailable: camera.bool("liveVideoAvailable"))
+            let layout = camera.str("layout")
+            return CameraView(id: id, name: camera.str("name", id), liveVideoAvailable: camera.bool("liveVideoAvailable"), layout: layout.isEmpty ? nil : layout)
         }
     }
 }

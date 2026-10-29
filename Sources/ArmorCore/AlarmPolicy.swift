@@ -2,12 +2,17 @@
 // Copyright (C) 2026 JuanenRac (Electro Hobby 3D). GPL-3.0-or-later.
 import Foundation
 
-/// `severity` is "critical", "high" or "warning".
+/// `severity` is "critical", "high" or "warning". `kind` says what the notice is about (see `NoticeKinds`) so that the person can switch kinds off.
 public struct AlarmNotice: Equatable, Sendable {
     public let id: Int
     public let title: String
     public let text: String
     public let severity: String
+    public let kind: String
+
+    public init(id: Int, title: String, text: String, severity: String, kind: String = NoticeKinds.system) {
+        self.id = id; self.title = title; self.text = text; self.severity = severity; self.kind = kind
+    }
 }
 
 public enum AlarmPolicy {
@@ -22,17 +27,17 @@ public enum AlarmPolicy {
             if isSilent(event.code) { return nil }
             switch true {
             case event.type == "alert" && event.to == "high":
-                return AlarmNotice(id: event.id, title: t.tr("ALERTA ALTA"), text: t.trf("%s: %s objetivos", event.subject, event.targets ?? 0), severity: "high")
+                return AlarmNotice(id: event.id, title: t.tr("ALERTA ALTA"), text: t.trf("%s: %s objetivos", event.subject, event.targets ?? 0), severity: "high", kind: "alert")
             case event.type == "camera" && event.to == "offline":
-                return AlarmNotice(id: event.id, title: t.tr("Cámara sin respuesta"), text: event.subject, severity: "high")
+                return AlarmNotice(id: event.id, title: t.tr("Cámara sin respuesta"), text: event.subject, severity: "high", kind: "camera")
             case event.type == "node" && armed && event.to == "offline":
-                return AlarmNotice(id: event.id, title: t.tr("Nodo fuera de línea"), text: event.subject, severity: "high")
+                return AlarmNotice(id: event.id, title: t.tr("Nodo fuera de línea"), text: event.subject, severity: "high", kind: "node")
             case event.type == "node" && armed && event.to == "stale":
-                return AlarmNotice(id: event.id, title: t.tr("Nodo en silencio"), text: event.subject, severity: "high")
+                return AlarmNotice(id: event.id, title: t.tr("Nodo en silencio"), text: event.subject, severity: "high", kind: "node")
             case event.type == "alarm" && event.to == "raised" && sources.contains(event.sourceType ?? ""):
                 let severity = event.severity ?? "warning"
                 return AlarmNotice(id: event.id, title: t.trf("ALARMA %s", AlarmText.severityLabel(severity, t)),
-                                   text: "\(AlarmText.text(event.code ?? "", t)) · \(event.subject)", severity: severity)
+                                   text: "\(AlarmText.text(event.code ?? "", t)) · \(event.subject)", severity: severity, kind: NoticeKinds.ofAlarm(event.sourceType))
             default: return nil
             }
         }

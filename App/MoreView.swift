@@ -14,6 +14,9 @@ struct MoreView: View {
                     NavigationLink(model.tr("Servidor")) { ServerSettings() }
                     NavigationLink(model.tr("Bloqueo con el teléfono")) { LockSettingsView() }
                     NavigationLink(model.tr("Idioma")) { LanguageView() }
+                    NavigationLink(model.tr("Qué avisos quiero")) { NoticeSettingsView() }
+                    NavigationLink(model.tr("Sonido de cada aviso")) { SoundSettingsView() }
+                    NavigationLink(model.tr("Voz de las alarmas")) { VoiceSettingsView() }
                     NavigationLink(model.tr("Ayuda")) { HelpView() }
                     NavigationLink(model.tr("Dispositivos")) { DevicesView() }
                 }.listRowBackground(Theme.surface)

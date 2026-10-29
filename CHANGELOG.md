@@ -4,6 +4,12 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+- **Choose which notices the phone shows:** in More, "Which notices I want" can silence every notice, show them without sound (and without the voice), and switch off a severity or a kind of notice (radar alerts, cameras, nodes, and the alarms of devices, solar, electrical, network and alarm panels). A critical alarm is never taken away by severity or kind, only by the switch that silences everything. Everything stays in the history. Off by default: nothing changes until the person turns something off. The rules are `NoticeSettings` in `ArmorCore`, with unit tests.
+- **A sound for each severity and each kind of notice:** a sound file of the person's own (.aiff, .wav or .caf, under 3 MB and 30 seconds, the formats iOS plays for a notification) is kept in the sounds of the app and named by the notification, with a play button; the kind wins over the severity, and the default sound of each severity is the way it was. iOS gives an app no list of its own sounds, so there is no list of phone sounds as on Android.
+- **The voice that says the alarms:** woman or man, age, style, speed and whether low-severity notices are said too, the same choices as Studio and the Android app, with a test button and the existing "say the alarm aloud" switch (off by default) kept next to it. The pitch and pace are worked out in `ArmorCore` and given to the system speech synthesizer; the app speaks only while it is open.
+- **A camera with two lenses in one picture is shown as two windows,** each with its half of the picture and the name of its lens; the snapshot and the movement pad still go to the real camera.
+- **The new texts are in the eight languages,** and the tests cover the rules of the notices, the sounds, the voice and the lens windows (146 tests in all).
+
 - **The README follows the universal layout:** security, interfaces, configuration, testing, troubleshooting and roadmap sections and the architecture and repository-structure pictures, in the eight languages.
 - **The layout of the README is checked in the CI:** the validator runs the shared `tools/universal_readme_check.py` and lists, as a warning, what differs from the universal layout of the README.
 - **One table of alarm codes for every client:** the sentence of each alarm code (58 of them, in the eight languages) comes from a copy of the table that the server and Studio share, checked against the original by `tools/ios_lint.py` and by a test.

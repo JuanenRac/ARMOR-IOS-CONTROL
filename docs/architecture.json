@@ -2,7 +2,7 @@
   "repo": "ARMOR-IOS-CONTROL",
   "ecosystem": "armor",
   "tagline": "The iPhone window on ARMOR-SERVER: the rules are a Swift package tested on Linux, the screens and the phone parts have never run on an iPhone.",
-  "description": "ARMOR-IOS-CONTROL reads and orders through ARMOR-SERVER and nothing else. The rules of the app are the Swift package ArmorCore (103 tests, run with swift test on macOS or Linux); the SwiftUI screens and the parts that need an iPhone (Face ID, the Keychain, the certificate rules, live camera and push) have not been built in Xcode or run.",
+  "description": "ARMOR-IOS-CONTROL reads and orders through ARMOR-SERVER and nothing else. The rules of the app are the Swift package ArmorCore (146 tests, run with swift test on macOS or Linux); the SwiftUI screens and the parts that need an iPhone (Face ID, the Keychain, the certificate rules, live camera and push) have not been built in Xcode or run.",
   "columns": [
     "WHO USES IT",
     "THIS REPOSITORY",
@@ -43,7 +43,7 @@
       "lines": [
         "server link, parsing, two",
         "addresses, MJPEG cutting;",
-        "103 tests with swift test"
+        "146 tests with swift test"
       ],
       "code": [
         "Sources/ArmorCore/ArmorController.swift",

@@ -22,14 +22,14 @@
   <img src="https://img.shields.io/badge/Language-Swift-f05138.svg" alt="Language">
   <img src="https://img.shields.io/badge/UI-SwiftUI-0a84ff.svg" alt="UI">
   <img src="https://img.shields.io/badge/Languages-8-00E5FF.svg" alt="Languages">
-  <img src="https://img.shields.io/badge/Tests-103%20passing-2ea44f.svg" alt="Tests">
+  <img src="https://img.shields.io/badge/Tests-146%20passing-2ea44f.svg" alt="Tests">
   <img src="https://img.shields.io/badge/Version-0.0.1-0f6cbd.svg" alt="Version">
   <img src="https://img.shields.io/badge/Maturity-scaffolding-FFB020.svg" alt="Maturity">
 </p>
 
 ---
 
-**Honesty check - what runs today:** the rules of the app (server link, parsing, choice of address, lock of the phone, vault of the session, trust in the certificate, alarm policy, use cases, MJPEG cutting) are the Swift package `ArmorCore`, covered by 103 unit tests that run with `swift test` on macOS or Linux, and `tools/ios_lint.py` checks the structure, the eight language tables and the contract without a Mac. What is **not** proven yet: the SwiftUI screens and the parts that need an iPhone (Face ID, Keychain, certificate rules, live camera, push through Firebase) have not been built in Xcode or run on a device.
+**Honesty check - what runs today:** the rules of the app (server link, parsing, choice of address, lock of the phone, vault of the session, trust in the certificate, alarm policy, use cases, MJPEG cutting) are the Swift package `ArmorCore`, covered by 146 unit tests that run with `swift test` on macOS or Linux, and `tools/ios_lint.py` checks the structure, the eight language tables and the contract without a Mac. What is **not** proven yet: the SwiftUI screens and the parts that need an iPhone (Face ID, Keychain, certificate rules, live camera, push through Firebase) have not been built in Xcode or run on a device.
 
 ---
 
@@ -41,7 +41,7 @@
 | Maturity | Scaffolding |
 | Role | iPhone operator client for ARMOR-SERVER (family: Clients, parent: ARMOR-SERVER) |
 | Stack | Swift 5.9+ / SwiftUI, iOS 16+ |
-| Tests | 103 (`swift test`) |
+| Tests | 146 (`swift test`) |
 | Languages | 8 (241 phrases per language, checked by `ios_lint.py`) |
 | Runs on | An iPhone with iOS 16+; the tests run on macOS or Linux |
 | On real hardware | Not run on an iPhone yet; the rules are tested on Linux |
@@ -58,7 +58,7 @@ Each line is one part of this repository and the light says how far it is today.
 | Area | State | What it means here |
 |---|---|---|
 | Software | 🟠 | The rules of the app are a Swift package (`ArmorCore`); the SwiftUI screens have not been built in Xcode. |
-| Tests | 🟡 | 103 unit tests pass with `swift test` on macOS or Linux, and `tools/ios_lint.py` checks the structure, the eight language tables and the contract without a Mac; no test runs on a device. |
+| Tests | 🟡 | 146 unit tests pass with `swift test` on macOS or Linux, and `tools/ios_lint.py` checks the structure, the eight language tables and the contract without a Mac; no test runs on a device. |
 | Interface | 🟠 | The SwiftUI screens are written but have not been built in Xcode or run on an iPhone. |
 | Hardware | 🔴 | It has not run on an iPhone: the rules are tested on Linux only. |
 | Security | 🟠 | The lock of the phone, the session vault and the trust in the certificate are rules tested on Linux; Face ID, the Keychain and the certificate rules have not run on a device. |
@@ -72,6 +72,7 @@ Each line is one part of this repository and the light says how far it is today.
 * **Lock with the phone:** Face ID, Touch ID or the passcode before arming, disarming, silencing a siren, unlocking and the other critical orders (on by default only with Face ID or Touch ID), and, if you turn it on, to open the app. Your administrator can require it, never lower what you chose; a phone with no passcode is never shut out and the locked screen always offers signing in with the password. Optionally (off by default, with a warning) the saved session is readable only while the phone is unlocked.
 * **Arm and disarm** after a check of what would be left blind or noisy, with the PIN to disarm; **alarms** to confirm, with a badge; the **alarm panels** (arm away or at home, disarm, silence the siren) and the **history**; **devices** with On / Off and a confirmation for circuits and critical ones.
 * **Cameras** through the server (the app never has a camera password): a grid where only the pictures on screen run, a full view with a pad to move the camera and a snapshot, and a stream asked for again with growing waits when it drops.
+* **Notices you choose:** silence everything or show it without sound; switch severities and kinds off (a critical alarm is never hidden, except by the switch that silences all); a sound file of your own for each severity and each kind, with a play button; and the voice that says the alarms (woman, man, age, style, speed, low-severity notices), with a test button. A camera with two lenses in one picture is shown as two windows.
 * **The assistant:** written commands (the keyboard's microphone dictates), with a confirmation bound to you for arming and disarming, behind the lock.
 * **Trust in the certificate:** the key of the installation's certificate is remembered the first time or paired with the QR of Studio; if it changes the connection is refused and you are told.
 * **Eight languages** (English, Spanish, German, French, Italian, Japanese, Chinese and Portuguese of Portugal), chosen in *More > Language* or following the phone, with a help for every screen.
@@ -132,7 +133,7 @@ In the app: the two addresses, *Remember me*, the lock of the phone and the lang
 **Requirements:** a Mac with Xcode 15+ and iOS 16+ to build the app; Swift 5.9+ (macOS or Linux) for the tests; Python 3.11 for the checks.
 
 ```sh
-swift test                  # 103 tests of ArmorCore (macOS or Linux)
+swift test                  # 146 tests of ArmorCore (macOS or Linux)
 python tools/ios_lint.py    # structure, eight languages, contract (any system)
 xcodegen generate           # then open ARMOR-IOS-CONTROL.xcodeproj in Xcode (on a Mac)
 ```
@@ -158,7 +159,7 @@ python -I tools/armor_ci_validate.py
 | `EndpointTests.swift`, `MjpegTests.swift`, `TranslatorTests.swift` | 7 + 7 + 7 | The address parsing, the MJPEG cutting and the translator |
 | `PolicyTests.swift`, `AlarmCodesTests.swift` | 6 + 4 | The alarm policy and the alarm codes |
 
-The 103 tests run with fixtures of a real server. `tools/ios_lint.py` passes without a Mac: 31 Swift files, 241 phrases in 8 languages, 26 server paths. No test runs on a device.
+The 146 tests run with fixtures of a real server. `tools/ios_lint.py` passes without a Mac: 31 Swift files, 241 phrases in 8 languages, 26 server paths. No test runs on a device.
 
 ## 🏗️ Build & Release
 
@@ -185,7 +186,7 @@ The Xcode project is generated from `project.yml` with XcodeGen: choose a signin
 ARMOR-IOS-CONTROL/
 ├── Sources/ArmorCore/                   the rules of the app: a Swift package
 ├── App/                                 the SwiftUI screens and the parts that need an iPhone
-├── Tests/                               103 tests and fixtures of a real server
+├── Tests/                               146 tests and fixtures of a real server
 ├── docs/                                the guides of this repository
 ├── tools/                               the shared CI checks and project tooling
 ├── .github/                             CI workflow, issue and pull-request templates
@@ -205,7 +206,7 @@ ARMOR-IOS-CONTROL/
 
 **Known limits today**
 
-* Nothing has run on an iPhone: the SwiftUI screens have not been built in Xcode; Face ID, the Keychain, the certificate rules, the live camera and push through Firebase are untested.
+* Nothing has run on an iPhone: the SwiftUI screens have not been built in Xcode; Face ID, the Keychain, the certificate rules, the live camera, the sounds of the notices, the voice and push through Firebase are untested.
 * Only the rules (`ArmorCore`) are tested, and only on Linux.
 * The app does not watch in the background: iOS does not let a closed app query the server.
 
