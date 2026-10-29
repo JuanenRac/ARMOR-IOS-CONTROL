@@ -239,6 +239,7 @@ final class AppModel: ObservableObject {
     }
 
     private func requestNotificationPermission() {
+        UNUserNotificationCenter.current().delegate = NotificationPresenter.shared   // the notices also show while the app is open
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { _, _ in }
     }
 
