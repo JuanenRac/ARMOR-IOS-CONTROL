@@ -476,7 +476,7 @@ def run_project(project: Path, manifest: dict[str, object]) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="A.R.M.O.R. standardized project workflow")
-    parser.add_argument("action", choices=("build", "build-test", "run"))
+    parser.add_argument("action", choices=("build", "build-test", "test", "run"))
     parser.add_argument("project", type=Path)
     args = parser.parse_args()
     project = args.project.resolve()
@@ -487,6 +487,7 @@ def main() -> int:
     if manifest.get("ecosystem") != "A.R.M.O.R.":
         raise RuntimeError("refusing non-A.R.M.O.R. manifest")
     global PANEL
+    PANEL = None   # a run that comes after another one in the same process starts clean
     if Panel is not None and os.environ.get("ARMOR_PRETTY") != "0" and args.action != "run":
         PANEL = Panel(str(manifest["name"]), args.action, str(manifest["version"]), "A.R.M.O.R.")
         PANEL.banner()
