@@ -24,7 +24,11 @@ final class FakeAuth: DeviceAuth, @unchecked Sendable {
 
 /// A server that refuses nothing and records the orders it gets; a test overrides what it needs.
 class FakeApi: ArmorApi, @unchecked Sendable {
-    var calls: [String] = []
+    // the controller may call the server from more than one task: the record is guarded so a test reads a whole list
+    private let callsLock = NSLock()
+    private var recorded: [String] = []
+    var calls: [String] { callsLock.lock(); defer { callsLock.unlock() }; return recorded }
+    func record(_ call: String) { callsLock.lock(); recorded.append(call); callsLock.unlock() }
     var modeError: ArmorApiError?
     var modeErrorOnce = false
     var facts = SessionFacts(role: "admin", deviceLock: "user")
@@ -38,26 +42,26 @@ class FakeApi: ArmorApi, @unchecked Sendable {
     func reach(_ origin: String) throws {
         if unreachable.contains(origin) { throw ArmorApiError(message: "timeout", status: nil) }
     }
-    func status(_ origin: String) async throws -> ArmorSnapshot { calls.append("status"); return ArmorSnapshot(mode: statusMode) }
-    func history(_ origin: String, limit: Int, before: Int?, after: Int?) async throws -> [ArmorEvent] { calls.append("history"); return historyEvents }
+    func status(_ origin: String) async throws -> ArmorSnapshot { record("status"); return ArmorSnapshot(mode: statusMode) }
+    func history(_ origin: String, limit: Int, before: Int?, after: Int?) async throws -> [ArmorEvent] { record("history"); return historyEvents }
     func preflight(_ origin: String) async throws -> Preflight { Preflight(ready: true, issues: []) }
     func setMode(_ origin: String, mode: String, pin: String?) async throws {
-        calls.append("mode:\(mode):\(pin ?? "-")")
+        record("mode:\(mode):\(pin ?? "-")")
         if let error = modeError { if modeErrorOnce { modeError = nil }; throw error }
         statusMode = mode
     }
-    func alarms(_ origin: String) async throws -> (active: [Alarm], recent: [Alarm]) { calls.append("alarms"); return ([], []) }
-    func acknowledgeAlarm(_ origin: String, id: String) async throws { calls.append("ack:\(id)") }
-    func acknowledgeAllAlarms(_ origin: String) async throws { calls.append("ackall") }
+    func alarms(_ origin: String) async throws -> (active: [Alarm], recent: [Alarm]) { record("alarms"); return ([], []) }
+    func acknowledgeAlarm(_ origin: String, id: String) async throws { record("ack:\(id)") }
+    func acknowledgeAllAlarms(_ origin: String) async throws { record("ackall") }
     func alarmPanels(_ origin: String) async throws -> [AlarmPanelView] { [] }
     func armProfiles(_ origin: String) async throws -> [ArmProfileView] { [] }
     func alarmCommandsEnabled(_ origin: String) async throws -> Bool { true }
     func sendAlarmCommand(_ origin: String, node: String, mode: String?, force: Bool, pin: String?, profile: String?) async throws {
-        calls.append("panel:\(node):\(mode ?? "disarm"):\(pin ?? "-")")
+        record("panel:\(node):\(mode ?? "disarm"):\(pin ?? "-")")
     }
-    func silenceAlarmSiren(_ origin: String, node: String, pin: String?) async throws { calls.append("silence:\(node)") }
+    func silenceAlarmSiren(_ origin: String, node: String, pin: String?) async throws { record("silence:\(node)") }
     func devices(_ origin: String) async throws -> [SiteDevice] { [] }
-    func commandDevice(_ origin: String, id: String, command: String, confirm: Bool) async throws { calls.append("device:\(id):\(command)") }
+    func commandDevice(_ origin: String, id: String, command: String, confirm: Bool) async throws { record("device:\(id):\(command)") }
     func cameraViews(_ origin: String) async throws -> [CameraView] { [] }
     func cameraStatus(_ origin: String) async throws -> [CameraHealth] { [] }
     func streamTicket(_ origin: String, cameraId: String, quality: String) async throws -> String { origin + "/api/v1/cameras/\(cameraId)/stream?ticket=t" }
@@ -65,18 +69,18 @@ class FakeApi: ArmorApi, @unchecked Sendable {
     func ptz(_ origin: String, cameraId: String, command: String) async throws {}
     func voiceAvailable(_ origin: String) async throws -> Bool { true }
     func voiceCommand(_ origin: String, text: String, language: String, confirmation: String?) async throws -> VoiceReply {
-        calls.append("voice:\(text):\(language):\(confirmation ?? "-")")
+        record("voice:\(text):\(language):\(confirmation ?? "-")")
         return VoiceReply(accepted: true, executed: confirmation != nil, intent: "arm", outcome: confirmation == nil ? "confirmation-needed" : "accepted", speech: "ok",
                           confirmationToken: confirmation == nil ? "tok" : nil)
     }
-    func signIn(_ origin: String, username: String, password: String) async throws -> SignIn { try reach(origin); calls.append("signin:\(username)"); return signInResult }
-    func completeSignIn(_ origin: String, challenge: String, code: String) async throws { calls.append("totp:\(challenge):\(code)") }
+    func signIn(_ origin: String, username: String, password: String) async throws -> SignIn { try reach(origin); record("signin:\(username)"); return signInResult }
+    func completeSignIn(_ origin: String, challenge: String, code: String) async throws { record("totp:\(challenge):\(code)") }
     func sessionFacts(_ origin: String) async throws -> SessionFacts { try reach(origin); return facts }
-    func closeSession(_ origin: String) async throws { calls.append("close") }
-    func elevate(_ origin: String, password: String, code: String) async throws { calls.append("elevate:\(password):\(code)") }
+    func closeSession(_ origin: String) async throws { record("close") }
+    func elevate(_ origin: String, password: String, code: String) async throws { record("elevate:\(password):\(code)") }
     func sessionCookie(_ origin: String) -> SessionCookie? { jar ?? cookie }
-    func restoreSessionCookie(_ origin: String, _ cookie: SessionCookie) { jar = cookie; calls.append("restore") }
-    func forgetSession(_ origin: String) { jar = nil; cookie = nil; calls.append("forget") }
+    func restoreSessionCookie(_ origin: String, _ cookie: SessionCookie) { jar = cookie; record("restore") }
+    func forgetSession(_ origin: String) { jar = nil; cookie = nil; record("forget") }
     func registerPush(_ origin: String, token: String) async throws {}
     func unregisterPush(_ origin: String, token: String) async throws {}
 }
