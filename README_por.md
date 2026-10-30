@@ -63,7 +63,7 @@ Cada linha é uma parte deste repositório e a luz diz até onde chega hoje. É 
 | Hardware | 🔴 | Não correu num iPhone: as regras só são testadas em Linux. |
 | Segurança | 🟠 | O bloqueio do telefone, o cofre da sessão e a confiança no certificado são regras testadas em Linux; o Face ID, o porta-chaves e as regras do certificado não correram num dispositivo. |
 | Integração | 🟠 | A câmara em direto e o push através do Firebase não foram experimentados; a ligação ao servidor e a análise são testadas contra o contrato partilhado. |
-| Documentação | 🟢 | Oito idiomas e o registo de alterações estão atualizados. |
+| Documentação | 🟡 | Oito idiomas e o registo de alterações estão atualizados. |
 
 ## 🎯 Visão geral
 

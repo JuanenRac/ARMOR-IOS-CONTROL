@@ -63,7 +63,7 @@ Cada línea es una parte de este repositorio y la luz dice hasta dónde llega ho
 | Hardware | 🔴 | No ha funcionado en un iPhone: las reglas solo se prueban en Linux. |
 | Seguridad | 🟠 | El bloqueo del teléfono, la caja de la sesión y la confianza en el certificado son reglas probadas en Linux; Face ID, el llavero y las reglas del certificado no se han ejecutado en un dispositivo. |
 | Integración | 🟠 | La cámara en vivo y el push mediante Firebase no se han probado; el enlace con el servidor y el análisis se prueban contra el contrato compartido. |
-| Documentación | 🟢 | Ocho idiomas y el historial de cambios están al día. |
+| Documentación | 🟡 | Ocho idiomas y el historial de cambios están al día. |
 
 ## 🎯 Resumen
 

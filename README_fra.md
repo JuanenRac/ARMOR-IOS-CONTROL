@@ -63,7 +63,7 @@ Chaque ligne est une partie de ce dépôt et le feu dit où elle en est aujourd'
 | Matériel | 🔴 | Elle n'a pas tourné sur un iPhone : les règles ne sont testées que sous Linux. |
 | Sécurité | 🟠 | Le verrouillage du téléphone, le coffre de la session et la confiance dans le certificat sont des règles testées sous Linux ; Face ID, le trousseau et les règles du certificat n'ont pas tourné sur un appareil. |
 | Intégration | 🟠 | La caméra en direct et le push via Firebase n'ont pas été essayés ; la liaison au serveur et l'analyse sont testées contre le contrat partagé. |
-| Documentation | 🟢 | Huit langues et le journal des modifications sont à jour. |
+| Documentation | 🟡 | Huit langues et le journal des modifications sont à jour. |
 
 ## 🎯 Présentation
 

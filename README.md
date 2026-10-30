@@ -63,7 +63,7 @@ Each line is one part of this repository and the light says how far it is today.
 | Hardware | 🔴 | It has not run on an iPhone: the rules are tested on Linux only. |
 | Security | 🟠 | The lock of the phone, the session vault and the trust in the certificate are rules tested on Linux; Face ID, the Keychain and the certificate rules have not run on a device. |
 | Integration | 🟠 | Live camera and push through Firebase have not been tried; the server link and the parsing are tested against the shared contract. |
-| Documentation | 🟢 | Eight languages and the changelog are up to date. |
+| Documentation | 🟡 | Eight languages and the changelog are up to date. |
 
 ## 🎯 Overview
 

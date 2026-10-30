@@ -63,7 +63,7 @@ Ogni riga è una parte di questo repository e il semaforo dice a che punto è og
 | Hardware | 🔴 | Non ha girato su un iPhone: le regole sono provate solo su Linux. |
 | Sicurezza | 🟠 | Il blocco del telefono, il deposito della sessione e la fiducia nel certificato sono regole provate su Linux; Face ID, il portachiavi e le regole del certificato non sono stati eseguiti su un dispositivo. |
 | Integrazione | 🟠 | La telecamera dal vivo e il push tramite Firebase non sono stati provati; il collegamento al server e il parsing sono provati contro il contratto condiviso. |
-| Documentazione | 🟢 | Otto lingue e il registro delle modifiche sono aggiornati. |
+| Documentazione | 🟡 | Otto lingue e il registro delle modifiche sono aggiornati. |
 
 ## 🎯 Panoramica
 
