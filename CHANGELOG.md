@@ -13,7 +13,7 @@ All notable changes to this project are documented here.
 - **The new texts are in the eight languages,** and the tests cover the rules of the notices, the sounds, the voice and the lens windows (146 tests in all).
 
 - **The README follows the universal layout:** security, interfaces, configuration, testing, troubleshooting and roadmap sections and the architecture and repository-structure pictures, in the eight languages.
-- **The layout of the README is checked in the CI:** the validator runs the shared `tools/universal_readme_check.py` and lists, as a warning, what differs from the universal layout of the README.
+- **The layout of the README is checked in the CI:** the validator runs the shared `tools/universal_readme_check.py` and fails when the README differs from the universal layout.
 - **One table of alarm codes for every client:** the sentence of each alarm code (58 of them, in the eight languages) comes from a copy of the table that the server and Studio share, checked against the original by `tools/ios_lint.py` and by a test.
 - **The quality of the camera picture is asked for explicitly:** a tile of the grid asks the server for the lighter picture from outside the house and the normal one at home, the full view lets the server decide.
 - **The pictures of the README come from shared tools:** `tools/make_architecture.py` draws `images/architecture.svg` from `docs/architecture.json` and `tools/make_structure.py` draws the Repository Structure (the text tree and the animated picture) from `docs/structure.json`; both measure every text, and `--check` fails when a picture, its description or the code it points to disagree. They are vendored from ARMOR-COMMON like the shared CI checks.
