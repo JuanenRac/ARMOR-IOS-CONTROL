@@ -8,6 +8,7 @@ final class AlarmCodesTests: XCTestCase {
         let table = AlarmCodes.shared
         XCTAssertGreaterThanOrEqual(table.count, 58)
         XCTAssertNotNil(table["network_dns_stale"])
+        XCTAssertNotNil(table["mode_panel_sync_failed"])
         for (code, texts) in table {
             for language in languages { XCTAssertFalse((texts[language] ?? "").isEmpty, "\(code) in \(language)") }
         }

@@ -591,6 +591,16 @@
    "ja": "外から家に接続するための名前が、公開アドレスを指さなくなりました",
    "zh": "从外部访问住宅所用的域名不再指向其公网地址",
    "pt": "O nome com que se chega a casa a partir do exterior já não aponta para o seu endereço público"
+  },
+  "mode_panel_sync_failed": {
+   "en": "An alarm panel did not confirm the arming mode: the server defends it, the panel may not",
+   "es": "Una central de alarma no confirmó el modo de armado: el servidor lo defiende, la central puede que no",
+   "de": "Eine Alarmzentrale hat den Scharfschaltmodus nicht bestätigt: Der Server schützt, die Zentrale womöglich nicht",
+   "fr": "Une centrale d'alarme n'a pas confirmé le mode d'armement : le serveur le défend, la centrale peut-être pas",
+   "it": "Una centrale d'allarme non ha confermato la modalità di attivazione: il server la difende, la centrale forse no",
+   "ja": "警報盤が警戒モードを確認しませんでした。サーバーは守っていますが、警報盤は守っていない可能性があります",
+   "zh": "报警主机未确认布防模式：服务器已按此防护，主机可能没有",
+   "pt": "Uma central de alarme não confirmou o modo de armamento: o servidor defende-o, a central talvez não"
   }
  }
 }
