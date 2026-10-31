@@ -329,6 +329,11 @@ public struct ArmingModesView: Equatable, Sendable {
 
 /// The words of the arming modes of the server.
 public enum ArmingText {
+    /// Whether arming in a mode first shows what the check before arming found: only an arm from disarmed (a switch between modes is not an arm), and only when the check found something.
+    /// Nothing found, or no answer from the server, goes straight to the server, which decides.
+    public static func showsCheck(systemArmed: Bool, check: Preflight?) -> Bool {
+        !systemArmed && !(check?.issues.isEmpty ?? true)
+    }
     public static func name(_ mode: String, _ t: Translator) -> String {
         switch mode {
         case "away": return t.tr("Modo fuera de casa")

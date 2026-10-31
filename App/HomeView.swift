@@ -133,7 +133,7 @@ struct HomeView: View {
     private func chooseMode(_ mode: String, checked: Bool = false, confirm: Bool = false, typedPin: String? = nil) async {
         if !checked && !model.state.snapshot.armed {
             let found = try? await model.controller.preflight()
-            if let found, !found.issues.isEmpty { preflight = found; modeAfterCheck = mode; confirmArm = true; return }
+            if let found, ArmingText.showsCheck(systemArmed: false, check: found) { preflight = found; modeAfterCheck = mode; confirmArm = true; return }
         }
         let typed = (typedPin ?? "").isEmpty ? nil : typedPin
         modePin = ""

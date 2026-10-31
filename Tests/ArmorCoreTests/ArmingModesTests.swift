@@ -141,4 +141,13 @@ final class ArmingModesTests: XCTestCase {
         try await controller.armInMode("night", pin: nil, confirmUnassigned: true)
         XCTAssertEqual(api.calls.filter { $0.hasPrefix("arming:") }, ["arming:night:-:false", "arming:night:-:true"])
     }
+
+    func testArmingInAModeFromDisarmedRunsTheSameCheckAsAPlainArm() {
+        let blind = Preflight(ready: false, issues: [PreflightIssue(kind: "node", level: "block", code: "node_offline", id: "radar-1", detail: nil)])
+        let none = Preflight(ready: true, issues: [])
+        XCTAssertTrue(ArmingText.showsCheck(systemArmed: false, check: blind))
+        XCTAssertFalse(ArmingText.showsCheck(systemArmed: false, check: none))
+        XCTAssertFalse(ArmingText.showsCheck(systemArmed: false, check: nil))
+        XCTAssertFalse(ArmingText.showsCheck(systemArmed: true, check: blind))
+    }
 }
