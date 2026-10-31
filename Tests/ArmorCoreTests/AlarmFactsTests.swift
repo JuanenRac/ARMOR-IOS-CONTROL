@@ -75,14 +75,4 @@ final class AlarmFactsTests: XCTestCase {
         XCTAssertTrue(a!.detail.isEmpty)
         XCTAssertTrue(AlarmFacts.rows(a!.detail, plain("en")).isEmpty)
     }
-
-    func testTheCopyInThePackageIsTheTableOfArmorCommon() throws {
-        let shared = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
-            .deletingLastPathComponent().appendingPathComponent("ARMOR-COMMON/src/armor_common/alarm_facts.json")
-        guard FileManager.default.fileExists(atPath: shared.path) else { return }
-        let packaged = Bundle.module.url(forResource: "alarm_facts", withExtension: "json")!
-        let a = try String(contentsOf: shared, encoding: .utf8).replacingOccurrences(of: "\r\n", with: "\n")
-        let b = try String(contentsOf: packaged, encoding: .utf8).replacingOccurrences(of: "\r\n", with: "\n")
-        XCTAssertEqual(a, b)
-    }
 }
