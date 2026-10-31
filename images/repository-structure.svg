@@ -61,7 +61,7 @@
 <text x="382" y="674" font-family="'JetBrains Mono','Cascadia Code','SFMono-Regular',Consolas,'Liberation Mono',monospace" font-size="19" font-weight="700" fill="#F2F6FA" text-anchor="start">Tests/</text>
 <line x1="382" y1="688" x2="585.333" y2="688" stroke="#3D9BFF" stroke-opacity="0.35" stroke-width="1"/>
 <text x="382" y="716" font-family="'JetBrains Mono','Cascadia Code','SFMono-Regular',Consolas,'Liberation Mono',monospace" font-size="13.5" font-weight="600" fill="#E6EDF3" text-anchor="start">ArmorCoreTests/</text>
-<text x="382" y="732" font-family="'Segoe UI','Noto Sans','Noto Sans CJK SC','Microsoft YaHei','Yu Gothic','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="11.8" font-weight="400" fill="#7D8A99" text-anchor="start">11 files of tests</text>
+<text x="382" y="732" font-family="'Segoe UI','Noto Sans','Noto Sans CJK SC','Microsoft YaHei','Yu Gothic','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="11.8" font-weight="400" fill="#7D8A99" text-anchor="start">15 files of tests</text>
 <rect x="628.333" y="640" width="243.333" height="154" rx="10" fill="url(#card)" stroke="#1E2A36" stroke-width="1"/>
 <rect x="628.333" y="654" width="3" height="126" rx="1.5" fill="#00FF88"><animate attributeName="opacity" values="0.55;1;0.55" dur="4s" begin="1.8s" repeatCount="indefinite"/></rect>
 <text x="650.333" y="674" font-family="'JetBrains Mono','Cascadia Code','SFMono-Regular',Consolas,'Liberation Mono',monospace" font-size="19" font-weight="700" fill="#F2F6FA" text-anchor="start">docs/</text>

@@ -170,14 +170,14 @@
         {
           "name": "ArmorCoreTests/",
           "desc": {
-            "en": "11 files of tests",
-            "es": "11 ficheros de pruebas",
-            "de": "11 Testdateien",
-            "fr": "11 fichiers de tests",
-            "it": "11 file di test",
-            "ja": "11 個のテストファイル",
-            "zh": "11 个测试文件",
-            "pt": "11 ficheiros de testes"
+            "en": "15 files of tests",
+            "es": "15 ficheros de pruebas",
+            "de": "15 Testdateien",
+            "fr": "15 fichiers de tests",
+            "it": "15 file di test",
+            "ja": "15 個のテストファイル",
+            "zh": "15 个测试文件",
+            "pt": "15 ficheiros de testes"
           }
         }
       ]
