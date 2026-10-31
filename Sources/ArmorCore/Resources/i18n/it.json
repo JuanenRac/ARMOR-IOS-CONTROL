@@ -314,5 +314,13 @@
  "Modo de armado": "Modalità di inserimento",
  "%d marcados": "%d contrassegnati",
  "Modo: %s": "Modalità: %s",
- "Desarmado": "Disinserito"
+ "Desarmado": "Disinserito",
+ "Paneles de alarma: esperando que confirmen el perfil %s.": "Centrali d'allarme: in attesa della conferma del profilo %s.",
+ "Paneles de alarma: confirmaron el perfil %s.": "Centrali d'allarme: hanno confermato il profilo %s.",
+ "Los paneles de alarma no confirmaron el perfil %s. El servidor defiende el modo; revisa los paneles o elige el modo otra vez.": "Le centrali d'allarme non hanno confermato il profilo %s. Il server difende la modalità; controlla le centrali o scegli di nuovo la modalità.",
+ "Ningún panel de alarma conocido: no se pidió a ninguno.": "Nessuna centrale d'allarme nota: non ne è stata interpellata nessuna.",
+ "rechazado": "rifiutato",
+ "sin respuesta": "nessuna risposta",
+ "no se pudo preguntar": "non è stato possibile interpellarlo",
+ "esperando": "in attesa"
 }

@@ -50,6 +50,19 @@ final class ArmingModesTests: XCTestCase {
         XCTAssertEqual(ArmorSnapshot.parse(try Json.object(Data(#"{"mode":"armed","arming_mode":"night","revision":1,"nodes":{}}"#.utf8))).armingMode, "night")
         XCTAssertNil(ArmorSnapshot.parse(try Json.object(Data(#"{"mode":"armed","revision":1,"nodes":{}}"#.utf8))).armingMode)
     }
+    func testWhatThePanelsDidAboutTheModeIsReadAsTheServerSaysIt() throws {
+        let pending = ArmorSnapshot.parse(try Json.object(Data(#"{"mode":"armed","arming_mode":"home","revision":2,"nodes":{},"panel_sync":{"mode":"home","profile":"stay","status":"pending","by":"ana","started_at":"x","nodes":[{"node_id":"alarm-1","status":"pending"}]}}"#.utf8)))
+        XCTAssertEqual(pending.panelSync?.status, "pending")
+        XCTAssertEqual(pending.panelSync?.profile, "stay")
+        XCTAssertEqual(pending.panelSync?.nodes.map { $0.id }, ["alarm-1"])
+        XCTAssertEqual(ArmingText.panelProblems(pending.panelSync, plain()), [], "a pending report lists no problem")
+        let failed = ArmorSnapshot.parse(try Json.object(Data(#"{"mode":"armed","arming_mode":"home","revision":3,"nodes":{},"panel_sync":{"mode":"home","profile":"stay","status":"failed","by":"ana","started_at":"x","nodes":[{"node_id":"alarm-1","status":"refused","reason":"zones_open"},{"node_id":"alarm-2","status":"confirmed"},{"node_id":"alarm-3","status":"timeout","reason":"timeout"}]}}"#.utf8)))
+        XCTAssertEqual(ArmingText.panelProblems(failed.panelSync, plain()), ["alarm-1: rechazado (zones_open)", "alarm-3: sin respuesta"], "only the panels that did not confirm, with the code the server gives")
+        XCTAssertNotNil(ArmingText.panelLine(failed.panelSync, plain()))
+        XCTAssertNil(ArmorSnapshot.parse(try Json.object(Data(#"{"mode":"armed","revision":4,"nodes":{}}"#.utf8))).panelSync, "a server without the sync says nothing")
+        XCTAssertNil(ArmingText.panelLine(nil, plain()))
+        XCTAssertNil(ArmorSnapshot.parse(try Json.object(Data(#"{"mode":"armed","revision":4,"nodes":{},"panel_sync":{"status":"surprise","profile":"x","nodes":[]}}"#.utf8))).panelSync, "an unknown status is not shown")
+    }
     func testEveryPhraseOfTheModesIsInEveryLanguage() throws {
         let phrases = ["Modo fuera de casa", "Modo en casa", "Modo noche", "defiende todo", "aún nada asignado", "%d marcados", "Modo de armado", "Hace falta el PIN", "Armar: %s", "Cambiar a %s",
                        "Nada asignado a %s", "Sistema armado: %s", "Ahora: %s", "Modo: %s", "No se pudo cambiar el modo.", "Ese modo no tiene nada asignado: no se armó.",

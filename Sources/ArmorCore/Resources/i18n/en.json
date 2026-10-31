@@ -314,5 +314,13 @@
  "Modo de armado": "Arming mode",
  "%d marcados": "%d marked",
  "Modo: %s": "Mode: %s",
- "Desarmado": "Disarmed"
+ "Desarmado": "Disarmed",
+ "Paneles de alarma: esperando que confirmen el perfil %s.": "Alarm panels: waiting for them to confirm the profile %s.",
+ "Paneles de alarma: confirmaron el perfil %s.": "Alarm panels: they confirmed the profile %s.",
+ "Los paneles de alarma no confirmaron el perfil %s. El servidor defiende el modo; revisa los paneles o elige el modo otra vez.": "The alarm panels did not confirm the profile %s. The server defends the mode; check the panels or choose the mode again.",
+ "Ningún panel de alarma conocido: no se pidió a ninguno.": "No alarm panel is known: none was asked.",
+ "rechazado": "refused",
+ "sin respuesta": "no answer",
+ "no se pudo preguntar": "could not be asked",
+ "esperando": "waiting"
 }

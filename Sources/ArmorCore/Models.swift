@@ -111,6 +111,8 @@ public struct ArmorSnapshot: Equatable, Sendable {
     public var nodes: [FieldNode] = []
     /// The arming mode in force ("disarmed", "away", "home", "night") while the server has the arming modes on; nil otherwise.
     public var armingMode: String?
+    /// What the alarm panels did about that mode (only while the server syncs the modes to the panels); nil otherwise.
+    public var panelSync: PanelSyncView?
     public var armed: Bool { mode == "armed" }
 
     public static func parse(_ root: JSON) -> ArmorSnapshot {
@@ -121,7 +123,25 @@ public struct ArmorSnapshot: Equatable, Sendable {
                              alertLevel: node.str("alert_level", "normal"), stale: node.bool("stale"))
         }
         let armingMode = root.str("arming_mode")
-        return ArmorSnapshot(mode: root.str("mode", "disarmed"), revision: root.int("revision"), updatedAt: root.str("updated_at"), nodes: nodes, armingMode: armingMode.isEmpty ? nil : armingMode)
+        return ArmorSnapshot(mode: root.str("mode", "disarmed"), revision: root.int("revision"), updatedAt: root.str("updated_at"), nodes: nodes, armingMode: armingMode.isEmpty ? nil : armingMode, panelSync: PanelSyncView.parse(root.object("panel_sync")))
+    }
+}
+
+/// One alarm panel in the report of the sync: `status` is pending, confirmed, refused, timeout or unavailable; `reason` is the code the server gives.
+public struct PanelSyncNode: Equatable, Sendable { public let id: String, status: String, reason: String? }
+
+/// What the alarm panels did about the arming mode: `status` is none, pending, confirmed or failed, read as the server says it (a panel that did not confirm is never shown as confirmed).
+public struct PanelSyncView: Equatable, Sendable {
+    public let status: String, profile: String
+    public let nodes: [PanelSyncNode]
+    public static func parse(_ root: JSON?) -> PanelSyncView? {
+        guard let root = root, ["none", "pending", "confirmed", "failed"].contains(root.str("status")) else { return nil }
+        let nodes = (root["nodes"] as? [Any] ?? []).compactMap { item -> PanelSyncNode? in
+            guard let node = item as? JSON else { return nil }
+            let reason = node.str("reason")
+            return PanelSyncNode(id: node.str("node_id"), status: node.str("status", "pending"), reason: reason.isEmpty ? nil : reason)
+        }
+        return PanelSyncView(status: root.str("status"), profile: root.str("profile"), nodes: nodes)
     }
 }
 
@@ -357,6 +377,31 @@ public enum ArmingText {
         case "pin_locked": return t.tr("Demasiados PIN erróneos: espera un poco")
         case "pin_not_set": return t.tr("Este usuario no tiene PIN: lo pone un administrador")
         default: return t.tr("No se pudo cambiar el modo.")
+        }
+    }
+    /// The line of the home screen about the alarm panels; nil when there is nothing to say.
+    public static func panelLine(_ view: PanelSyncView?, _ t: Translator) -> String? {
+        guard let view = view else { return nil }
+        switch view.status {
+        case "pending": return t.trf("Paneles de alarma: esperando que confirmen el perfil %s.", view.profile)
+        case "confirmed": return t.trf("Paneles de alarma: confirmaron el perfil %s.", view.profile)
+        case "failed": return t.trf("Los paneles de alarma no confirmaron el perfil %s. El servidor defiende el modo; revisa los paneles o elige el modo otra vez.", view.profile)
+        case "none": return t.tr("Ningún panel de alarma conocido: no se pidió a ninguno.")
+        default: return nil
+        }
+    }
+    /// The panels that did not confirm, one line each, under a failure.
+    public static func panelProblems(_ view: PanelSyncView?, _ t: Translator) -> [String] {
+        guard let view = view, view.status == "failed" else { return [] }
+        return view.nodes.filter { $0.status != "confirmed" }.map { node in
+            let state: String
+            switch node.status {
+            case "refused": state = t.tr("rechazado")
+            case "timeout": state = t.tr("sin respuesta")
+            case "unavailable": state = t.tr("no se pudo preguntar")
+            default: state = t.tr("esperando")
+            }
+            return "\(node.id): \(state)" + (node.reason.map { $0 == node.status ? "" : " (\($0))" } ?? "")
         }
     }
     /// The refusals the picker answers by asking something more: the confirmation of a mode with nothing assigned, or the PIN.

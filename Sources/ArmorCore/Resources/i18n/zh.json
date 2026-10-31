@@ -314,5 +314,13 @@
  "Modo de armado": "布防模式",
  "%d marcados": "已标记 %d 项",
  "Modo: %s": "模式：%s",
- "Desarmado": "撤防"
+ "Desarmado": "撤防",
+ "Paneles de alarma: esperando que confirmen el perfil %s.": "报警面板：正在等待确认配置%s。",
+ "Paneles de alarma: confirmaron el perfil %s.": "报警面板：已确认配置%s。",
+ "Los paneles de alarma no confirmaron el perfil %s. El servidor defiende el modo; revisa los paneles o elige el modo otra vez.": "报警面板未确认配置%s。服务器仍在保护该模式；请检查面板或再次选择该模式。",
+ "Ningún panel de alarma conocido: no se pidió a ninguno.": "未发现任何报警面板：没有向任何面板发出请求。",
+ "rechazado": "已拒绝",
+ "sin respuesta": "无响应",
+ "no se pudo preguntar": "无法发出请求",
+ "esperando": "等待中"
 }

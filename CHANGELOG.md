@@ -4,6 +4,8 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+- **The home screen shows what the alarm panels did about the arming mode:** the same as the Android app, read in the core library (`panel_sync`) and shown as one line with the panels that did not confirm; nothing against a server that does not send it. The texts are in the eight languages.
+
 - **Arming in a mode runs the check before arming:** the same as the Android app. The rule that decides when the picker shows the check (only an arm from disarmed, and only when the check found something) is now one function of the core library, with its test. The code and its tests are written and were not compiled or tried on an iPhone.
 
 - **Arming modes of the server (Away, Home, Night):** the same as the Android app. While the server has the arming modes on, the arm button of the status screen opens a picker to arm in a mode, switch between modes or disarm; a mode with nothing assigned asks to be confirmed, a change to a mode that defends less asks for the PIN, and the status names the mode in force. Against an older server or with the modes off nothing changes. The check before arming is kept when arming from disarmed. The code and its tests are written but were not compiled or tried on an iPhone.

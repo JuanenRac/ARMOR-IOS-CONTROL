@@ -314,5 +314,13 @@
  "Modo de armado": "Scharfschaltmodus",
  "%d marcados": "%d markiert",
  "Modo: %s": "Modus: %s",
- "Desarmado": "Unscharf"
+ "Desarmado": "Unscharf",
+ "Paneles de alarma: esperando que confirmen el perfil %s.": "Alarmzentralen: Warten auf die Bestätigung des Profils %s.",
+ "Paneles de alarma: confirmaron el perfil %s.": "Alarmzentralen: Das Profil %s wurde bestätigt.",
+ "Los paneles de alarma no confirmaron el perfil %s. El servidor defiende el modo; revisa los paneles o elige el modo otra vez.": "Die Alarmzentralen haben das Profil %s nicht bestätigt. Der Server schützt den Modus; prüfen Sie die Zentralen oder wählen Sie den Modus erneut.",
+ "Ningún panel de alarma conocido: no se pidió a ninguno.": "Keine Alarmzentrale bekannt: Es wurde keine gefragt.",
+ "rechazado": "abgelehnt",
+ "sin respuesta": "keine Antwort",
+ "no se pudo preguntar": "konnte nicht gefragt werden",
+ "esperando": "wartet"
 }

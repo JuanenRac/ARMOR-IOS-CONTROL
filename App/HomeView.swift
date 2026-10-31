@@ -53,6 +53,15 @@ struct HomeView: View {
                         if !canChange { Text(model.tr("Tu usuario solo puede mirar: no puede cambiar nada.")).font(.caption).foregroundColor(Theme.muted) }
                     }
 
+                    if modes != nil, let line = ArmingText.panelLine(model.state.snapshot.panelSync, model.translator) {
+                        Card {
+                            Text(line).font(.callout)
+                            ForEach(ArmingText.panelProblems(model.state.snapshot.panelSync, model.translator), id: \.self) { problem in
+                                Text(problem).font(.caption).foregroundColor(Theme.muted)
+                            }
+                        }
+                    }
+
                     if model.state.unseenAlarms > 0 {
                         Card { Label(model.trf("%d alarmas sin confirmar", model.state.unseenAlarms), systemImage: "exclamationmark.triangle.fill").foregroundColor(Theme.danger) }
                     }

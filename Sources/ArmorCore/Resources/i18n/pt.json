@@ -314,5 +314,13 @@
  "Modo de armado": "Modo de armar",
  "%d marcados": "%d marcados",
  "Modo: %s": "Modo: %s",
- "Desarmado": "Desarmado"
+ "Desarmado": "Desarmado",
+ "Paneles de alarma: esperando que confirmen el perfil %s.": "Painéis de alarme: a aguardar que confirmem o perfil %s.",
+ "Paneles de alarma: confirmaron el perfil %s.": "Painéis de alarme: confirmaram o perfil %s.",
+ "Los paneles de alarma no confirmaron el perfil %s. El servidor defiende el modo; revisa los paneles o elige el modo otra vez.": "Os painéis de alarme não confirmaram o perfil %s. O servidor defende o modo; verifique os painéis ou escolha o modo outra vez.",
+ "Ningún panel de alarma conocido: no se pidió a ninguno.": "Nenhum painel de alarme conhecido: nenhum foi consultado.",
+ "rechazado": "recusado",
+ "sin respuesta": "sem resposta",
+ "no se pudo preguntar": "não foi possível consultar",
+ "esperando": "a aguardar"
 }
