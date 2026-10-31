@@ -1,0 +1,586 @@
+{
+ "schema": 1,
+ "_doc": "The label of each fact an alarm carries (the 'detail' of an alarm: which device, which port, which panel...), in the eight languages. The consoles show a fact with its label; a key that is not here is shown as it comes. A new fact is added here first.",
+ "languages": [
+  "en",
+  "es",
+  "de",
+  "fr",
+  "it",
+  "ja",
+  "zh",
+  "pt"
+ ],
+ "facts": {
+  "arming_mode": {
+   "en": "Arming mode chosen",
+   "es": "Modo de armado elegido",
+   "de": "Gewählter Scharfschaltmodus",
+   "fr": "Mode d'armement choisi",
+   "it": "Modalità di inserimento scelta",
+   "ja": "選択された警戒モード",
+   "zh": "所选布防模式",
+   "pt": "Modo de armamento escolhido"
+  },
+  "by": {
+   "en": "Chosen by",
+   "es": "Elegido por",
+   "de": "Gewählt von",
+   "fr": "Choisi par",
+   "it": "Scelto da",
+   "ja": "選択した人",
+   "zh": "选择者",
+   "pt": "Escolhido por"
+  },
+  "cell": {
+   "en": "Cell",
+   "es": "Celda",
+   "de": "Zelle",
+   "fr": "Cellule",
+   "it": "Cella",
+   "ja": "セル",
+   "zh": "电芯",
+   "pt": "Célula"
+  },
+  "cells": {
+   "en": "Cells affected",
+   "es": "Celdas afectadas",
+   "de": "Betroffene Zellen",
+   "fr": "Cellules concernées",
+   "it": "Celle interessate",
+   "ja": "該当セル数",
+   "zh": "受影响电芯数",
+   "pt": "Células afetadas"
+  },
+  "counter": {
+   "en": "Counter",
+   "es": "Contador",
+   "de": "Zähler",
+   "fr": "Compteur",
+   "it": "Contatore",
+   "ja": "カウンター",
+   "zh": "计数器",
+   "pt": "Contador"
+  },
+  "current_a": {
+   "en": "Current (A)",
+   "es": "Corriente (A)",
+   "de": "Strom (A)",
+   "fr": "Courant (A)",
+   "it": "Corrente (A)",
+   "ja": "電流 (A)",
+   "zh": "电流 (A)",
+   "pt": "Corrente (A)"
+  },
+  "device": {
+   "en": "Device",
+   "es": "Dispositivo",
+   "de": "Gerät",
+   "fr": "Appareil",
+   "it": "Dispositivo",
+   "ja": "デバイス",
+   "zh": "设备",
+   "pt": "Dispositivo"
+  },
+  "events_buffered": {
+   "en": "Events waiting",
+   "es": "Eventos en espera",
+   "de": "Ereignisse in der Warteschlange",
+   "fr": "Événements en attente",
+   "it": "Eventi in attesa",
+   "ja": "待機中のイベント",
+   "zh": "等待中的事件",
+   "pt": "Eventos à espera"
+  },
+  "failing": {
+   "en": "What fails",
+   "es": "Qué falla",
+   "de": "Was ausfällt",
+   "fr": "Ce qui échoue",
+   "it": "Cosa non risponde",
+   "ja": "失敗している項目",
+   "zh": "失败项",
+   "pt": "O que falha"
+  },
+  "family": {
+   "en": "Kind of node",
+   "es": "Tipo de nodo",
+   "de": "Knotenart",
+   "fr": "Type de nœud",
+   "it": "Tipo di nodo",
+   "ja": "ノードの種類",
+   "zh": "节点类型",
+   "pt": "Tipo de nó"
+  },
+  "first_seen": {
+   "en": "First seen",
+   "es": "Visto por primera vez",
+   "de": "Zum ersten Mal gesehen",
+   "fr": "Vu pour la première fois",
+   "it": "Visto per la prima volta",
+   "ja": "初めて確認",
+   "zh": "首次发现",
+   "pt": "Visto pela primeira vez"
+  },
+  "from": {
+   "en": "Before",
+   "es": "Antes",
+   "de": "Vorher",
+   "fr": "Avant",
+   "it": "Prima",
+   "ja": "以前",
+   "zh": "之前",
+   "pt": "Antes"
+  },
+  "heap_free": {
+   "en": "Free memory (bytes)",
+   "es": "Memoria libre (bytes)",
+   "de": "Freier Speicher (Bytes)",
+   "fr": "Mémoire libre (octets)",
+   "it": "Memoria libera (byte)",
+   "ja": "空きメモリ（バイト）",
+   "zh": "可用内存（字节）",
+   "pt": "Memória livre (bytes)"
+  },
+  "heap_internal_free": {
+   "en": "Free internal memory (bytes)",
+   "es": "Memoria interna libre (bytes)",
+   "de": "Freier interner Speicher (Bytes)",
+   "fr": "Mémoire interne libre (octets)",
+   "it": "Memoria interna libera (byte)",
+   "ja": "内部メモリの空き（バイト）",
+   "zh": "可用内部内存（字节）",
+   "pt": "Memória interna livre (bytes)"
+  },
+  "heap_internal_largest": {
+   "en": "Biggest free block of internal memory (bytes)",
+   "es": "Mayor bloque libre de memoria interna (bytes)",
+   "de": "Größter freier Block des internen Speichers (Bytes)",
+   "fr": "Plus grand bloc libre de mémoire interne (octets)",
+   "it": "Blocco libero più grande di memoria interna (byte)",
+   "ja": "内部メモリの最大の空きブロック（バイト）",
+   "zh": "内部内存最大可用块（字节）",
+   "pt": "Maior bloco livre de memória interna (bytes)"
+  },
+  "heap_internal_min": {
+   "en": "Least free internal memory (bytes)",
+   "es": "Mínimo de memoria interna libre (bytes)",
+   "de": "Geringster freier interner Speicher (Bytes)",
+   "fr": "Mémoire interne libre minimale (octets)",
+   "it": "Minimo di memoria interna libera (byte)",
+   "ja": "内部メモリの最小の空き（バイト）",
+   "zh": "最低可用内部内存（字节）",
+   "pt": "Mínimo de memória interna livre (bytes)"
+  },
+  "heap_min": {
+   "en": "Least free memory (bytes)",
+   "es": "Mínimo de memoria libre (bytes)",
+   "de": "Geringster freier Speicher (Bytes)",
+   "fr": "Mémoire libre minimale (octets)",
+   "it": "Minimo di memoria libera (byte)",
+   "ja": "最小の空きメモリ（バイト）",
+   "zh": "最低可用内存（字节）",
+   "pt": "Mínimo de memória livre (bytes)"
+  },
+  "hostname": {
+   "en": "Name it announces",
+   "es": "Nombre que anuncia",
+   "de": "Angekündigter Name",
+   "fr": "Nom annoncé",
+   "it": "Nome annunciato",
+   "ja": "通知している名前",
+   "zh": "其公布的名称",
+   "pt": "Nome que anuncia"
+  },
+  "interface": {
+   "en": "Interface",
+   "es": "Interfaz",
+   "de": "Schnittstelle",
+   "fr": "Interface",
+   "it": "Interfaccia",
+   "ja": "インターフェース",
+   "zh": "接口",
+   "pt": "Interface"
+  },
+  "ip": {
+   "en": "Address (IP)",
+   "es": "Dirección (IP)",
+   "de": "Adresse (IP)",
+   "fr": "Adresse (IP)",
+   "it": "Indirizzo (IP)",
+   "ja": "アドレス（IP）",
+   "zh": "地址（IP）",
+   "pt": "Endereço (IP)"
+  },
+  "kind": {
+   "en": "Kind",
+   "es": "Tipo",
+   "de": "Art",
+   "fr": "Type",
+   "it": "Tipo",
+   "ja": "種類",
+   "zh": "类型",
+   "pt": "Tipo"
+  },
+  "last_reason": {
+   "en": "Last reason",
+   "es": "Último motivo",
+   "de": "Letzter Grund",
+   "fr": "Dernier motif",
+   "it": "Ultimo motivo",
+   "ja": "直近の理由",
+   "zh": "最近原因",
+   "pt": "Último motivo"
+  },
+  "latency_ms": {
+   "en": "Latency",
+   "es": "Latencia",
+   "de": "Latenz",
+   "fr": "Latence",
+   "it": "Latenza",
+   "ja": "遅延",
+   "zh": "延迟",
+   "pt": "Latência"
+  },
+  "limit_a": {
+   "en": "Limit it states (A)",
+   "es": "Límite que indica (A)",
+   "de": "Angegebene Grenze (A)",
+   "fr": "Limite indiquée (A)",
+   "it": "Limite dichiarato (A)",
+   "ja": "申告している上限 (A)",
+   "zh": "其声明的限值 (A)",
+   "pt": "Limite que indica (A)"
+  },
+  "limit_dbm": {
+   "en": "Warning level (dBm)",
+   "es": "Nivel de aviso (dBm)",
+   "de": "Warnschwelle (dBm)",
+   "fr": "Seuil d'avertissement (dBm)",
+   "it": "Soglia di avviso (dBm)",
+   "ja": "警告しきい値 (dBm)",
+   "zh": "警告阈值 (dBm)",
+   "pt": "Nível de aviso (dBm)"
+  },
+  "link_down_reports": {
+   "en": "Reports with the link down",
+   "es": "Informes con el enlace caído",
+   "de": "Berichte mit ausgefallener Verbindung",
+   "fr": "Rapports avec la liaison coupée",
+   "it": "Rapporti con il collegamento interrotto",
+   "ja": "回線切断中の報告",
+   "zh": "连接断开时的报告",
+   "pt": "Relatórios com a ligação em baixo"
+  },
+  "loss_percent": {
+   "en": "Packet loss",
+   "es": "Pérdida de paquetes",
+   "de": "Paketverlust",
+   "fr": "Perte de paquets",
+   "it": "Perdita di pacchetti",
+   "ja": "パケット損失",
+   "zh": "丢包",
+   "pt": "Perda de pacotes"
+  },
+  "low_stack_tasks": {
+   "en": "Tasks short of stack",
+   "es": "Tareas cortas de pila",
+   "de": "Aufgaben mit knappem Stack",
+   "fr": "Tâches à court de pile",
+   "it": "Task a corto di stack",
+   "ja": "スタック不足のタスク",
+   "zh": "栈空间不足的任务",
+   "pt": "Tarefas com pouca pilha"
+  },
+  "mac": {
+   "en": "MAC",
+   "es": "MAC",
+   "de": "MAC",
+   "fr": "MAC",
+   "it": "MAC",
+   "ja": "MAC",
+   "zh": "MAC",
+   "pt": "MAC"
+  },
+  "mac_before": {
+   "en": "MAC that answered before",
+   "es": "MAC que respondía antes",
+   "de": "MAC, die zuvor antwortete",
+   "fr": "MAC qui répondait avant",
+   "it": "MAC che rispondeva prima",
+   "ja": "以前応答していた MAC",
+   "zh": "此前应答的 MAC",
+   "pt": "MAC que respondia antes"
+  },
+  "mac_now": {
+   "en": "MAC that answers now",
+   "es": "MAC que responde ahora",
+   "de": "MAC, die jetzt antwortet",
+   "fr": "MAC qui répond maintenant",
+   "it": "MAC che risponde ora",
+   "ja": "現在応答している MAC",
+   "zh": "现在应答的 MAC",
+   "pt": "MAC que responde agora"
+  },
+  "minutes": {
+   "en": "Minutes",
+   "es": "Minutos",
+   "de": "Minuten",
+   "fr": "Minutes",
+   "it": "Minuti",
+   "ja": "分",
+   "zh": "分钟",
+   "pt": "Minutos"
+  },
+  "models": {
+   "en": "Models",
+   "es": "Modelos",
+   "de": "Modelle",
+   "fr": "Modèles",
+   "it": "Modelli",
+   "ja": "型番",
+   "zh": "型号",
+   "pt": "Modelos"
+  },
+  "module": {
+   "en": "Module",
+   "es": "Módulo",
+   "de": "Modul",
+   "fr": "Module",
+   "it": "Modulo",
+   "ja": "モジュール",
+   "zh": "模块",
+   "pt": "Módulo"
+  },
+  "node": {
+   "en": "Monitor node",
+   "es": "Nodo que vigila",
+   "de": "Überwachender Knoten",
+   "fr": "Nœud qui surveille",
+   "it": "Nodo che monitora",
+   "ja": "監視ノード",
+   "zh": "监控节点",
+   "pt": "Nó monitor"
+  },
+  "online": {
+   "en": "On the network now",
+   "es": "En la red ahora",
+   "de": "Jetzt im Netzwerk",
+   "fr": "Sur le réseau maintenant",
+   "it": "In rete ora",
+   "ja": "現在ネットワーク上",
+   "zh": "当前在网络中",
+   "pt": "Na rede agora"
+  },
+  "open_ports": {
+   "en": "Open ports",
+   "es": "Puertos abiertos",
+   "de": "Offene Ports",
+   "fr": "Ports ouverts",
+   "it": "Porte aperte",
+   "ja": "開いているポート",
+   "zh": "开放端口",
+   "pt": "Portas abertas"
+  },
+  "opened_at": {
+   "en": "Opened at",
+   "es": "Abierto a las",
+   "de": "Geöffnet um",
+   "fr": "Ouvert à",
+   "it": "Aperto alle",
+   "ja": "開いた時刻",
+   "zh": "开放时间",
+   "pt": "Aberta às"
+  },
+  "os": {
+   "en": "System",
+   "es": "Sistema",
+   "de": "System",
+   "fr": "Système",
+   "it": "Sistema",
+   "ja": "システム",
+   "zh": "系统",
+   "pt": "Sistema"
+  },
+  "over_v": {
+   "en": "Protection voltage (V)",
+   "es": "Tensión de protección (V)",
+   "de": "Schutzspannung (V)",
+   "fr": "Tension de protection (V)",
+   "it": "Tensione di protezione (V)",
+   "ja": "保護電圧 (V)",
+   "zh": "保护电压 (V)",
+   "pt": "Tensão de proteção (V)"
+  },
+  "panel_answers": {
+   "en": "What each panel answered",
+   "es": "Qué respondió cada central",
+   "de": "Was jede Zentrale geantwortet hat",
+   "fr": "Ce que chaque centrale a répondu",
+   "it": "Cosa ha risposto ogni centrale",
+   "ja": "各パネルの応答",
+   "zh": "每台主机的回应",
+   "pt": "O que cada central respondeu"
+  },
+  "panel_profile": {
+   "en": "Profile asked of the panels",
+   "es": "Perfil pedido a las centrales",
+   "de": "An die Zentralen gesendetes Profil",
+   "fr": "Profil demandé aux centrales",
+   "it": "Profilo richiesto alle centrali",
+   "ja": "パネルに要求したプロファイル",
+   "zh": "向主机请求的配置",
+   "pt": "Perfil pedido às centrais"
+  },
+  "panels": {
+   "en": "Panels that did not confirm",
+   "es": "Centrales que no confirmaron",
+   "de": "Zentralen ohne Bestätigung",
+   "fr": "Centrales sans confirmation",
+   "it": "Centrali senza conferma",
+   "ja": "確認しなかったパネル",
+   "zh": "未确认的主机",
+   "pt": "Centrais que não confirmaram"
+  },
+  "port": {
+   "en": "Port that opened",
+   "es": "Puerto que se abrió",
+   "de": "Geöffneter Port",
+   "fr": "Port ouvert",
+   "it": "Porta aperta",
+   "ja": "開いたポート",
+   "zh": "新开放的端口",
+   "pt": "Porta que abriu"
+  },
+  "profile": {
+   "en": "Arming mode",
+   "es": "Modo de armado",
+   "de": "Scharfschaltmodus",
+   "fr": "Mode d'armement",
+   "it": "Modalità di inserimento",
+   "ja": "警戒モード",
+   "zh": "布防模式",
+   "pt": "Modo de armar"
+  },
+  "reconnects": {
+   "en": "Broker connections lost",
+   "es": "Conexiones al broker perdidas",
+   "de": "Verlorene Brokerverbindungen",
+   "fr": "Connexions au broker perdues",
+   "it": "Connessioni al broker perse",
+   "ja": "切れたブローカー接続",
+   "zh": "丢失的代理连接",
+   "pt": "Ligações ao broker perdidas"
+  },
+  "restarts_24h": {
+   "en": "Restarts in 24 h",
+   "es": "Reinicios en 24 h",
+   "de": "Neustarts in 24 h",
+   "fr": "Redémarrages en 24 h",
+   "it": "Riavvii in 24 h",
+   "ja": "24 時間の再起動",
+   "zh": "24 小时内重启",
+   "pt": "Reinícios em 24 h"
+  },
+  "risky": {
+   "en": "A port a house rarely wants open",
+   "es": "Un puerto que una casa rara vez quiere abierto",
+   "de": "Ein Port, den ein Haus selten offen will",
+   "fr": "Un port qu'une maison veut rarement ouvert",
+   "it": "Una porta che una casa raramente vuole aperta",
+   "ja": "家庭では通常開けたくないポート",
+   "zh": "家庭很少希望开放的端口",
+   "pt": "Uma porta que uma casa raramente quer aberta"
+  },
+  "router": {
+   "en": "Router",
+   "es": "Router",
+   "de": "Router",
+   "fr": "Routeur",
+   "it": "Router",
+   "ja": "ルーター",
+   "zh": "路由器",
+   "pt": "Router"
+  },
+  "router_answers": {
+   "en": "The router answers",
+   "es": "El router responde",
+   "de": "Der Router antwortet",
+   "fr": "Le routeur répond",
+   "it": "Il router risponde",
+   "ja": "ルーターは応答",
+   "zh": "路由器有响应",
+   "pt": "O router responde"
+  },
+  "rssi_dbm": {
+   "en": "Wi-Fi signal (dBm)",
+   "es": "Señal Wi-Fi (dBm)",
+   "de": "WLAN-Signal (dBm)",
+   "fr": "Signal Wi-Fi (dBm)",
+   "it": "Segnale Wi-Fi (dBm)",
+   "ja": "Wi-Fi 信号 (dBm)",
+   "zh": "Wi-Fi 信号 (dBm)",
+   "pt": "Sinal Wi-Fi (dBm)"
+  },
+  "sensors": {
+   "en": "Sensors",
+   "es": "Sensores",
+   "de": "Sensoren",
+   "fr": "Capteurs",
+   "it": "Sensori",
+   "ja": "センサー",
+   "zh": "传感器",
+   "pt": "Sensores"
+  },
+  "since": {
+   "en": "Since",
+   "es": "Desde",
+   "de": "Seit",
+   "fr": "Depuis",
+   "it": "Da",
+   "ja": "開始",
+   "zh": "自",
+   "pt": "Desde"
+  },
+  "to": {
+   "en": "Now",
+   "es": "Ahora",
+   "de": "Jetzt",
+   "fr": "Maintenant",
+   "it": "Ora",
+   "ja": "現在",
+   "zh": "现在",
+   "pt": "Agora"
+  },
+  "vendor": {
+   "en": "Maker",
+   "es": "Fabricante",
+   "de": "Hersteller",
+   "fr": "Fabricant",
+   "it": "Produttore",
+   "ja": "メーカー",
+   "zh": "厂商",
+   "pt": "Fabricante"
+  },
+  "voltage_v": {
+   "en": "Voltage (V)",
+   "es": "Tensión (V)",
+   "de": "Spannung (V)",
+   "fr": "Tension (V)",
+   "it": "Tensione (V)",
+   "ja": "電圧 (V)",
+   "zh": "电压 (V)",
+   "pt": "Tensão (V)"
+  },
+  "what_happened": {
+   "en": "What happened",
+   "es": "Qué pasó",
+   "de": "Was geschah",
+   "fr": "Ce qui s'est passé",
+   "it": "Cos'è successo",
+   "ja": "発生した内容",
+   "zh": "发生了什么",
+   "pt": "O que aconteceu"
+  }
+ }
+}

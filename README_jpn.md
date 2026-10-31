@@ -22,14 +22,14 @@
   <img src="https://img.shields.io/badge/Language-Swift-f05138.svg" alt="Language">
   <img src="https://img.shields.io/badge/UI-SwiftUI-0a84ff.svg" alt="UI">
   <img src="https://img.shields.io/badge/Languages-8-00E5FF.svg" alt="Languages">
-  <img src="https://img.shields.io/badge/Tests-159%20passing-2ea44f.svg" alt="Tests">
+  <img src="https://img.shields.io/badge/Tests-169%20passing-2ea44f.svg" alt="Tests">
   <img src="https://img.shields.io/badge/Version-0.0.1-0f6cbd.svg" alt="Version">
   <img src="https://img.shields.io/badge/Maturity-scaffolding-FFB020.svg" alt="Maturity">
 </p>
 
 ---
 
-**正直さのチェック - 今日動いているもの:** アプリのルール（サーバー接続、応答の解析、アドレスの選択、端末ロック、セッションの保管庫、証明書の信頼、警報ポリシー、ユースケース、MJPEG の切り出し）は Swift パッケージ `ArmorCore` にあり、macOS または Linux で `swift test` により実行される 159 件の単体テストでカバーされています。`tools/ios_lint.py` は Mac なしで構造、8 言語の表、契約を検査します。**まだ**証明されていないもの：SwiftUI の画面と iPhone が必要な部分（Face ID、キーチェーン、証明書ルール、ライブカメラ、Firebase 経由のプッシュ）は、Xcode でのビルドも実機での実行もしていません。
+**正直さのチェック - 今日動いているもの:** アプリのルール（サーバー接続、応答の解析、アドレスの選択、端末ロック、セッションの保管庫、証明書の信頼、警報ポリシー、ユースケース、MJPEG の切り出し）は Swift パッケージ `ArmorCore` にあり、macOS または Linux で `swift test` により実行される 169 件の単体テストでカバーされています。`tools/ios_lint.py` は Mac なしで構造、8 言語の表、契約を検査します。**まだ**証明されていないもの：SwiftUI の画面と iPhone が必要な部分（Face ID、キーチェーン、証明書ルール、ライブカメラ、Firebase 経由のプッシュ）は、Xcode でのビルドも実機での実行もしていません。
 
 ---
 
@@ -41,8 +41,8 @@
 | 成熟度 | 足場段階 |
 | 役割 | ARMOR-SERVER 用の iPhone オペレーター向けクライアント（ファミリー：Clients、親：ARMOR-SERVER） |
 | 技術 | Swift 5.9+ / SwiftUI, iOS 16+ |
-| テスト | 159 (`swift test`) |
-| 言語 | 8（言語ごとに 241 フレーズ、`ios_lint.py` が検査） |
+| テスト | 169 (`swift test`) |
+| 言語 | 8（言語ごとに 331 フレーズ、`ios_lint.py` が検査） |
 | 動作環境 | iOS 16+ の iPhone。テストは macOS または Linux で実行 |
 | 実機での確認 | iPhone ではまだ実行していません。ルールは Linux でテスト済みです |
 | ライセンス | GPL-3.0-or-later |
@@ -58,7 +58,7 @@
 | 領域 | 状態 | ここでの意味 |
 |---|---|---|
 | ソフトウェア | 🟠 | アプリの規則は Swift パッケージ（`ArmorCore`）です。SwiftUI の画面は Xcode ではまだビルドしていません。 |
-| テスト | 🟡 | 159 件のユニットテストが macOS または Linux の `swift test` で通り、`tools/ios_lint.py` が Mac なしで構造、8 言語の表、契約を確認します。実機で動くテストはありません。 |
+| テスト | 🟡 | 169 件のユニットテストが macOS または Linux の `swift test` で通り、`tools/ios_lint.py` が Mac なしで構造、8 言語の表、契約を確認します。実機で動くテストはありません。 |
 | インターフェース | 🟠 | SwiftUI の画面は書いてありますが、Xcode でのビルドも iPhone での実行もしていません。 |
 | ハードウェア | 🔴 | iPhone 上ではまだ動かしていません。規則は Linux でのみテストしています。 |
 | セキュリティ | 🟠 | 端末のロック、セッションの保管庫、証明書の信頼は Linux でテストした規則です。Face ID、キーチェーン、証明書の規則は実機では動かしていません。 |
@@ -71,6 +71,7 @@
 * **2 つのアドレス：** 自宅の Wi-Fi ではプライベートなアドレス、モバイルデータでは外出先用（ダイナミック DNS 名または VPN）。一方が応答しなければもう一方を試し、何が失敗したかを表示します。
 * **端末ロック：** 警戒、解除、サイレンの消音、解錠などの重要な操作の前に Face ID、Touch ID またはパスコードを要求します（既定では Face ID / Touch ID がある場合のみオン）。オンにするとアプリを開くときにも要求します。管理者は必須にできますが、あなたの選択を下げることはできません。パスコードのない iPhone が締め出されることはなく、ロック画面には常にパスワードでのサインインがあります。任意（既定でオフ、警告付き）：保存したセッションは iPhone のロック解除中のみ読めます。
 * **警戒と解除**：死角やノイズになる箇所を確認した上で行い、解除には PIN が必要です。確認すべき**警報**（バッジ付き）、**警報盤**（外出警戒・在宅警戒、解除、サイレン消音）と**履歴**、オン / オフできる**デバイス**（回路と重要機器は確認付き）。
+* **アラームの詳細：** Android アプリと同じく、アラームの「詳細」ボタンで重大度、発生元、時刻、状態と、そのアラームが持つすべての事実がアプリの言語のラベル付きでシートに開きます（表は契約のもので、コアライブラリで読み込みます）。表に無い事実は届いたまま表示されます。
 * **カメラ**はサーバー経由（アプリがカメラのパスワードを持つことはありません）：画面に見えている映像だけが動くグリッド、カメラを動かす十字キーと写真付きのフルビュー、途切れたときに待ち時間を延ばしながら再取得するストリーム。
 * **通知を自分で選べます：** すべてを消音するか、音なしで表示します。重大度や種類ごとにオフにできます（重大なアラームは、すべてを消音するスイッチを除き、隠されません）。重大度ごと・種類ごとに自分の音声ファイルを選べ、再生ボタンで聞けます。アラームを読み上げる声（女性、男性、年齢、スタイル、速度、重大度の低い通知）も選べ、試し再生ボタンがあります。1枚の映像に2つのレンズがあるカメラは2つのウィンドウで表示されます。 通知はアプリを開いている間も表示されます（バナーと通知の音）。通知を隠す・消すために選んだ設定が引き続き優先されます。
 * **アシスタント：** 文字コマンド（キーボードのマイクで音声入力可）。警戒と解除にはご本人に結び付いた確認が必要で、ロックの内側にあります。
@@ -110,7 +111,7 @@ ARMOR-IOS-CONTROL は、[ARMOR-STUDIO](https://github.com/JuanenRac/ARMOR-STUDIO
 
 ## 🔌 インターフェース
 
-これはクライアントです。ARMOR-SERVER の 26 のパスを呼び出し（`tools/ios_lint.py` が数え、Android クライアントも呼ぶことを検査）、カメラの MJPEG ストリームを独自のパーサー（`MjpegParser.swift`）で切り出します。
+これはクライアントです。ARMOR-SERVER の 27 のパスを呼び出し（`tools/ios_lint.py` が数え、Android クライアントも呼ぶことを検査）、カメラの MJPEG ストリームを独自のパーサー（`MjpegParser.swift`）で切り出します。
 
 | 部分 | 設定内容 |
 |---|---|
@@ -134,7 +135,7 @@ ARMOR-IOS-CONTROL は、[ARMOR-STUDIO](https://github.com/JuanenRac/ARMOR-STUDIO
 **必要なもの:** アプリのビルドには Xcode 15+ と iOS 16+ の Mac、テストには Swift 5.9+（macOS または Linux）、検査には Python 3.11。
 
 ```sh
-swift test                  # 159 tests of ArmorCore (macOS or Linux)
+swift test                  # 169 tests of ArmorCore (macOS or Linux)
 python tools/ios_lint.py    # structure, eight languages, contract (any system)
 xcodegen generate           # then open ARMOR-IOS-CONTROL.xcodeproj in Xcode (on a Mac)
 ```
@@ -158,9 +159,9 @@ python -I tools/armor_ci_validate.py
 | `ReachTests.swift` | 11 | 2 つのアドレスの選択 |
 | `SecurityTests.swift` | 8 | セッション保管庫と証明書への信頼 |
 | `EndpointTests.swift`, `MjpegTests.swift`, `TranslatorTests.swift` | 7 + 7 + 7 | アドレス解析、MJPEG の切り出し、翻訳 |
-| `PolicyTests.swift`, `AlarmCodesTests.swift` | 6 + 4 | アラームポリシーとアラームコード |
+| `PolicyTests.swift`, `AlarmCodesTests.swift`, `AlarmFactsTests.swift` | 6 + 4 + 8 | アラームポリシーとアラームコード |
 
-159 件のテストは実サーバーのデータで動きます。`tools/ios_lint.py` は Mac なしで通ります：Swift ファイル 31、8 言語の 241 フレーズ、サーバーパス 26。実機で動くテストはありません。
+169 件のテストは実サーバーのデータで動きます。`tools/ios_lint.py` は Mac なしで通ります：Swift ファイル 40、8 言語の 331 フレーズ、サーバーパス 27。実機で動くテストはありません。
 
 ## 🏗️ ビルドとリリース
 
@@ -187,7 +188,7 @@ Xcode プロジェクトは XcodeGen で `project.yml` から生成します。�
 ARMOR-IOS-CONTROL/
 ├── Sources/ArmorCore/                   アプリのルール：Swift パッケージ
 ├── App/                                 SwiftUI 画面と iPhone が必要な部分
-├── Tests/                               159 件のテストと実サーバーのデータ
+├── Tests/                               169 件のテストと実サーバーのデータ
 ├── docs/                                このリポジトリのガイド
 ├── tools/                               共通の CI チェックとプロジェクトツール
 ├── .github/                             CI ワークフローと Issue・Pull Request のテンプレート

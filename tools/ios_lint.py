@@ -26,8 +26,8 @@ LITERAL = re.compile(r'"((?:[^"\\]|\\.)*)"')
 REQUIRED = (
     "Package.swift", "project.yml", "armor.project.json", "CHANGELOG.md", "LICENSE", ".gitignore",
     "Sources/ArmorCore/ArmorApi.swift", "Sources/ArmorCore/ArmorApiClient.swift", "Sources/ArmorCore/ArmorController.swift",
-    "Sources/ArmorCore/AlarmCodes.swift", "Sources/ArmorCore/Resources/alarm_codes.json", "Sources/ArmorCore/DeviceLock.swift", "Sources/ArmorCore/Tr.swift", "Sources/ArmorCore/Trust.swift", "Sources/ArmorCore/Reach.swift",
-    "App/ArmorApp.swift", "App/AppModel.swift", "App/RootView.swift", "App/LoginView.swift", "App/HomeView.swift", "App/AlarmsView.swift",
+    "Sources/ArmorCore/AlarmCodes.swift", "Sources/ArmorCore/Resources/alarm_codes.json", "Sources/ArmorCore/AlarmFacts.swift", "Sources/ArmorCore/Resources/alarm_facts.json", "Sources/ArmorCore/DeviceLock.swift", "Sources/ArmorCore/Tr.swift", "Sources/ArmorCore/Trust.swift", "Sources/ArmorCore/Reach.swift",
+    "App/ArmorApp.swift", "App/AppModel.swift", "App/RootView.swift", "App/LoginView.swift", "App/HomeView.swift", "App/AlarmsView.swift", "App/AlarmDetailView.swift",
     "App/CamerasView.swift", "App/AssistantView.swift", "App/MoreView.swift", "App/LockedView.swift", "App/HelpView.swift",
     "App/Platform/BiometricAuth.swift", "App/Platform/KeychainSecrets.swift", "App/Platform/TrustDelegate.swift", "App/Platform/Push.swift",
     "App/Resources/Assets.xcassets/Contents.json",
@@ -171,6 +171,23 @@ def check_alarm_codes(problems: list[str]) -> None:
         problems.append("the table of alarm codes differs from the one in ARMOR-COMMON")
 
 
+def check_alarm_facts(problems: list[str]) -> None:
+    """The labels of the facts of an alarm are the table of ARMOR-COMMON, with every fact in the eight languages."""
+    path = ROOT / "Sources" / "ArmorCore" / "Resources" / "alarm_facts.json"
+    if not path.is_file():
+        return
+    table = json.loads(path.read_text(encoding="utf-8")).get("facts", {})
+    if len(table) < 50:
+        problems.append(f"the table of alarm facts has {len(table)} facts (50 or more expected)")
+    for key, texts in table.items():
+        for language in ("en", "es", "de", "fr", "it", "ja", "zh", "pt"):
+            if not str(texts.get(language, "")).strip():
+                problems.append(f"alarm fact {key} has no label in {language}")
+    shared = ROOT.parent / "ARMOR-COMMON" / "src" / "armor_common" / "alarm_facts.json"
+    if shared.is_file() and normalised(shared) != normalised(path):
+        problems.append("the table of alarm facts differs from the one in ARMOR-COMMON")
+
+
 def normalised(path: Path) -> str:
     return path.read_text(encoding="utf-8").replace(chr(13) + chr(10), chr(10))
 
@@ -232,6 +249,7 @@ def main() -> int:
     check_languages(problems)
     check_contract(problems)
     check_alarm_codes(problems)
+    check_alarm_facts(problems)
     check_secrets(problems)
     check_public_text(problems)
     if problems:

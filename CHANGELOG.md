@@ -4,6 +4,8 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+- **The detail of an alarm:** the same as the Android app: the button Details of an alarm (active or closed) opens a sheet with its severity, source, time and state and every fact it carries with its label in the language of the app. The labels are the table of the contract (`alarm_facts.json`, a copy of the one in ARMOR-COMMON kept equal by a test and by `tools/ios_lint.py`), read in the core library (`AlarmFacts`); a fact the table does not know is shown with its key as it comes. The Swift tests of the core library are written and run by the macOS workflow.
+
 - **An alarm panel that does not confirm the arming mode is told in the alarm list:** the same as the Android app: the alarm `mode_panel_sync_failed` reads in the language of the app from the shared table of alarm sentences (the copy in the resources is the one of the contract).
 - **The home screen shows what the alarm panels did about the arming mode:** the same as the Android app, read in the core library (`panel_sync`) and shown as one line with the panels that did not confirm; nothing against a server that does not send it. The texts are in the eight languages.
 

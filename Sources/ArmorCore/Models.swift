@@ -156,6 +156,8 @@ public struct Alarm: Equatable, Sendable, Identifiable {
     public let raisedAt: String
     public let acknowledgedBy: String?
     public let cleared: Bool
+    /// The plain facts the alarm carries (which device, which port, which panel...); every one is kept, even one the labels table does not know.
+    public let detail: [AlarmFact]
     public var acknowledged: Bool { acknowledgedBy != nil }
 
     public static func parse(_ json: JSON) -> Alarm? {
@@ -164,7 +166,8 @@ public struct Alarm: Equatable, Sendable, Identifiable {
         if AlarmPolicy.isSilent(json.str("code")) { return nil }   // the alarm of a duress PIN is not listed nor counted on a phone
         let by: String? = json.has("acknowledged_at") ? (json.str("acknowledged_by").isEmpty ? "?" : json.str("acknowledged_by")) : nil
         return Alarm(id: id, sourceType: source.str("type"), sourceId: source.str("id"), severity: json.str("severity", "warning"),
-                     code: json.str("code"), raisedAt: json.str("raised_at"), acknowledgedBy: by, cleared: json.has("cleared_at"))
+                     code: json.str("code"), raisedAt: json.str("raised_at"), acknowledgedBy: by, cleared: json.has("cleared_at"),
+                     detail: AlarmFacts.facts(json.object("detail")))
     }
 }
 

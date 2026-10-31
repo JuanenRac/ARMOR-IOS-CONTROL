@@ -66,14 +66,14 @@
         },
         {
           "desc": {
-            "en": "AlarmPolicy, AlarmText, AlarmCodes: what an alarm asks and how it is worded",
-            "es": "AlarmPolicy, AlarmText, AlarmCodes: qué pide una alarma y cómo se redacta",
-            "de": "AlarmPolicy, AlarmText, AlarmCodes: was ein Alarm verlangt und wie er lautet",
-            "fr": "AlarmPolicy, AlarmText, AlarmCodes : ce qu'une alarme demande et sa formulation",
-            "it": "AlarmPolicy, AlarmText, AlarmCodes: cosa chiede un allarme e come è formulato",
-            "ja": "AlarmPolicy、AlarmText、AlarmCodes：アラームの要求内容と文言",
-            "zh": "AlarmPolicy、AlarmText、AlarmCodes：报警的要求与措辞",
-            "pt": "AlarmPolicy, AlarmText, AlarmCodes: o que um alarme pede e como é redigido"
+            "en": "AlarmPolicy, AlarmText, AlarmCodes, AlarmFacts: what an alarm asks and how it is worded",
+            "es": "AlarmPolicy, AlarmText, AlarmCodes, AlarmFacts: qué pide una alarma y cómo se redacta",
+            "de": "AlarmPolicy, AlarmText, AlarmCodes, AlarmFacts: was ein Alarm verlangt und wie er lautet",
+            "fr": "AlarmPolicy, AlarmText, AlarmCodes, AlarmFacts : ce qu'une alarme demande et sa formulation",
+            "it": "AlarmPolicy, AlarmText, AlarmCodes, AlarmFacts: cosa chiede un allarme e come è formulato",
+            "ja": "AlarmPolicy、AlarmText、AlarmCodes、AlarmFacts：アラームの要求内容と文言",
+            "zh": "AlarmPolicy、AlarmText、AlarmCodes、AlarmFacts：报警的要求与措辞",
+            "pt": "AlarmPolicy, AlarmText, AlarmCodes, AlarmFacts: o que um alarme pede e como é redigido"
           }
         },
         {

@@ -7,7 +7,7 @@ let package = Package(
     platforms: [.iOS(.v16), .macOS(.v13)],
     products: [.library(name: "ArmorCore", targets: ["ArmorCore"])],
     targets: [
-        .target(name: "ArmorCore", resources: [.copy("Resources/i18n"), .copy("Resources/alarm_codes.json")]),
+        .target(name: "ArmorCore", resources: [.copy("Resources/i18n"), .copy("Resources/alarm_codes.json"), .copy("Resources/alarm_facts.json")]),
         .testTarget(name: "ArmorCoreTests", dependencies: ["ArmorCore"], resources: [.copy("Fixtures")]),
     ]
 )

@@ -30,6 +30,7 @@ struct AlarmsView: View {
 
 struct ActiveAlarms: View {
     @EnvironmentObject var model: AppModel
+    @State private var detail: Alarm?
 
     var body: some View {
         List {
@@ -43,9 +44,12 @@ struct ActiveAlarms: View {
                     }
                     Text(AlarmText.text(alarm.code, model.translator))
                     Text("\(alarm.sourceId) · \(alarm.raisedAt)").font(.caption).foregroundColor(Theme.muted)
-                    if !alarm.acknowledged, model.state.facts.canChange {
-                        Button(model.tr("Confirmar")) { Task { await model.order { _ in try await model.controller.acknowledge(alarm.id) } } }.buttonStyle(.bordered).tint(Theme.accent)
-                    }
+                    HStack {
+                        Button(model.tr("Detalles")) { detail = alarm }.accessibilityHint(model.tr("Ver detalles de la alarma"))
+                        if !alarm.acknowledged, model.state.facts.canChange {
+                            Button(model.tr("Confirmar")) { Task { await model.order { _ in try await model.controller.acknowledge(alarm.id) } } }
+                        }
+                    }.buttonStyle(.bordered).tint(Theme.accent)
                 }
                 .listRowBackground(Theme.surface)
             }
@@ -58,6 +62,7 @@ struct ActiveAlarms: View {
                         VStack(alignment: .leading) {
                             Text(AlarmText.text(alarm.code, model.translator))
                             Text("\(alarm.sourceId) · \(alarm.raisedAt)").font(.caption).foregroundColor(Theme.muted)
+                            Button(model.tr("Detalles")) { detail = alarm }.buttonStyle(.bordered).tint(Theme.accent).accessibilityHint(model.tr("Ver detalles de la alarma"))
                         }.listRowBackground(Theme.surface)
                     }
                 }
@@ -65,6 +70,7 @@ struct ActiveAlarms: View {
         }
         .scrollContentBackground(.hidden)
         .refreshable { await model.refresh() }
+        .sheet(item: $detail) { AlarmDetailView(alarm: $0).environmentObject(model) }
     }
 }
 
