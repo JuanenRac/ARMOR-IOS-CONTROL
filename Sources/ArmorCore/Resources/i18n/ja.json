@@ -313,5 +313,6 @@
  "Cambiar a %s": "%sに切り替える",
  "Modo de armado": "警戒モード",
  "%d marcados": "%d件を指定",
- "Modo: %s": "モード: %s"
+ "Modo: %s": "モード: %s",
+ "Desarmado": "解除"
 }

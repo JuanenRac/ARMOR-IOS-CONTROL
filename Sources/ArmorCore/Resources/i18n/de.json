@@ -313,5 +313,6 @@
  "Cambiar a %s": "Wechseln zu %s",
  "Modo de armado": "Scharfschaltmodus",
  "%d marcados": "%d markiert",
- "Modo: %s": "Modus: %s"
+ "Modo: %s": "Modus: %s",
+ "Desarmado": "Unscharf"
 }

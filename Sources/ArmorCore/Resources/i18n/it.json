@@ -313,5 +313,6 @@
  "Cambiar a %s": "Passa a %s",
  "Modo de armado": "Modalità di inserimento",
  "%d marcados": "%d contrassegnati",
- "Modo: %s": "Modalità: %s"
+ "Modo: %s": "Modalità: %s",
+ "Desarmado": "Disinserito"
 }

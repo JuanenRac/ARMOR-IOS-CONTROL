@@ -313,5 +313,6 @@
  "Cambiar a %s": "Switch to %s",
  "Modo de armado": "Arming mode",
  "%d marcados": "%d marked",
- "Modo: %s": "Mode: %s"
+ "Modo: %s": "Mode: %s",
+ "Desarmado": "Disarmed"
 }

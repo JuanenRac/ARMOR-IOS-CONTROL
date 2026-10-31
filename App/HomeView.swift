@@ -84,7 +84,7 @@ struct HomeView: View {
             .confirmationDialog(model.tr("Modo de armado"), isPresented: $pickMode, titleVisibility: .visible) {
                 if let modes {
                     ForEach(modes.armable.filter { $0 != modes.current }, id: \.self) { mode in
-                        Button("\(model.state.snapshot.armed ? model.trf("Cambiar a %s", ArmingText.name(mode, model.translator)) : model.trf("Armar: %s", ArmingText.name(mode, model.translator))) · \(ArmingText.defends(modes, mode, model.translator))") { Task { await chooseMode(mode) } }
+                        Button(modeButtonLabel(mode, modes)) { Task { await chooseMode(mode) } }
                     }
                 }
                 Button(model.tr("Cancelar"), role: .cancel) {}
@@ -119,6 +119,13 @@ struct HomeView: View {
         let found = try? await model.controller.preflight()
         preflight = found
         if let found, !found.issues.isEmpty { confirmArm = true } else { await arm() }
+    }
+
+    /// The words of one button of the picker: what it does (arm or switch to) the mode, and what the mode defends.
+    private func modeButtonLabel(_ mode: String, _ modes: ArmingModesView) -> String {
+        let name = ArmingText.name(mode, model.translator)
+        let action = model.state.snapshot.armed ? model.trf("Cambiar a %s", name) : model.trf("Armar: %s", name)
+        return action + " - " + ArmingText.defends(modes, mode, model.translator)
     }
 
     /// Arms in a mode of the server. Arming from disarmed goes through the same check as a plain arm; the server decides whether the mode needs the confirmation (nothing assigned) or the PIN
