@@ -25,6 +25,8 @@ public struct ArmorState: Equatable, Sendable {
     public var events: [ArmorEvent] = []
     public var panels: [AlarmPanelView] = []
     public var profiles: [ArmProfileView] = []
+    /// The arming modes of the server; nil until it has answered (and kept as it was against an older server that never does).
+    public var armingModes: ArmingModesView?
     public var commandsEnabled = false
     public var unseenAlarms: Int { active.filter { !$0.acknowledged }.count }
     public var lastRefreshFailed = false
@@ -119,9 +121,10 @@ public final class ArmorController: @unchecked Sendable {
             async let events = api.history(origin, limit: 50, before: nil, after: nil)
             let (status, list, history) = try await (snapshot, alarms, events)
             let panels = (try? await api.alarmPanels(origin)) ?? state.panels
+            let modes = (try? await api.armingModes(origin)) ?? state.armingModes
             let fresh = seen.fresh(history)
             let notices = AlarmPolicy.notices(fresh, armed: status.armed, translator)
-            update { $0.snapshot = status; $0.active = list.active; $0.recent = list.recent; $0.events = history; $0.panels = panels; $0.lastRefreshFailed = false }
+            update { $0.snapshot = status; $0.active = list.active; $0.recent = list.recent; $0.events = history; $0.panels = panels; $0.armingModes = modes; $0.lastRefreshFailed = false }
             return notices
         } catch let error as ArmorApiError {
             if error.isUnauthorized { update { $0.signedIn = false } }
@@ -158,6 +161,14 @@ public final class ArmorController: @unchecked Sendable {
 
     public func disarm(pin: String?, asker: ElevationAsker? = nil) async throws {
         try await guarded(reason: translator.tr("Desarmar el sistema"), asker: asker) { [api] origin in try await api.setMode(origin, mode: "disarmed", pin: pin) }
+    }
+
+    /// Arms the system in a mode of the server (Away, Home or Night). Behind the lock of the phone like arming; a refusal that the picker answers (the confirmation of a mode with nothing assigned, a
+    /// PIN) comes as an `ArmorApiError` whose `code` says which.
+    public func armInMode(_ mode: String, pin: String?, confirmUnassigned: Bool, asker: ElevationAsker? = nil) async throws {
+        try await guarded(reason: translator.tr("Armar el sistema"), asker: asker) { [api] origin in
+            try await api.setArmingMode(origin, mode: mode, pin: pin, confirmUnassigned: confirmUnassigned)
+        }
     }
 
     public func armPanel(_ node: String, mode: String, force: Bool, profile: String?, asker: ElevationAsker? = nil) async throws {

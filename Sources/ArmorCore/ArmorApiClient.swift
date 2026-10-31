@@ -71,6 +71,16 @@ public final class ArmorApiClient: ArmorApi, @unchecked Sendable {
         do { _ = try await send(origin, "/api/v1/mode", "POST", body, [200]) } catch let error as ArmorApiError { throw ArmorApiClient.pinFailure(error) ?? error }
     }
 
+    public func armingModes(_ origin: String) async throws -> ArmingModesView { ArmingModesView.parse(try await getJson(origin, "/api/v1/alarm/modes")) }
+
+    public func setArmingMode(_ origin: String, mode: String, pin: String?, confirmUnassigned: Bool) async throws {
+        guard ArmingModesView.armed.contains(mode) else { throw ArmorApiError(message: "The mode is away, home or night", status: nil) }
+        var body: JSON = ["mode": mode]
+        if let pin, !pin.isEmpty { body["pin"] = pin }
+        if confirmUnassigned { body["confirm_unassigned"] = true }
+        _ = try await send(origin, "/api/v1/mode", "POST", body, [200])
+    }
+
     public func acknowledgeAlarm(_ origin: String, id: String) async throws { _ = try await send(origin, "/api/v1/alarms/\(Self.part(id))/acknowledge", "POST", nil, [200]) }
     public func acknowledgeAllAlarms(_ origin: String) async throws { _ = try await send(origin, "/api/v1/alarms/acknowledge", "POST", nil, [200]) }
 

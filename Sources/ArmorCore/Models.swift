@@ -109,6 +109,8 @@ public struct ArmorSnapshot: Equatable, Sendable {
     public var revision: Int = 0
     public var updatedAt: String = ""
     public var nodes: [FieldNode] = []
+    /// The arming mode in force ("disarmed", "away", "home", "night") while the server has the arming modes on; nil otherwise.
+    public var armingMode: String?
     public var armed: Bool { mode == "armed" }
 
     public static func parse(_ root: JSON) -> ArmorSnapshot {
@@ -118,7 +120,8 @@ public struct ArmorSnapshot: Equatable, Sendable {
             return FieldNode(id: id, online: node.bool("online"), lux: node.double("lux"), targetCount: node.int("target_count"),
                              alertLevel: node.str("alert_level", "normal"), stale: node.bool("stale"))
         }
-        return ArmorSnapshot(mode: root.str("mode", "disarmed"), revision: root.int("revision"), updatedAt: root.str("updated_at"), nodes: nodes)
+        let armingMode = root.str("arming_mode")
+        return ArmorSnapshot(mode: root.str("mode", "disarmed"), revision: root.int("revision"), updatedAt: root.str("updated_at"), nodes: nodes, armingMode: armingMode.isEmpty ? nil : armingMode)
     }
 }
 
@@ -290,6 +293,69 @@ public enum AlarmPanelsParser {
 
     /// Whether the server may command the panels at all.
     public static func commandsEnabled(_ root: JSON) -> Bool { root.bool("enabled") }
+}
+
+// MARK: the arming modes of the server (Away, Home, Night)
+
+/// GET /api/v1/alarm/modes. `enabled` is false until an administrator turns the modes on in Studio (then the app arms and disarms as it always did); `current` is "disarmed", "away",
+/// "home" or "night"; `available` is what can be asked; `unassigned` the modes that defend nothing yet; `defended` how many references Home and Night mark.
+public struct ArmingModesView: Equatable, Sendable {
+    public static let armed = ["away", "home", "night"]
+    public var enabled = false
+    public var current = "disarmed"
+    public var available: [String] = []
+    public var unassigned: [String] = []
+    public var downgradePinRequired = true
+    public var defended: [String: Int] = [:]
+    public init() {}
+    /// The armed modes that can be asked for, in the order Away, Home, Night.
+    public var armable: [String] { Self.armed.filter { available.contains($0) } }
+
+    public static func parse(_ root: JSON) -> ArmingModesView {
+        let known = ["disarmed", "away", "home", "night"]
+        func strings(_ key: String) -> [String] { ((root[key] as? [Any]) ?? []).compactMap { $0 as? String }.filter { !$0.isEmpty } }
+        var view = ArmingModesView()
+        view.enabled = root.bool("enabled")
+        let current = root.str("current", "disarmed")
+        view.current = known.contains(current) ? current : "disarmed"
+        view.available = strings("available").filter { known.contains($0) }
+        view.unassigned = strings("unassigned")
+        view.downgradePinRequired = root.bool("downgrade_pin_required", true)
+        let modes = root.object("modes")
+        for mode in ["home", "night"] { view.defended[mode] = ((modes?.object(mode)?["defends"] as? [Any]) ?? []).count }
+        return view
+    }
+}
+
+/// The words of the arming modes of the server.
+public enum ArmingText {
+    public static func name(_ mode: String, _ t: Translator) -> String {
+        switch mode {
+        case "away": return t.tr("Modo fuera de casa")
+        case "home": return t.tr("Modo en casa")
+        case "night": return t.tr("Modo noche")
+        default: return t.tr("Desarmado")
+        }
+    }
+    /// What the picker says under each mode.
+    public static func defends(_ view: ArmingModesView, _ mode: String, _ t: Translator) -> String {
+        if mode == "away" { return t.tr("defiende todo") }
+        if view.unassigned.contains(mode) { return t.tr("aún nada asignado") }
+        return t.trf("%d marcados", view.defended[mode] ?? 0)
+    }
+    /// The refusal of a mode in words.
+    public static func refusal(_ code: String, _ t: Translator) -> String {
+        switch code {
+        case "modes_disabled": return t.tr("Los modos de armado no están activados en el servidor.")
+        case "no_zones_assigned": return t.tr("Ese modo no tiene nada asignado: no se armó.")
+        case "wrong_pin": return t.tr("El PIN no es correcto")
+        case "pin_locked": return t.tr("Demasiados PIN erróneos: espera un poco")
+        case "pin_not_set": return t.tr("Este usuario no tiene PIN: lo pone un administrador")
+        default: return t.tr("No se pudo cambiar el modo.")
+        }
+    }
+    /// The refusals the picker answers by asking something more: the confirmation of a mode with nothing assigned, or the PIN.
+    public static func isAskable(_ code: String) -> Bool { ["no_zones_assigned", "wrong_pin", "pin_locked", "pin_not_set"].contains(code) }
 }
 
 // MARK: cameras

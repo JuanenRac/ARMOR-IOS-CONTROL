@@ -283,7 +283,8 @@ final class AppModel: ObservableObject {
     // MARK: orders
 
     /// Runs an order of the controller, with the proof of identity asked on a screen if the server wants it, and the result said in words.
-    func order(_ done: String? = nil, _ action: @escaping (ElevationAsker) async throws -> Void) async {
+    @discardableResult
+    func order(_ done: String? = nil, _ action: @escaping (ElevationAsker) async throws -> Void) async -> Bool {
         busy = true; defer { busy = false }
         let asker: ElevationAsker = { [weak self] in
             guard let self else { return nil }
@@ -295,6 +296,7 @@ final class AppModel: ObservableObject {
             try await action(asker)
             state = controller.state
             if let done { show(done, error: false) }
+            return true
         } catch let error as ControllerError {
             switch error {
             case .lockRefused: show(tr("No se ha confirmado con el bloqueo del teléfono: no se ha hecho nada."), error: true)
@@ -302,8 +304,24 @@ final class AppModel: ObservableObject {
             case .notSignedIn: show(tr("Inicia sesión primero."), error: true)
             case .elevationDeclined: show(tr("No se ha hecho nada: hace falta confirmar tu identidad."), error: true)
             }
-        } catch let error as ArmorApiError { show(describe(error), error: true) }
-        catch { show(error.localizedDescription, error: true) }
+            return false
+        } catch let error as ArmorApiError { show(describe(error), error: true); return false }
+        catch { show(error.localizedDescription, error: true); return false }
+    }
+
+    /// Arms in a mode of the server. Returns nil when it was done, else the code of the refusal the picker answers by asking more (`no_zones_assigned`, `wrong_pin`, `pin_locked`,
+    /// `pin_not_set`); any other failure is shown in words and returns "failed". The elevation and the lock of the phone work as for every order.
+    func armInMode(_ mode: String, pin: String?, confirmUnassigned: Bool) async -> String? {
+        final class Refusal: @unchecked Sendable { var code: String? }
+        let refusal = Refusal()
+        let done = await order(nil) { asker in
+            do { try await self.controller.armInMode(mode, pin: pin, confirmUnassigned: confirmUnassigned, asker: asker) }
+            catch let error as ArmorApiError where ArmingText.isAskable(error.code) { refusal.code = error.code }
+        }
+        if let code = refusal.code { return code }
+        guard done else { return "failed" }
+        show(trf("Sistema armado: %s", ArmingText.name(mode, translator)), error: false)
+        return nil
     }
 
     func answerElevation(_ request: ElevationRequest, password: String, code: String) {

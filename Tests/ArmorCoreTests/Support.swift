@@ -31,6 +31,11 @@ class FakeApi: ArmorApi, @unchecked Sendable {
     func record(_ call: String) { callsLock.lock(); recorded.append(call); callsLock.unlock() }
     var modeError: ArmorApiError?
     var modeErrorOnce = false
+    // the arming modes of the server
+    var modes = ArmingModesView()
+    var armingError: ArmorApiError?
+    var armingErrorOnce = false
+    var armingModesAvailable = true
     var facts = SessionFacts(role: "admin", deviceLock: "user")
     var statusMode = "disarmed"
     var historyEvents: [ArmorEvent] = []
@@ -49,6 +54,16 @@ class FakeApi: ArmorApi, @unchecked Sendable {
         record("mode:\(mode):\(pin ?? "-")")
         if let error = modeError { if modeErrorOnce { modeError = nil }; throw error }
         statusMode = mode
+    }
+    func armingModes(_ origin: String) async throws -> ArmingModesView {
+        if !armingModesAvailable { throw ArmorApiError(message: "not found", status: 404) }
+        return modes
+    }
+    func setArmingMode(_ origin: String, mode: String, pin: String?, confirmUnassigned: Bool) async throws {
+        record("arming:\(mode):\(pin ?? "-"):\(confirmUnassigned)")
+        if let error = armingError { if armingErrorOnce { armingError = nil }; throw error }
+        statusMode = "armed"
+        modes.current = mode
     }
     func alarms(_ origin: String) async throws -> (active: [Alarm], recent: [Alarm]) { record("alarms"); return ([], []) }
     func acknowledgeAlarm(_ origin: String, id: String) async throws { record("ack:\(id)") }

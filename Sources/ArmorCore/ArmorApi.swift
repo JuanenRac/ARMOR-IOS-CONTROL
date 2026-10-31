@@ -15,6 +15,11 @@ public protocol ArmorApi: Sendable {
     func preflight(_ origin: String) async throws -> Preflight
     /// Arm or disarm the whole system; the server audits it with the signed-in user's name. Disarming carries the PIN of the user when there is one.
     func setMode(_ origin: String, mode: String, pin: String?) async throws
+    /// The arming modes of the server (Away, Home, Night); an older server has no such route and the call fails.
+    func armingModes(_ origin: String) async throws -> ArmingModesView
+    /// Arms in a mode ("away", "home" or "night"). A mode that defends nothing is refused (code `no_zones_assigned`) unless `confirmUnassigned`; a change to a mode that defends less than the
+    /// current one needs the PIN like a disarm (codes `wrong_pin`, `pin_locked`, `pin_not_set`).
+    func setArmingMode(_ origin: String, mode: String, pin: String?, confirmUnassigned: Bool) async throws
     /// Active alarms first (raised and not yet cleared, or cleared but waiting for a person), then the closed record.
     func alarms(_ origin: String) async throws -> (active: [Alarm], recent: [Alarm])
     func acknowledgeAlarm(_ origin: String, id: String) async throws

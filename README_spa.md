@@ -22,14 +22,14 @@
   <img src="https://img.shields.io/badge/Language-Swift-f05138.svg" alt="Lenguaje">
   <img src="https://img.shields.io/badge/UI-SwiftUI-0a84ff.svg" alt="UI">
   <img src="https://img.shields.io/badge/Languages-8-00E5FF.svg" alt="Idiomas">
-  <img src="https://img.shields.io/badge/Tests-146%20passing-2ea44f.svg" alt="Pruebas">
+  <img src="https://img.shields.io/badge/Tests-159%20passing-2ea44f.svg" alt="Pruebas">
   <img src="https://img.shields.io/badge/Version-0.0.1-0f6cbd.svg" alt="Versión">
   <img src="https://img.shields.io/badge/Maturity-scaffolding-FFB020.svg" alt="Madurez">
 </p>
 
 ---
 
-**Comprobación de honestidad - qué funciona hoy:** las reglas de la app (enlace con el servidor, lectura de las respuestas, elección de dirección, bloqueo del teléfono, caja de la sesión, confianza en el certificado, política de alarmas, casos de uso, corte del MJPEG) son el paquete Swift `ArmorCore`, cubierto por 146 pruebas unitarias que se ejecutan con `swift test` en macOS o Linux, y `tools/ios_lint.py` comprueba la estructura, las ocho tablas de idiomas y el contrato sin Mac. Lo que **no** está demostrado todavía: las pantallas SwiftUI y las partes que necesitan un iPhone (Face ID, llavero, reglas de certificado, cámara en vivo, push con Firebase) no se han compilado en Xcode ni ejecutado en un dispositivo.
+**Comprobación de honestidad - qué funciona hoy:** las reglas de la app (enlace con el servidor, lectura de las respuestas, elección de dirección, bloqueo del teléfono, caja de la sesión, confianza en el certificado, política de alarmas, casos de uso, corte del MJPEG) son el paquete Swift `ArmorCore`, cubierto por 159 pruebas unitarias que se ejecutan con `swift test` en macOS o Linux, y `tools/ios_lint.py` comprueba la estructura, las ocho tablas de idiomas y el contrato sin Mac. Lo que **no** está demostrado todavía: las pantallas SwiftUI y las partes que necesitan un iPhone (Face ID, llavero, reglas de certificado, cámara en vivo, push con Firebase) no se han compilado en Xcode ni ejecutado en un dispositivo.
 
 ---
 
@@ -41,7 +41,7 @@
 | Madurez | Andamiaje |
 | Función | Cliente de operador para iPhone de ARMOR-SERVER (familia: Clients, padre: ARMOR-SERVER) |
 | Tecnología | Swift 5.9+ / SwiftUI, iOS 16+ |
-| Pruebas | 146 (`swift test`) |
+| Pruebas | 159 (`swift test`) |
 | Idiomas | 8 (241 frases por idioma, comprobadas por `ios_lint.py`) |
 | Funciona en | Un iPhone con iOS 16+; las pruebas corren en macOS o Linux |
 | En hardware real | Aún no se ha ejecutado en un iPhone; las reglas se prueban en Linux |
@@ -58,7 +58,7 @@ Cada línea es una parte de este repositorio y la luz dice hasta dónde llega ho
 | Área | Estado | Qué significa aquí |
 |---|---|---|
 | Software | 🟠 | Las reglas de la app son un paquete Swift (`ArmorCore`); las pantallas SwiftUI no se han compilado en Xcode. |
-| Pruebas | 🟡 | Pasan 146 pruebas unitarias con `swift test` en macOS o Linux, y `tools/ios_lint.py` comprueba la estructura, las tablas de los ocho idiomas y el contrato sin un Mac; ninguna prueba se ejecuta en un dispositivo. |
+| Pruebas | 🟡 | Pasan 159 pruebas unitarias con `swift test` en macOS o Linux, y `tools/ios_lint.py` comprueba la estructura, las tablas de los ocho idiomas y el contrato sin un Mac; ninguna prueba se ejecuta en un dispositivo. |
 | Interfaz | 🟠 | Las pantallas SwiftUI están escritas pero no se han compilado en Xcode ni ejecutado en un iPhone. |
 | Hardware | 🔴 | No ha funcionado en un iPhone: las reglas solo se prueban en Linux. |
 | Seguridad | 🟠 | El bloqueo del teléfono, la caja de la sesión y la confianza en el certificado son reglas probadas en Linux; Face ID, el llavero y las reglas del certificado no se han ejecutado en un dispositivo. |
@@ -76,6 +76,7 @@ Cada línea es una parte de este repositorio y la luz dice hasta dónde llega ho
 * **El asistente:** órdenes escritas (el micrófono del teclado dicta), con una confirmación ligada a ti para armar y desarmar, detrás del bloqueo.
 * **Confianza en el certificado:** la clave del certificado de la instalación se recuerda la primera vez o se empareja con el QR de Studio; si cambia, la conexión se rechaza y se te avisa.
 * **Ocho idiomas** (inglés, español, alemán, francés, italiano, japonés, chino y portugués de Portugal), a elegir en *Más > Idioma* o siguiendo al teléfono, con ayuda para cada pantalla.
+* **Modos de armado del servidor (Fuera, En casa, Noche):** mientras el servidor tiene los modos de armado activados (Studio, Configuración > Seguridad), el botón de armar de la pantalla de estado abre un selector para armar en un modo, cambiar de uno a otro o desarmar; un modo sin nada asignado pide confirmación, un cambio a un modo que defiende menos pide el PIN como desarmar, y el estado muestra el modo en vigor. Con los modos apagados la app arma y desarma como antes. Sigue a la app de Android; el código y sus pruebas están escritos y no se compilaron ni se probaron en un iPhone.
 
 ## 🧩 Papel en A.R.M.O.R.
 
@@ -133,7 +134,7 @@ En la app: las dos direcciones, *Recordarme*, el bloqueo del teléfono y el idio
 **Requisitos:** un Mac con Xcode 15+ e iOS 16+ para compilar la app; Swift 5.9+ (macOS o Linux) para las pruebas; Python 3.11 para las comprobaciones.
 
 ```sh
-swift test                  # 146 tests of ArmorCore (macOS or Linux)
+swift test                  # 159 tests of ArmorCore (macOS or Linux)
 python tools/ios_lint.py    # structure, eight languages, contract (any system)
 xcodegen generate           # then open ARMOR-IOS-CONTROL.xcodeproj in Xcode (on a Mac)
 ```
@@ -159,7 +160,7 @@ python -I tools/armor_ci_validate.py
 | `EndpointTests.swift`, `MjpegTests.swift`, `TranslatorTests.swift` | 7 + 7 + 7 | La lectura de direcciones, el corte MJPEG y el traductor |
 | `PolicyTests.swift`, `AlarmCodesTests.swift` | 6 + 4 | La política de alarmas y los códigos de alarma |
 
-Las 146 pruebas usan datos de un servidor real. `tools/ios_lint.py` pasa sin Mac: 31 ficheros Swift, 241 frases en 8 idiomas, 26 rutas del servidor. Ninguna prueba corre en un dispositivo.
+Las 159 pruebas usan datos de un servidor real. `tools/ios_lint.py` pasa sin Mac: 31 ficheros Swift, 241 frases en 8 idiomas, 26 rutas del servidor. Ninguna prueba corre en un dispositivo.
 
 ## 🏗️ Compilación y publicación
 
@@ -186,7 +187,7 @@ El proyecto de Xcode se genera desde `project.yml` con XcodeGen: elige un equipo
 ARMOR-IOS-CONTROL/
 ├── Sources/ArmorCore/                   las reglas de la app: un paquete Swift
 ├── App/                                 las pantallas SwiftUI y las partes que necesitan un iPhone
-├── Tests/                               146 pruebas y datos de un servidor real
+├── Tests/                               159 pruebas y datos de un servidor real
 ├── docs/                                las guías de este repositorio
 ├── tools/                               las comprobaciones de CI compartidas y las herramientas del proyecto
 ├── .github/                             flujo de CI y plantillas de issues y pull requests
