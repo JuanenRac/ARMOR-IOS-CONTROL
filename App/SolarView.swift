@@ -59,6 +59,7 @@ struct SolarView: View {
 
     var body: some View {
         List {
+            NodeFinderPanel(knownIds: (solar.overview?.devices.map(\.nodeId) ?? []) + (solar.overview?.waiting.map(\.nodeId) ?? []))
             Section { Text(headline).font(.footnote).foregroundColor(Theme.muted) }.listRowBackground(Theme.surface)
             if let data = solar.overview {
                 if data.isEmpty {

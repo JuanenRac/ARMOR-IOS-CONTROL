@@ -35,6 +35,7 @@ struct ElectricalView: View {
 
     var body: some View {
         List {
+            NodeFinderPanel(knownIds: electrical.overview?.nodes.map(\.nodeId) ?? [])
             Section { Text(headline).font(.footnote).foregroundColor(Theme.muted) }.listRowBackground(Theme.surface)
             if let data = electrical.overview {
                 if data.isEmpty {

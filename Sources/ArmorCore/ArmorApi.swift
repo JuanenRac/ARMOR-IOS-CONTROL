@@ -77,6 +77,10 @@ public protocol ArmorApi: Sendable {
     /// Step two: writes it, with the serial number typed again.
     func batteryExecute(_ origin: String, id: String, serial: String) async throws -> BatteryOperationView
     func batteryCancel(_ origin: String, id: String) async throws -> BatteryOperationView
+    /// The local network as the network nodes see it.
+    func network(_ origin: String) async throws -> NetworkOverview
+    /// Asks the network node to sweep the network now, for the node finder.
+    func scanNetworkNow(_ origin: String) async throws
 }
 
 extension ArmorApi {
@@ -89,6 +93,8 @@ extension ArmorApi {
     func batteryOperation(_ origin: String, id: String) async throws -> BatteryOperationView { throw ArmorApiError(message: "not supported", status: nil) }
     func batteryExecute(_ origin: String, id: String, serial: String) async throws -> BatteryOperationView { throw ArmorApiError(message: "not supported", status: nil) }
     func batteryCancel(_ origin: String, id: String) async throws -> BatteryOperationView { throw ArmorApiError(message: "not supported", status: nil) }
+    func network(_ origin: String) async throws -> NetworkOverview { throw ArmorApiError(message: "not supported", status: nil) }
+    func scanNetworkNow(_ origin: String) async throws { throw ArmorApiError(message: "not supported", status: nil) }
 
     /// A ticket with the quality left to the server.
     func streamTicket(_ origin: String, cameraId: String) async throws -> String {

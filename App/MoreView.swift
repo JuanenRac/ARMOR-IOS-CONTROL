@@ -23,6 +23,7 @@ struct MoreView: View {
                     if model.state.facts.canChange {
                         NavigationLink(model.tr("Solar")) { SolarView() }
                         NavigationLink(model.tr("Eléctrica")) { ElectricalView() }
+                        NavigationLink(model.tr("Red")) { NetworkView() }
                     }
                     if model.state.facts.isAdmin { NavigationLink(model.tr("Mantenimiento de baterías")) { BatteryView() } }
                 }.listRowBackground(Theme.surface)

@@ -6,15 +6,16 @@ public struct ScreenPolling: Equatable, Sendable {
     public let solarSeconds: Double
     public let electricalSeconds: Double
     public let batterySeconds: Double
+    public let networkSeconds: Double
 
-    public static let defaults = ScreenPolling(solarSeconds: 5, electricalSeconds: 5, batterySeconds: 2)
+    public static let defaults = ScreenPolling(solarSeconds: 5, electricalSeconds: 5, batterySeconds: 2, networkSeconds: 5)
 
     /// Reads the values and keeps each between the minimum and the maximum of the file (never faster than once a second by default, so a typo cannot flood the server).
     public static func parse(_ json: JSON) -> ScreenPolling {
         let low = max(0.5, json.double("minimum_seconds") ?? 1)
         let high = max(low, json.double("maximum_seconds") ?? 300)
         func pick(_ key: String, _ fallback: Double) -> Double { min(high, max(low, json.double(key) ?? fallback)) }
-        return ScreenPolling(solarSeconds: pick("solar_seconds", defaults.solarSeconds), electricalSeconds: pick("electrical_seconds", defaults.electricalSeconds), batterySeconds: pick("battery_seconds", defaults.batterySeconds))
+        return ScreenPolling(solarSeconds: pick("solar_seconds", defaults.solarSeconds), electricalSeconds: pick("electrical_seconds", defaults.electricalSeconds), batterySeconds: pick("battery_seconds", defaults.batterySeconds), networkSeconds: pick("network_seconds", defaults.networkSeconds))
     }
 
     /// The file shipped inside the package.

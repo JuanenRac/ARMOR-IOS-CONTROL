@@ -48,6 +48,7 @@ struct AlarmDetailView: View {
         case .solar: return AnyView(NavigationLink(model.tr("Solar")) { SolarView() })
         case .batteries: return AnyView(NavigationLink(model.tr("Mantenimiento de baterías")) { BatteryView() })
         case .electrical: return AnyView(NavigationLink(model.tr("Eléctrica")) { ElectricalView() })
+        case .network: return AnyView(NavigationLink(model.tr("Red")) { NetworkView() })
         default: return nil
         }
     }

@@ -94,6 +94,9 @@ public final class ArmorApiClient: ArmorApi, @unchecked Sendable {
         BatteryParser.operation(try Json.object(try await send(origin, "/api/v1/solar/battery-ops/" + Self.part(id) + "/cancel", "POST", [:], [202])))
     }
 
+    public func network(_ origin: String) async throws -> NetworkOverview { NetworkParser.overview(try await getJson(origin, "/api/v1/network")) }
+    public func scanNetworkNow(_ origin: String) async throws { _ = try await send(origin, "/api/v1/network/commands", "POST", ["type": "scan_now"], [200, 201, 202]) }
+
     public func voiceAvailable(_ origin: String) async throws -> Bool { try await getJson(origin, "/api/v1/voice/status").bool("available") }
 
     // MARK: orders
