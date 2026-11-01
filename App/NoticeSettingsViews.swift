@@ -6,7 +6,7 @@ import UniformTypeIdentifiers
 import ArmorCore
 
 /// The title of a kind of notice (the same words in the filters and in the sounds).
-func noticeKindTitle(_ kind: String, _ model: AppModel) -> String {
+@MainActor func noticeKindTitle(_ kind: String, _ model: AppModel) -> String {
     switch kind {
     case "alert": return model.tr("Alertas del radar")
     case "camera": return model.tr("Cámaras sin respuesta")
