@@ -51,7 +51,7 @@ public final class Translator: @unchecked Sendable {
     }
 
     /// Fills `%s` and `%d` in order, and `%1$s`, `%2$d`... by position (a translation may need to put the holes in another order).
-    static func fill(_ template: String, _ args: [Any]) -> String {
+    public static func fill(_ template: String, _ args: [Any]) -> String {
         let chars = Array(template)
         var out = ""
         var index = 0
