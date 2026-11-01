@@ -16,6 +16,9 @@ struct AlarmDetailView: View {
                     line(model.tr("Origen"), alarm.sourceId)
                     line(model.tr("Hora"), alarm.raisedAt)
                     line(model.tr("Estado"), alarm.acknowledged ? model.tr("confirmada") : model.tr("Sin confirmar"))
+                    if alarm.falseAlarm == true { line(model.tr("Falsa alarma"), model.tr("sí")) }
+                    // what the alarm means and what to check, from the table every client shares; nothing when the code has none
+                    if let help = AlarmFacts.help(alarm.code, model.translator.language) { Text(help).font(.footnote).accessibilityLabel(help) }
                 }
                 Section {
                     let facts = AlarmFacts.rows(alarm.detail, model.translator)

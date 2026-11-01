@@ -183,6 +183,13 @@ def check_alarm_facts(problems: list[str]) -> None:
         for language in ("en", "es", "de", "fr", "it", "ja", "zh", "pt"):
             if not str(texts.get(language, "")).strip():
                 problems.append(f"alarm fact {key} has no label in {language}")
+    helps = json.loads(path.read_text(encoding="utf-8")).get("help", {})
+    if len(helps) < 11:
+        problems.append(f"the table of alarm facts has {len(helps)} help texts (11 or more expected)")
+    for code, texts in helps.items():
+        for language in ("en", "es", "de", "fr", "it", "ja", "zh", "pt"):
+            if not str(texts.get(language, "")).strip():
+                problems.append(f"alarm help {code} has no text in {language}")
     shared = ROOT.parent / "ARMOR-COMMON" / "src" / "armor_common" / "alarm_facts.json"
     if shared.is_file() and normalised(shared) != normalised(path):
         problems.append("the table of alarm facts differs from the one in ARMOR-COMMON")

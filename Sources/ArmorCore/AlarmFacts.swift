@@ -32,6 +32,29 @@ public enum AlarmFacts {
         return parse(data)
     }()
 
+    /// code -> language -> what the alarm means and what to check (the `help` of the shared table), read once from the package; empty when the file has none.
+    public static let sharedHelp: [String: [String: String]] = {
+        guard let url = Bundle.module.url(forResource: "alarm_facts", withExtension: "json"), let data = try? Data(contentsOf: url) else { return [:] }
+        return parseHelp(data)
+    }()
+
+    public static func parseHelp(_ data: Data) -> [String: [String: String]] {
+        guard let root = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any], let help = root["help"] as? [String: Any] else { return [:] }
+        var table: [String: [String: String]] = [:]
+        for (code, value) in help {
+            if let words = value as? [String: String] { table[code] = words }
+        }
+        return table
+    }
+
+    /// The help of an alarm code in [language]; English when that language lacks it; nil when the code has no help text.
+    public static func help(_ code: String, _ language: String, table: [String: [String: String]] = sharedHelp) -> String? {
+        guard let words = table[code] else { return nil }
+        let text = words[language] ?? words["en"]
+        guard let text, !text.isEmpty else { return nil }
+        return text
+    }
+
     public static func parse(_ data: Data) -> [String: [String: String]] {
         guard let root = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any], let facts = root["facts"] as? [String: Any] else { return [:] }
         var table: [String: [String: String]] = [:]

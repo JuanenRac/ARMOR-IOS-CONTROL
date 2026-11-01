@@ -17,6 +17,33 @@ final class AlarmFactsTests: XCTestCase {
         }
     }
 
+    func testTheHelpOfEveryAlarmCodeIsInTheSharedTableInTheEightLanguages() {
+        let help = AlarmFacts.sharedHelp
+        XCTAssertGreaterThanOrEqual(help.count, 11)
+        for (code, words) in help {
+            for language in languages { XCTAssertFalse((words[language] ?? "").isEmpty, "\(code) in \(language)") }
+        }
+    }
+
+    func testTheHelpComesInTheLanguageAskedEnglishWhenItLacksItAndNilWhenTheCodeHasNone() {
+        let table = ["solar_battery_low": ["en": "Means: low", "pt": "Significa: baixa"], "smoke": ["es": "Humo"]]
+        XCTAssertEqual(AlarmFacts.help("solar_battery_low", "pt", table: table), "Significa: baixa")
+        XCTAssertEqual(AlarmFacts.help("solar_battery_low", "de", table: table), "Means: low")
+        XCTAssertNil(AlarmFacts.help("smoke", "de", table: table))
+        XCTAssertNil(AlarmFacts.help("no_such_code", "en", table: table))
+    }
+
+    func testTheMarkOfAFalseAlarmIsReadAndAnAlarmNobodyMarkedHasNone() {
+        func parse(_ extra: JSON) -> Alarm {
+            var json: JSON = ["id": "a1", "source": ["type": "device", "id": "d1"], "severity": "high", "code": "door_open", "raised_at": "2026-01-01T00:00:00Z"]
+            for (key, value) in extra { json[key] = value }
+            return Alarm.parse(json)!
+        }
+        XCTAssertEqual(parse(["false_alarm": true]).falseAlarm, true)
+        XCTAssertEqual(parse(["false_alarm": false]).falseAlarm, false)
+        XCTAssertNil(parse([:]).falseAlarm)
+    }
+
     func testTheFactsOfAPanelThatDoesNotConfirmTheArmingModeComeWithTheirLabelsInOrder() {
         let a = alarm(["by": "voice", "panel_answers": "nodeA: timeout", "panels": "nodeA, nodeB", "panel_profile": "away", "arming_mode": "away"] as JSON)
         let rows = AlarmFacts.rows(a.detail, plain("pt"))
