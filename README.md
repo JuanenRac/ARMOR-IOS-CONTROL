@@ -57,9 +57,9 @@ Each line is one part of this repository and the light says how far it is today.
 
 | Area | State | What it means here |
 |---|---|---|
-| Software | 🟠 | The rules of the app are a Swift package (`ArmorCore`); the SwiftUI screens have not been built in Xcode. |
+| Software | 🟡 | The rules of the app are a Swift package (`ArmorCore`) and the SwiftUI app is built for the simulator by the CI on macOS; it has not run on an iPhone. |
 | Tests | 🟡 | 262 unit tests pass with `swift test` on macOS or Linux, and `tools/ios_lint.py` checks the structure, the eight language tables and the contract without a Mac; no test runs on a device. |
-| Interface | 🟠 | The SwiftUI screens are written but have not been built in Xcode or run on an iPhone. |
+| Interface | 🟠 | The SwiftUI screens are built for the simulator by the CI on macOS but have not been run on an iPhone. |
 | Hardware | 🔴 | It has not run on an iPhone: the rules are tested on Linux only. |
 | Security | 🟠 | The lock of the phone, the session vault and the trust in the certificate are rules tested on Linux; Face ID, the Keychain and the certificate rules have not run on a device. |
 | Integration | 🟠 | Live camera and push through Firebase have not been tried; the server link and the parsing are tested against the shared contract. |

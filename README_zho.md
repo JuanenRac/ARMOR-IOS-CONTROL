@@ -57,9 +57,9 @@
 
 | 领域 | 状态 | 在这里的含义 |
 |---|---|---|
-| 软件 | 🟠 | 应用的规则是一个 Swift 包（`ArmorCore`）；SwiftUI 界面尚未在 Xcode 中构建。 |
+| 软件 | 🟡 | 应用的规则是一个 Swift 包（`ArmorCore`），SwiftUI 应用由 macOS 上的 CI 为模拟器构建；它没有在 iPhone 上运行过。 |
 | 测试 | 🟡 | 262 项单元测试在 macOS 或 Linux 上通过 `swift test` 运行，`tools/ios_lint.py` 无需 Mac 即可检查结构、八种语言表和契约；没有任何测试在设备上运行。 |
-| 界面 | 🟠 | SwiftUI 界面已编写，但尚未在 Xcode 中构建，也没有在 iPhone 上运行。 |
+| 界面 | 🟠 | SwiftUI 界面由 macOS 上的 CI 为模拟器构建，但没有在 iPhone 上运行过。 |
 | 硬件 | 🔴 | 尚未在 iPhone 上运行过：规则只在 Linux 上测试。 |
 | 安全 | 🟠 | 手机锁定、会话保险库和对证书的信任是在 Linux 上测试的规则；Face ID、钥匙串和证书规则尚未在设备上运行过。 |
 | 集成 | 🟠 | 实时摄像头和通过 Firebase 的推送尚未试过；与服务器的连接和解析已对照共享契约测试。 |

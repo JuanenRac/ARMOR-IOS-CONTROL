@@ -57,9 +57,9 @@ Chaque ligne est une partie de ce dépôt et le feu dit où elle en est aujourd'
 
 | Domaine | État | Ce que cela veut dire ici |
 |---|---|---|
-| Logiciel | 🟠 | Les règles de l'application forment un paquet Swift (`ArmorCore`) ; les écrans SwiftUI n'ont pas été compilés dans Xcode. |
+| Logiciel | 🟡 | Les règles de l'application forment un paquet Swift (`ArmorCore`) et l'app SwiftUI est compilée pour le simulateur par la CI sous macOS ; elle n'a pas tourné sur un iPhone. |
 | Tests | 🟡 | 262 tests unitaires réussissent avec `swift test` sous macOS ou Linux, et `tools/ios_lint.py` vérifie la structure, les tables des huit langues et le contrat sans Mac ; aucun test ne tourne sur un appareil. |
-| Interface | 🟠 | Les écrans SwiftUI sont écrits mais n'ont été ni compilés dans Xcode ni exécutés sur un iPhone. |
+| Interface | 🟠 | Les écrans SwiftUI sont compilés pour le simulateur par la CI sous macOS mais n'ont pas été exécutés sur un iPhone. |
 | Matériel | 🔴 | Elle n'a pas tourné sur un iPhone : les règles ne sont testées que sous Linux. |
 | Sécurité | 🟠 | Le verrouillage du téléphone, le coffre de la session et la confiance dans le certificat sont des règles testées sous Linux ; Face ID, le trousseau et les règles du certificat n'ont pas tourné sur un appareil. |
 | Intégration | 🟠 | La caméra en direct et le push via Firebase n'ont pas été essayés ; la liaison au serveur et l'analyse sont testées contre le contrat partagé. |

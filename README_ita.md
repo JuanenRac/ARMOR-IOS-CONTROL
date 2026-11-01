@@ -57,9 +57,9 @@ Ogni riga è una parte di questo repository e il semaforo dice a che punto è og
 
 | Area | Stato | Cosa significa qui |
 |---|---|---|
-| Software | 🟠 | Le regole dell'app sono un pacchetto Swift (`ArmorCore`); le schermate SwiftUI non sono state compilate in Xcode. |
+| Software | 🟡 | Le regole dell'app sono un pacchetto Swift (`ArmorCore`) e l'app SwiftUI è compilata per il simulatore dalla CI su macOS; non ha girato su un iPhone. |
 | Test | 🟡 | Superano 262 test unitari con `swift test` su macOS o Linux, e `tools/ios_lint.py` controlla la struttura, le tabelle delle otto lingue e il contratto senza un Mac; nessun test gira su un dispositivo. |
-| Interfaccia | 🟠 | Le schermate SwiftUI sono scritte ma non sono state compilate in Xcode né eseguite su un iPhone. |
+| Interfaccia | 🟠 | Le schermate SwiftUI sono compilate per il simulatore dalla CI su macOS ma non sono state eseguite su un iPhone. |
 | Hardware | 🔴 | Non ha girato su un iPhone: le regole sono provate solo su Linux. |
 | Sicurezza | 🟠 | Il blocco del telefono, il deposito della sessione e la fiducia nel certificato sono regole provate su Linux; Face ID, il portachiavi e le regole del certificato non sono stati eseguiti su un dispositivo. |
 | Integrazione | 🟠 | La telecamera dal vivo e il push tramite Firebase non sono stati provati; il collegamento al server e il parsing sono provati contro il contratto condiviso. |
