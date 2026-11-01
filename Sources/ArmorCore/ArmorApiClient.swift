@@ -265,7 +265,7 @@ public final class ArmorApiClient: ArmorApi, @unchecked Sendable {
         return value.addingPercentEncoding(withAllowedCharacters: allowed) ?? value
     }
 
-    private func getJson(_ origin: String, _ path: String) async throws -> JSON { try Json.object(try await send(origin, path, "GET", nil, [200])) }
+    private func getJson(_ origin: String, _ path: String) async throws -> JSON { try Json.object(try ResponseLimit.check(try await send(origin, path, "GET", nil, [200]), limit: ResponseLimit.json)) }
 
     func request(_ origin: String, _ path: String, _ method: String, _ body: JSON?) throws -> URLRequest {
         guard let url = URL(string: Self.trimmed(origin) + path) else { throw ArmorApiError(message: "The address is not valid", status: nil) }
@@ -285,6 +285,7 @@ public final class ArmorApiClient: ArmorApi, @unchecked Sendable {
         let data: Data, response: URLResponse
         do { (data, response) = try await session.data(for: request) } catch { throw ArmorApiError(message: error.localizedDescription, status: nil) }
         let status = (response as? HTTPURLResponse)?.statusCode ?? 0
+        try ResponseLimit.check(data, limit: ResponseLimit.picture)
         if !expected.contains(status) {
             let text = String(decoding: data.prefix(2000), as: UTF8.self)
             let shown = String(text.prefix(180))

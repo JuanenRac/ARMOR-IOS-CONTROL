@@ -48,4 +48,27 @@ final class MjpegTests: XCTestCase {
         XCTAssertEqual(CameraGrid.live(visible: (1...10).map(String.init)).count, 6)
         XCTAssertEqual(CameraGrid.live(visible: ["a"]), ["a"])
     }
+    func testABigPictureArrivingInSmallPiecesIsCutOnceAndQuickly() {
+        var parser = MjpegFrameParser()
+        let big = jpeg(5, count: 3 * 1024 * 1024)
+        var frames: [Data] = []
+        let started = Date()
+        for index in stride(from: 0, to: big.count, by: 4096) { frames += parser.feed(big.subdata(in: index..<min(index + 4096, big.count))) }
+        XCTAssertEqual(frames, [big])
+        XCTAssertLessThan(Date().timeIntervalSince(started), 20, "a picture in small pieces must not cost the square of its size")
+    }
+    func testTheEndMarkerSplitBetweenTwoPiecesIsFoundWhateverTheSearchSkipped() {
+        var parser = MjpegFrameParser()
+        var frames = parser.feed(Data([0xFF, 0xD8, 0x01, 0x02, 0x03, 0xFF]))
+        XCTAssertTrue(frames.isEmpty)
+        frames += parser.feed(Data([0xD9, 0xFF, 0xD8, 0x09, 0xFF]))
+        frames += parser.feed(Data([0xD9]))
+        XCTAssertEqual(frames, [Data([0xFF, 0xD8, 0x01, 0x02, 0x03, 0xFF, 0xD9]), Data([0xFF, 0xD8, 0x09, 0xFF, 0xD9])])
+    }
+    func testAParserThatWasResetStartsTheSearchAgain() {
+        var parser = MjpegFrameParser()
+        _ = parser.feed(Data([0xFF, 0xD8]) + Data(repeating: 0x11, count: 500))
+        parser.reset()
+        XCTAssertEqual(parser.feed(jpeg(4)), [jpeg(4)])
+    }
 }

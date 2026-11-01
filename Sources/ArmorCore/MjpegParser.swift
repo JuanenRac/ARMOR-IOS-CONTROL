@@ -7,6 +7,8 @@ import Foundation
 public struct MjpegFrameParser {
     public static let maxFrameBytes = 4 * 1024 * 1024
     private var buffer = Data()
+    /// Where the search for the end of the picture in progress goes on: what was already searched in an earlier piece is not read again (a big picture arriving in small pieces would otherwise cost the square of its size).
+    private var searchFrom = 2
 
     public init() {}
 
@@ -18,13 +20,17 @@ public struct MjpegFrameParser {
             guard let start = Self.find([0xFF, 0xD8], in: buffer, from: 0) else {
                 // no start in sight: keep only the last byte, which may be the first half of a marker
                 buffer = buffer.suffix(1)
+                searchFrom = 2
                 break
             }
             if start > 0 { buffer.removeSubrange(buffer.startIndex..<buffer.startIndex + start) }
-            guard let end = Self.find([0xFF, 0xD9], in: buffer, from: 2) else {
+            guard let end = Self.find([0xFF, 0xD9], in: buffer, from: searchFrom) else {
                 if buffer.count > Self.maxFrameBytes { buffer.removeAll(keepingCapacity: false) }
+                // the last byte may be the first half of the end marker: it is looked at again with the next piece
+                searchFrom = max(2, buffer.count - 1)
                 break
             }
+            searchFrom = 2
             let frameEnd = end + 2
             if frameEnd <= Self.maxFrameBytes { frames.append(Data(buffer.prefix(frameEnd))) }
             buffer.removeSubrange(buffer.startIndex..<buffer.startIndex + frameEnd)
@@ -32,7 +38,7 @@ public struct MjpegFrameParser {
         return frames
     }
 
-    public mutating func reset() { buffer.removeAll(keepingCapacity: false) }
+    public mutating func reset() { buffer.removeAll(keepingCapacity: false); searchFrom = 2 }
 
     private static func find(_ marker: [UInt8], in data: Data, from: Int) -> Int? {
         guard data.count >= from + 2 else { return nil }

@@ -66,7 +66,7 @@ public final class WeatherApiClient: @unchecked Sendable {
         do { (data, response) = try await session.data(for: request) } catch { throw ArmorApiError(message: error.localizedDescription, status: nil) }
         let status = (response as? HTTPURLResponse)?.statusCode ?? 0
         if status != 200 { throw ArmorApiError(message: "Weather service failed (HTTP \(status))", status: status) }
-        return try Json.object(data)
+        return try Json.object(try ResponseLimit.check(data, limit: ResponseLimit.json))
     }
 
     public func forecast(_ place: Place) async throws -> Forecast {
