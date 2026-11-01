@@ -770,5 +770,18 @@
  "En marcha %s": "Running %s",
  " · puerto %s": " · port %s",
  " · %s reinicios": " · %s restarts",
- " · arranca solo": " · starts by itself"
+ " · arranca solo": " · starts by itself",
+ "Estado del sistema": "System status",
+ "Alarmas activas": "Active alarms",
+ "Hay alguien": "Is anybody there",
+ "Estado de las cámaras": "Camera status",
+ "Estado solar": "Solar status",
+ "Consumo eléctrico": "Electrical consumption",
+ "Estado de la red": "Network status",
+ "Qué hora es": "What time is it",
+ "Enciende las luces": "Turn the lights on",
+ "Apaga las luces": "Turn the lights off",
+ "Silenciar la voz del móvil": "Mute the phone's voice",
+ "Activar la voz del móvil": "Turn on the phone's voice",
+ "Borrar la conversación": "Clear the conversation"
 }

@@ -770,5 +770,18 @@
  "En marcha %s": "%s 稼働中",
  " · puerto %s": " · ポート %s",
  " · %s reinicios": " · 再起動 %s 回",
- " · arranca solo": " · 自動起動"
+ " · arranca solo": " · 自動起動",
+ "Estado del sistema": "システムの状態",
+ "Alarmas activas": "作動中のアラーム",
+ "Hay alguien": "誰かいますか",
+ "Estado de las cámaras": "カメラの状態",
+ "Estado solar": "ソーラーの状態",
+ "Consumo eléctrico": "電力消費",
+ "Estado de la red": "ネットワークの状態",
+ "Qué hora es": "今何時ですか",
+ "Enciende las luces": "照明をつけて",
+ "Apaga las luces": "照明を消して",
+ "Silenciar la voz del móvil": "スマホの音声をオフ",
+ "Activar la voz del móvil": "スマホの音声をオン",
+ "Borrar la conversación": "会話を消去"
 }

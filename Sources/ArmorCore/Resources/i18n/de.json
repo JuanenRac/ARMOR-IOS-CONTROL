@@ -770,5 +770,18 @@
  "En marcha %s": "Läuft seit %s",
  " · puerto %s": " · Port %s",
  " · %s reinicios": " · %s Neustarts",
- " · arranca solo": " · startet von selbst"
+ " · arranca solo": " · startet von selbst",
+ "Estado del sistema": "Systemstatus",
+ "Alarmas activas": "Aktive Alarme",
+ "Hay alguien": "Ist jemand da",
+ "Estado de las cámaras": "Kamerastatus",
+ "Estado solar": "Solarstatus",
+ "Consumo eléctrico": "Stromverbrauch",
+ "Estado de la red": "Netzwerkstatus",
+ "Qué hora es": "Wie spät ist es",
+ "Enciende las luces": "Lichter einschalten",
+ "Apaga las luces": "Lichter ausschalten",
+ "Silenciar la voz del móvil": "Handy-Stimme stummschalten",
+ "Activar la voz del móvil": "Handy-Stimme einschalten",
+ "Borrar la conversación": "Unterhaltung löschen"
 }

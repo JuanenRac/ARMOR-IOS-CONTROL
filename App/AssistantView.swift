@@ -10,6 +10,7 @@ struct AssistantView: View {
     @State private var lines: [(mine: Bool, text: String)] = []
     @State private var pending: (phrase: String, token: String)?
     @State private var working = false
+    @State private var speak = true
 
     var body: some View {
         NavigationStack {
@@ -39,6 +40,13 @@ struct AssistantView: View {
                             }
                         }.padding()
                     }
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 6) {
+                            ForEach(AssistantSuggestions.phrases(model.translator), id: \.self) { phrase in
+                                Button(phrase) { Task { await send(phrase) } }.buttonStyle(.bordered).font(.footnote).disabled(working)
+                            }
+                        }.padding(.horizontal)
+                    }
                     HStack {
                         TextField(model.tr("Escribe o di órdenes: armar, desarmar, el estado o silenciar la alarma"), text: $text).textFieldStyle(.roundedBorder).submitLabel(.send)
                             .onSubmit { Task { await send() } }
@@ -48,13 +56,23 @@ struct AssistantView: View {
             }
             .background(Theme.background)
             .navigationTitle(model.tr("Asistente"))
+            .toolbar {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    Button { speak.toggle(); if !speak { AlarmSpeaker.shared.stop() } } label: { Image(systemName: speak ? "speaker.wave.2.fill" : "speaker.slash.fill") }
+                        .accessibilityLabel(speak ? model.tr("Silenciar la voz del móvil") : model.tr("Activar la voz del móvil"))
+                    Button { lines = []; pending = nil } label: { Image(systemName: "trash") }
+                        .accessibilityLabel(model.tr("Borrar la conversación")).disabled(lines.isEmpty)
+                }
+            }
         }
     }
 
-    private func send() async {
-        let phrase = text.trimmingCharacters(in: .whitespaces)
+    /// Sends what was typed, or a phrase of the chips.
+    private func send(_ chosen: String? = nil) async {
+        let phrase = (chosen ?? text).trimmingCharacters(in: .whitespaces)
         guard !phrase.isEmpty else { return }
-        text = ""; lines.append((true, phrase)); pending = nil; working = true; defer { working = false }
+        if chosen == nil { text = "" }
+        lines.append((true, phrase)); pending = nil; working = true; defer { working = false }
         await ask(phrase, token: nil)
     }
 
@@ -66,7 +84,9 @@ struct AssistantView: View {
     private func ask(_ phrase: String, token: String?) async {
         do {
             let reply = try await model.controller.ask(phrase, confirmation: token)
-            lines.append((false, reply.line(model.translator)))
+            let said = reply.line(model.translator)
+            lines.append((false, said))
+            if speak { AlarmSpeaker.shared.say(said, voice: model.voice, language: model.translator.language) }
             if reply.outcome == "confirmation-needed", let next = reply.confirmationToken { pending = (phrase, next) }
             if reply.executed { await model.refresh() }
         } catch ControllerError.lockRefused {

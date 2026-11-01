@@ -770,5 +770,18 @@
  "En marcha %s": "Em funcionamento há %s",
  " · puerto %s": " · porta %s",
  " · %s reinicios": " · %s reinícios",
- " · arranca solo": " · arranca sozinho"
+ " · arranca solo": " · arranca sozinho",
+ "Estado del sistema": "Estado do sistema",
+ "Alarmas activas": "Alarmes ativos",
+ "Hay alguien": "Está alguém",
+ "Estado de las cámaras": "Estado das câmaras",
+ "Estado solar": "Estado solar",
+ "Consumo eléctrico": "Consumo elétrico",
+ "Estado de la red": "Estado da rede",
+ "Qué hora es": "Que horas são",
+ "Enciende las luces": "Acende as luzes",
+ "Apaga las luces": "Apaga as luzes",
+ "Silenciar la voz del móvil": "Silenciar a voz do telemóvel",
+ "Activar la voz del móvil": "Ativar a voz do telemóvel",
+ "Borrar la conversación": "Apagar a conversa"
 }

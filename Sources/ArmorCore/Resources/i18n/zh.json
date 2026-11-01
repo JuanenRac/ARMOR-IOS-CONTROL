@@ -770,5 +770,18 @@
  "En marcha %s": "已运行 %s",
  " · puerto %s": " · 端口 %s",
  " · %s reinicios": " · 重启 %s 次",
- " · arranca solo": " · 自动启动"
+ " · arranca solo": " · 自动启动",
+ "Estado del sistema": "系统状态",
+ "Alarmas activas": "当前报警",
+ "Hay alguien": "有人吗",
+ "Estado de las cámaras": "摄像头状态",
+ "Estado solar": "太阳能状态",
+ "Consumo eléctrico": "用电量",
+ "Estado de la red": "网络状态",
+ "Qué hora es": "现在几点",
+ "Enciende las luces": "打开灯光",
+ "Apaga las luces": "关闭灯光",
+ "Silenciar la voz del móvil": "关闭手机语音",
+ "Activar la voz del móvil": "开启手机语音",
+ "Borrar la conversación": "清除对话"
 }
