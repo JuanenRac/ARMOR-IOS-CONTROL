@@ -284,7 +284,7 @@ final class AppModel: ObservableObject {
 
     /// Runs an order of the controller, with the proof of identity asked on a screen if the server wants it, and the result said in words.
     @discardableResult
-    func order(_ done: String? = nil, _ action: @escaping (ElevationAsker) async throws -> Void) async -> Bool {
+    func order(_ done: String? = nil, _ action: @escaping (@escaping ElevationAsker) async throws -> Void) async -> Bool {
         busy = true; defer { busy = false }
         let asker: ElevationAsker = { [weak self] in
             guard let self else { return nil }
