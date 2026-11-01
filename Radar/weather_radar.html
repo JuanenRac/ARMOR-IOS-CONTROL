@@ -1,0 +1,171 @@
+<!doctype html>
+<!--
+  ARMOR-IOS-CONTROL - the live rain-and-cloud radar of the Weather screen, loaded by a WKWebView. A port of ARMOR-STUDIO's RadarMap.tsx into plain JavaScript
+  and Leaflet: the base map (Esri, no key), the rain of the last two hours (RainViewer, animated) and the infrared image of the clouds (EUMETSAT
+  Meteosat, 10.5 micrometres) over the chosen place. The place comes in the page's own URL (?lat=&lon=&name=), set by the app before it loads this page.
+  Leaflet itself is bundled in this folder (leaflet/), not fetched from a CDN at runtime: Studio gets it from its own build (an npm import, no network needed
+  to load the map library); a phone whose network cannot reach cdnjs.cloudflare.com showed nothing at all - not even the base map, which needs no API key
+  and no cross-origin fetch - because the map library that draws it had never loaded.
+  Copyright (C) 2026 JuanenRac (Electro Hobby 3D). GPL-3.0-or-later.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="stylesheet" href="leaflet/leaflet.min.css">
+<style>
+  html, body { margin: 0; background: #0b1a22; }
+  body { position: relative; height: 100%; }
+  #map { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: #0b1a22; }
+  body { font: 13px -apple-system, Roboto, sans-serif; color: #e8fbff; }
+  .bar { position: absolute; z-index: 1000; top: 8px; left: 8px; right: 8px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .bar button { padding: 6px 10px; border-radius: 8px; border: 1px solid #285a66; background: rgba(10,32,42,.92); color: #d9f6fb; font-size: 12px; }
+  .bar button.on { border-color: #22d3ee; background: #0d2f3b; }
+  .bar input[type=range] { width: 90px; }
+  .note { position: absolute; z-index: 1000; bottom: 6px; left: 8px; right: 8px; color: #86a8b3; font-size: 11px; background: rgba(7,19,27,.7); padding: 2px 6px; border-radius: 6px; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<script>
+// The app says how tall the box is (?h=, in CSS pixels): a WebView may give its page a viewport of no height at all, and then a map that
+// takes "all the height" is a map of no height ("map size 356x0"). The page is given that height outright.
+(function () {
+  const h = parseInt(new URLSearchParams(location.search).get("h"), 10);
+  if (h > 0) { document.body.style.height = h + "px"; document.documentElement.style.height = h + "px"; document.getElementById("map").style.height = h + "px"; }
+})();
+</script>
+<div class="bar">
+  <button id="btnRain"></button>
+  <button id="btnClouds"></button>
+  <button id="btnPlay"></button>
+  <input id="opacity" type="range" min="0.2" max="1" step="0.05" value="0.75">
+</div>
+<div class="note"><span id="note"></span> <span id="baseNote"></span></div>
+<script>
+// The words of the page in the eight languages of the app; the app says which one in ?lang= (English when it is none of them).
+const WORDS = {
+  en: { rain: "🌧 Rain", clouds: "☁ Clouds", pause: "⏸ Pause", resume: "▶ Resume", map: "Map: {ok} ok", mapErr: "Map: {ok} ok, {bad} with errors", rainFail: "The rain radar could not be loaded: ", rainAt: "Rain: ", error: "Error: " },
+  es: { rain: "🌧 Lluvia", clouds: "☁ Nubes", pause: "⏸ Pausa", resume: "▶ Seguir", map: "Mapa: {ok} ok", mapErr: "Mapa: {ok} ok, {bad} con error", rainFail: "No se pudo cargar el radar de lluvia: ", rainAt: "Lluvia: ", error: "Error: " },
+  de: { rain: "🌧 Regen", clouds: "☁ Wolken", pause: "⏸ Pause", resume: "▶ Weiter", map: "Karte: {ok} ok", mapErr: "Karte: {ok} ok, {bad} mit Fehlern", rainFail: "Das Regenradar konnte nicht geladen werden: ", rainAt: "Regen: ", error: "Fehler: " },
+  fr: { rain: "🌧 Pluie", clouds: "☁ Nuages", pause: "⏸ Pause", resume: "▶ Reprendre", map: "Carte : {ok} ok", mapErr: "Carte : {ok} ok, {bad} en erreur", rainFail: "Le radar de pluie n'a pas pu être chargé : ", rainAt: "Pluie : ", error: "Erreur : " },
+  it: { rain: "🌧 Pioggia", clouds: "☁ Nuvole", pause: "⏸ Pausa", resume: "▶ Riprendi", map: "Mappa: {ok} ok", mapErr: "Mappa: {ok} ok, {bad} con errori", rainFail: "Impossibile caricare il radar della pioggia: ", rainAt: "Pioggia: ", error: "Errore: " },
+  ja: { rain: "🌧 雨", clouds: "☁ 雲", pause: "⏸ 一時停止", resume: "▶ 再開", map: "地図: {ok} 件成功", mapErr: "地図: {ok} 件成功、{bad} 件エラー", rainFail: "雨レーダーを読み込めませんでした: ", rainAt: "雨: ", error: "エラー: " },
+  zh: { rain: "🌧 降雨", clouds: "☁ 云", pause: "⏸ 暂停", resume: "▶ 继续", map: "地图：{ok} 成功", mapErr: "地图：{ok} 成功，{bad} 出错", rainFail: "无法加载降雨雷达：", rainAt: "降雨：", error: "错误：" },
+  pt: { rain: "🌧 Chuva", clouds: "☁ Nuvens", pause: "⏸ Pausa", resume: "▶ Continuar", map: "Mapa: {ok} ok", mapErr: "Mapa: {ok} ok, {bad} com erro", rainFail: "Não foi possível carregar o radar de chuva: ", rainAt: "Chuva: ", error: "Erro: " },
+};
+const W = WORDS[new URLSearchParams(location.search).get("lang")] || WORDS.en;
+document.getElementById("btnRain").textContent = W.rain;
+document.getElementById("btnClouds").textContent = W.clouds;
+document.getElementById("btnPlay").textContent = W.pause;
+</script>
+<script>
+window.addEventListener("error", e => { try { console.error("page error: " + e.message + " (" + (e.filename || "").split("/").pop() + ":" + e.lineno + ")"); } catch (x) {} });
+</script>
+<script>
+// Some phones' WebView paints Leaflet's 3D-transformed tiles as black squares: the map is drawn with plain 2D transforms.
+window.L_DISABLE_3D = true;
+</script>
+<script src="leaflet/leaflet.min.js"></script>
+<script>
+window.onerror = (message) => { const n = document.getElementById("note"); if (n) n.textContent = W.error + message; };
+const params = new URLSearchParams(location.search);
+const lat = parseFloat(params.get("lat")), lon = parseFloat(params.get("lon")), name = params.get("name") || "";
+
+const BASE_MAP = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}";
+const LABELS = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}";
+const RADAR_INDEX = "https://api.rainviewer.com/public/weather-maps.json";
+const SATELLITE_WMS = "https://view.eumetsat.int/geoserver/ows";
+
+const map = L.map("map", { center: [lat, lon], zoom: 7, minZoom: 3, maxZoom: 10, worldCopyJump: true, zoomSnap: 0.5, fadeAnimation: false, zoomAnimation: false, markerZoomAnimation: false });
+map.createPane("radar").style.zIndex = 420;
+map.createPane("labels").style.zIndex = 450;
+map.getPane("labels").style.pointerEvents = "none";
+// What the base map did, written at the bottom of the page: a map that stays dark says here whether its pictures arrived or not.
+let baseLoaded = 0, baseFailed = 0;
+function showBase() { const n = document.getElementById("baseNote"); if (n) n.textContent = (baseFailed ? W.mapErr : W.map).replace("{ok}", baseLoaded).replace("{bad}", baseFailed); }
+const baseLayer = L.tileLayer(BASE_MAP, { maxZoom: 16, attribution: "Esri, HERE, Garmin, © OpenStreetMap contributors" });
+baseLayer.on("tileload", () => { baseLoaded++; showBase(); });
+baseLayer.on("tileerror", () => { baseFailed++; showBase(); });
+baseLayer.addTo(map);
+L.tileLayer(LABELS, { maxZoom: 16, pane: "labels" }).addTo(map);
+L.circleMarker([lat, lon], { radius: 6, color: "#00e5ff", weight: 2, fillColor: "#00e5ff", fillOpacity: 0.45 }).addTo(map).bindTooltip((function () { var label = document.createElement("span"); label.textContent = name; return label; })());   // the name of the place is text, never HTML
+
+let frames = [], host = "", index = 0, playing = true, showRain = true, showClouds = false, opacity = 0.75;
+const rainLayers = new Map();
+let cloudLayers = [];
+
+async function loadFrames() {
+  try {
+    const response = await fetch(RADAR_INDEX);
+    if (!response.ok) throw new Error("HTTP " + response.status);
+    const data = await response.json();
+    host = data.host || "";
+    frames = (data.radar && data.radar.past) || [];
+    index = Math.max(0, frames.length - 1);
+    updateRain();
+  } catch (e) { document.getElementById("note").textContent = W.rainFail + e.message; console.error("loadFrames failed", e); }
+}
+
+function updateRain() {
+  for (const [time, layer] of rainLayers) if (!frames.some(f => f.time === time)) { map.removeLayer(layer); rainLayers.delete(time); }
+  const frame = frames[Math.min(index, frames.length - 1)];
+  if (!frame) return;
+  for (const candidate of [frame, frames[index + 1]]) {
+    if (!candidate || rainLayers.has(candidate.time)) continue;
+    const layer = L.tileLayer(`${host}${candidate.path}/256/{z}/{x}/{y}/2/1_1.png`, { opacity: 0, maxNativeZoom: 7, maxZoom: 10, tileSize: 256, pane: "radar", attribution: "RainViewer" });
+    layer.addTo(map);
+    rainLayers.set(candidate.time, layer);
+  }
+  for (const [time, layer] of rainLayers) layer.setOpacity(showRain && time === frame.time ? opacity : 0);
+  const d = new Date(frame.time * 1000);
+  document.getElementById("note").textContent = showRain ? (W.rainAt + d.toLocaleTimeString()) : "";
+}
+
+function drawClouds() {
+  const old = cloudLayers; cloudLayers = [];
+  if (showClouds) {
+    const bounds = map.getBounds(), size = map.getSize();
+    const south = Math.max(-85, bounds.getSouth()), north = Math.min(85, bounds.getNorth()), west = Math.max(-180, bounds.getWest()), east = Math.min(180, bounds.getEast());
+    const span = north - south, strips = Math.min(8, Math.max(1, Math.ceil(span / 2.5), Math.ceil(size.y / 400)));
+    for (let i = 0; i < strips; i++) {
+      const s = south + (span * i) / strips, n = south + (span * (i + 1)) / strips;
+      const top = map.latLngToContainerPoint([n, west]).y, bottom = map.latLngToContainerPoint([s, west]).y;
+      const w = Math.min(1400, size.x), h = Math.max(32, Math.min(700, Math.abs(bottom - top)));
+      const bbox = [s, west, n, east].map(v => Math.round(v * 1e4) / 1e4).join(",");
+      const url = `${SATELLITE_WMS}?service=WMS&version=1.3.0&request=GetMap&layers=mtg_fd:ir105_hrfi&styles=&format=image/png&crs=EPSG:4326&bbox=${bbox}&width=${Math.round(w)}&height=${Math.round(h)}`;
+      const overlay = L.imageOverlay(url, [[s, west], [n, east]], { opacity: Math.min(1, opacity + 0.1), className: "wx-cloud", interactive: false });
+      overlay.addTo(map); cloudLayers.push(overlay);
+    }
+  }
+  setTimeout(() => old.forEach(o => map.removeLayer(o)), 1500);
+}
+
+let timer = null;
+function restartAnimation() {
+  clearInterval(timer);
+  if (playing && frames.length > 1 && showRain) timer = setInterval(() => { index = (index + 1) % frames.length; updateRain(); }, 700);
+}
+
+document.getElementById("btnRain").onclick = e => { showRain = !showRain; e.target.classList.toggle("on", showRain); updateRain(); restartAnimation(); };
+document.getElementById("btnClouds").onclick = e => { showClouds = !showClouds; e.target.classList.toggle("on", showClouds); drawClouds(); };
+document.getElementById("btnPlay").onclick = e => { playing = !playing; e.target.textContent = playing ? W.pause : W.resume; restartAnimation(); };
+document.getElementById("opacity").oninput = e => { opacity = parseFloat(e.target.value); updateRain(); cloudLayers.forEach(o => o.setOpacity(Math.min(1, opacity + 0.1))); };
+document.getElementById("btnRain").classList.add("on");
+
+// The WebView may hand the page its final size after the map was made: the map measures its container again when that happens.
+function remeasure() { map.invalidateSize(); const size = map.getSize(); console.log("map size " + size.x + "x" + size.y); }
+window.addEventListener("load", remeasure);
+window.addEventListener("resize", remeasure);
+[200, 800, 2500].forEach(ms => setTimeout(remeasure, ms));
+if (window.ResizeObserver) new ResizeObserver(remeasure).observe(document.getElementById("map"));
+
+let moveTimer;
+map.on("moveend zoomend resize", () => { clearTimeout(moveTimer); moveTimer = setTimeout(drawClouds, 500); });
+setInterval(loadFrames, 5 * 60 * 1000);
+setInterval(drawClouds, 10 * 60 * 1000);
+loadFrames();
+restartAnimation();
+</script>
+</body>
+</html>
