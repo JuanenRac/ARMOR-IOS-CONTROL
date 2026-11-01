@@ -71,6 +71,29 @@ public final class ArmorApiClient: ArmorApi, @unchecked Sendable {
         return ReportsParser.heatmap(map, png: picture.count >= 8 && picture.count <= 16_000_000 ? picture : nil)
     }
 
+    public func solar(_ origin: String) async throws -> SolarOverview { SolarParser.overview(try await getJson(origin, "/api/v1/solar")) }
+    public func electrical(_ origin: String) async throws -> ElectricalOverview { ElectricalParser.overview(try await getJson(origin, "/api/v1/electrical/readings")) }
+    public func batteryOperations(_ origin: String) async throws -> BatteryOverview { BatteryParser.overview(try await getJson(origin, "/api/v1/solar/battery-ops")) }
+
+    public func batteryOperation(_ origin: String, id: String) async throws -> BatteryOperationView {
+        BatteryParser.operation(try await getJson(origin, "/api/v1/solar/battery-ops/" + Self.part(id)))
+    }
+
+    public func batteryArm(_ origin: String, node: String, port: Int, op: String, output: String?, state: String?, serial: String) async throws -> BatteryOperationView {
+        var params: JSON = [:]
+        if op == "output_set" { params["output"] = output ?? ""; params["state"] = state ?? "" }
+        let body: JSON = ["node": node, "port": port, "op": op, "params": params, "serial": serial]
+        return BatteryParser.operation(try Json.object(try await send(origin, "/api/v1/solar/battery-ops", "POST", body, [202])))
+    }
+
+    public func batteryExecute(_ origin: String, id: String, serial: String) async throws -> BatteryOperationView {
+        BatteryParser.operation(try Json.object(try await send(origin, "/api/v1/solar/battery-ops/" + Self.part(id) + "/execute", "POST", ["serial": serial], [202])))
+    }
+
+    public func batteryCancel(_ origin: String, id: String) async throws -> BatteryOperationView {
+        BatteryParser.operation(try Json.object(try await send(origin, "/api/v1/solar/battery-ops/" + Self.part(id) + "/cancel", "POST", [:], [202])))
+    }
+
     public func voiceAvailable(_ origin: String) async throws -> Bool { try await getJson(origin, "/api/v1/voice/status").bool("available") }
 
     // MARK: orders

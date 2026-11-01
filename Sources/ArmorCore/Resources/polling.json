@@ -1,0 +1,7 @@
+{
+  "solar_seconds": 5,
+  "electrical_seconds": 5,
+  "battery_seconds": 2,
+  "minimum_seconds": 1,
+  "maximum_seconds": 300
+}

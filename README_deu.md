@@ -22,14 +22,14 @@
   <img src="https://img.shields.io/badge/Language-Swift-f05138.svg" alt="Sprache">
   <img src="https://img.shields.io/badge/UI-SwiftUI-0a84ff.svg" alt="UI">
   <img src="https://img.shields.io/badge/Languages-8-00E5FF.svg" alt="Sprachen">
-  <img src="https://img.shields.io/badge/Tests-168%20passing-2ea44f.svg" alt="Tests">
+  <img src="https://img.shields.io/badge/Tests-218%20passing-2ea44f.svg" alt="Tests">
   <img src="https://img.shields.io/badge/Version-0.0.1-0f6cbd.svg" alt="Version">
   <img src="https://img.shields.io/badge/Maturity-scaffolding-FFB020.svg" alt="Reifegrad">
 </p>
 
 ---
 
-**Ehrlichkeitsprüfung - was heute läuft:** Die Regeln der App (Serververbindung, Auswertung der Antworten, Adressauswahl, Telefonsperre, Tresor der Sitzung, Vertrauen in das Zertifikat, Alarmrichtlinie, Anwendungsfälle, MJPEG-Zerlegung) sind das Swift-Paket `ArmorCore`, abgedeckt durch 168 Unit-Tests, die mit `swift test` unter macOS oder Linux laufen; `tools/ios_lint.py` prüft Struktur, die acht Sprachtabellen und den Vertrag ohne Mac. **Noch nicht** belegt: Die SwiftUI-Bildschirme und die Teile, die ein iPhone brauchen (Face ID, Schlüsselbund, Zertifikatsregeln, Live-Kamera, Push über Firebase), wurden weder in Xcode gebaut noch auf einem Gerät ausgeführt.
+**Ehrlichkeitsprüfung - was heute läuft:** Die Regeln der App (Serververbindung, Auswertung der Antworten, Adressauswahl, Telefonsperre, Tresor der Sitzung, Vertrauen in das Zertifikat, Alarmrichtlinie, Anwendungsfälle, MJPEG-Zerlegung) sind das Swift-Paket `ArmorCore`, abgedeckt durch 218 Unit-Tests, die mit `swift test` unter macOS oder Linux laufen; `tools/ios_lint.py` prüft Struktur, die acht Sprachtabellen und den Vertrag ohne Mac. **Noch nicht** belegt: Die SwiftUI-Bildschirme und die Teile, die ein iPhone brauchen (Face ID, Schlüsselbund, Zertifikatsregeln, Live-Kamera, Push über Firebase), wurden weder in Xcode gebaut noch auf einem Gerät ausgeführt.
 
 ---
 
@@ -41,8 +41,8 @@
 | Reifegrad | Gerüst |
 | Rolle | iPhone-Bedienclient für ARMOR-SERVER (Familie: Clients, übergeordnet: ARMOR-SERVER) |
 | Technik | Swift 5.9+ / SwiftUI, iOS 16+ |
-| Tests | 168 (`swift test`) |
-| Sprachen | 8 (331 Sätze je Sprache, von `ios_lint.py` geprüft) |
+| Tests | 218 (`swift test`) |
+| Sprachen | 8 (559 Sätze je Sprache, von `ios_lint.py` geprüft) |
 | Läuft auf | Ein iPhone mit iOS 16+; die Tests laufen auf macOS oder Linux |
 | Auf echter Hardware | Noch nicht auf einem iPhone ausgeführt; die Regeln werden unter Linux getestet |
 | Lizenz | GPL-3.0-or-later |
@@ -58,7 +58,7 @@ Jede Zeile ist ein Teil dieses Repositorys, und die Ampel sagt, wie weit er heut
 | Bereich | Stand | Was das hier bedeutet |
 |---|---|---|
 | Software | 🟠 | Die Regeln der App sind ein Swift-Paket (`ArmorCore`); die SwiftUI-Bildschirme wurden nicht in Xcode gebaut. |
-| Tests | 🟡 | 168 Unit-Tests bestehen mit `swift test` unter macOS oder Linux, und `tools/ios_lint.py` prüft Struktur, die Tabellen der acht Sprachen und den Vertrag ohne Mac; auf einem Gerät läuft kein Test. |
+| Tests | 🟡 | 218 Unit-Tests bestehen mit `swift test` unter macOS oder Linux, und `tools/ios_lint.py` prüft Struktur, die Tabellen der acht Sprachen und den Vertrag ohne Mac; auf einem Gerät läuft kein Test. |
 | Oberfläche | 🟠 | Die SwiftUI-Bildschirme sind geschrieben, wurden aber weder in Xcode gebaut noch auf einem iPhone ausgeführt. |
 | Hardware | 🔴 | Sie lief nicht auf einem iPhone: Die Regeln sind nur unter Linux getestet. |
 | Sicherheit | 🟠 | Die Sperre des Telefons, der Tresor der Sitzung und das Vertrauen ins Zertifikat sind unter Linux getestete Regeln; Face ID, der Schlüsselbund und die Zertifikatsregeln liefen nicht auf einem Gerät. |
@@ -78,6 +78,7 @@ Jede Zeile ist ein Teil dieses Repositorys, und die Ampel sagt, wie weit er heut
 * **Vertrauen in das Zertifikat:** Der Schlüssel des Zertifikats der Installation wird beim ersten Mal gemerkt oder mit dem QR-Code von Studio gekoppelt; ändert er sich, wird die Verbindung abgelehnt und Sie werden informiert.
 * **Acht Sprachen** (Englisch, Spanisch, Deutsch, Französisch, Italienisch, Japanisch, Chinesisch und Portugiesisch aus Portugal), wählbar unter *Mehr > Sprache* oder dem Telefon folgend, mit einer Hilfe zu jedem Bildschirm.
 * **Scharfschaltmodi des Servers (Abwesend, Zuhause, Nacht):** Hat der Server die Scharfschaltmodi eingeschaltet (Studio, Konfiguration > Sicherheit), öffnet die Schaltfläche zum Scharfschalten auf dem Statusbildschirm eine Auswahl, um in einem Modus scharf zu schalten, zu wechseln oder unscharf zu schalten; ein Modus ohne Zuweisung verlangt eine Bestätigung, ein Wechsel zu einem Modus mit weniger Schutz verlangt die PIN wie das Unscharfschalten, und der Status zeigt den aktiven Modus. Das Scharfschalten aus dem unscharfen Zustand führt zuerst die Prüfung vor dem Scharfschalten aus, wie ein einfaches Scharfschalten. Bei ausgeschalteten Modi schaltet die App wie bisher scharf und unscharf. Sie folgt der Android-App; der Code und seine Tests sind geschrieben und wurden weder kompiliert noch auf einem iPhone ausprobiert.
+* **Solar, Batterien und Stromnetz, für Administratoren und Bediener:** Mehr > Solar zeigt die Summen (Sonne, Verbrauch, Ladezustand, Netz) und jeden Wechselrichter und jede Batterie mit Werten, Zellen, Zählern und Ereignisprotokoll; Mehr > Elektrisch zeigt den Netzeingang, die Stromkreise und die Gleichstromschienen mit den Umschaltern; Mehr > Batteriewartung (nur Administratoren) bietet die einfachen Vorgänge an einer Pylontech-Batterie in zwei Schritten (der Knoten prüft, der Bildschirm zeigt genau, was geschehen wird, und geschrieben wird erst, nachdem die Seriennummer erneut eingegeben wurde). Die Bildschirme fragen alle paar Sekunden erneut, in einem Takt aus einer Konfigurationsdatei. Sie folgt der Android-App; der Code und seine Tests sind geschrieben und wurden weder kompiliert noch auf einem iPhone ausprobiert.
 
 ## 🧩 Rolle in A.R.M.O.R.
 
@@ -135,7 +136,7 @@ In der App: die zwei Adressen, *Angemeldet bleiben*, die Telefonsperre und die S
 **Voraussetzungen:** ein Mac mit Xcode 15+ und iOS 16+ zum Bauen der App; Swift 5.9+ (macOS oder Linux) für die Tests; Python 3.11 für die Prüfungen.
 
 ```sh
-swift test                  # 168 tests of ArmorCore (macOS or Linux)
+swift test                  # 218 tests of ArmorCore (macOS or Linux)
 python tools/ios_lint.py    # structure, eight languages, contract (any system)
 xcodegen generate           # then open ARMOR-IOS-CONTROL.xcodeproj in Xcode (on a Mac)
 ```
@@ -160,8 +161,9 @@ python -I tools/armor_ci_validate.py
 | `SecurityTests.swift` | 8 | Der Sitzungstresor und das Zertifikatsvertrauen |
 | `EndpointTests.swift`, `MjpegTests.swift`, `TranslatorTests.swift` | 7 + 7 + 7 | Die Adressauswertung, das MJPEG-Zerlegen und der Übersetzer |
 | `PolicyTests.swift`, `AlarmCodesTests.swift`, `AlarmFactsTests.swift` | 6 + 4 + 7 | Die Alarmrichtlinie und die Alarmcodes |
+| `SolarTests.swift`, `BatteryTests.swift`, `ElectricalTests.swift`, `ScreenPollingTests.swift`, `EquipmentClientTests.swift` | 13 + 10 + 5 + 3 + 10 | Solar, Batterien, Stromnetz und die Aufrufe des Clients |
 
-Die 168 Tests laufen mit Daten eines echten Servers. `tools/ios_lint.py` besteht ohne Mac: 40 Swift-Dateien, 331 Sätze in 8 Sprachen, 27 Serverpfade. Kein Test läuft auf einem Gerät.
+Die 218 Tests laufen mit Daten eines echten Servers. `tools/ios_lint.py` besteht ohne Mac: 49 Swift-Dateien, 559 Sätze in 8 Sprachen, 33 Serverpfade. Kein Test läuft auf einem Gerät.
 
 ## 🏗️ Build und Veröffentlichung
 
@@ -188,7 +190,7 @@ Das Xcode-Projekt wird aus `project.yml` mit XcodeGen erzeugt: Wähle ein Signin
 ARMOR-IOS-CONTROL/
 ├── Sources/ArmorCore/                   die Regeln der App: ein Swift-Paket
 ├── App/                                 die SwiftUI-Bildschirme und die Teile, die ein iPhone brauchen
-├── Tests/                               168 Tests und Daten eines echten Servers
+├── Tests/                               218 Tests und Daten eines echten Servers
 ├── docs/                                die Anleitungen dieses Repositorys
 ├── tools/                               die gemeinsamen CI-Prüfungen und Projektwerkzeuge
 ├── .github/                             CI-Workflow sowie Vorlagen für Issues und Pull Requests

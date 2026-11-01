@@ -59,13 +59,36 @@ public protocol ArmorApi: Sendable {
     /// Tells the server the token APNs gave this phone, so it can push alarms to it (a server with push off answers 409, which is not a failure of the app).
     func registerPush(_ origin: String, token: String) async throws
     func unregisterPush(_ origin: String, token: String) async throws
+
+    // reports, solar, electrical and battery maintenance (declared here, not only in the extension below, so a call through the protocol reaches the real client)
+    /// The summary of a day in a language, for administrators and operators; the server refuses (404 off, 403 role, 503 not set up...) with a code that `ReportRefusal` turns into words.
+    func dailySummary(_ origin: String, date: String, language: String) async throws -> DailySummaryView
+    /// The activity heat map of a camera (the only one when `camera` is nil) with its picture.
+    func heatmap(_ origin: String, camera: String?) async throws -> HeatmapView
+    /// Every inverter and battery that has reported, the declared ones still waiting, and the sums; an operator session is needed.
+    func solar(_ origin: String) async throws -> SolarOverview
+    /// The meters of the electrical nodes and the sums.
+    func electrical(_ origin: String) async throws -> ElectricalOverview
+    /// The battery operations of the last weeks, newest first, and whether the server lets anything be written at all; an administrator's.
+    func batteryOperations(_ origin: String) async throws -> BatteryOverview
+    /// Step one of writing to a battery: the server asks the node to read it and check everything; the answer is the operation, still being checked. The typed serial number must be the battery's.
+    func batteryArm(_ origin: String, node: String, port: Int, op: String, output: String?, state: String?, serial: String) async throws -> BatteryOperationView
+    func batteryOperation(_ origin: String, id: String) async throws -> BatteryOperationView
+    /// Step two: writes it, with the serial number typed again.
+    func batteryExecute(_ origin: String, id: String, serial: String) async throws -> BatteryOperationView
+    func batteryCancel(_ origin: String, id: String) async throws -> BatteryOperationView
 }
 
 extension ArmorApi {
-    /// The summary of a day in a language, for administrators and operators; the server refuses (404 off, 403 role, 503 not set up...) with a code that `ReportRefusal` turns into words.
     func dailySummary(_ origin: String, date: String, language: String) async throws -> DailySummaryView { throw ArmorApiError(message: "not supported", status: nil) }
-    /// The activity heat map of a camera (the only one when `camera` is nil) with its picture.
     func heatmap(_ origin: String, camera: String?) async throws -> HeatmapView { throw ArmorApiError(message: "not supported", status: nil) }
+    func solar(_ origin: String) async throws -> SolarOverview { throw ArmorApiError(message: "not supported", status: nil) }
+    func electrical(_ origin: String) async throws -> ElectricalOverview { throw ArmorApiError(message: "not supported", status: nil) }
+    func batteryOperations(_ origin: String) async throws -> BatteryOverview { throw ArmorApiError(message: "not supported", status: nil) }
+    func batteryArm(_ origin: String, node: String, port: Int, op: String, output: String?, state: String?, serial: String) async throws -> BatteryOperationView { throw ArmorApiError(message: "not supported", status: nil) }
+    func batteryOperation(_ origin: String, id: String) async throws -> BatteryOperationView { throw ArmorApiError(message: "not supported", status: nil) }
+    func batteryExecute(_ origin: String, id: String, serial: String) async throws -> BatteryOperationView { throw ArmorApiError(message: "not supported", status: nil) }
+    func batteryCancel(_ origin: String, id: String) async throws -> BatteryOperationView { throw ArmorApiError(message: "not supported", status: nil) }
 
     /// A ticket with the quality left to the server.
     func streamTicket(_ origin: String, cameraId: String) async throws -> String {
