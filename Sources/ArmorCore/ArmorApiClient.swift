@@ -60,6 +60,17 @@ public final class ArmorApiClient: ArmorApi, @unchecked Sendable {
         }
     }
 
+    public func dailySummary(_ origin: String, date: String, language: String) async throws -> DailySummaryView {
+        ReportsParser.summary(try await getJson(origin, "/api/v1/summary/daily?date=\(Self.part(date))&lang=\(Self.part(language))"))
+    }
+
+    public func heatmap(_ origin: String, camera: String?) async throws -> HeatmapView {
+        let query = (camera.map { $0.isEmpty ? "" : "camera=\(Self.part($0))&" } ?? "") + "scale=8"
+        let map = try await getJson(origin, "/api/v1/vision/heatmap?\(query)&format=json")
+        let picture = try await send(origin, "/api/v1/vision/heatmap?\(query)&format=png", "GET", nil, [200])
+        return ReportsParser.heatmap(map, png: picture.count >= 8 && picture.count <= 16_000_000 ? picture : nil)
+    }
+
     public func voiceAvailable(_ origin: String) async throws -> Bool { try await getJson(origin, "/api/v1/voice/status").bool("available") }
 
     // MARK: orders

@@ -65,6 +65,10 @@ def phrases() -> dict[str, list[str]]:
         if rel.endswith("AlarmText.swift"):
             for match in re.finditer(r'^\s+"[a-z_0-9]+":\s*"((?:[^"\\]|\\.)*)",\s*$', source, re.M):
                 add(match.group(1), rel)
+        if rel.endswith("Reports.swift"):
+            # the refusals of a report are the keys of the table: the screen turns them into the language of the person
+            for match in re.finditer(r'return "((?:[^"\\]|\\.)*)"', source):
+                add(match.group(1), rel)
         if rel.endswith("HelpView.swift"):
             block = source.split("static let topics", 1)[1].split("\n    ]", 1)[0]
             for line in block.splitlines():

@@ -62,6 +62,11 @@ public protocol ArmorApi: Sendable {
 }
 
 extension ArmorApi {
+    /// The summary of a day in a language, for administrators and operators; the server refuses (404 off, 403 role, 503 not set up...) with a code that `ReportRefusal` turns into words.
+    func dailySummary(_ origin: String, date: String, language: String) async throws -> DailySummaryView { throw ArmorApiError(message: "not supported", status: nil) }
+    /// The activity heat map of a camera (the only one when `camera` is nil) with its picture.
+    func heatmap(_ origin: String, camera: String?) async throws -> HeatmapView { throw ArmorApiError(message: "not supported", status: nil) }
+
     /// A ticket with the quality left to the server.
     func streamTicket(_ origin: String, cameraId: String) async throws -> String {
         try await streamTicket(origin, cameraId: cameraId, quality: "auto")

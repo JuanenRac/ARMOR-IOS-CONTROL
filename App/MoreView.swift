@@ -19,6 +19,7 @@ struct MoreView: View {
                     NavigationLink(model.tr("Voz de las alarmas")) { VoiceSettingsView() }
                     NavigationLink(model.tr("Ayuda")) { HelpView() }
                     NavigationLink(model.tr("Dispositivos")) { DevicesView() }
+                    if model.state.facts.role == "admin" || model.state.facts.role == "operator" { NavigationLink(model.tr("Informes")) { ReportsView() } }
                 }.listRowBackground(Theme.surface)
                 Section {
                     LabeledContent(model.tr("Usuario"), value: model.state.facts.role)
