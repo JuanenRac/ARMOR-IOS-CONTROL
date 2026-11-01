@@ -19,7 +19,11 @@ final class AlarmFactsTests: XCTestCase {
 
     func testTheHelpOfEveryAlarmCodeIsInTheSharedTableInTheEightLanguages() {
         let help = AlarmFacts.sharedHelp
-        XCTAssertGreaterThanOrEqual(help.count, 11)
+        XCTAssertGreaterThanOrEqual(help.count, 59)
+        for code in ["smoke", "co", "gas", "water_leak", "panic", "intrusion", "door_open", "duress_disarm", "network_internet_down", "alarm_offline", "node_down", "mode_panel_sync_failed"] {
+            guard let words = help[code] else { XCTFail("\(code) has no help"); continue }
+            for language in ["en", "es", "de", "fr", "it", "ja", "zh", "pt"] { XCTAssertEqual(words[language]?.split(separator: "\n", omittingEmptySubsequences: false).count, 2, "\(code) in \(language)") }
+        }
         for (code, words) in help {
             for language in languages { XCTAssertFalse((words[language] ?? "").isEmpty, "\(code) in \(language)") }
         }

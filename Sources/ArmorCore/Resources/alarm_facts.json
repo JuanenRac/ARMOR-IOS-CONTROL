@@ -693,6 +693,486 @@
    "ja": "意味: ノードがこのソーラー機器から応答を受け取れなくなりました（またはノード自体が応答していません）。\n確認: ケーブルとそのピン（RJ45 コンソール：ピン3＝バッテリー TX、ピン6＝バッテリー RX、ピン8＝グラウンド）、速度（コンソールは 115200、古い機器は 19200 の場合あり、RS485 は DIP 1：1＝9600、0＝115200）を確認してください。バッテリーがスリープしている可能性があります。起こし方はノードのヘルプにあります。",
    "zh": "含义: 节点不再收到该光伏设备的应答（或节点本身没有响应）。\n检查: 检查线缆及针脚（RJ45 控制台：3 号针脚＝电池 TX，6 号针脚＝电池 RX，8 号针脚＝地）和速率（控制台 115200；旧机型可能用 19200；RS485 看 DIP 开关 1：1＝9600，0＝115200）。电池可能处于休眠：节点的帮助说明了如何唤醒。",
    "pt": "Significa: O nó já não recebe respostas deste equipamento solar (ou o próprio nó está em silêncio).\nVerifique: O cabo e os seus pinos (consola RJ45: pino 3 TX da bateria, pino 6 RX da bateria, pino 8 massa), a velocidade (consola 115200; uma unidade antiga pode usar 19200; RS485 com o DIP 1: 1 = 9600, 0 = 115200). Uma bateria pode estar adormecida: a ajuda do nó explica como a acordar."
+  },
+  "solar_fault": {
+   "en": "Means: A solar module reports a fault of its own (not one of the listed protections).\nCheck: The module's own indicators and its event log here; the manual lists what the fault code means. If it repeats, contact the distributor.",
+   "es": "Significa: Un módulo solar informa de un fallo propio (no una de las protecciones conocidas).\nRevisa: Los indicadores del propio módulo y su registro de eventos aquí; el manual explica el código de fallo. Si se repite, contacta con el distribuidor.",
+   "de": "Bedeutung: Ein Solarmodul meldet einen eigenen Fehler (keinen der bekannten Schutzfälle).\nPrüfen: Die Anzeigen des Moduls und sein Ereignisprotokoll hier; das Handbuch erklärt den Fehlercode. Wiederholt er sich, den Händler kontaktieren.",
+   "fr": "Signification: Un module solaire signale un défaut propre (pas l'une des protections connues).\nÀ vérifier: Les voyants du module et son journal d'événements ici ; le manuel explique le code de défaut. S'il se répète, contactez le distributeur.",
+   "it": "Significato: Un modulo solare segnala un guasto proprio (non una delle protezioni note).\nControlla: Gli indicatori del modulo e il suo registro eventi qui; il manuale spiega il codice di guasto. Se si ripete, contatta il distributore.",
+   "ja": "意味: ソーラーモジュールが独自の故障を報告しています（既知の保護動作ではありません）。\n確認: モジュール自体の表示とここのイベントログを確認してください。故障コードの意味は取扱説明書にあります。繰り返す場合は販売店に連絡してください。",
+   "zh": "含义: 光伏模块报告了自身的故障（不是已知的保护动作）。\n检查: 查看模块自身的指示灯和此处的事件记录；故障代码的含义见手册。若反复出现，请联系经销商。",
+   "pt": "Significa: Um módulo solar comunica uma avaria própria (não uma das proteções conhecidas).\nVerifique: Os indicadores do próprio módulo e o seu registo de eventos aqui; o manual explica o código de avaria. Se se repetir, contacte o distribuidor."
+  },
+  "solar_inverter_hot": {
+   "en": "Means: The inverter is too hot.\nCheck: Ventilation around it, dust on the fins or the fan, direct sun on the case and the load it is carrying. It cools down by itself; if it keeps overheating, reduce the load or improve the airflow.",
+   "es": "Significa: El inversor está demasiado caliente.\nRevisa: La ventilación a su alrededor, el polvo en las aletas o el ventilador, el sol directo sobre la caja y la carga que lleva. Se enfría solo; si sigue recalentándose, reduce la carga o mejora la circulación de aire.",
+   "de": "Bedeutung: Der Wechselrichter ist zu heiß.\nPrüfen: Belüftung um das Gerät, Staub an den Rippen oder am Lüfter, direkte Sonne auf dem Gehäuse und die Last. Er kühlt von selbst ab; überhitzt er weiter, die Last senken oder die Luftzufuhr verbessern.",
+   "fr": "Signification: L'onduleur est trop chaud.\nÀ vérifier: La ventilation autour de lui, la poussière sur les ailettes ou le ventilateur, le soleil direct sur le boîtier et la charge qu'il porte. Il refroidit tout seul ; s'il surchauffe encore, réduisez la charge ou améliorez la circulation d'air.",
+   "it": "Significato: L'inverter è troppo caldo.\nControlla: La ventilazione attorno, la polvere sulle alette o sulla ventola, il sole diretto sulla scocca e il carico. Si raffredda da solo; se continua a surriscaldarsi, riduci il carico o migliora il ricambio d'aria.",
+   "ja": "意味: インバーターが高温になっています。\n確認: 周囲の通気、フィンやファンのほこり、本体に当たる直射日光、接続している負荷を確認してください。自然に冷えます。過熱が続く場合は負荷を減らすか、通気を改善してください。",
+   "zh": "含义: 逆变器温度过高。\n检查: 检查周围通风、散热片或风扇上的灰尘、机壳是否被阳光直射以及所带负载。它会自行降温；若持续过热，请减小负载或改善通风。",
+   "pt": "Significa: O inversor está demasiado quente.\nVerifique: A ventilação à sua volta, o pó nas alhetas ou na ventoinha, o sol direto na caixa e a carga que leva. Arrefece sozinho; se continuar a sobreaquecer, reduza a carga ou melhore a circulação de ar."
+  },
+  "electrical_alarm": {
+   "en": "Means: An electrical node reports an alarm of its own.\nCheck: The node's page here for which reading raised it, and the board's cabinet for what is wrong. Do not reset a protection without knowing why it tripped.",
+   "es": "Significa: Un nodo eléctrico informa de una alarma propia.\nRevisa: La página del nodo aquí para ver qué lectura la provocó, y el cuadro eléctrico para saber qué falla. No rearmes una protección sin saber por qué saltó.",
+   "de": "Bedeutung: Ein Elektroknoten meldet einen eigenen Alarm.\nPrüfen: Die Seite des Knotens hier zeigt, welcher Messwert ihn ausgelöst hat; der Schaltschrank zeigt, was nicht stimmt. Einen Schutz nicht zurücksetzen, ohne die Ursache zu kennen.",
+   "fr": "Signification: Un nœud électrique signale une alarme propre.\nÀ vérifier: La page du nœud ici indique quelle mesure l'a déclenchée, et le tableau électrique ce qui ne va pas. Ne réarmez pas une protection sans savoir pourquoi elle a déclenché.",
+   "it": "Significato: Un nodo elettrico segnala un allarme proprio.\nControlla: La pagina del nodo qui mostra quale misura l'ha causato, il quadro elettrico cosa non va. Non riarmare una protezione senza sapere perché è scattata.",
+   "ja": "意味: 電気ノードが独自のアラームを報告しています。\n確認: ここのノードのページでどの測定値が原因かを、分電盤で何が悪いかを確認してください。理由が分からないまま保護装置を復帰させないでください。",
+   "zh": "含义: 电气节点报告了自身的警报。\n检查: 在此处查看节点页面了解是哪项读数触发，并到配电箱检查故障原因。不明原因时不要复位保护装置。",
+   "pt": "Significa: Um nó elétrico comunica um alarme próprio.\nVerifique: A página do nó aqui mostra que leitura o provocou, e o quadro elétrico o que está mal. Não rearme uma proteção sem saber por que disparou."
+  },
+  "electrical_voltage": {
+   "en": "Means: The mains voltage is outside the limits set for this node.\nCheck: The reading on the node's page and the limits set for it. A high or low voltage that lasts is a matter for the electricity company; sensitive devices may need protection meanwhile.",
+   "es": "Significa: La tensión de red está fuera de los límites fijados para este nodo.\nRevisa: La lectura en la página del nodo y los límites fijados. Una tensión alta o baja que dura es asunto de la compañía eléctrica; los equipos delicados pueden necesitar protección mientras tanto.",
+   "de": "Bedeutung: Die Netzspannung liegt außerhalb der für diesen Knoten festgelegten Grenzen.\nPrüfen: Den Messwert auf der Seite des Knotens und die eingestellten Grenzen. Eine anhaltend hohe oder niedrige Spannung ist Sache des Netzbetreibers; empfindliche Geräte brauchen bis dahin Schutz.",
+   "fr": "Signification: La tension du réseau est hors des limites fixées pour ce nœud.\nÀ vérifier: La mesure sur la page du nœud et les limites fixées. Une tension haute ou basse qui dure relève du fournisseur d'électricité ; les appareils sensibles peuvent avoir besoin de protection en attendant.",
+   "it": "Significato: La tensione di rete è fuori dai limiti fissati per questo nodo.\nControlla: La misura nella pagina del nodo e i limiti impostati. Una tensione alta o bassa che dura riguarda il fornitore di energia; i dispositivi delicati possono richiedere protezione nel frattempo.",
+   "ja": "意味: 商用電源の電圧がこのノードに設定した範囲外です。\n確認: ノードのページの測定値と設定した範囲を確認してください。高すぎる、または低すぎる電圧が続く場合は電力会社の問題です。それまで精密機器の保護を検討してください。",
+   "zh": "含义: 市电电压超出了为该节点设定的范围。\n检查: 查看节点页面上的读数和设定的范围。电压持续偏高或偏低属于供电公司的问题；在此期间精密设备可能需要保护。",
+   "pt": "Significa: A tensão da rede está fora dos limites definidos para este nó.\nVerifique: A leitura na página do nó e os limites definidos. Uma tensão alta ou baixa que se prolonga é assunto da companhia elétrica; entretanto os equipamentos sensíveis podem precisar de proteção."
+  },
+  "electrical_grid_lost": {
+   "en": "Means: The node no longer sees the mains: there is a power cut or the feed to the node is off.\nCheck: Whether the whole house is without power or only this circuit (the breaker of the node's feed). With a battery system the house may still be running on it.",
+   "es": "Significa: El nodo ya no ve la red eléctrica: hay un corte de luz o la alimentación del nodo está apagada.\nRevisa: Si toda la casa está sin luz o solo este circuito (el magnetotérmico de la alimentación del nodo). Con un sistema de baterías la casa puede seguir funcionando con ellas.",
+   "de": "Bedeutung: Der Knoten sieht das Netz nicht mehr: Es gibt einen Stromausfall oder die Versorgung des Knotens ist aus.\nPrüfen: Ob das ganze Haus ohne Strom ist oder nur dieser Stromkreis (der Schutzschalter der Knotenversorgung). Mit einem Batteriesystem kann das Haus weiter damit laufen.",
+   "fr": "Signification: Le nœud ne voit plus le réseau électrique : coupure de courant ou alimentation du nœud coupée.\nÀ vérifier: Si toute la maison est sans courant ou seulement ce circuit (le disjoncteur de l'alimentation du nœud). Avec un système de batteries, la maison peut continuer à fonctionner dessus.",
+   "it": "Significato: Il nodo non vede più la rete elettrica: c'è un blackout o l'alimentazione del nodo è spenta.\nControlla: Se tutta la casa è senza corrente o solo questo circuito (l'interruttore dell'alimentazione del nodo). Con un sistema a batterie la casa può continuare a funzionare con esse.",
+   "ja": "意味: ノードが商用電源を検出できません。停電か、ノードへの給電が切れています。\n確認: 家全体が停電しているのか、この回路だけ（ノードの給電ブレーカー）かを確認してください。蓄電池システムがあれば、家はそれで動き続けることがあります。",
+   "zh": "含义: 节点检测不到市电：发生了停电，或节点的供电已断开。\n检查: 确认是整栋房子断电还是只有这一路（节点供电的断路器）。有电池系统时，房子可能仍由电池供电。",
+   "pt": "Significa: O nó já não vê a rede elétrica: há um corte de energia ou a alimentação do nó está desligada.\nVerifique: Se a casa toda está sem luz ou só este circuito (o disjuntor da alimentação do nó). Com um sistema de baterias a casa pode continuar a funcionar com elas."
+  },
+  "electrical_offline": {
+   "en": "Means: The server no longer hears this electrical node.\nCheck: Its power and its Wi-Fi or network cable, and whether the server and the node are on the same network. The node's own page (if reachable) shows its last state.",
+   "es": "Significa: El servidor ya no oye a este nodo eléctrico.\nRevisa: Su alimentación y su Wi-Fi o cable de red, y si el servidor y el nodo están en la misma red. La página del propio nodo (si responde) muestra su último estado.",
+   "de": "Bedeutung: Der Server hört diesen Elektroknoten nicht mehr.\nPrüfen: Dessen Stromversorgung und WLAN oder Netzwerkkabel sowie ob Server und Knoten im selben Netz sind. Die eigene Seite des Knotens (falls erreichbar) zeigt den letzten Zustand.",
+   "fr": "Signification: Le serveur n'entend plus ce nœud électrique.\nÀ vérifier: Son alimentation et son Wi-Fi ou câble réseau, et si le serveur et le nœud sont sur le même réseau. La page du nœud lui-même (si elle répond) montre son dernier état.",
+   "it": "Significato: Il server non sente più questo nodo elettrico.\nControlla: La sua alimentazione e il Wi-Fi o il cavo di rete, e se server e nodo sono nella stessa rete. La pagina del nodo stesso (se risponde) mostra l'ultimo stato.",
+   "ja": "意味: サーバーがこの電気ノードから応答を受け取れません。\n確認: 電源、Wi-Fi またはネットワークケーブル、サーバーとノードが同じネットワークにあるかを確認してください。ノード自身のページ（開ける場合）に最後の状態が出ます。",
+   "zh": "含义: 服务器收不到该电气节点的信息。\n检查: 检查它的供电、Wi-Fi 或网线，以及服务器与节点是否在同一网络。节点自身的页面（若能打开）会显示其最后状态。",
+   "pt": "Significa: O servidor já não ouve este nó elétrico.\nVerifique: A sua alimentação e o seu Wi-Fi ou cabo de rede, e se o servidor e o nó estão na mesma rede. A página do próprio nó (se responder) mostra o último estado."
+  },
+  "electrical_switch_fault": {
+   "en": "Means: A relay or switch of the electrical node did not do what it was told.\nCheck: Whether the load really changed (look or measure), the wiring of the relay and its fuse. Do not trust the state shown until you have seen the load itself.",
+   "es": "Significa: Un relé o interruptor del nodo eléctrico no hizo lo que se le ordenó.\nRevisa: Si la carga cambió de verdad (mira o mide), el cableado del relé y su fusible. No te fíes del estado mostrado hasta ver la propia carga.",
+   "de": "Bedeutung: Ein Relais oder Schalter des Elektroknotens hat nicht getan, was verlangt wurde.\nPrüfen: Ob sich die Last wirklich geändert hat (nachsehen oder messen), die Verdrahtung des Relais und seine Sicherung. Dem angezeigten Zustand nicht trauen, bevor die Last selbst gesehen wurde.",
+   "fr": "Signification: Un relais ou interrupteur du nœud électrique n'a pas fait ce qu'on lui demandait.\nÀ vérifier: Si la charge a vraiment changé (regardez ou mesurez), le câblage du relais et son fusible. Ne vous fiez pas à l'état affiché avant d'avoir vu la charge elle-même.",
+   "it": "Significato: Un relè o interruttore del nodo elettrico non ha fatto ciò che gli era stato ordinato.\nControlla: Se il carico è cambiato davvero (guarda o misura), il cablaggio del relè e il suo fusibile. Non fidarti dello stato mostrato finché non vedi il carico stesso.",
+   "ja": "意味: 電気ノードのリレーまたはスイッチが指示どおりに動作しませんでした。\n確認: 負荷が実際に変わったか（目視か測定で）、リレーの配線とヒューズを確認してください。負荷そのものを確認するまで、表示された状態を信用しないでください。",
+   "zh": "含义: 电气节点的继电器或开关没有按指令动作。\n检查: 确认负载是否真的变化（目测或测量），检查继电器接线及其保险丝。在亲眼看到负载之前，不要相信显示的状态。",
+   "pt": "Significa: Um relé ou interruptor do nó elétrico não fez o que lhe foi ordenado.\nVerifique: Se a carga mudou mesmo (olhe ou meça), a cablagem do relé e o seu fusível. Não confie no estado mostrado até ver a própria carga."
+  },
+  "intrusion": {
+   "en": "Means: A radar node detected a person or object inside a watched area while the system was armed.\nCheck: The cameras and the alarm detail: where and when. If nobody should be there, treat it as real: call the police or your security contact. Do not go in alone.",
+   "es": "Significa: Un nodo radar detectó a una persona u objeto en una zona vigilada con el sistema armado.\nRevisa: Las cámaras y el detalle de la alarma: dónde y cuándo. Si no debería haber nadie, trátalo como real: llama a la policía o a tu contacto de seguridad. No entres solo.",
+   "de": "Bedeutung: Ein Radarknoten hat bei scharfem System eine Person oder ein Objekt in einem überwachten Bereich erkannt.\nPrüfen: Die Kameras und die Alarmdetails: wo und wann. Sollte niemand dort sein, als echt behandeln: Polizei oder Sicherheitskontakt anrufen. Nicht allein hineingehen.",
+   "fr": "Signification: Un nœud radar a détecté une personne ou un objet dans une zone surveillée alors que le système était armé.\nÀ vérifier: Les caméras et le détail de l'alarme : où et quand. Si personne ne devrait être là, considérez-la comme réelle : appelez la police ou votre contact de sécurité. N'entrez pas seul.",
+   "it": "Significato: Un nodo radar ha rilevato una persona o un oggetto in un'area sorvegliata con il sistema inserito.\nControlla: Le telecamere e il dettaglio dell'allarme: dove e quando. Se non dovrebbe esserci nessuno, trattalo come reale: chiama la polizia o il tuo contatto di sicurezza. Non entrare da solo.",
+   "ja": "意味: 警戒中にレーダーノードが監視エリア内の人や物体を検出しました。\n確認: カメラとアラームの詳細（場所と時刻）を確認してください。誰もいないはずなら本物として扱い、警察か警備の連絡先に電話してください。一人で入らないでください。",
+   "zh": "含义: 系统布防期间，雷达节点在监控区域内检测到人或物体。\n检查: 查看摄像头和警报详情：地点与时间。若不应有人，请按真实情况处理：报警或联系安保。不要独自进入。",
+   "pt": "Significa: Um nó de radar detetou uma pessoa ou um objeto numa zona vigiada com o sistema armado.\nVerifique: As câmaras e o detalhe do alarme: onde e quando. Se não devia estar lá ninguém, trate-o como real: ligue à polícia ou ao seu contacto de segurança. Não entre sozinho."
+  },
+  "node_down": {
+   "en": "Means: A node stopped reporting to the server.\nCheck: Its power, its Wi-Fi or network cable and whether the server is reachable from it. While it is silent, what it watched is not being watched.",
+   "es": "Significa: Un nodo dejó de informar al servidor.\nRevisa: Su alimentación, su Wi-Fi o cable de red y si el servidor es alcanzable desde él. Mientras calle, lo que vigilaba no está vigilado.",
+   "de": "Bedeutung: Ein Knoten meldet sich nicht mehr beim Server.\nPrüfen: Dessen Stromversorgung, WLAN oder Netzwerkkabel und ob der Server von ihm erreichbar ist. Solange er schweigt, wird das, was er überwachte, nicht überwacht.",
+   "fr": "Signification: Un nœud ne signale plus rien au serveur.\nÀ vérifier: Son alimentation, son Wi-Fi ou câble réseau et si le serveur est joignable depuis lui. Tant qu'il se tait, ce qu'il surveillait n'est pas surveillé.",
+   "it": "Significato: Un nodo ha smesso di riferire al server.\nControlla: La sua alimentazione, il Wi-Fi o il cavo di rete e se il server è raggiungibile da esso. Finché tace, ciò che sorvegliava non è sorvegliato.",
+   "ja": "意味: ノードがサーバーへの報告を止めました。\n確認: 電源、Wi-Fi またはネットワークケーブル、ノードからサーバーに届くかを確認してください。応答がない間、そのノードが見ていた場所は監視されていません。",
+   "zh": "含义: 节点停止向服务器上报。\n检查: 检查它的供电、Wi-Fi 或网线，以及它能否访问服务器。它沉默期间，其负责监视的区域处于无人监视状态。",
+   "pt": "Significa: Um nó deixou de comunicar com o servidor.\nVerifique: A sua alimentação, o seu Wi-Fi ou cabo de rede e se o servidor é alcançável a partir dele. Enquanto estiver em silêncio, o que vigiava não está vigiado."
+  },
+  "camera_motion": {
+   "en": "Means: A camera saw movement.\nCheck: The picture or recording of that moment on the Record page. If you expected it (a person, a pet, the wind in a tree), it needs nothing; otherwise treat it like an intrusion.",
+   "es": "Significa: Una cámara vio movimiento.\nRevisa: La imagen o grabación de ese momento en la página Grabación. Si lo esperabas (una persona, una mascota, el viento en un árbol), no hace falta nada; si no, trátalo como una intrusión.",
+   "de": "Bedeutung: Eine Kamera hat Bewegung gesehen.\nPrüfen: Das Bild oder die Aufnahme dieses Moments auf der Seite Aufnahme. Wenn Sie es erwartet haben (Person, Haustier, Wind im Baum), ist nichts nötig; sonst wie einen Einbruch behandeln.",
+   "fr": "Signification: Une caméra a vu un mouvement.\nÀ vérifier: L'image ou l'enregistrement de ce moment sur la page Enregistrement. Si vous l'attendiez (une personne, un animal, le vent dans un arbre), rien à faire ; sinon, traitez-le comme une intrusion.",
+   "it": "Significato: Una telecamera ha visto movimento.\nControlla: L'immagine o la registrazione di quel momento nella pagina Registrazione. Se era previsto (una persona, un animale, il vento tra gli alberi) non serve nulla; altrimenti trattalo come un'intrusione.",
+   "ja": "意味: カメラが動きを検出しました。\n確認: 「録画」ページでその瞬間の映像を確認してください。予期していたもの（人、ペット、木を揺らす風）なら対応は不要です。そうでなければ侵入と同様に扱ってください。",
+   "zh": "含义: 摄像头检测到移动。\n检查: 在“录像”页面查看那一刻的画面或录像。若在预期之内（人、宠物、风吹树木）则无需处理；否则按入侵对待。",
+   "pt": "Significa: Uma câmara viu movimento.\nVerifique: A imagem ou gravação desse momento na página Gravação. Se era esperado (uma pessoa, um animal, o vento numa árvore), não é preciso fazer nada; caso contrário, trate-o como uma intrusão."
+  },
+  "camera_down": {
+   "en": "Means: The server cannot get a picture from this camera.\nCheck: The camera's power and network, its address and login (they may have changed), and whether the router gave it a new IP. Until it is back the place it watches is not recorded.",
+   "es": "Significa: El servidor no consigue imagen de esta cámara.\nRevisa: La alimentación y la red de la cámara, su dirección y su acceso (pueden haber cambiado) y si el router le dio otra IP. Hasta que vuelva, el lugar que vigila no se graba.",
+   "de": "Bedeutung: Der Server bekommt kein Bild von dieser Kamera.\nPrüfen: Stromversorgung und Netz der Kamera, ihre Adresse und Zugangsdaten (sie können sich geändert haben) und ob der Router ihr eine neue IP gegeben hat. Bis sie zurück ist, wird ihr Bereich nicht aufgezeichnet.",
+   "fr": "Signification: Le serveur ne reçoit plus d'image de cette caméra.\nÀ vérifier: L'alimentation et le réseau de la caméra, son adresse et son identifiant (ils ont pu changer), et si le routeur lui a donné une nouvelle IP. Tant qu'elle n'est pas revenue, l'endroit qu'elle surveille n'est pas enregistré.",
+   "it": "Significato: Il server non riceve più immagini da questa telecamera.\nControlla: L'alimentazione e la rete della telecamera, il suo indirizzo e le credenziali (possono essere cambiati) e se il router le ha dato un nuovo IP. Finché non torna, il luogo che sorveglia non viene registrato.",
+   "ja": "意味: サーバーがこのカメラの映像を取得できません。\n確認: カメラの電源とネットワーク、アドレスとログイン情報（変わっている場合があります）、ルーターが新しい IP を割り当てていないかを確認してください。復旧するまでその場所は録画されません。",
+   "zh": "含义: 服务器无法获取该摄像头的画面。\n检查: 检查摄像头的供电和网络、地址和登录信息（可能已更改），以及路由器是否给它分配了新 IP。恢复之前，它所监视的位置不会被录像。",
+   "pt": "Significa: O servidor não consegue imagem desta câmara.\nVerifique: A alimentação e a rede da câmara, o seu endereço e o acesso (podem ter mudado) e se o router lhe deu outro IP. Até voltar, o local que vigia não é gravado."
+  },
+  "smoke": {
+   "en": "Means: A smoke detector is in alarm.\nCheck: Look for fire or smoke now. If you see or smell it, leave and call the emergency number. Only if there is clearly no fire (cooking, steam) air the room and wait for the detector to clear.",
+   "es": "Significa: Un detector de humo está en alarma.\nRevisa: Busca fuego o humo ahora. Si lo ves o lo hueles, sal y llama al número de emergencias. Solo si claramente no hay fuego (cocina, vapor) ventila la sala y espera a que el detector se normalice.",
+   "de": "Bedeutung: Ein Rauchmelder schlägt Alarm.\nPrüfen: Jetzt nach Feuer oder Rauch sehen. Sieht oder riecht man ihn, das Haus verlassen und den Notruf wählen. Nur wenn eindeutig kein Feuer vorliegt (Kochen, Dampf), den Raum lüften und warten, bis der Melder sich beruhigt.",
+   "fr": "Signification: Un détecteur de fumée est en alarme.\nÀ vérifier: Cherchez tout de suite du feu ou de la fumée. Si vous en voyez ou en sentez, sortez et appelez les secours. Seulement s'il n'y a clairement pas de feu (cuisine, vapeur), aérez la pièce et attendez que le détecteur se calme.",
+   "it": "Significato: Un rilevatore di fumo è in allarme.\nControlla: Cerca subito fuoco o fumo. Se lo vedi o lo senti, esci e chiama il numero di emergenza. Solo se chiaramente non c'è fuoco (cucina, vapore) arieggia il locale e aspetta che il rilevatore si normalizzi.",
+   "ja": "意味: 煙感知器が警報を出しています。\n確認: 今すぐ火や煙を確認してください。見えるか臭う場合は避難して緊急通報してください。調理や湯気など明らかに火災でない場合のみ換気し、感知器が戻るのを待ってください。",
+   "zh": "含义: 烟雾探测器报警。\n检查: 立即查看是否有火或烟。若看到或闻到，请撤离并拨打紧急电话。只有在明显没有火情（做饭、蒸汽）时，才通风并等待探测器恢复。",
+   "pt": "Significa: Um detetor de fumo está em alarme.\nVerifique: Procure fogo ou fumo já. Se o vir ou cheirar, saia e ligue para o número de emergência. Só se claramente não houver fogo (cozinha, vapor) areje a divisão e espere que o detetor normalize."
+  },
+  "co": {
+   "en": "Means: A carbon monoxide detector is in alarm.\nCheck: Open windows and leave the house at once if anyone feels dizzy or has a headache, and call the emergency number. Then check the boiler, the heater and the chimney before using them again. Carbon monoxide has no smell.",
+   "es": "Significa: Un detector de monóxido de carbono está en alarma.\nRevisa: Abre ventanas y sal de la casa de inmediato si alguien se marea o tiene dolor de cabeza, y llama a emergencias. Luego revisa la caldera, el calentador y la chimenea antes de usarlos. El monóxido de carbono no huele.",
+   "de": "Bedeutung: Ein Kohlenmonoxid-Melder schlägt Alarm.\nPrüfen: Fenster öffnen und das Haus sofort verlassen, wenn jemandem schwindlig ist oder der Kopf schmerzt, und den Notruf wählen. Danach Heizkessel, Ofen und Schornstein prüfen lassen, bevor sie wieder benutzt werden. Kohlenmonoxid ist geruchlos.",
+   "fr": "Signification: Un détecteur de monoxyde de carbone est en alarme.\nÀ vérifier: Ouvrez les fenêtres et quittez la maison tout de suite si quelqu'un a des vertiges ou mal à la tête, et appelez les secours. Faites ensuite vérifier la chaudière, le chauffage et le conduit avant de les réutiliser. Le monoxyde de carbone n'a pas d'odeur.",
+   "it": "Significato: Un rilevatore di monossido di carbonio è in allarme.\nControlla: Apri le finestre ed esci subito di casa se qualcuno ha vertigini o mal di testa, e chiama l'emergenza. Poi fai controllare caldaia, stufa e canna fumaria prima di riusarle. Il monossido di carbonio non ha odore.",
+   "ja": "意味: 一酸化炭素検知器が警報を出しています。\n確認: めまいや頭痛を感じる人がいれば、直ちに窓を開けて家を出て、緊急通報してください。その後、ボイラー、暖房器具、煙突を点検してから再使用してください。一酸化炭素は無臭です。",
+   "zh": "含义: 一氧化碳探测器报警。\n检查: 若有人头晕或头痛，请立即开窗并离开房屋，拨打紧急电话。之后先检查锅炉、取暖器和烟道，再继续使用。一氧化碳无味。",
+   "pt": "Significa: Um detetor de monóxido de carbono está em alarme.\nVerifique: Abra as janelas e saia de casa de imediato se alguém sentir tonturas ou dores de cabeça, e ligue para a emergência. Depois mande verificar a caldeira, o aquecedor e a chaminé antes de os voltar a usar. O monóxido de carbono não tem cheiro."
+  },
+  "gas": {
+   "en": "Means: A gas detector is in alarm.\nCheck: Do not switch any light or device on or off and do not make sparks. Open windows, close the gas at the valve if you can reach it safely, leave and call the gas emergency number from outside.",
+   "es": "Significa: Un detector de gas está en alarma.\nRevisa: No enciendas ni apagues luces ni aparatos y no hagas chispas. Abre ventanas, cierra el gas en la llave si puedes llegar con seguridad, sal y llama a la emergencia del gas desde fuera.",
+   "de": "Bedeutung: Ein Gasmelder schlägt Alarm.\nPrüfen: Kein Licht und kein Gerät ein- oder ausschalten, keine Funken erzeugen. Fenster öffnen, das Gas am Ventil schließen, wenn es gefahrlos erreichbar ist, hinausgehen und von draußen den Gas-Notdienst anrufen.",
+   "fr": "Signification: Un détecteur de gaz est en alarme.\nÀ vérifier: N'allumez ni n'éteignez aucune lumière ni aucun appareil et ne faites pas d'étincelle. Ouvrez les fenêtres, fermez le gaz à la vanne si vous y accédez sans risque, sortez et appelez le numéro d'urgence gaz depuis l'extérieur.",
+   "it": "Significato: Un rilevatore di gas è in allarme.\nControlla: Non accendere né spegnere luci o apparecchi e non produrre scintille. Apri le finestre, chiudi il gas al rubinetto se lo raggiungi in sicurezza, esci e chiama il numero di emergenza del gas dall'esterno.",
+   "ja": "意味: ガス検知器が警報を出しています。\n確認: 照明や機器のオン・オフをせず、火花を出さないでください。窓を開け、安全に届くならガスの元栓を閉め、屋外に出てから緊急連絡先（ガス会社）に電話してください。",
+   "zh": "含义: 燃气探测器报警。\n检查: 不要开关任何灯或电器，不要产生火花。开窗；若能安全够到，关闭燃气阀门；离开房屋，在室外拨打燃气应急电话。",
+   "pt": "Significa: Um detetor de gás está em alarme.\nVerifique: Não ligue nem desligue luzes ou aparelhos e não faça faíscas. Abra as janelas, feche o gás na torneira se lá chegar com segurança, saia e ligue para a emergência do gás do exterior."
+  },
+  "water_leak": {
+   "en": "Means: A water sensor is wet: there is water where there should be none.\nCheck: Find the leak and close the water at the main valve if you cannot stop it. Switch off electrical devices near the water only from a dry place. Dry the area to avoid damp and mould.",
+   "es": "Significa: Un sensor de agua está mojado: hay agua donde no debería.\nRevisa: Busca la fuga y cierra el agua en la llave general si no puedes detenerla. Apaga los aparatos eléctricos cercanos al agua solo desde un sitio seco. Seca la zona para evitar humedad y moho.",
+   "de": "Bedeutung: Ein Wassersensor ist nass: Dort ist Wasser, wo keines sein sollte.\nPrüfen: Das Leck suchen und das Wasser am Hauptventil abstellen, wenn es sich nicht stoppen lässt. Elektrogeräte in Wassernähe nur von einer trockenen Stelle aus abschalten. Den Bereich trocknen, um Feuchtigkeit und Schimmel zu vermeiden.",
+   "fr": "Signification: Un capteur d'eau est mouillé : il y a de l'eau là où il ne devrait pas y en avoir.\nÀ vérifier: Trouvez la fuite et fermez l'eau au robinet général si vous ne pouvez pas l'arrêter. Éteignez les appareils électriques proches de l'eau uniquement depuis un endroit sec. Séchez la zone pour éviter humidité et moisissures.",
+   "it": "Significato: Un sensore d'acqua è bagnato: c'è acqua dove non dovrebbe.\nControlla: Trova la perdita e chiudi l'acqua al rubinetto generale se non riesci a fermarla. Spegni gli apparecchi elettrici vicini all'acqua solo da un punto asciutto. Asciuga la zona per evitare umidità e muffa.",
+   "ja": "意味: 水漏れセンサーが濡れています。水があるはずのない場所に水があります。\n確認: 漏れを見つけ、止められなければ元栓を閉めてください。水の近くの電気機器は乾いた場所からだけ切ってください。湿気やカビを防ぐため、その場所を乾かしてください。",
+   "zh": "含义: 水浸传感器被打湿：不该有水的地方有水。\n检查: 找到漏水处；若无法止住，关闭总水阀。靠近水的电器只能在干燥处断电。把该区域擦干，避免潮湿和霉菌。",
+   "pt": "Significa: Um sensor de água está molhado: há água onde não devia haver.\nVerifique: Procure a fuga e feche a água na torneira geral se não a conseguir parar. Desligue os aparelhos elétricos perto da água só a partir de um sítio seco. Seque a zona para evitar humidade e bolor."
+  },
+  "panic": {
+   "en": "Means: Someone pressed a panic button.\nCheck: Treat it as real until you know it is not: call the person, check the cameras and, if you cannot reach them or something looks wrong, call the police. Acknowledge it only when you are sure it is over.",
+   "es": "Significa: Alguien pulsó un botón de pánico.\nRevisa: Trátalo como real hasta saber que no lo es: llama a la persona, mira las cámaras y, si no la localizas o algo va mal, llama a la policía. Reconócelo solo cuando estés seguro de que ha terminado.",
+   "de": "Bedeutung: Jemand hat einen Panikknopf gedrückt.\nPrüfen: Als echt behandeln, bis das Gegenteil feststeht: die Person anrufen, die Kameras ansehen und, wenn sie nicht erreichbar ist oder etwas nicht stimmt, die Polizei rufen. Erst quittieren, wenn sicher ist, dass es vorbei ist.",
+   "fr": "Signification: Quelqu'un a appuyé sur un bouton de panique.\nÀ vérifier: Considérez-le comme réel jusqu'à preuve du contraire : appelez la personne, regardez les caméras et, si vous ne la joignez pas ou si quelque chose cloche, appelez la police. Acquittez-le seulement quand vous êtes sûr que c'est fini.",
+   "it": "Significato: Qualcuno ha premuto un pulsante antipanico.\nControlla: Trattalo come reale finché non sai che non lo è: chiama la persona, guarda le telecamere e, se non la raggiungi o qualcosa non va, chiama la polizia. Riconoscilo solo quando sei sicuro che sia finita.",
+   "ja": "意味: 誰かがパニックボタンを押しました。\n確認: 違うと分かるまで本物として扱ってください。本人に電話し、カメラを見て、連絡が取れない、または様子がおかしければ警察に通報してください。終わったと確信してから確認済みにしてください。",
+   "zh": "含义: 有人按下了紧急按钮。\n检查: 在确认不是真的之前，按真实情况处理：给对方打电话、查看摄像头，若联系不上或情况异常，请报警。确定事情已结束后再确认该警报。",
+   "pt": "Significa: Alguém carregou num botão de pânico.\nVerifique: Trate-o como real até saber que não é: ligue à pessoa, veja as câmaras e, se não a conseguir contactar ou algo parecer mal, ligue à polícia. Só o reconheça quando tiver a certeza de que acabou."
+  },
+  "door_open": {
+   "en": "Means: A door is open while the system is armed (or a door that should be closed is open).\nCheck: Whether someone opened it on purpose. Look at the cameras; if nobody should have, treat it as an intrusion. A door that did not close properly can also trigger it again.",
+   "es": "Significa: Una puerta está abierta con el sistema armado (o una puerta que debería estar cerrada está abierta).\nRevisa: Si alguien la abrió a propósito. Mira las cámaras; si nadie debía, trátalo como una intrusión. Una puerta que no cerró bien también puede volver a dispararla.",
+   "de": "Bedeutung: Eine Tür ist bei scharfem System offen (oder eine Tür, die geschlossen sein sollte).\nPrüfen: Ob jemand sie absichtlich geöffnet hat. Die Kameras ansehen; sollte es niemand gewesen sein, wie einen Einbruch behandeln. Eine nicht richtig geschlossene Tür kann sie auch erneut auslösen.",
+   "fr": "Signification: Une porte est ouverte alors que le système est armé (ou une porte qui devrait être fermée).\nÀ vérifier: Si quelqu'un l'a ouverte volontairement. Regardez les caméras ; si personne ne devait, traitez-le comme une intrusion. Une porte mal refermée peut aussi la redéclencher.",
+   "it": "Significato: Una porta è aperta con il sistema inserito (o una porta che dovrebbe essere chiusa).\nControlla: Se qualcuno l'ha aperta di proposito. Guarda le telecamere; se nessuno doveva, trattalo come un'intrusione. Una porta chiusa male può anche farlo scattare di nuovo.",
+   "ja": "意味: 警戒中にドアが開いています（または閉まっているはずのドアが開いています）。\n確認: 誰かが意図的に開けたかを確認してください。カメラを見て、誰も開けるはずがなければ侵入として扱ってください。きちんと閉まっていないドアが再び作動させることもあります。",
+   "zh": "含义: 布防期间门被打开（或本应关闭的门是开着的）。\n检查: 确认是否有人有意开门。查看摄像头；若不应有人开门，则按入侵处理。没关严的门也可能再次触发。",
+   "pt": "Significa: Uma porta está aberta com o sistema armado (ou uma porta que devia estar fechada).\nVerifique: Se alguém a abriu de propósito. Veja as câmaras; se ninguém devia, trate-o como uma intrusão. Uma porta mal fechada também pode voltar a disparar."
+  },
+  "window_open": {
+   "en": "Means: A window is open while the system is armed (or a window that should be closed is open).\nCheck: Whether it was left open on purpose or by mistake, and the cameras. If nobody should have opened it, treat it as an intrusion. Close it and check the sensor is aligned.",
+   "es": "Significa: Una ventana está abierta con el sistema armado (o una ventana que debería estar cerrada está abierta).\nRevisa: Si se dejó abierta a propósito o por descuido, y las cámaras. Si nadie debía abrirla, trátalo como una intrusión. Ciérrala y comprueba que el sensor está alineado.",
+   "de": "Bedeutung: Ein Fenster ist bei scharfem System offen (oder ein Fenster, das geschlossen sein sollte).\nPrüfen: Ob es absichtlich oder aus Versehen offen blieb, und die Kameras. Sollte es niemand geöffnet haben, wie einen Einbruch behandeln. Schließen und prüfen, ob der Sensor ausgerichtet ist.",
+   "fr": "Signification: Une fenêtre est ouverte alors que le système est armé (ou une fenêtre qui devrait être fermée).\nÀ vérifier: Si elle a été laissée ouverte volontairement ou par oubli, et les caméras. Si personne ne devait l'ouvrir, traitez-le comme une intrusion. Fermez-la et vérifiez l'alignement du capteur.",
+   "it": "Significato: Una finestra è aperta con il sistema inserito (o una finestra che dovrebbe essere chiusa).\nControlla: Se è stata lasciata aperta di proposito o per sbaglio, e le telecamere. Se nessuno doveva aprirla, trattalo come un'intrusione. Chiudila e controlla che il sensore sia allineato.",
+   "ja": "意味: 警戒中に窓が開いています（または閉まっているはずの窓が開いています）。\n確認: 意図的か、閉め忘れかを確認し、カメラも見てください。誰も開けるはずがなければ侵入として扱ってください。閉めて、センサーの位置が合っているかも確認してください。",
+   "zh": "含义: 布防期间窗户被打开（或本应关闭的窗户是开着的）。\n检查: 确认是有意还是忘记关，并查看摄像头。若不应有人开窗，则按入侵处理。关好窗户，并检查传感器是否对齐。",
+   "pt": "Significa: Uma janela está aberta com o sistema armado (ou uma janela que devia estar fechada).\nVerifique: Se ficou aberta de propósito ou por esquecimento, e as câmaras. Se ninguém a devia abrir, trate-o como uma intrusão. Feche-a e verifique se o sensor está alinhado."
+  },
+  "motion": {
+   "en": "Means: A motion detector saw movement while the system was armed.\nCheck: The cameras and what is in that area (a pet, a curtain, a heater can fool some detectors). If nobody should be there, treat it as an intrusion.",
+   "es": "Significa: Un detector de movimiento vio movimiento con el sistema armado.\nRevisa: Las cámaras y lo que hay en esa zona (una mascota, una cortina o una estufa pueden engañar a algunos detectores). Si nadie debería estar, trátalo como una intrusión.",
+   "de": "Bedeutung: Ein Bewegungsmelder hat bei scharfem System Bewegung gesehen.\nPrüfen: Die Kameras und was sich in dem Bereich befindet (ein Haustier, ein Vorhang oder eine Heizung können manche Melder täuschen). Sollte niemand dort sein, wie einen Einbruch behandeln.",
+   "fr": "Signification: Un détecteur de mouvement a vu un mouvement alors que le système était armé.\nÀ vérifier: Les caméras et ce qui se trouve dans cette zone (un animal, un rideau ou un radiateur peuvent tromper certains détecteurs). Si personne ne devrait y être, traitez-le comme une intrusion.",
+   "it": "Significato: Un rilevatore di movimento ha visto movimento con il sistema inserito.\nControlla: Le telecamere e cosa c'è in quell'area (un animale, una tenda o una stufa possono ingannare alcuni rilevatori). Se non dovrebbe esserci nessuno, trattalo come un'intrusione.",
+   "ja": "意味: 警戒中に人感センサーが動きを検出しました。\n確認: カメラとその場所にあるもの（ペット、カーテン、暖房器具が一部のセンサーを誤作動させることがあります）を確認してください。誰もいないはずなら侵入として扱ってください。",
+   "zh": "含义: 布防期间，移动探测器检测到活动。\n检查: 查看摄像头和该区域内的情况（宠物、窗帘或取暖器可能干扰部分探测器）。若不应有人，请按入侵处理。",
+   "pt": "Significa: Um detetor de movimento viu movimento com o sistema armado.\nVerifique: As câmaras e o que há nessa zona (um animal, uma cortina ou um aquecedor podem enganar alguns detetores). Se não devia estar lá ninguém, trate-o como uma intrusão."
+  },
+  "glass_break": {
+   "en": "Means: A glass-break detector heard glass breaking.\nCheck: The windows and doors around it and the cameras at once. A real break-in is likely: do not go in alone, call the police. Loud noises near the detector can also trigger it.",
+   "es": "Significa: Un detector de rotura de cristal oyó romperse un cristal.\nRevisa: Las ventanas y puertas de alrededor y las cámaras, enseguida. Es probable una entrada real: no entres solo, llama a la policía. Ruidos fuertes cerca del detector también pueden dispararlo.",
+   "de": "Bedeutung: Ein Glasbruchmelder hat Glasbruch gehört.\nPrüfen: Sofort die Fenster und Türen in der Nähe und die Kameras prüfen. Ein echter Einbruch ist wahrscheinlich: nicht allein hineingehen, die Polizei rufen. Laute Geräusche nahe dem Melder können ihn auch auslösen.",
+   "fr": "Signification: Un détecteur de bris de verre a entendu du verre se briser.\nÀ vérifier: Les fenêtres et portes autour et les caméras, tout de suite. Une vraie effraction est probable : n'entrez pas seul, appelez la police. Des bruits forts près du détecteur peuvent aussi le déclencher.",
+   "it": "Significato: Un rilevatore di rottura vetri ha sentito rompersi un vetro.\nControlla: Le finestre e le porte intorno e le telecamere, subito. È probabile un'effrazione vera: non entrare da solo, chiama la polizia. Anche rumori forti vicino al rilevatore possono farlo scattare.",
+   "ja": "意味: ガラス破壊センサーがガラスの割れる音を検出しました。\n確認: すぐに周囲の窓とドア、カメラを確認してください。本物の侵入の可能性が高いので、一人で入らず警察に通報してください。センサー近くの大きな音でも作動することがあります。",
+   "zh": "含义: 玻璃破碎探测器听到了玻璃破碎的声音。\n检查: 立即查看周围的门窗和摄像头。很可能是真实入侵：不要独自进入，请报警。探测器附近的巨大声响也可能触发它。",
+   "pt": "Significa: Um detetor de rutura de vidros ouviu um vidro a partir.\nVerifique: As janelas e portas à volta e as câmaras, de imediato. É provável uma intrusão real: não entre sozinho, ligue à polícia. Ruídos fortes perto do detetor também o podem disparar."
+  },
+  "vibration": {
+   "en": "Means: A vibration or shock sensor felt a hit or a strong vibration.\nCheck: What is around it: a door slammed, a heavy truck, a tool, or somebody forcing the door or safe it is mounted on. Check the cameras; repeated hits are suspicious.",
+   "es": "Significa: Un sensor de vibración o golpe notó un golpe o una vibración fuerte.\nRevisa: Qué hay a su alrededor: un portazo, un camión pesado, una herramienta o alguien forzando la puerta o la caja fuerte donde está instalado. Mira las cámaras; golpes repetidos son sospechosos.",
+   "de": "Bedeutung: Ein Vibrations- oder Erschütterungssensor hat einen Schlag oder starke Vibration gespürt.\nPrüfen: Was in der Nähe ist: eine zugeschlagene Tür, ein schwerer Lkw, ein Werkzeug oder jemand, der die Tür oder den Tresor aufbricht, an dem er montiert ist. Kameras prüfen; wiederholte Schläge sind verdächtig.",
+   "fr": "Signification: Un capteur de vibration ou de choc a senti un coup ou une forte vibration.\nÀ vérifier: Ce qu'il y a autour : une porte claquée, un camion lourd, un outil, ou quelqu'un qui force la porte ou le coffre où il est fixé. Regardez les caméras ; des coups répétés sont suspects.",
+   "it": "Significato: Un sensore di vibrazione o urto ha sentito un colpo o una forte vibrazione.\nControlla: Cosa c'è intorno: una porta sbattuta, un camion pesante, un attrezzo o qualcuno che forza la porta o la cassaforte su cui è montato. Guarda le telecamere; colpi ripetuti sono sospetti.",
+   "ja": "意味: 振動・衝撃センサーが衝撃または強い振動を検出しました。\n確認: 周囲の状況（ドアを強く閉めた、大型トラック、工具、設置先のドアや金庫をこじ開けようとする人）を確認してください。カメラを見てください。繰り返される衝撃は不審です。",
+   "zh": "含义: 振动/冲击传感器感受到撞击或强烈振动。\n检查: 查看周围情况：用力关门、重型卡车、工具，或有人在撬其所安装的门或保险箱。查看摄像头；反复撞击值得怀疑。",
+   "pt": "Significa: Um sensor de vibração ou choque sentiu uma pancada ou uma vibração forte.\nVerifique: O que há à volta: uma porta batida, um camião pesado, uma ferramenta ou alguém a forçar a porta ou o cofre onde está montado. Veja as câmaras; pancadas repetidas são suspeitas."
+  },
+  "triggered": {
+   "en": "Means: A device or sensor of the house was triggered.\nCheck: Which device it is (see the detail of the alarm) and what it watches: its own page tells what it reports. If you do not know why, look at the cameras.",
+   "es": "Significa: Se activó un dispositivo o sensor de la casa.\nRevisa: Qué dispositivo es (mira el detalle de la alarma) y qué vigila: su propia página dice lo que informa. Si no sabes por qué, mira las cámaras.",
+   "de": "Bedeutung: Ein Gerät oder Sensor des Hauses wurde ausgelöst.\nPrüfen: Welches Gerät es ist (siehe die Alarmdetails) und was es überwacht: Seine eigene Seite zeigt, was es meldet. Ist der Grund unklar, die Kameras ansehen.",
+   "fr": "Signification: Un appareil ou capteur de la maison s'est déclenché.\nÀ vérifier: De quel appareil il s'agit (voir le détail de l'alarme) et ce qu'il surveille : sa propre page indique ce qu'il signale. Si vous ne savez pas pourquoi, regardez les caméras.",
+   "it": "Significato: Un dispositivo o sensore della casa è scattato.\nControlla: Quale dispositivo è (vedi il dettaglio dell'allarme) e cosa sorveglia: la sua pagina dice cosa segnala. Se non sai perché, guarda le telecamere.",
+   "ja": "意味: 家のデバイスまたはセンサーが作動しました。\n確認: どのデバイスか（アラームの詳細を参照）と何を監視しているかを確認してください。デバイス自身のページに報告内容が出ます。理由が分からなければカメラを見てください。",
+   "zh": "含义: 家中的某个设备或传感器被触发。\n检查: 查看是哪个设备（见警报详情）以及它监视什么：其自身页面会显示它的上报内容。若不知原因，请查看摄像头。",
+   "pt": "Significa: Um dispositivo ou sensor da casa foi acionado.\nVerifique: Que dispositivo é (veja o detalhe do alarme) e o que vigia: a sua própria página diz o que comunica. Se não souber porquê, veja as câmaras."
+  },
+  "tamper": {
+   "en": "Means: Someone opened or moved a device or its cover (anti-tamper contact).\nCheck: Whether it was you (maintenance, a battery change) or somebody else. Check the cameras and the device itself; a sensor that is being opened may be about to be disabled.",
+   "es": "Significa: Alguien abrió o movió un dispositivo o su tapa (contacto antisabotaje).\nRevisa: Si fuiste tú (mantenimiento, cambio de pila) u otra persona. Mira las cámaras y el propio dispositivo; un sensor que se abre puede estar a punto de ser anulado.",
+   "de": "Bedeutung: Jemand hat ein Gerät oder dessen Abdeckung geöffnet oder bewegt (Sabotagekontakt).\nPrüfen: Ob Sie es waren (Wartung, Batteriewechsel) oder jemand anderes. Die Kameras und das Gerät selbst prüfen; ein geöffneter Sensor soll vielleicht gleich außer Betrieb gesetzt werden.",
+   "fr": "Signification: Quelqu'un a ouvert ou déplacé un appareil ou son couvercle (contact anti-sabotage).\nÀ vérifier: Si c'était vous (maintenance, changement de pile) ou quelqu'un d'autre. Regardez les caméras et l'appareil lui-même ; un capteur qu'on ouvre est peut-être sur le point d'être neutralisé.",
+   "it": "Significato: Qualcuno ha aperto o spostato un dispositivo o il suo coperchio (contatto antimanomissione).\nControlla: Se sei stato tu (manutenzione, cambio batteria) o qualcun altro. Guarda le telecamere e il dispositivo stesso; un sensore che viene aperto potrebbe essere sul punto di essere disattivato.",
+   "ja": "意味: 誰かがデバイスまたはそのカバーを開けたか動かしました（改ざん検知接点）。\n確認: 自分（保守、電池交換）か、他の人かを確認してください。カメラとデバイス本体を見てください。開けられているセンサーは無効化されようとしている可能性があります。",
+   "zh": "含义: 有人打开或移动了设备或其外盖（防拆触点）。\n检查: 确认是不是您自己（维护、换电池）还是别人。查看摄像头和设备本身；被打开的传感器可能即将被人屏蔽。",
+   "pt": "Significa: Alguém abriu ou moveu um dispositivo ou a sua tampa (contacto antissabotagem).\nVerifique: Se foi por si (manutenção, troca de pilha) ou outra pessoa. Veja as câmaras e o próprio dispositivo; um sensor que está a ser aberto pode estar prestes a ser anulado."
+  },
+  "low_battery": {
+   "en": "Means: The battery of a device is low.\nCheck: Change the battery soon (the device's page names the type). A device with a flat battery stops protecting you without a further warning.",
+   "es": "Significa: La pila de un dispositivo está baja.\nRevisa: Cambia la pila pronto (la página del dispositivo indica el tipo). Un dispositivo con la pila agotada deja de protegerte sin más aviso.",
+   "de": "Bedeutung: Die Batterie eines Geräts ist schwach.\nPrüfen: Die Batterie bald wechseln (die Seite des Geräts nennt den Typ). Ein Gerät mit leerer Batterie schützt ohne weitere Warnung nicht mehr.",
+   "fr": "Signification: La pile d'un appareil est faible.\nÀ vérifier: Changez la pile bientôt (la page de l'appareil indique le type). Un appareil à pile vide cesse de vous protéger sans autre avertissement.",
+   "it": "Significato: La batteria di un dispositivo è scarica.\nControlla: Cambia la batteria presto (la pagina del dispositivo indica il tipo). Un dispositivo con la batteria esaurita smette di proteggerti senza ulteriori avvisi.",
+   "ja": "意味: デバイスの電池残量が少なくなっています。\n確認: 近いうちに電池を交換してください（種類はデバイスのページにあります）。電池切れのデバイスは、それ以上の警告なしに保護しなくなります。",
+   "zh": "含义: 设备电池电量低。\n检查: 尽快更换电池（设备页面注明型号）。电池耗尽的设备会不再提醒就停止保护。",
+   "pt": "Significa: A pilha de um dispositivo está fraca.\nVerifique: Mude a pilha em breve (a página do dispositivo indica o tipo). Um dispositivo com a pilha gasta deixa de o proteger sem mais avisos."
+  },
+  "device_offline": {
+   "en": "Means: A device has not reported for longer than its usual interval.\nCheck: Its battery, its distance to the gateway or router and whether it was moved or unplugged. A device that is silent is not protecting anything.",
+   "es": "Significa: Un dispositivo no informa desde hace más que su intervalo habitual.\nRevisa: Su pila, su distancia a la pasarela o al router y si se movió o se desenchufó. Un dispositivo en silencio no protege nada.",
+   "de": "Bedeutung: Ein Gerät hat sich länger als sein üblicher Abstand nicht gemeldet.\nPrüfen: Dessen Batterie, die Entfernung zum Gateway oder Router und ob es bewegt oder ausgesteckt wurde. Ein schweigendes Gerät schützt nichts.",
+   "fr": "Signification: Un appareil ne s'est pas signalé depuis plus longtemps que son intervalle habituel.\nÀ vérifier: Sa pile, sa distance à la passerelle ou au routeur et s'il a été déplacé ou débranché. Un appareil muet ne protège rien.",
+   "it": "Significato: Un dispositivo non riferisce da più del suo intervallo abituale.\nControlla: La sua batteria, la distanza dal gateway o dal router e se è stato spostato o scollegato. Un dispositivo silenzioso non protegge nulla.",
+   "ja": "意味: デバイスが通常の間隔を超えて報告していません。\n確認: 電池、ゲートウェイやルーターとの距離、移動や電源抜けがなかったかを確認してください。応答しないデバイスは何も守っていません。",
+   "zh": "含义: 设备超过其正常间隔仍未上报。\n检查: 检查它的电池、与网关或路由器的距离，以及是否被移动或拔掉电源。沉默的设备起不到任何保护作用。",
+   "pt": "Significa: Um dispositivo não comunica há mais do que o seu intervalo habitual.\nVerifique: A sua pilha, a distância ao gateway ou ao router e se foi movido ou desligado. Um dispositivo em silêncio não protege nada."
+  },
+  "network_internet_down": {
+   "en": "Means: The router answers, but nothing beyond it does: the Internet connection is down.\nCheck: The modem or fibre box and its lights, and whether your provider has an outage. Restart the modem (not the router) first. The house keeps working locally; remote access and push messages may not.",
+   "es": "Significa: El router responde, pero nada más allá: la conexión a Internet está caída.\nRevisa: El módem o la ONT y sus luces, y si tu operador tiene una avería. Reinicia primero el módem (no el router). La casa sigue funcionando en local; el acceso remoto y los avisos push pueden no llegar.",
+   "de": "Bedeutung: Der Router antwortet, aber nichts dahinter: Die Internetverbindung ist ausgefallen.\nPrüfen: Modem oder Glasfaserbox und deren Lichter, und ob Ihr Anbieter eine Störung hat. Zuerst das Modem (nicht den Router) neu starten. Das Haus arbeitet lokal weiter; Fernzugriff und Push-Meldungen kommen eventuell nicht an.",
+   "fr": "Signification: Le routeur répond, mais rien au-delà : la connexion Internet est coupée.\nÀ vérifier: Le modem ou la box fibre et ses voyants, et si votre opérateur a une panne. Redémarrez d'abord le modem (pas le routeur). La maison continue de fonctionner en local ; l'accès à distance et les notifications push peuvent ne pas arriver.",
+   "it": "Significato: Il router risponde, ma nulla oltre: la connessione Internet è caduta.\nControlla: Il modem o la ONT e le sue spie, e se il tuo operatore ha un guasto. Riavvia prima il modem (non il router). La casa continua a funzionare in locale; accesso remoto e notifiche push potrebbero non arrivare.",
+   "ja": "意味: ルーターは応答しますが、その先には届きません。インターネット接続が切れています。\n確認: モデムまたは光回線終端装置とそのランプ、プロバイダーの障害の有無を確認してください。まずモデム（ルーターではなく）を再起動してください。家はローカルで動き続けますが、遠隔アクセスとプッシュ通知は届かないことがあります。",
+   "zh": "含义: 路由器有响应，但其后的网络都不通：互联网连接中断。\n检查: 检查光猫/调制解调器及其指示灯，以及运营商是否出现故障。先重启光猫（不是路由器）。家中系统在本地仍可工作；远程访问和推送通知可能无法送达。",
+   "pt": "Significa: O router responde, mas nada para além dele: a ligação à Internet caiu.\nVerifique: O modem ou a ONT e as suas luzes, e se o operador tem uma avaria. Reinicie primeiro o modem (não o router). A casa continua a funcionar localmente; o acesso remoto e os avisos push podem não chegar."
+  },
+  "network_lan_down": {
+   "en": "Means: The router itself does not answer: the local network is down or the network node lost its link.\nCheck: The router's power and its cable to the node, and the switch in between. Nothing on the network can reach the server until the router is back.",
+   "es": "Significa: El propio router no responde: la red local está caída o el nodo de red perdió su enlace.\nRevisa: La alimentación del router, su cable hasta el nodo y el switch intermedio. Nada de la red llega al servidor hasta que el router vuelva.",
+   "de": "Bedeutung: Der Router selbst antwortet nicht: Das lokale Netz ist ausgefallen oder der Netzwerkknoten hat seine Verbindung verloren.\nPrüfen: Stromversorgung des Routers, sein Kabel zum Knoten und der Switch dazwischen. Bis der Router zurück ist, erreicht nichts im Netz den Server.",
+   "fr": "Signification: Le routeur lui-même ne répond pas : le réseau local est coupé ou le nœud réseau a perdu sa liaison.\nÀ vérifier: L'alimentation du routeur, son câble vers le nœud et le switch intermédiaire. Rien sur le réseau n'atteint le serveur tant que le routeur n'est pas revenu.",
+   "it": "Significato: Il router stesso non risponde: la rete locale è caduta o il nodo di rete ha perso il collegamento.\nControlla: L'alimentazione del router, il suo cavo verso il nodo e lo switch intermedio. Nulla nella rete raggiunge il server finché il router non torna.",
+   "ja": "意味: ルーター自体が応答しません。ローカルネットワークが落ちているか、ネットワークノードがリンクを失いました。\n確認: ルーターの電源、ノードまでのケーブル、間のスイッチを確認してください。ルーターが復旧するまで、ネットワーク上のどの機器もサーバーに届きません。",
+   "zh": "含义: 路由器本身没有响应：本地网络中断，或网络节点失去了链路。\n检查: 检查路由器的电源、通往节点的线缆以及中间的交换机。路由器恢复之前，网络中的设备都无法连到服务器。",
+   "pt": "Significa: O próprio router não responde: a rede local caiu ou o nó de rede perdeu a ligação.\nVerifique: A alimentação do router, o seu cabo até ao nó e o switch pelo meio. Nada na rede chega ao servidor até o router voltar."
+  },
+  "network_degraded": {
+   "en": "Means: The connection works, but with high latency or packet loss.\nCheck: The Wi-Fi signal and the load on the network (a download, a camera stream), the cable if there is one, and whether the provider is having problems. It usually passes by itself.",
+   "es": "Significa: La conexión funciona, pero con latencia alta o pérdida de paquetes.\nRevisa: La señal Wi-Fi y la carga de la red (una descarga, un flujo de cámara), el cable si lo hay y si el operador tiene problemas. Suele pasar solo.",
+   "de": "Bedeutung: Die Verbindung funktioniert, aber mit hoher Latenz oder Paketverlust.\nPrüfen: Das WLAN-Signal und die Netzlast (ein Download, ein Kamerastrom), das Kabel, falls vorhanden, und ob der Anbieter Probleme hat. Meist geht es von selbst vorbei.",
+   "fr": "Signification: La connexion fonctionne, mais avec une latence élevée ou des pertes de paquets.\nÀ vérifier: Le signal Wi-Fi et la charge du réseau (un téléchargement, un flux de caméra), le câble s'il y en a un, et si l'opérateur a des problèmes. Cela passe en général tout seul.",
+   "it": "Significato: La connessione funziona, ma con latenza alta o perdita di pacchetti.\nControlla: Il segnale Wi-Fi e il carico della rete (un download, un flusso di telecamera), il cavo se c'è e se l'operatore ha problemi. Di solito passa da solo.",
+   "ja": "意味: 接続は動いていますが、遅延が大きいかパケット損失があります。\n確認: Wi-Fi の電波とネットワークの負荷（ダウンロード、カメラの映像）、ケーブルがあればその状態、プロバイダーの障害を確認してください。多くは自然に直ります。",
+   "zh": "含义: 连接可用，但延迟高或有丢包。\n检查: 检查 Wi-Fi 信号和网络负载（下载、摄像头视频流）、有线连接（如有）以及运营商是否有问题。通常会自行恢复。",
+   "pt": "Significa: A ligação funciona, mas com latência alta ou perda de pacotes.\nVerifique: O sinal Wi-Fi e a carga da rede (uma transferência, um fluxo de câmara), o cabo se existir e se o operador tem problemas. Costuma passar sozinho."
+  },
+  "network_new_device": {
+   "en": "Means: A device nobody has named or marked as known joined the network.\nCheck: Whose it is: a guest's phone, a new appliance, or something that should not be there. If it is yours, mark it as known in the Network page. If not, change the Wi-Fi password.",
+   "es": "Significa: Un dispositivo que nadie ha nombrado ni marcado como conocido se unió a la red.\nRevisa: De quién es: el móvil de una visita, un electrodoméstico nuevo o algo que no debería estar. Si es tuyo, márcalo como conocido en la página Red. Si no, cambia la contraseña del Wi-Fi.",
+   "de": "Bedeutung: Ein Gerät, das niemand benannt oder als bekannt markiert hat, ist dem Netz beigetreten.\nPrüfen: Wem es gehört: das Handy eines Gastes, ein neues Gerät oder etwas, das nicht da sein sollte. Ist es Ihres, auf der Seite Netzwerk als bekannt markieren. Wenn nicht, das WLAN-Passwort ändern.",
+   "fr": "Signification: Un appareil que personne n'a nommé ni marqué comme connu a rejoint le réseau.\nÀ vérifier: À qui il est : le téléphone d'un invité, un nouvel appareil ou quelque chose qui ne devrait pas être là. S'il est à vous, marquez-le comme connu dans la page Réseau. Sinon, changez le mot de passe Wi-Fi.",
+   "it": "Significato: Un dispositivo che nessuno ha nominato o contrassegnato come noto è entrato nella rete.\nControlla: Di chi è: il telefono di un ospite, un elettrodomestico nuovo o qualcosa che non dovrebbe esserci. Se è tuo, segnalo come noto nella pagina Rete. Altrimenti cambia la password del Wi-Fi.",
+   "ja": "意味: 誰も名前を付けておらず、既知にもしていない機器がネットワークに参加しました。\n確認: 誰の機器かを確認してください（来客のスマホ、新しい家電、あるいは本来いないはずのもの）。自分のものなら「ネットワーク」ページで既知にしてください。そうでなければ Wi-Fi パスワードを変更してください。",
+   "zh": "含义: 有一台未命名、也未标记为已知的设备加入了网络。\n检查: 确认是谁的设备：访客的手机、新家电，或不该出现的东西。若是您的，请在“网络”页面标记为已知；否则请更改 Wi-Fi 密码。",
+   "pt": "Significa: Um dispositivo que ninguém nomeou nem marcou como conhecido entrou na rede.\nVerifique: De quem é: o telemóvel de uma visita, um eletrodoméstico novo ou algo que não devia estar. Se for seu, marque-o como conhecido na página Rede. Se não, mude a palavra-passe do Wi-Fi."
+  },
+  "network_arp_conflict": {
+   "en": "Means: Two devices claim the same address on the network, or an address changed hands (ARP conflict).\nCheck: Whether two devices were given the same fixed address, or someone is imitating another device (the detail shows both hardware addresses). Fix the address clash in the router; an imitation is a security matter.",
+   "es": "Significa: Dos dispositivos reclaman la misma dirección en la red, o una dirección cambió de manos (conflicto ARP).\nRevisa: Si dos dispositivos tienen asignada la misma dirección fija o si alguien imita a otro (el detalle muestra las dos direcciones físicas). Arregla el choque en el router; una suplantación es un asunto de seguridad.",
+   "de": "Bedeutung: Zwei Geräte beanspruchen dieselbe Adresse im Netz, oder eine Adresse hat den Besitzer gewechselt (ARP-Konflikt).\nPrüfen: Ob zwei Geräten dieselbe feste Adresse zugewiesen wurde oder jemand ein anderes Gerät nachahmt (die Details zeigen beide Hardwareadressen). Den Adresskonflikt im Router beheben; eine Nachahmung ist eine Sicherheitsfrage.",
+   "fr": "Signification: Deux appareils revendiquent la même adresse sur le réseau, ou une adresse a changé de propriétaire (conflit ARP).\nÀ vérifier: Si deux appareils ont reçu la même adresse fixe ou si quelqu'un en imite un autre (le détail montre les deux adresses matérielles). Réglez le conflit dans le routeur ; une usurpation est une affaire de sécurité.",
+   "it": "Significato: Due dispositivi rivendicano lo stesso indirizzo nella rete, oppure un indirizzo ha cambiato proprietario (conflitto ARP).\nControlla: Se a due dispositivi è stato assegnato lo stesso indirizzo fisso o se qualcuno ne imita un altro (il dettaglio mostra i due indirizzi hardware). Risolvi il conflitto nel router; un'imitazione è una questione di sicurezza.",
+   "ja": "意味: ネットワーク上で2台の機器が同じアドレスを名乗っているか、アドレスの持ち主が変わりました（ARP の競合）。\n確認: 2台に同じ固定アドレスを割り当てていないか、誰かが別の機器になりすましていないか（詳細に両方のハードウェアアドレスが出ます）を確認してください。重複はルーターで直してください。なりすましはセキュリティ上の問題です。",
+   "zh": "含义: 网络上有两台设备声称使用同一地址，或某地址换了主人（ARP 冲突）。\n检查: 确认是否给两台设备分配了同一固定地址，或有人在冒充另一台设备（详情中有两个硬件地址）。地址冲突请在路由器中修正；冒充属于安全问题。",
+   "pt": "Significa: Dois dispositivos reclamam o mesmo endereço na rede, ou um endereço mudou de dono (conflito ARP).\nVerifique: Se a dois dispositivos foi atribuído o mesmo endereço fixo ou se alguém imita outro (o detalhe mostra os dois endereços físicos). Resolva o conflito no router; uma imitação é um assunto de segurança."
+  },
+  "network_port_opened": {
+   "en": "Means: A device on the network opened a network port it did not have open before.\nCheck: Whether you installed or enabled something on it (a remote desktop, a web server, a camera feature). If you did not, the device may be misconfigured or compromised: update it or disconnect it.",
+   "es": "Significa: Un dispositivo de la red abrió un puerto que antes no tenía abierto.\nRevisa: Si instalaste o activaste algo en él (escritorio remoto, servidor web, una función de la cámara). Si no, el dispositivo puede estar mal configurado o comprometido: actualízalo o desconéctalo.",
+   "de": "Bedeutung: Ein Gerät im Netz hat einen Port geöffnet, der vorher nicht offen war.\nPrüfen: Ob Sie darauf etwas installiert oder aktiviert haben (Fernzugriff, Webserver, eine Kamerafunktion). Wenn nicht, ist das Gerät vielleicht falsch konfiguriert oder kompromittiert: aktualisieren oder trennen.",
+   "fr": "Signification: Un appareil du réseau a ouvert un port qui n'était pas ouvert avant.\nÀ vérifier: Si vous y avez installé ou activé quelque chose (bureau à distance, serveur web, une fonction de la caméra). Sinon, l'appareil est peut-être mal configuré ou compromis : mettez-le à jour ou déconnectez-le.",
+   "it": "Significato: Un dispositivo della rete ha aperto una porta che prima non era aperta.\nControlla: Se hai installato o attivato qualcosa su di esso (desktop remoto, server web, una funzione della telecamera). Altrimenti il dispositivo potrebbe essere configurato male o compromesso: aggiornalo o scollegalo.",
+   "ja": "意味: ネットワーク上の機器が、これまで開いていなかったポートを開きました。\n確認: その機器に何かをインストールまたは有効化したか（リモートデスクトップ、Web サーバー、カメラの機能）を確認してください。身に覚えがなければ設定ミスか侵害の可能性があります。更新するか切り離してください。",
+   "zh": "含义: 网络上的某台设备打开了此前未开放的端口。\n检查: 确认您是否在其上安装或启用了某项功能（远程桌面、网页服务、摄像头功能）。若没有，设备可能配置错误或已被入侵：请更新或断开它。",
+   "pt": "Significa: Um dispositivo da rede abriu uma porta que antes não tinha aberta.\nVerifique: Se instalou ou ativou algo nele (ambiente de trabalho remoto, servidor web, uma função da câmara). Se não, o dispositivo pode estar mal configurado ou comprometido: atualize-o ou desligue-o."
+  },
+  "network_offline": {
+   "en": "Means: The server no longer hears the network node.\nCheck: Its power and its connection to the network, and whether the server and the node are on the same network. While it is silent the devices on the network are not being watched.",
+   "es": "Significa: El servidor ya no oye al nodo de red.\nRevisa: Su alimentación y su conexión a la red, y si el servidor y el nodo están en la misma red. Mientras calle, los dispositivos de la red no se vigilan.",
+   "de": "Bedeutung: Der Server hört den Netzwerkknoten nicht mehr.\nPrüfen: Dessen Stromversorgung und Netzanschluss und ob Server und Knoten im selben Netz sind. Solange er schweigt, werden die Geräte im Netz nicht überwacht.",
+   "fr": "Signification: Le serveur n'entend plus le nœud réseau.\nÀ vérifier: Son alimentation et sa connexion au réseau, et si le serveur et le nœud sont sur le même réseau. Tant qu'il se tait, les appareils du réseau ne sont pas surveillés.",
+   "it": "Significato: Il server non sente più il nodo di rete.\nControlla: La sua alimentazione e il collegamento alla rete, e se server e nodo sono nella stessa rete. Finché tace, i dispositivi della rete non sono sorvegliati.",
+   "ja": "意味: サーバーがネットワークノードから応答を受け取れません。\n確認: 電源とネットワークへの接続、サーバーとノードが同じネットワークにあるかを確認してください。応答がない間、ネットワーク上の機器は監視されていません。",
+   "zh": "含义: 服务器收不到网络节点的信息。\n检查: 检查它的供电和网络连接，以及服务器与节点是否在同一网络。它沉默期间，网络中的设备处于无人监视状态。",
+   "pt": "Significa: O servidor já não ouve o nó de rede.\nVerifique: A sua alimentação e a ligação à rede, e se o servidor e o nó estão na mesma rede. Enquanto estiver em silêncio, os dispositivos da rede não são vigiados."
+  },
+  "network_watched_online": {
+   "en": "Means: A device you asked to watch has come online.\nCheck: It is information: the device you marked as watched is now on the network. Nothing is wrong unless it should not be there at this time.",
+   "es": "Significa: Un dispositivo que pediste vigilar se ha conectado.\nRevisa: Es información: el dispositivo que marcaste como vigilado está ahora en la red. No hay ningún fallo, salvo que no debiera estar a esta hora.",
+   "de": "Bedeutung: Ein Gerät, das Sie beobachten lassen wollten, ist online gegangen.\nPrüfen: Das ist eine Information: Das als beobachtet markierte Gerät ist jetzt im Netz. Nichts ist falsch, außer es sollte zu dieser Zeit nicht da sein.",
+   "fr": "Signification: Un appareil que vous avez demandé de surveiller est apparu en ligne.\nÀ vérifier: C'est une information : l'appareil marqué comme surveillé est maintenant sur le réseau. Rien d'anormal, sauf s'il ne devrait pas être là à ce moment.",
+   "it": "Significato: Un dispositivo che hai chiesto di sorvegliare è andato online.\nControlla: È un'informazione: il dispositivo segnato come sorvegliato è ora in rete. Non c'è nulla di sbagliato, a meno che non dovrebbe esserci in questo momento.",
+   "ja": "意味: 監視を指定した機器がオンラインになりました。\n確認: これは情報です。監視対象にした機器がネットワークに現れました。この時間にいるはずがない場合を除き、問題ではありません。",
+   "zh": "含义: 您指定监视的设备已上线。\n检查: 这是一条通知：被标记为监视的设备现已接入网络。除非此时它不应出现，否则没有问题。",
+   "pt": "Significa: Um dispositivo que pediu para vigiar ficou online.\nVerifique: É informação: o dispositivo marcado como vigiado está agora na rede. Não há problema, a menos que não devesse estar a esta hora."
+  },
+  "duress_disarm": {
+   "en": "Means: The alarm was disarmed with the duress code: the person may be forced to disarm it.\nCheck: Do not call the person or show anything that tells them you know. Look at the cameras and call the police, saying that a duress code was used. This alarm is silent on purpose.",
+   "es": "Significa: La alarma se desarmó con el código de coacción: puede que obliguen a la persona a desarmarla.\nRevisa: No llames a la persona ni muestres nada que le indique que lo sabes. Mira las cámaras y llama a la policía diciendo que se usó un código de coacción. Esta alarma es silenciosa a propósito.",
+   "de": "Bedeutung: Die Alarmanlage wurde mit dem Zwangscode unscharf geschaltet: Die Person wird möglicherweise gezwungen.\nPrüfen: Die Person nicht anrufen und nichts zeigen, was ihr verrät, dass Sie es wissen. Kameras ansehen und die Polizei rufen mit dem Hinweis, dass ein Zwangscode benutzt wurde. Dieser Alarm ist absichtlich lautlos.",
+   "fr": "Signification: L'alarme a été désarmée avec le code de contrainte : la personne est peut-être forcée de la désarmer.\nÀ vérifier: N'appelez pas la personne et ne montrez rien qui lui indique que vous le savez. Regardez les caméras et appelez la police en précisant qu'un code de contrainte a été utilisé. Cette alarme est silencieuse volontairement.",
+   "it": "Significato: L'allarme è stato disinserito con il codice di coercizione: la persona potrebbe essere costretta a farlo.\nControlla: Non chiamare la persona e non mostrare nulla che le faccia capire che lo sai. Guarda le telecamere e chiama la polizia dicendo che è stato usato un codice di coercizione. Questo allarme è silenzioso di proposito.",
+   "ja": "意味: 強要コードでアラームが解除されました。本人が強制されている可能性があります。\n確認: 本人に電話したり、気づいたと分かる表示をしたりしないでください。カメラを見て、強要コードが使われたと伝えて警察に通報してください。このアラームはわざと無音です。",
+   "zh": "含义: 警报被胁迫码撤防：当事人可能是被迫撤防。\n检查: 不要给当事人打电话，也不要显示任何让对方知道您已察觉的内容。查看摄像头，并报警说明使用了胁迫码。此警报特意设为静音。",
+   "pt": "Significa: O alarme foi desarmado com o código de coação: a pessoa pode estar obrigada a desarmá-lo.\nVerifique: Não ligue à pessoa nem mostre nada que lhe indique que sabe. Veja as câmaras e ligue à polícia dizendo que foi usado um código de coação. Este alarme é silencioso de propósito."
+  },
+  "alarm_sounding": {
+   "en": "Means: The siren of an alarm panel is sounding.\nCheck: Why it started (the alarms listed with it) and the cameras. If it is a real alarm, call for help. To stop it, disarm with your code once you know it is safe; a false alarm can be marked as such.",
+   "es": "Significa: La sirena de una central de alarma está sonando.\nRevisa: Por qué empezó (las alarmas listadas con ella) y las cámaras. Si es una alarma real, pide ayuda. Para pararla, desarma con tu código cuando sepas que es seguro; una falsa alarma se puede marcar como tal.",
+   "de": "Bedeutung: Die Sirene einer Alarmzentrale heult.\nPrüfen: Warum sie angegangen ist (die dazu aufgeführten Alarme) und die Kameras. Bei einem echten Alarm Hilfe rufen. Zum Beenden mit dem Code unscharf schalten, sobald es sicher ist; ein Fehlalarm lässt sich als solcher markieren.",
+   "fr": "Signification: La sirène d'une centrale d'alarme sonne.\nÀ vérifier: Pourquoi elle s'est déclenchée (les alarmes listées avec elle) et les caméras. Si l'alarme est réelle, appelez de l'aide. Pour l'arrêter, désarmez avec votre code quand vous savez que c'est sûr ; une fausse alarme peut être marquée comme telle.",
+   "it": "Significato: La sirena di una centrale d'allarme sta suonando.\nControlla: Perché è partita (gli allarmi elencati con essa) e le telecamere. Se è un allarme reale, chiedi aiuto. Per fermarla, disinserisci con il tuo codice quando sai che è sicuro; un falso allarme si può segnare come tale.",
+   "ja": "意味: 警報パネルのサイレンが鳴っています。\n確認: 鳴り始めた原因（一緒に表示されるアラーム）とカメラを確認してください。本物なら助けを呼んでください。安全が確認できたらコードで解除して止めます。誤報は誤報として記録できます。",
+   "zh": "含义: 报警主机的警笛正在鸣响。\n检查: 查看触发原因（与其一同列出的警报）和摄像头。若是真实警报，请呼叫救援。确认安全后用您的密码撤防即可停止；误报可标记为误报。",
+   "pt": "Significa: A sirene de uma central de alarme está a tocar.\nVerifique: Porque começou (os alarmes listados com ela) e as câmaras. Se for um alarme real, peça ajuda. Para a parar, desarme com o seu código quando souber que é seguro; um falso alarme pode ser marcado como tal."
+  },
+  "alarm_tamper": {
+   "en": "Means: The alarm panel itself was opened or moved (its own anti-tamper contact).\nCheck: Whether it was you (maintenance). If not, someone is interfering with the panel: check the cameras and the panel, and call the police if anything looks forced.",
+   "es": "Significa: La propia central de alarma fue abierta o movida (su contacto antisabotaje).\nRevisa: Si fuiste tú (mantenimiento). Si no, alguien manipula la central: mira las cámaras y la central, y llama a la policía si algo parece forzado.",
+   "de": "Bedeutung: Die Alarmzentrale selbst wurde geöffnet oder bewegt (ihr eigener Sabotagekontakt).\nPrüfen: Ob Sie es waren (Wartung). Wenn nicht, macht sich jemand an der Zentrale zu schaffen: Kameras und Zentrale prüfen und die Polizei rufen, wenn etwas aufgebrochen wirkt.",
+   "fr": "Signification: La centrale d'alarme elle-même a été ouverte ou déplacée (son contact anti-sabotage).\nÀ vérifier: Si c'était vous (maintenance). Sinon, quelqu'un manipule la centrale : regardez les caméras et la centrale, et appelez la police si quelque chose semble forcé.",
+   "it": "Significato: La centrale d'allarme stessa è stata aperta o spostata (il suo contatto antimanomissione).\nControlla: Se sei stato tu (manutenzione). Altrimenti qualcuno manomette la centrale: guarda le telecamere e la centrale, e chiama la polizia se qualcosa sembra forzato.",
+   "ja": "意味: 警報パネル自体が開けられたか動かされました（パネルの改ざん検知接点）。\n確認: 自分（保守）かを確認してください。違う場合は誰かがパネルを触っています。カメラとパネルを確認し、こじ開けられた形跡があれば警察に通報してください。",
+   "zh": "含义: 报警主机本身被打开或移动（其自身的防拆触点）。\n检查: 确认是不是您自己（维护）。若不是，说明有人在动主机：查看摄像头和主机，若有被撬迹象请报警。",
+   "pt": "Significa: A própria central de alarme foi aberta ou movida (o seu contacto antissabotagem).\nVerifique: Se foi por si (manutenção). Se não, alguém está a mexer na central: veja as câmaras e a central e ligue à polícia se algo parecer forçado."
+  },
+  "alarm_zone_trouble": {
+   "en": "Means: A zone of the alarm panel has a wiring fault (open or short circuit).\nCheck: The wire and the contact of that zone: a loose terminal, a cut or crushed cable, water in a joint. While it is in fault the zone does not protect that opening.",
+   "es": "Significa: Una zona de la central de alarma tiene una avería de cableado (circuito abierto o cortocircuito).\nRevisa: El cable y el contacto de esa zona: un borne flojo, un cable cortado o aplastado, agua en un empalme. Mientras esté en avería la zona no protege ese acceso.",
+   "de": "Bedeutung: Eine Zone der Alarmzentrale hat einen Verdrahtungsfehler (offener Stromkreis oder Kurzschluss).\nPrüfen: Die Leitung und den Kontakt dieser Zone: eine lose Klemme, ein durchtrenntes oder gequetschtes Kabel, Wasser in einer Verbindung. Solange die Störung besteht, schützt die Zone diese Öffnung nicht.",
+   "fr": "Signification: Une zone de la centrale d'alarme a un défaut de câblage (circuit ouvert ou court-circuit).\nÀ vérifier: Le fil et le contact de cette zone : une borne desserrée, un câble coupé ou écrasé, de l'eau dans une jonction. Tant qu'elle est en défaut, la zone ne protège pas cet accès.",
+   "it": "Significato: Una zona della centrale d'allarme ha un guasto di cablaggio (circuito aperto o cortocircuito).\nControlla: Il filo e il contatto di quella zona: un morsetto lento, un cavo tagliato o schiacciato, acqua in una giunzione. Finché è in guasto la zona non protegge quell'accesso.",
+   "ja": "意味: 警報パネルのゾーンに配線の不具合（開放または短絡）があります。\n確認: そのゾーンの配線と接点（緩んだ端子、切断や潰れたケーブル、接続部の水）を確認してください。不具合の間、そのゾーンはその開口部を守りません。",
+   "zh": "含义: 报警主机的某个防区接线故障（开路或短路）。\n检查: 检查该防区的线缆和触点：松动的端子、被剪断或压坏的线、接头进水。故障期间，该防区不保护那处出入口。",
+   "pt": "Significa: Uma zona da central de alarme tem uma avaria de cablagem (circuito aberto ou curto-circuito).\nVerifique: O fio e o contacto dessa zona: um terminal solto, um cabo cortado ou esmagado, água numa junção. Enquanto estiver em avaria, a zona não protege essa abertura."
+  },
+  "alarm_locked_out": {
+   "en": "Means: The alarm panel locked the keypad after too many wrong codes.\nCheck: Who tried: if it was you, wait for the lock to end; if not, someone is guessing the code, so look at the cameras. The panel unlocks by itself after a while.",
+   "es": "Significa: La central de alarma bloqueó el teclado tras demasiados códigos erróneos.\nRevisa: Quién lo intentó: si fuiste tú, espera a que termine el bloqueo; si no, alguien está adivinando el código, así que mira las cámaras. La central se desbloquea sola pasado un tiempo.",
+   "de": "Bedeutung: Die Alarmzentrale hat das Tastenfeld nach zu vielen falschen Codes gesperrt.\nPrüfen: Wer es versucht hat: Waren Sie es, warten, bis die Sperre endet; sonst rät jemand den Code, also die Kameras ansehen. Die Zentrale entsperrt sich nach einer Weile selbst.",
+   "fr": "Signification: La centrale d'alarme a verrouillé le clavier après trop de codes erronés.\nÀ vérifier: Qui a essayé : si c'était vous, attendez la fin du verrouillage ; sinon, quelqu'un devine le code, regardez donc les caméras. La centrale se déverrouille seule au bout d'un moment.",
+   "it": "Significato: La centrale d'allarme ha bloccato la tastiera dopo troppi codici errati.\nControlla: Chi ha provato: se sei stato tu, aspetta la fine del blocco; altrimenti qualcuno sta indovinando il codice, quindi guarda le telecamere. La centrale si sblocca da sola dopo un po'.",
+   "ja": "意味: 間違ったコードが続いたため、警報パネルがキーパッドをロックしました。\n確認: 誰が試したかを確認してください。自分ならロックが終わるまで待ちます。違うなら誰かがコードを推測しているので、カメラを見てください。しばらくすると自動で解除されます。",
+   "zh": "含义: 输错密码次数过多，报警主机锁定了键盘。\n检查: 确认是谁在尝试：若是您自己，等待锁定结束；若不是，说明有人在猜密码，请查看摄像头。主机一段时间后会自动解锁。",
+   "pt": "Significa: A central de alarme bloqueou o teclado após demasiados códigos errados.\nVerifique: Quem tentou: se foi por si, espere que o bloqueio termine; se não, alguém está a adivinhar o código, por isso veja as câmaras. A central desbloqueia-se sozinha passado algum tempo."
+  },
+  "alarm_offline": {
+   "en": "Means: The server no longer hears this alarm panel.\nCheck: Its power (and its battery), its Wi-Fi or network cable, and whether the server and the panel are on the same network. The panel keeps protecting the house on its own, but the server cannot see or command it.",
+   "es": "Significa: El servidor ya no oye a esta central de alarma.\nRevisa: Su alimentación (y su batería), su Wi-Fi o cable de red y si el servidor y la central están en la misma red. La central sigue protegiendo la casa por su cuenta, pero el servidor no puede verla ni mandarla.",
+   "de": "Bedeutung: Der Server hört diese Alarmzentrale nicht mehr.\nPrüfen: Deren Stromversorgung (und Akku), WLAN oder Netzwerkkabel und ob Server und Zentrale im selben Netz sind. Die Zentrale schützt das Haus weiter allein, aber der Server kann sie weder sehen noch steuern.",
+   "fr": "Signification: Le serveur n'entend plus cette centrale d'alarme.\nÀ vérifier: Son alimentation (et sa batterie), son Wi-Fi ou câble réseau et si le serveur et la centrale sont sur le même réseau. La centrale continue de protéger la maison seule, mais le serveur ne peut ni la voir ni la commander.",
+   "it": "Significato: Il server non sente più questa centrale d'allarme.\nControlla: La sua alimentazione (e batteria), il Wi-Fi o il cavo di rete e se server e centrale sono nella stessa rete. La centrale continua a proteggere la casa da sola, ma il server non può vederla né comandarla.",
+   "ja": "意味: サーバーがこの警報パネルから応答を受け取れません。\n確認: 電源（とバッテリー）、Wi-Fi またはネットワークケーブル、サーバーとパネルが同じネットワークにあるかを確認してください。パネルは単独で家を守り続けますが、サーバーからは見えず操作もできません。",
+   "zh": "含义: 服务器收不到该报警主机的信息。\n检查: 检查它的供电（和电池）、Wi-Fi 或网线，以及服务器与主机是否在同一网络。主机仍会独立保护房屋，但服务器看不到也无法控制它。",
+   "pt": "Significa: O servidor já não ouve esta central de alarme.\nVerifique: A sua alimentação (e bateria), o seu Wi-Fi ou cabo de rede e se o servidor e a central estão na mesma rede. A central continua a proteger a casa por si, mas o servidor não a pode ver nem comandar."
+  },
+  "node_low_memory": {
+   "en": "Means: A node is running out of free memory.\nCheck: It may restart soon. Note when it started and whether it keeps going down; if it repeats, update the node's firmware or reduce what it has to do (fewer connections, a lower report rate).",
+   "es": "Significa: Un nodo se está quedando sin memoria libre.\nRevisa: Puede reiniciarse pronto. Anota cuándo empezó y si sigue bajando; si se repite, actualiza el firmware del nodo o reduce lo que tiene que hacer (menos conexiones, menor frecuencia de informes).",
+   "de": "Bedeutung: Einem Knoten geht der freie Speicher aus.\nPrüfen: Er könnte bald neu starten. Notieren, wann es begann und ob es weiter sinkt; wiederholt es sich, die Firmware des Knotens aktualisieren oder seine Aufgaben verringern (weniger Verbindungen, niedrigere Meldefrequenz).",
+   "fr": "Signification: Un nœud manque bientôt de mémoire libre.\nÀ vérifier: Il peut redémarrer bientôt. Notez quand cela a commencé et si cela continue de baisser ; si cela se répète, mettez à jour le firmware du nœud ou réduisez sa charge (moins de connexions, fréquence de rapport plus basse).",
+   "it": "Significato: Un nodo sta finendo la memoria libera.\nControlla: Potrebbe riavviarsi presto. Annota quando è iniziato e se continua a scendere; se si ripete, aggiorna il firmware del nodo o riduci ciò che deve fare (meno connessioni, frequenza di report più bassa).",
+   "ja": "意味: ノードの空きメモリが少なくなっています。\n確認: まもなく再起動する可能性があります。いつから始まり、下がり続けているかを控えてください。繰り返す場合は、ノードのファームウェアを更新するか、負荷を減らしてください（接続を減らす、報告頻度を下げる）。",
+   "zh": "含义: 节点的可用内存即将耗尽。\n检查: 它可能很快重启。记下开始时间以及是否持续下降；若反复出现，请更新节点固件或减轻其负担（减少连接、降低上报频率）。",
+   "pt": "Significa: Um nó está a ficar sem memória livre.\nVerifique: Pode reiniciar em breve. Anote quando começou e se continua a descer; se se repetir, atualize o firmware do nó ou reduza o que ele tem de fazer (menos ligações, menor frequência de relatórios)."
+  },
+  "node_frequent_resets": {
+   "en": "Means: A node restarts again and again.\nCheck: Its power supply (a weak or noisy one is the usual cause), its cable and the temperature. The reset reason is in the node's own page and its log. Replace the supply first, then update the firmware.",
+   "es": "Significa: Un nodo se reinicia una y otra vez.\nRevisa: Su fuente de alimentación (una débil o con ruido es la causa habitual), su cable y la temperatura. El motivo del reinicio está en la página del propio nodo y en su registro. Cambia primero la fuente y luego actualiza el firmware.",
+   "de": "Bedeutung: Ein Knoten startet immer wieder neu.\nPrüfen: Dessen Netzteil (ein schwaches oder verrauschtes ist die übliche Ursache), sein Kabel und die Temperatur. Der Grund des Neustarts steht auf der Seite des Knotens und in seinem Protokoll. Zuerst das Netzteil tauschen, dann die Firmware aktualisieren.",
+   "fr": "Signification: Un nœud redémarre sans cesse.\nÀ vérifier: Son alimentation (une alimentation faible ou bruitée est la cause habituelle), son câble et la température. La raison du redémarrage figure dans la page du nœud et dans son journal. Changez d'abord l'alimentation, puis mettez à jour le firmware.",
+   "it": "Significato: Un nodo si riavvia continuamente.\nControlla: Il suo alimentatore (uno debole o rumoroso è la causa abituale), il suo cavo e la temperatura. Il motivo del riavvio è nella pagina del nodo e nel suo registro. Cambia prima l'alimentatore, poi aggiorna il firmware.",
+   "ja": "意味: ノードが何度も再起動しています。\n確認: 電源（弱い、またはノイズの多い電源が典型的な原因）、ケーブル、温度を確認してください。再起動の理由はノードのページとログにあります。まず電源を交換し、次にファームウェアを更新してください。",
+   "zh": "含义: 节点不断重启。\n检查: 检查它的电源（电源功率不足或有噪声是常见原因）、线缆和温度。重启原因记录在节点自身的页面和日志里。先更换电源，再更新固件。",
+   "pt": "Significa: Um nó reinicia-se vezes sem conta.\nVerifique: A sua fonte de alimentação (uma fraca ou com ruído é a causa habitual), o seu cabo e a temperatura. O motivo do reinício está na página do próprio nó e no seu registo. Mude primeiro a fonte e depois atualize o firmware."
+  },
+  "node_link_flapping": {
+   "en": "Means: A node's connection keeps dropping and coming back.\nCheck: The Wi-Fi signal where it is (a weak signal or interference is the usual cause), the router's channel and the node's power. Move it closer, add an access point or use a cable.",
+   "es": "Significa: La conexión de un nodo se corta y vuelve una y otra vez.\nRevisa: La señal Wi-Fi donde está (una señal débil o interferencias son la causa habitual), el canal del router y la alimentación del nodo. Acércalo, añade un punto de acceso o usa cable.",
+   "de": "Bedeutung: Die Verbindung eines Knotens bricht immer wieder ab und kommt zurück.\nPrüfen: Das WLAN-Signal am Standort (ein schwaches Signal oder Störungen sind die übliche Ursache), den Kanal des Routers und die Stromversorgung des Knotens. Näher heranrücken, einen Access Point ergänzen oder ein Kabel nutzen.",
+   "fr": "Signification: La liaison d'un nœud tombe et revient sans cesse.\nÀ vérifier: Le signal Wi-Fi à son emplacement (un signal faible ou des interférences sont la cause habituelle), le canal du routeur et l'alimentation du nœud. Rapprochez-le, ajoutez un point d'accès ou utilisez un câble.",
+   "it": "Significato: Il collegamento di un nodo cade e torna in continuazione.\nControlla: Il segnale Wi-Fi dove si trova (un segnale debole o interferenze sono la causa abituale), il canale del router e l'alimentazione del nodo. Avvicinalo, aggiungi un access point o usa un cavo.",
+   "ja": "意味: ノードの接続が切れては戻ることを繰り返しています。\n確認: 設置場所の Wi-Fi 電波（弱い電波や干渉が典型的な原因）、ルーターのチャンネル、ノードの電源を確認してください。近づける、アクセスポイントを追加する、有線にする、のいずれかを試してください。",
+   "zh": "含义: 节点的连接不断掉线又恢复。\n检查: 检查其所在位置的 Wi-Fi 信号（信号弱或有干扰是常见原因）、路由器信道和节点供电。可将其移近、增加接入点，或改用网线。",
+   "pt": "Significa: A ligação de um nó cai e volta vezes sem conta.\nVerifique: O sinal Wi-Fi onde está (um sinal fraco ou interferências são a causa habitual), o canal do router e a alimentação do nó. Aproxime-o, acrescente um ponto de acesso ou use cabo."
+  },
+  "node_weak_signal": {
+   "en": "Means: A node's Wi-Fi signal is weak.\nCheck: Where it is placed: metal, thick walls and distance weaken the signal. Move the node or the router, or add an access point, before the link starts to drop.",
+   "es": "Significa: La señal Wi-Fi de un nodo es débil.\nRevisa: Dónde está colocado: el metal, los muros gruesos y la distancia debilitan la señal. Mueve el nodo o el router, o añade un punto de acceso, antes de que el enlace empiece a caerse.",
+   "de": "Bedeutung: Das WLAN-Signal eines Knotens ist schwach.\nPrüfen: Wo er steht: Metall, dicke Wände und Entfernung schwächen das Signal. Knoten oder Router versetzen oder einen Access Point ergänzen, bevor die Verbindung abbricht.",
+   "fr": "Signification: Le signal Wi-Fi d'un nœud est faible.\nÀ vérifier: Où il est placé : le métal, les murs épais et la distance affaiblissent le signal. Déplacez le nœud ou le routeur, ou ajoutez un point d'accès, avant que la liaison ne tombe.",
+   "it": "Significato: Il segnale Wi-Fi di un nodo è debole.\nControlla: Dove è collocato: metallo, muri spessi e distanza indeboliscono il segnale. Sposta il nodo o il router, o aggiungi un access point, prima che il collegamento cominci a cadere.",
+   "ja": "意味: ノードの Wi-Fi 電波が弱くなっています。\n確認: 設置場所を確認してください。金属、厚い壁、距離は電波を弱めます。接続が切れ始める前に、ノードかルーターを移動するか、アクセスポイントを追加してください。",
+   "zh": "含义: 节点的 Wi-Fi 信号较弱。\n检查: 检查安装位置：金属、厚墙和距离都会削弱信号。在连接开始掉线之前，移动节点或路由器，或增加接入点。",
+   "pt": "Significa: O sinal Wi-Fi de um nó é fraco.\nVerifique: Onde está colocado: o metal, as paredes grossas e a distância enfraquecem o sinal. Mude o nó ou o router de sítio, ou acrescente um ponto de acesso, antes de a ligação começar a cair."
+  },
+  "node_sensor_bluetooth_open": {
+   "en": "Means: A radar sensor's own Bluetooth is open, so anyone nearby could connect to it.\nCheck: Close it again: it should only be open while you configure the sensor. Leave it open and a person within range can change its settings.",
+   "es": "Significa: El Bluetooth propio de un sensor de radar está abierto: cualquiera cerca podría conectarse.\nRevisa: Ciérralo de nuevo: solo debe estar abierto mientras configuras el sensor. Si lo dejas abierto, alguien dentro del alcance puede cambiar sus ajustes.",
+   "de": "Bedeutung: Das eigene Bluetooth eines Radarsensors ist offen, sodass sich jeder in der Nähe verbinden könnte.\nPrüfen: Wieder schließen: Es sollte nur während der Einrichtung des Sensors offen sein. Bleibt es offen, kann jemand in Reichweite seine Einstellungen ändern.",
+   "fr": "Signification: Le Bluetooth propre d'un capteur radar est ouvert : n'importe qui à proximité pourrait s'y connecter.\nÀ vérifier: Refermez-le : il ne doit être ouvert que pendant la configuration du capteur. Laissé ouvert, une personne à portée peut modifier ses réglages.",
+   "it": "Significato: Il Bluetooth proprio di un sensore radar è aperto: chiunque vicino potrebbe collegarsi.\nControlla: Richiudilo: deve restare aperto solo durante la configurazione del sensore. Se lo lasci aperto, una persona nel raggio può cambiarne le impostazioni.",
+   "ja": "意味: レーダーセンサー自身の Bluetooth が開いており、近くの誰でも接続できる状態です。\n確認: 再び閉じてください。センサーの設定中だけ開けておくものです。開けたままだと、届く範囲の人が設定を変更できます。",
+   "zh": "含义: 雷达传感器自带的蓝牙处于开启状态，附近任何人都可能连接。\n检查: 请重新关闭：只应在配置传感器期间开启。若一直开着，范围内的人就能更改其设置。",
+   "pt": "Significa: O Bluetooth do próprio sensor de radar está aberto, pelo que qualquer pessoa por perto se poderia ligar.\nVerifique: Feche-o de novo: só deve estar aberto enquanto configura o sensor. Se o deixar aberto, uma pessoa ao alcance pode alterar as suas definições."
+  },
+  "node_radar_masked": {
+   "en": "Means: A radar sensor seems covered or blocked: it sees much less than before.\nCheck: Whether something was placed in front of it (a box, a plant, paint, a cover) or the sensor was turned. A covered sensor stops protecting its area; clear it and check the area.",
+   "es": "Significa: Un sensor de radar parece tapado o bloqueado: ve mucho menos que antes.\nRevisa: Si se colocó algo delante (una caja, una planta, pintura, una cubierta) o si el sensor se giró. Un sensor tapado deja de proteger su zona; despéjalo y revisa la zona.",
+   "de": "Bedeutung: Ein Radarsensor scheint abgedeckt oder blockiert: Er sieht viel weniger als zuvor.\nPrüfen: Ob etwas davor gestellt wurde (ein Karton, eine Pflanze, Farbe, eine Abdeckung) oder der Sensor gedreht wurde. Ein abgedeckter Sensor schützt seinen Bereich nicht mehr; freimachen und den Bereich prüfen.",
+   "fr": "Signification: Un capteur radar semble couvert ou bloqué : il voit beaucoup moins qu'avant.\nÀ vérifier: Si quelque chose a été placé devant (un carton, une plante, de la peinture, un cache) ou si le capteur a été tourné. Un capteur couvert ne protège plus sa zone ; dégagez-le et vérifiez la zone.",
+   "it": "Significato: Un sensore radar sembra coperto o bloccato: vede molto meno di prima.\nControlla: Se è stato messo qualcosa davanti (una scatola, una pianta, vernice, una copertura) o se il sensore è stato girato. Un sensore coperto smette di proteggere la sua zona; liberalo e controlla la zona.",
+   "ja": "意味: レーダーセンサーが覆われたか遮られているようです。以前よりはるかに見える範囲が狭くなっています。\n確認: 前に何か（箱、植物、塗料、カバー）が置かれていないか、センサーの向きが変わっていないかを確認してください。覆われたセンサーはそのエリアを守れません。障害物を取り除き、エリアを確認してください。",
+   "zh": "含义: 雷达传感器似乎被遮挡：探测范围比以前小得多。\n检查: 检查前方是否放了东西（纸箱、植物、油漆、遮盖物）或传感器是否被转动。被遮挡的传感器无法保护其区域；请清除遮挡并检查该区域。",
+   "pt": "Significa: Um sensor de radar parece tapado ou bloqueado: vê muito menos do que antes.\nVerifique: Se foi colocado algo à frente (uma caixa, uma planta, tinta, uma cobertura) ou se o sensor foi rodado. Um sensor tapado deixa de proteger a sua zona; liberte-o e verifique a zona."
+  },
+  "node_wifi_jam": {
+   "en": "Means: A node saw its Wi-Fi blocked in a way that looks like jamming.\nCheck: Whether several devices lost Wi-Fi at the same moment, and the cameras. Jamming can come before a break-in: check the doors and windows, and use a wired link if you have one.",
+   "es": "Significa: Un nodo vio bloqueado su Wi-Fi de una forma que parece un inhibidor.\nRevisa: Si varios dispositivos perdieron el Wi-Fi a la vez, y las cámaras. Un inhibidor puede preceder a una entrada: revisa puertas y ventanas y usa un enlace por cable si lo tienes.",
+   "de": "Bedeutung: Ein Knoten sah sein WLAN so gestört, dass es nach einem Störsender aussieht.\nPrüfen: Ob mehrere Geräte gleichzeitig das WLAN verloren haben, und die Kameras. Ein Störsender kann einem Einbruch vorausgehen: Türen und Fenster prüfen und, falls vorhanden, eine Kabelverbindung nutzen.",
+   "fr": "Signification: Un nœud a vu son Wi-Fi bloqué d'une façon qui ressemble à du brouillage.\nÀ vérifier: Si plusieurs appareils ont perdu le Wi-Fi au même moment, et les caméras. Un brouilleur peut précéder une effraction : vérifiez portes et fenêtres et utilisez une liaison filaire si vous en avez une.",
+   "it": "Significato: Un nodo ha visto il proprio Wi-Fi bloccato in modo che sembra un jammer.\nControlla: Se più dispositivi hanno perso il Wi-Fi nello stesso momento, e le telecamere. Un jammer può precedere un'effrazione: controlla porte e finestre e usa un collegamento via cavo se ce l'hai.",
+   "ja": "意味: ノードが、妨害（ジャミング）のような Wi-Fi の遮断を検出しました。\n確認: 複数の機器が同時に Wi-Fi を失っていないか、カメラを確認してください。ジャミングは侵入の前触れのことがあります。ドアと窓を確認し、有線接続があればそれを使ってください。",
+   "zh": "含义: 节点发现其 Wi-Fi 被阻断，类似遭到干扰（信号屏蔽）。\n检查: 确认是否有多台设备同时失去 Wi-Fi，并查看摄像头。干扰可能发生在入侵之前：检查门窗，若有有线连接请使用。",
+   "pt": "Significa: Um nó viu o seu Wi-Fi bloqueado de uma forma que parece um inibidor de sinal.\nVerifique: Se vários dispositivos perderam o Wi-Fi ao mesmo tempo, e as câmaras. Um inibidor pode preceder uma intrusão: verifique portas e janelas e use uma ligação por cabo se a tiver."
+  },
+  "network_dns_stale": {
+   "en": "Means: The names of the network (DNS) are answered with old data or not at all.\nCheck: The router's DNS settings and whether a public DNS (for example 1.1.1.1 or 9.9.9.9) is reachable. Pages by name may fail while addresses still work.",
+   "es": "Significa: Los nombres de la red (DNS) se responden con datos viejos o no se responden.\nRevisa: La configuración DNS del router y si un DNS público (por ejemplo 1.1.1.1 o 9.9.9.9) es alcanzable. Las páginas por nombre pueden fallar mientras las direcciones siguen funcionando.",
+   "de": "Bedeutung: Die Namen im Netz (DNS) werden mit alten Daten oder gar nicht beantwortet.\nPrüfen: Die DNS-Einstellungen des Routers und ob ein öffentlicher DNS (zum Beispiel 1.1.1.1 oder 9.9.9.9) erreichbar ist. Seiten per Name können scheitern, während Adressen noch funktionieren.",
+   "fr": "Signification: Les noms du réseau (DNS) reçoivent des réponses périmées ou aucune réponse.\nÀ vérifier: Les réglages DNS du routeur et si un DNS public (par exemple 1.1.1.1 ou 9.9.9.9) est joignable. Les pages par nom peuvent échouer alors que les adresses fonctionnent encore.",
+   "it": "Significato: I nomi della rete (DNS) ricevono risposte vecchie o nessuna risposta.\nControlla: Le impostazioni DNS del router e se un DNS pubblico (per esempio 1.1.1.1 o 9.9.9.9) è raggiungibile. Le pagine per nome possono fallire mentre gli indirizzi funzionano ancora.",
+   "ja": "意味: ネットワークの名前解決（DNS）が古いデータで応答するか、応答しません。\n確認: ルーターの DNS 設定と、公開 DNS（例：1.1.1.1 や 9.9.9.9）に届くかを確認してください。アドレスでは使えても、名前でのアクセスが失敗することがあります。",
+   "zh": "含义: 网络的域名解析（DNS）返回过期数据或无应答。\n检查: 检查路由器的 DNS 设置，以及公共 DNS（例如 1.1.1.1 或 9.9.9.9）能否访问。按名称访问可能失败，而按地址仍可用。",
+   "pt": "Significa: Os nomes da rede (DNS) são respondidos com dados antigos ou não são respondidos.\nVerifique: As definições DNS do router e se um DNS público (por exemplo 1.1.1.1 ou 9.9.9.9) é alcançável. As páginas por nome podem falhar enquanto os endereços ainda funcionam."
+  },
+  "mode_panel_sync_failed": {
+   "en": "Means: An alarm panel did not confirm the arming mode: the server defends the mode, the panel may not.\nCheck: Which panel and why (the detail lists each answer): a profile that does not exist, a panel that is offline or not known, or one that refused. Fix it in the modes page and arm again; until then that panel may be less protected.",
+   "es": "Significa: Una central de alarma no confirmó el modo de armado: el servidor defiende el modo, la central puede que no.\nRevisa: Qué central y por qué (el detalle lista cada respuesta): un perfil que no existe, una central sin conexión o desconocida, o una que rechazó. Corrígelo en la página de modos y arma de nuevo; hasta entonces esa central puede estar menos protegida.",
+   "de": "Bedeutung: Eine Alarmzentrale hat den Scharfschaltmodus nicht bestätigt: Der Server verteidigt den Modus, die Zentrale vielleicht nicht.\nPrüfen: Welche Zentrale und warum (die Details nennen jede Antwort): ein Profil, das es nicht gibt, eine Zentrale offline oder unbekannt oder eine, die abgelehnt hat. Auf der Seite der Modi beheben und erneut scharf schalten; bis dahin ist diese Zentrale womöglich schlechter geschützt.",
+   "fr": "Signification: Une centrale d'alarme n'a pas confirmé le mode d'armement : le serveur défend le mode, la centrale peut-être pas.\nÀ vérifier: Quelle centrale et pourquoi (le détail liste chaque réponse) : un profil qui n'existe pas, une centrale hors ligne ou inconnue, ou une qui a refusé. Corrigez dans la page des modes et armez de nouveau ; d'ici là cette centrale est peut-être moins protégée.",
+   "it": "Significato: Una centrale d'allarme non ha confermato la modalità di inserimento: il server difende la modalità, la centrale forse no.\nControlla: Quale centrale e perché (il dettaglio elenca ogni risposta): un profilo che non esiste, una centrale offline o sconosciuta, o una che ha rifiutato. Correggi nella pagina delle modalità e inserisci di nuovo; fino ad allora quella centrale potrebbe essere meno protetta.",
+   "ja": "意味: 警報パネルが警戒モードを確認しませんでした。サーバーはそのモードを守っていますが、パネルは守っていないかもしれません。\n確認: どのパネルで、なぜか（詳細に各応答があります）を確認してください：存在しないプロファイル、オフラインまたは未知のパネル、拒否したパネル。モードのページで直して再度警戒してください。それまでそのパネルは保護が弱い可能性があります。",
+   "zh": "含义: 某台报警主机没有确认布防模式：服务器按该模式守护，但主机可能没有。\n检查: 查看是哪台主机以及原因（详情列出了每个应答）：配置文件不存在、主机离线或未知，或被其拒绝。在“模式”页面修正后重新布防；在此之前该主机的保护可能较弱。",
+   "pt": "Significa: Uma central de alarme não confirmou o modo de armação: o servidor defende o modo, a central pode não o fazer.\nVerifique: Que central e porquê (o detalhe lista cada resposta): um perfil que não existe, uma central offline ou desconhecida, ou uma que recusou. Corrija na página dos modos e arme de novo; até lá essa central pode estar menos protegida."
   }
  }
 }
