@@ -96,6 +96,16 @@ public protocol ArmorApi: Sendable {
     func totpDisable(_ origin: String, password: String) async throws
     /// How the server sees this phone: its address and whether it comes from outside the house.
     func remoteCheck(_ origin: String) async throws -> RemoteInfo
+    /// The way in from outside the house (administrators): the VPN and the dynamic address, as the maintenance helper reports them.
+    func remoteSetup(_ origin: String) async throws -> RemoteSetup
+    func vpnSetup(_ origin: String, endpoint: String, port: Int, lan: String, routeLan: String) async throws -> RemoteSetup
+    /// Adds a device; the answer holds its private key, to be shown once.
+    func vpnAddPeer(_ origin: String, name: String, fullTunnel: Bool) async throws -> PeerConfig
+    func vpnShowPeer(_ origin: String, name: String) async throws -> PeerConfig
+    func vpnRemovePeer(_ origin: String, name: String) async throws
+    func ddnsSetup(_ origin: String, provider: String, domain: String, token: String, zone: String, record: String, url: String) async throws -> RemoteSetup
+    func ddnsUpdate(_ origin: String) async throws -> RemoteSetup
+    func ddnsRemove(_ origin: String) async throws -> RemoteSetup
 }
 
 extension ArmorApi {
@@ -119,6 +129,14 @@ extension ArmorApi {
     func totpEnable(_ origin: String, code: String) async throws -> [String] { throw ArmorApiError(message: "not supported", status: nil) }
     func totpDisable(_ origin: String, password: String) async throws { throw ArmorApiError(message: "not supported", status: nil) }
     func remoteCheck(_ origin: String) async throws -> RemoteInfo { throw ArmorApiError(message: "not supported", status: nil) }
+    func remoteSetup(_ origin: String) async throws -> RemoteSetup { throw ArmorApiError(message: "not supported", status: nil) }
+    func vpnSetup(_ origin: String, endpoint: String, port: Int, lan: String, routeLan: String) async throws -> RemoteSetup { throw ArmorApiError(message: "not supported", status: nil) }
+    func vpnAddPeer(_ origin: String, name: String, fullTunnel: Bool) async throws -> PeerConfig { throw ArmorApiError(message: "not supported", status: nil) }
+    func vpnShowPeer(_ origin: String, name: String) async throws -> PeerConfig { throw ArmorApiError(message: "not supported", status: nil) }
+    func vpnRemovePeer(_ origin: String, name: String) async throws { throw ArmorApiError(message: "not supported", status: nil) }
+    func ddnsSetup(_ origin: String, provider: String, domain: String, token: String, zone: String, record: String, url: String) async throws -> RemoteSetup { throw ArmorApiError(message: "not supported", status: nil) }
+    func ddnsUpdate(_ origin: String) async throws -> RemoteSetup { throw ArmorApiError(message: "not supported", status: nil) }
+    func ddnsRemove(_ origin: String) async throws -> RemoteSetup { throw ArmorApiError(message: "not supported", status: nil) }
 
     /// A ticket with the quality left to the server.
     func streamTicket(_ origin: String, cameraId: String) async throws -> String {

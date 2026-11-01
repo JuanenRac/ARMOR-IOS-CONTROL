@@ -30,7 +30,72 @@ public struct TotpSetup: Equatable, Sendable {
     public let uri: String
 }
 
+public struct VpnPeer: Equatable, Sendable {
+    public let name: String
+    public let address: String
+}
+
+/// The configuration of a device of the VPN. It holds the PRIVATE KEY of the device, so it is shown once, never written to disk or to a log, and it prints as hidden.
+public struct PeerConfig: Equatable, Sendable, CustomStringConvertible, CustomDebugStringConvertible {
+    public let name: String
+    public let config: String
+    public var description: String { "PeerConfig(name: \(name), config: <hidden>)" }
+    public var debugDescription: String { description }
+}
+
+/// The way in from outside the house as the maintenance helper reports it (never a key or a token).
+public struct RemoteSetup: Equatable, Sendable {
+    public let vpnScript: Bool, vpnTool: Bool, vpnConfigured: Bool, vpnRunning: Bool
+    public let vpnEndpoint: String, vpnSubnet: String, vpnPort: String
+    public let peers: [VpnPeer]
+    public let ddnsScript: Bool, ddnsConfigured: Bool
+    public let ddnsProvider: String, ddnsName: String, ddnsLast: String
+}
+
+/// What the person allows for the configuration of a device of the VPN, from Resources/security.json. The defaults are the careful ones: no copying to the clipboard, and the window closes by itself.
+public struct PeerConfigPolicy: Equatable, Sendable {
+    public let allowCopy: Bool
+    public let visibleSeconds: Double
+
+    public static let defaults = PeerConfigPolicy(allowCopy: false, visibleSeconds: 120)
+
+    public static func parse(_ json: JSON) -> PeerConfigPolicy {
+        let seconds = json.double("peer_config_visible_seconds") ?? defaults.visibleSeconds
+        return PeerConfigPolicy(allowCopy: json.has("allow_copy_peer_config") ? json.bool("allow_copy_peer_config") : defaults.allowCopy, visibleSeconds: min(600, max(10, seconds)))
+    }
+
+    public static func bundled() -> PeerConfigPolicy {
+        guard let url = Bundle.module.url(forResource: "security", withExtension: "json"), let data = try? Data(contentsOf: url), let json = try? Json.object(data) else { return defaults }
+        return parse(json)
+    }
+}
+
 public enum SecurityParser {
+    public static func remoteSetup(_ root: JSON) -> RemoteSetup {
+        let vpn = root.object("wireguard") ?? [:], ddns = root.object("ddns") ?? [:]
+        let peers = vpn.objects("peers").compactMap { item -> VpnPeer? in
+            let name = item.str("name")
+            return name.trimmingCharacters(in: .whitespaces).isEmpty ? nil : VpnPeer(name: name, address: item.str("address"))
+        }
+        return RemoteSetup(vpnScript: vpn.bool("script"), vpnTool: vpn.bool("tool"), vpnConfigured: vpn.bool("configured"), vpnRunning: vpn.bool("running"), vpnEndpoint: vpn.str("endpoint"),
+                           vpnSubnet: vpn.str("subnet"), vpnPort: vpn.str("port"), peers: peers, ddnsScript: ddns.bool("script"), ddnsConfigured: ddns.bool("configured"), ddnsProvider: ddns.str("provider"),
+                           ddnsName: ddns.str("name"), ddnsLast: ddns.str("last_address"))
+    }
+
+    public static func peerConfig(_ root: JSON) -> PeerConfig { PeerConfig(name: root.str("name"), config: root.str("config")) }
+
+    /// A name of a device as the helper takes it: letters, digits, - and _, up to 32.
+    public static func cleanPeerName(_ text: String) -> String { String(text.filter { $0.isASCII && ($0.isLetter || $0.isNumber || $0 == "-" || $0 == "_") }.prefix(32)) }
+
+    /// The UDP port to forward on the router, from the endpoint ("casa.duckdns.org:51820") or, failing that, the port of the setup.
+    public static func forwardedPort(_ setup: RemoteSetup) -> String {
+        if let colon = setup.vpnEndpoint.lastIndex(of: ":") {
+            let port = String(setup.vpnEndpoint[setup.vpnEndpoint.index(after: colon)...])
+            if !port.isEmpty { return port }
+        }
+        return setup.vpnPort.isEmpty ? "51820" : setup.vpnPort
+    }
+
     public static func sessions(_ root: JSON) -> [SessionInfo] {
         root.objects("sessions").compactMap { item in
             let id = item.str("id")
@@ -67,6 +132,14 @@ public enum SecurityParser {
 }
 
 public enum SecurityText {
+    public static func ddnsProviderName(_ id: String, _ t: Translator) -> String {
+        switch id {
+        case "duckdns": return t.tr("DuckDNS (gratuito)")
+        case "cloudflare": return t.tr("Cloudflare")
+        default: return t.tr("Otro (una dirección a la que llamar)")
+        }
+    }
+
     /// The phrase for a code the server gave.
     public static func error(_ code: String, _ t: Translator) -> String {
         switch code {

@@ -1,0 +1,4 @@
+{
+  "allow_copy_peer_config": false,
+  "peer_config_visible_seconds": 120
+}

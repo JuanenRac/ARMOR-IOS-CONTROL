@@ -138,6 +138,7 @@ struct SecurityView: View {
         Section(header: Text(model.tr("Usar el servidor desde fuera de casa")),
                 footer: Text(model.tr("Abre el servidor a Internet solo por una puerta: un proxy inverso con certificado válido (el perfil TLS). El broker y los nodos nunca se publican. Pulsa el botón desde un móvil con datos para ver cómo te ve el servidor."))) {
             Button(model.tr("Comprobar cómo me ve el servidor")) { Task { await security.load(model: model) } }.disabled(security.busy)
+            if model.state.facts.isAdmin { NavigationLink(model.tr("Acceso desde fuera de casa")) { RemoteSetupView() } }
             if let remote = security.remote {
                 Text(model.tr("Dirección que ve el servidor") + ": " + remote.ip)
                 Text(model.tr("Cuenta como") + ": " + (remote.remote ? model.tr("desde fuera") : model.tr("desde casa")))

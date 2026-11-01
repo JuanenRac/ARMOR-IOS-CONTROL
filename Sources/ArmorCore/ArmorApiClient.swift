@@ -111,6 +111,34 @@ public final class ArmorApiClient: ArmorApi, @unchecked Sendable {
     public func totpDisable(_ origin: String, password: String) async throws { _ = try await send(origin, "/api/v1/studio/totp", "DELETE", ["password": password], [204]) }
     public func remoteCheck(_ origin: String) async throws -> RemoteInfo { SecurityParser.remote(try await getJson(origin, "/api/v1/remote/check")) }
 
+    public func remoteSetup(_ origin: String) async throws -> RemoteSetup { SecurityParser.remoteSetup(try await getJson(origin, "/api/v1/admin/remote")) }
+
+    public func vpnSetup(_ origin: String, endpoint: String, port: Int, lan: String, routeLan: String) async throws -> RemoteSetup {
+        var body: JSON = ["endpoint": endpoint, "port": port]
+        if !lan.isEmpty { body["lan"] = lan }
+        if !routeLan.isEmpty { body["route_lan"] = routeLan }
+        return SecurityParser.remoteSetup(try Json.object(try await send(origin, "/api/v1/admin/remote/wireguard/setup", "POST", body, [200])))
+    }
+
+    public func vpnAddPeer(_ origin: String, name: String, fullTunnel: Bool) async throws -> PeerConfig {
+        SecurityParser.peerConfig(try Json.object(try await send(origin, "/api/v1/admin/remote/wireguard/peers", "POST", ["name": name, "full_tunnel": fullTunnel], [201])))
+    }
+
+    public func vpnShowPeer(_ origin: String, name: String) async throws -> PeerConfig {
+        SecurityParser.peerConfig(try await getJson(origin, "/api/v1/admin/remote/wireguard/peers/" + Self.part(name)))
+    }
+
+    public func vpnRemovePeer(_ origin: String, name: String) async throws { _ = try await send(origin, "/api/v1/admin/remote/wireguard/peers/" + Self.part(name), "DELETE", nil, [200]) }
+
+    public func ddnsSetup(_ origin: String, provider: String, domain: String, token: String, zone: String, record: String, url: String) async throws -> RemoteSetup {
+        var body: JSON = ["provider": provider]
+        for (key, value) in [("domain", domain), ("token", token), ("zone", zone), ("record_name", record), ("url", url)] where !value.isEmpty { body[key] = value }
+        return SecurityParser.remoteSetup(try Json.object(try await send(origin, "/api/v1/admin/remote/ddns/setup", "POST", body, [200])))
+    }
+
+    public func ddnsUpdate(_ origin: String) async throws -> RemoteSetup { SecurityParser.remoteSetup(try Json.object(try await send(origin, "/api/v1/admin/remote/ddns/update", "POST", [:], [200]))) }
+    public func ddnsRemove(_ origin: String) async throws -> RemoteSetup { SecurityParser.remoteSetup(try Json.object(try await send(origin, "/api/v1/admin/remote/ddns/remove", "POST", [:], [200]))) }
+
     public func voiceAvailable(_ origin: String) async throws -> Bool { try await getJson(origin, "/api/v1/voice/status").bool("available") }
 
     // MARK: orders
