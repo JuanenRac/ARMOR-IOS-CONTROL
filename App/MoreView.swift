@@ -13,6 +13,7 @@ struct MoreView: View {
                 Section {
                     NavigationLink(model.tr("Servidor")) { ServerSettings() }
                     NavigationLink(model.tr("Bloqueo con el teléfono")) { LockSettingsView() }
+                    NavigationLink(model.tr("Seguridad")) { SecurityView() }
                     NavigationLink(model.tr("Idioma")) { LanguageView() }
                     NavigationLink(model.tr("Qué avisos quiero")) { NoticeSettingsView() }
                     NavigationLink(model.tr("Sonido de cada aviso")) { SoundSettingsView() }
@@ -25,6 +26,7 @@ struct MoreView: View {
                         NavigationLink(model.tr("Solar")) { SolarView() }
                         NavigationLink(model.tr("Eléctrica")) { ElectricalView() }
                         NavigationLink(model.tr("Red")) { NetworkView() }
+                        NavigationLink(model.tr("Servicios")) { ServicesView() }
                     }
                     if model.state.facts.isAdmin { NavigationLink(model.tr("Mantenimiento de baterías")) { BatteryView() } }
                 }.listRowBackground(Theme.surface)

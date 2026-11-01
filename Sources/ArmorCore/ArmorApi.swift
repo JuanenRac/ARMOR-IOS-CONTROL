@@ -81,6 +81,21 @@ public protocol ArmorApi: Sendable {
     func network(_ origin: String) async throws -> NetworkOverview
     /// Asks the network node to sweep the network now, for the node finder.
     func scanNetworkNow(_ origin: String) async throws
+    /// Every service of the system, running or not.
+    func services(_ origin: String) async throws -> ServicesOverview
+    /// The open sessions of the signed-in account, this one marked.
+    func mySessions(_ origin: String) async throws -> [SessionInfo]
+    func endSession(_ origin: String, id: String) async throws
+    func endOtherSessions(_ origin: String) async throws
+    /// The state of the second factor of the account.
+    func totpState(_ origin: String) async throws -> TotpInfo
+    /// Starts the second factor (the password confirms who asks): the key and the address to add to the authenticator.
+    func totpSetup(_ origin: String, password: String) async throws -> TotpSetup
+    /// Confirms it with the first code; the answer is the recovery codes, shown once.
+    func totpEnable(_ origin: String, code: String) async throws -> [String]
+    func totpDisable(_ origin: String, password: String) async throws
+    /// How the server sees this phone: its address and whether it comes from outside the house.
+    func remoteCheck(_ origin: String) async throws -> RemoteInfo
 }
 
 extension ArmorApi {
@@ -95,6 +110,15 @@ extension ArmorApi {
     func batteryCancel(_ origin: String, id: String) async throws -> BatteryOperationView { throw ArmorApiError(message: "not supported", status: nil) }
     func network(_ origin: String) async throws -> NetworkOverview { throw ArmorApiError(message: "not supported", status: nil) }
     func scanNetworkNow(_ origin: String) async throws { throw ArmorApiError(message: "not supported", status: nil) }
+    func services(_ origin: String) async throws -> ServicesOverview { throw ArmorApiError(message: "not supported", status: nil) }
+    func mySessions(_ origin: String) async throws -> [SessionInfo] { throw ArmorApiError(message: "not supported", status: nil) }
+    func endSession(_ origin: String, id: String) async throws { throw ArmorApiError(message: "not supported", status: nil) }
+    func endOtherSessions(_ origin: String) async throws { throw ArmorApiError(message: "not supported", status: nil) }
+    func totpState(_ origin: String) async throws -> TotpInfo { throw ArmorApiError(message: "not supported", status: nil) }
+    func totpSetup(_ origin: String, password: String) async throws -> TotpSetup { throw ArmorApiError(message: "not supported", status: nil) }
+    func totpEnable(_ origin: String, code: String) async throws -> [String] { throw ArmorApiError(message: "not supported", status: nil) }
+    func totpDisable(_ origin: String, password: String) async throws { throw ArmorApiError(message: "not supported", status: nil) }
+    func remoteCheck(_ origin: String) async throws -> RemoteInfo { throw ArmorApiError(message: "not supported", status: nil) }
 
     /// A ticket with the quality left to the server.
     func streamTicket(_ origin: String, cameraId: String) async throws -> String {

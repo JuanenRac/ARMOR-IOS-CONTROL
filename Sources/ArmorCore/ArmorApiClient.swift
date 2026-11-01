@@ -97,6 +97,20 @@ public final class ArmorApiClient: ArmorApi, @unchecked Sendable {
     public func network(_ origin: String) async throws -> NetworkOverview { NetworkParser.overview(try await getJson(origin, "/api/v1/network")) }
     public func scanNetworkNow(_ origin: String) async throws { _ = try await send(origin, "/api/v1/network/commands", "POST", ["type": "scan_now"], [200, 201, 202]) }
 
+    public func services(_ origin: String) async throws -> ServicesOverview { ServicesParser.overview(try await getJson(origin, "/api/v1/system/services")) }
+    public func mySessions(_ origin: String) async throws -> [SessionInfo] { SecurityParser.sessions(try await getJson(origin, "/api/v1/studio/sessions")) }
+    public func endSession(_ origin: String, id: String) async throws { _ = try await send(origin, "/api/v1/studio/sessions/\(Self.part(id))", "DELETE", nil, [204]) }
+    public func endOtherSessions(_ origin: String) async throws { _ = try await send(origin, "/api/v1/studio/sessions/end-others", "POST", nil, [204]) }
+    public func totpState(_ origin: String) async throws -> TotpInfo { SecurityParser.totp(try await getJson(origin, "/api/v1/studio/totp")) }
+    public func totpSetup(_ origin: String, password: String) async throws -> TotpSetup {
+        SecurityParser.setup(try Json.object(try await send(origin, "/api/v1/studio/totp/setup", "POST", ["password": password], [200])))
+    }
+    public func totpEnable(_ origin: String, code: String) async throws -> [String] {
+        SecurityParser.codes(try Json.object(try await send(origin, "/api/v1/studio/totp/enable", "POST", ["code": code], [200])))
+    }
+    public func totpDisable(_ origin: String, password: String) async throws { _ = try await send(origin, "/api/v1/studio/totp", "DELETE", ["password": password], [204]) }
+    public func remoteCheck(_ origin: String) async throws -> RemoteInfo { SecurityParser.remote(try await getJson(origin, "/api/v1/remote/check")) }
+
     public func voiceAvailable(_ origin: String) async throws -> Bool { try await getJson(origin, "/api/v1/voice/status").bool("available") }
 
     // MARK: orders

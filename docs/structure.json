@@ -157,27 +157,27 @@
       "name": "Tests/",
       "span": 1,
       "tree": {
-        "en": "146 tests and fixtures of a real server",
-        "es": "146 pruebas y datos de un servidor real",
-        "de": "146 Tests und Daten eines echten Servers",
-        "fr": "146 tests et données d'un vrai serveur",
-        "it": "146 test e dati di un server reale",
-        "ja": "146 件のテストと実サーバーのデータ",
-        "zh": "146 个测试和真实服务器的数据",
-        "pt": "146 testes e dados de um servidor real"
+        "en": "249 tests and fixtures of a real server",
+        "es": "249 pruebas y datos de un servidor real",
+        "de": "249 Tests und Daten eines echten Servers",
+        "fr": "249 tests et données d'un vrai serveur",
+        "it": "249 test e dati di un server reale",
+        "ja": "249 件のテストと実サーバーのデータ",
+        "zh": "249 个测试和真实服务器的数据",
+        "pt": "249 testes e dados de um servidor real"
       },
       "rows": [
         {
           "name": "ArmorCoreTests/",
           "desc": {
-            "en": "15 files of tests",
-            "es": "15 ficheros de pruebas",
-            "de": "15 Testdateien",
-            "fr": "15 fichiers de tests",
-            "it": "15 file di test",
-            "ja": "15 個のテストファイル",
-            "zh": "15 个测试文件",
-            "pt": "15 ficheiros de testes"
+            "en": "27 files of tests",
+            "es": "27 ficheros de pruebas",
+            "de": "27 Testdateien",
+            "fr": "27 fichiers de tests",
+            "it": "27 file di test",
+            "ja": "27 個のテストファイル",
+            "zh": "27 个测试文件",
+            "pt": "27 ficheiros de testes"
           }
         }
       ]
@@ -283,6 +283,19 @@
             "ja": "バナー、アイコン、この README の 2 つの図",
             "zh": "横幅、图标和本 README 的两幅图",
             "pt": "faixa, ícone e as duas imagens deste README"
+          }
+        },
+        {
+          "name": "Radar/",
+          "desc": {
+            "en": "the radar page of the weather screen",
+            "es": "la página del radar de la pantalla del tiempo",
+            "de": "die Radarseite des Wetterbildschirms",
+            "fr": "la page radar de l'écran météo",
+            "it": "la pagina radar della schermata del meteo",
+            "ja": "天気画面のレーダーページ",
+            "zh": "天气界面的雷达页面",
+            "pt": "a página do radar do ecrã do tempo"
           }
         }
       ]

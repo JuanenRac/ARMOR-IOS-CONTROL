@@ -3,6 +3,7 @@
   "electrical_seconds": 5,
   "battery_seconds": 2,
   "network_seconds": 5,
+  "services_seconds": 8,
   "minimum_seconds": 1,
   "maximum_seconds": 300
 }
