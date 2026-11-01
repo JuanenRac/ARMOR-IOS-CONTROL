@@ -20,6 +20,9 @@ struct AlarmDetailView: View {
                     // what the alarm means and what to check, from the table every client shares; nothing when the code has none
                     if let help = AlarmFacts.help(alarm.code, model.translator.language) { Text(help).font(.footnote).accessibilityLabel(help) }
                 }
+                if model.state.facts.canChange, let screen = handlingScreen {
+                    Section { screen }.listRowBackground(Theme.surface)
+                }
                 Section {
                     let facts = AlarmFacts.rows(alarm.detail, model.translator)
                     if facts.isEmpty { Text(model.tr("Esta alarma no trae más detalles.")).foregroundColor(Theme.muted) }
@@ -36,6 +39,16 @@ struct AlarmDetailView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) { Button(model.tr("Cerrar")) { dismiss() } }
             }
+        }
+    }
+
+    /// The screen that handles this alarm, when the app has one for it: solar equipment opens the inverters or the batteries, an electrical node the electrical screen.
+    private var handlingScreen: AnyView? {
+        switch AlarmRoute.of(alarm) {
+        case .solar: return AnyView(NavigationLink(model.tr("Solar")) { SolarView() })
+        case .batteries: return AnyView(NavigationLink(model.tr("Mantenimiento de baterías")) { BatteryView() })
+        case .electrical: return AnyView(NavigationLink(model.tr("Eléctrica")) { ElectricalView() })
+        default: return nil
         }
     }
 

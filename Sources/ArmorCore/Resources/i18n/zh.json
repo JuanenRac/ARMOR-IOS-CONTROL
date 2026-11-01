@@ -557,5 +557,7 @@
  "CC": "直流",
  "CA": "交流",
  "Inversor": "逆变器",
- "%s de %s": "%s / %s"
+ "%s de %s": "%s / %s",
+ "Baterías: %s": "电池：%s",
+ "%s de sol · %s de consumo": "光伏 %s · 用电 %s"
 }

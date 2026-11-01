@@ -557,5 +557,7 @@
  "CC": "CC",
  "CA": "CA",
  "Inversor": "Inversor",
- "%s de %s": "%s de %s"
+ "%s de %s": "%s de %s",
+ "Baterías: %s": "Baterias: %s",
+ "%s de sol · %s de consumo": "%s de sol · %s de consumo"
 }

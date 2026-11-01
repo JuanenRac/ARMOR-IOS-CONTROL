@@ -66,6 +66,8 @@ struct HomeView: View {
                         Card { Label(model.trf("%d alarmas sin confirmar", model.state.unseenAlarms), systemImage: "exclamationmark.triangle.fill").foregroundColor(Theme.danger) }
                     }
 
+                    EquipmentCards()
+
                     Card {
                         Text(model.tr("Estado de los nodos")).font(.headline)
                         ForEach(model.state.snapshot.nodes) { node in

@@ -557,5 +557,7 @@
  "CC": "DC",
  "CA": "AC",
  "Inversor": "インバーター",
- "%s de %s": "%s / %s"
+ "%s de %s": "%s / %s",
+ "Baterías: %s": "バッテリー：%s",
+ "%s de sol · %s de consumo": "太陽光 %s · 消費 %s"
 }

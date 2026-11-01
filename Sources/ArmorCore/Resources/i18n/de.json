@@ -557,5 +557,7 @@
  "CC": "DC",
  "CA": "AC",
  "Inversor": "Wechselrichter",
- "%s de %s": "%s von %s"
+ "%s de %s": "%s von %s",
+ "Baterías: %s": "Batterien: %s",
+ "%s de sol · %s de consumo": "%s Sonne · %s Verbrauch"
 }

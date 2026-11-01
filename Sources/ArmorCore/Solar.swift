@@ -371,6 +371,12 @@ public enum SolarText {
         return t.tr("En reposo")
     }
 
+    /// The summary line the Status screen shows under the Solar card: "2.40 kW de sol · 1.18 kW de consumo", or the batteries alone when there is no inverter.
+    public static func summary(_ totals: SolarTotals, _ t: Translator) -> String {
+        if totals.inverters == 0 { return t.trf("Baterías: %s", batteryFlow(totals.batteryW, t)) }
+        return t.trf("%s de sol · %s de consumo", watts(totals.pvW), watts(totals.loadW))
+    }
+
     /// The spread between the highest and the lowest cell, in millivolts: the number that tells an unbalanced pack.
     public static func cellSpreadMv(_ cells: [Double]) -> Int? {
         guard cells.count >= 2, let high = cells.max(), let low = cells.min() else { return nil }

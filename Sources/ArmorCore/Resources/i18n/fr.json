@@ -557,5 +557,7 @@
  "CC": "CC",
  "CA": "CA",
  "Inversor": "Onduleur",
- "%s de %s": "%s sur %s"
+ "%s de %s": "%s sur %s",
+ "Baterías: %s": "Batteries : %s",
+ "%s de sol · %s de consumo": "%s de soleil · %s de consommation"
 }

@@ -170,4 +170,13 @@ final class SolarTests: XCTestCase {
         XCTAssertEqual(SolarText.socLevel(39), "warn")
         XCTAssertEqual(SolarText.socLevel(40), "ok")
     }
+
+    func testTheStatusLineGivesTheSunAndTheConsumptionOrTheBatteriesAlone() {
+        let t = plain("es")
+        var totals = SolarTotals()
+        totals.batteryW = 340
+        XCTAssertEqual(SolarText.summary(totals, t), "Baterías: Cargando · 340 W")
+        totals.inverters = 1; totals.pvW = 2400; totals.loadW = 1180
+        XCTAssertEqual(SolarText.summary(totals, t), "2.40 kW de sol · 1.18 kW de consumo")
+    }
 }
