@@ -827,5 +827,7 @@
  "Nombre que mantener al día": "Name to keep up to date",
  "Dirección a la que llamar, con {ip} donde va la dirección": "Address to call, with {ip} where the address goes",
  "Token del servicio": "Token of the service",
- "Guardar y comprobar ahora": "Save and check now"
+ "Guardar y comprobar ahora": "Save and check now",
+ "Compartir diagnóstico": "Share diagnostic",
+ "«Compartir diagnóstico» prepara un informe sin contraseñas ni datos privados para quien te ayude; tú eliges con qué aplicación enviarlo.": "“Share diagnostic” prepares a report with no passwords or private data for whoever is helping you; you choose which app sends it."
 }

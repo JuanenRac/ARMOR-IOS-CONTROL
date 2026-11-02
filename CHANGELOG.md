@@ -4,6 +4,7 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+- **A diagnostic report to share with whoever helps:** the same as the Android app. More gains Share diagnostic, which opens the sharing sheet with a short report (app version, iOS and device, language, server host, role, whether notifications are allowed and the last answers of the server by route shape and status), with no password, token, PIN, query or message text; the lines that only exist on Android (battery optimisation, the alarm watcher) say unknown.
 - **An answer from a server is refused past a limit:** the same as the Android app (which now reads every answer up to a limit). The client fails a request whose answer is longer than 8 MiB (16 MB for a picture, the heat map) the way it fails a lost connection, for the server, the weather service and the release check.
 - **A big picture of the camera stream is no longer looked at again for every piece that arrives:** the cutting of the MJPEG stream remembers where the search for the end of the picture stopped, so a picture that arrives in small pieces costs its size and not the square of it.
 - Tests: 262 (before 257).

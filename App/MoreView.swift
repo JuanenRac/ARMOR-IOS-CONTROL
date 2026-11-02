@@ -2,10 +2,21 @@
 // Copyright (C) 2026 JuanenRac (Electro Hobby 3D). GPL-3.0-or-later.
 import SwiftUI
 import ArmorCore
+import UserNotifications
 
 struct MoreView: View {
     @EnvironmentObject var model: AppModel
     @State private var confirmSignOut = false
+    @State private var notificationsAllowed: Bool?
+
+    /// The report to share (see DiagnosticReport): built when the screen is drawn, so it holds the latest answers of the server.
+    private var diagnosticText: String {
+        let bundle = Bundle.main
+        return DiagnosticReport.render(DiagnosticInfo(
+            appVersion: bundle.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "-", appBuild: bundle.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "-",
+            systemVersion: UIDevice.current.systemVersion, device: UIDevice.current.model, language: model.language, origin: model.activeOrigin ?? "", role: model.state.facts.role,
+            notificationsAllowed: notificationsAllowed, recent: DiagnosticLog.shared.recent(), nowMs: Int64(Date().timeIntervalSince1970 * 1000)))
+    }
 
     var body: some View {
         NavigationStack {
@@ -34,11 +45,17 @@ struct MoreView: View {
                     LabeledContent(model.tr("Usuario"), value: model.state.facts.role)
                     LabeledContent(model.tr("Servidor"), value: model.activeOrigin ?? "-")
                     LabeledContent(model.tr("Versión"), value: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "-")
+                    ShareLink(item: diagnosticText, subject: Text("A.R.M.O.R. diagnostic report")) { Label(model.tr("Compartir diagnóstico"), systemImage: "square.and.arrow.up") }
                     Button(model.tr("Cerrar sesión"), role: .destructive) { confirmSignOut = true }
-                }.listRowBackground(Theme.surface)
+                } footer: { Text(model.tr("«Compartir diagnóstico» prepara un informe sin contraseñas ni datos privados para quien te ayude; tú eliges con qué aplicación enviarlo.")) }
+                .listRowBackground(Theme.surface)
             }
             .scrollContentBackground(.hidden).background(Theme.background)
             .navigationTitle(model.tr("Más"))
+            .task {
+                let settings = await UNUserNotificationCenter.current().notificationSettings()
+                notificationsAllowed = settings.authorizationStatus == .authorized || settings.authorizationStatus == .provisional
+            }
             .confirmationDialog(model.tr("¿Cerrar sesión?"), isPresented: $confirmSignOut, titleVisibility: .visible) {
                 Button(model.tr("Cerrar sesión"), role: .destructive) { Task { await model.signOut() } }
                 Button(model.tr("Cancelar"), role: .cancel) {}

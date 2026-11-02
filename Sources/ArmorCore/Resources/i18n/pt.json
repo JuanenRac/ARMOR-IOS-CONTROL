@@ -827,5 +827,7 @@
  "Nombre que mantener al día": "Nome a manter atualizado",
  "Dirección a la que llamar, con {ip} donde va la dirección": "Endereço a chamar, com {ip} onde vai o endereço",
  "Token del servicio": "Token do serviço",
- "Guardar y comprobar ahora": "Guardar e verificar agora"
+ "Guardar y comprobar ahora": "Guardar e verificar agora",
+ "Compartir diagnóstico": "Partilhar diagnóstico",
+ "«Compartir diagnóstico» prepara un informe sin contraseñas ni datos privados para quien te ayude; tú eliges con qué aplicación enviarlo.": "«Partilhar diagnóstico» prepara um relatório sem palavras-passe nem dados privados para quem o ajuda; o utilizador escolhe com que aplicação o envia."
 }

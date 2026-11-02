@@ -283,8 +283,9 @@ public final class ArmorApiClient: ArmorApi, @unchecked Sendable {
     private func send(_ origin: String, _ path: String, _ method: String, _ body: JSON?, _ expected: Set<Int>) async throws -> Data {
         let request = try request(origin, path, method, body)
         let data: Data, response: URLResponse
-        do { (data, response) = try await session.data(for: request) } catch { throw ArmorApiError(message: error.localizedDescription, status: nil) }
+        do { (data, response) = try await session.data(for: request) } catch { DiagnosticLog.shared.record(method: method, path: path, status: 0); throw ArmorApiError(message: error.localizedDescription, status: nil) }
         let status = (response as? HTTPURLResponse)?.statusCode ?? 0
+        DiagnosticLog.shared.record(method: method, path: path, status: status)
         try ResponseLimit.check(data, limit: ResponseLimit.picture)
         if !expected.contains(status) {
             let text = String(decoding: data.prefix(2000), as: UTF8.self)

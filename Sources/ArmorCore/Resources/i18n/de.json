@@ -827,5 +827,7 @@
  "Nombre que mantener al día": "Zu aktualisierender Name",
  "Dirección a la que llamar, con {ip} donde va la dirección": "Aufzurufende Adresse, mit {ip} an der Stelle der Adresse",
  "Token del servicio": "Token des Dienstes",
- "Guardar y comprobar ahora": "Speichern und jetzt prüfen"
+ "Guardar y comprobar ahora": "Speichern und jetzt prüfen",
+ "Compartir diagnóstico": "Diagnose teilen",
+ "«Compartir diagnóstico» prepara un informe sin contraseñas ni datos privados para quien te ayude; tú eliges con qué aplicación enviarlo.": "„Diagnose teilen“ erstellt einen Bericht ohne Passwörter oder private Daten für die Person, die Ihnen hilft; Sie wählen, mit welcher App er gesendet wird."
 }

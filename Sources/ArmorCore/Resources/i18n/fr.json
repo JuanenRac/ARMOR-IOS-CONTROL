@@ -827,5 +827,7 @@
  "Nombre que mantener al día": "Nom à tenir à jour",
  "Dirección a la que llamar, con {ip} donde va la dirección": "Adresse à appeler, avec {ip} à l'endroit de l'adresse",
  "Token del servicio": "Jeton du service",
- "Guardar y comprobar ahora": "Enregistrer et vérifier maintenant"
+ "Guardar y comprobar ahora": "Enregistrer et vérifier maintenant",
+ "Compartir diagnóstico": "Partager le diagnostic",
+ "«Compartir diagnóstico» prepara un informe sin contraseñas ni datos privados para quien te ayude; tú eliges con qué aplicación enviarlo.": "« Partager le diagnostic » prépare un rapport sans mots de passe ni données privées pour la personne qui vous aide ; vous choisissez l'application d'envoi."
 }

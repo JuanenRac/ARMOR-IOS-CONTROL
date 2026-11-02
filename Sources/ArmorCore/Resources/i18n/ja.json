@@ -827,5 +827,7 @@
  "Nombre que mantener al día": "最新に保つ名前",
  "Dirección a la que llamar, con {ip} donde va la dirección": "呼び出すアドレス（アドレスが入る場所に {ip} を書く）",
  "Token del servicio": "サービスのトークン",
- "Guardar y comprobar ahora": "保存して今すぐ確認"
+ "Guardar y comprobar ahora": "保存して今すぐ確認",
+ "Compartir diagnóstico": "診断を共有",
+ "«Compartir diagnóstico» prepara un informe sin contraseñas ni datos privados para quien te ayude; tú eliges con qué aplicación enviarlo.": "「診断を共有」は、パスワードや個人データを含まないレポートを、サポートしてくれる人向けに作成します。送信に使うアプリはご自分で選べます。"
 }

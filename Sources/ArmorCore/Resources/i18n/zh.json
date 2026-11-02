@@ -827,5 +827,7 @@
  "Nombre que mantener al día": "要保持更新的名称",
  "Dirección a la que llamar, con {ip} donde va la dirección": "要调用的地址，地址位置写 {ip}",
  "Token del servicio": "服务令牌",
- "Guardar y comprobar ahora": "保存并立即检查"
+ "Guardar y comprobar ahora": "保存并立即检查",
+ "Compartir diagnóstico": "分享诊断信息",
+ "«Compartir diagnóstico» prepara un informe sin contraseñas ni datos privados para quien te ayude; tú eliges con qué aplicación enviarlo.": "“分享诊断信息”会为帮助您的人生成一份不含密码和隐私数据的报告；用哪个应用发送由您选择。"
 }
