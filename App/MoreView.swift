@@ -4,6 +4,9 @@ import SwiftUI
 import ArmorCore
 import UserNotifications
 
+/// The subject line of the shared report: a name, the same in every language (the Android app sends the same one).
+private let diagnosticSubject = "A.R.M.O.R. diagnostic report"
+
 struct MoreView: View {
     @EnvironmentObject var model: AppModel
     @State private var confirmSignOut = false
@@ -45,7 +48,7 @@ struct MoreView: View {
                     LabeledContent(model.tr("Usuario"), value: model.state.facts.role)
                     LabeledContent(model.tr("Servidor"), value: model.activeOrigin ?? "-")
                     LabeledContent(model.tr("Versión"), value: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "-")
-                    ShareLink(item: diagnosticText, subject: Text("A.R.M.O.R. diagnostic report")) { Label(model.tr("Compartir diagnóstico"), systemImage: "square.and.arrow.up") }
+                    ShareLink(item: diagnosticText, subject: Text(diagnosticSubject)) { Label(model.tr("Compartir diagnóstico"), systemImage: "square.and.arrow.up") }
                     Button(model.tr("Cerrar sesión"), role: .destructive) { confirmSignOut = true }
                 } footer: { Text(model.tr("«Compartir diagnóstico» prepara un informe sin contraseñas ni datos privados para quien te ayude; tú eliges con qué aplicación enviarlo.")) }
                 .listRowBackground(Theme.surface)
