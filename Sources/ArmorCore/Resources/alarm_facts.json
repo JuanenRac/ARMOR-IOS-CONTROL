@@ -1064,6 +1064,16 @@
    "zh": "含义: 报警主机的某个防区接线故障（开路或短路）。\n检查: 检查该防区的线缆和触点：松动的端子、被剪断或压坏的线、接头进水。故障期间，该防区不保护那处出入口。",
    "pt": "Significa: Uma zona da central de alarme tem uma avaria de cablagem (circuito aberto ou curto-circuito).\nVerifique: O fio e o contacto dessa zona: um terminal solto, um cabo cortado ou esmagado, água numa junção. Enquanto estiver em avaria, a zona não protege essa abertura."
   },
+  "alarm_siren_fault": {
+   "en": "Means: The wiring of the siren of an alarm panel is open, in short circuit or cannot be read, so the siren may stay silent when the alarm needs it.\nCheck: The siren cable and its terminals, and the siren itself. Until it is repaired, do not count on the siren.",
+   "es": "Significa: El cableado de la sirena de una central de alarma está abierto, en cortocircuito o no se puede leer, así que la sirena podría no sonar cuando la alarma la necesite.\nRevisa: El cable de la sirena y sus bornes, y la propia sirena. Hasta que se repare, no cuentes con la sirena.",
+   "de": "Bedeutung: Die Leitung der Sirene einer Alarmzentrale ist offen, kurzgeschlossen oder nicht lesbar; die Sirene bleibt womöglich stumm, wenn der Alarm sie braucht.\nPrüfen: Das Sirenenkabel und seine Klemmen sowie die Sirene selbst. Bis zur Reparatur nicht auf die Sirene verlassen.",
+   "fr": "Signification: Le câblage de la sirène d'une centrale d'alarme est ouvert, en court-circuit ou illisible : la sirène peut rester muette quand l'alarme en a besoin.\nÀ vérifier: Le câble de la sirène et ses bornes, ainsi que la sirène elle-même. Tant que ce n'est pas réparé, ne comptez pas sur la sirène.",
+   "it": "Significato: Il cablaggio della sirena di una centrale d'allarme è aperto, in cortocircuito o illeggibile: la sirena potrebbe restare muta quando l'allarme ne ha bisogno.\nControlla: Il cavo della sirena e i suoi morsetti, e la sirena stessa. Finché non è riparata, non contare sulla sirena.",
+   "ja": "意味: 警報パネルのサイレンの配線が開放・短絡、または読み取れないため、警報時にサイレンが鳴らない可能性があります。\n確認: サイレンのケーブルと端子、サイレン本体を確認してください。修理するまでサイレンをあてにしないでください。",
+   "zh": "含义: 报警主机警笛的线路开路、短路或无法读取，报警时警笛可能不会响。\n检查: 检查警笛线缆和端子以及警笛本身。修复之前，请不要依赖警笛。",
+   "pt": "Significa: A cablagem da sirene de uma central de alarme está aberta, em curto-circuito ou ilegível, pelo que a sirene pode ficar muda quando o alarme precisar dela.\nVerifique: O cabo da sirene e os seus terminais, e a própria sirene. Até ser reparada, não conte com a sirene."
+  },
   "alarm_locked_out": {
    "en": "Means: The alarm panel locked the keypad after too many wrong codes.\nCheck: Who tried: if it was you, wait for the lock to end; if not, someone is guessing the code, so look at the cameras. The panel unlocks by itself after a while.",
    "es": "Significa: La central de alarma bloqueó el teclado tras demasiados códigos erróneos.\nRevisa: Quién lo intentó: si fuiste tú, espera a que termine el bloqueo; si no, alguien está adivinando el código, así que mira las cámaras. La central se desbloquea sola pasado un tiempo.",

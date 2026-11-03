@@ -4,6 +4,8 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+- **The alarm code `alarm_siren_fault` (the siren of a panel may not sound) is told in the eight languages:** the same as the Android app. The copies of the shared table of alarm codes and of their help follow the originals, and the Spanish fallback knows the code.
+
 ## [0.0.2] - The iOS app follows the capabilities the server announces, shares a diagnostic report, refuses oversized answers and adds the weather, network, node finder, services and security screens of the Android app
 
 - **What the person sees follows the capabilities the server announces:** the same as the Android app. The session now carries what the signed-in person may do and the app shows, hides and disables from it instead of from the role alone (arm and disarm, confirming alarms, the camera controls, the administrator screens); an order the server does not allow is refused before it is asked, with a message in the eight languages, and a server that sends none keeps the behaviour by role. Not compiled or run: written without a Swift toolchain, to be run with `swift test` on macOS. Tests: 270 (before 266).
