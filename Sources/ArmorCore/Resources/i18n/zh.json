@@ -279,6 +279,7 @@
  "Tu administrador lo exige en este servidor.": "你的管理员在此服务器上要求启用。",
  "Tu contraseña (para confirmar que eres tú)": "您的密码（用于确认是您本人）",
  "Tu usuario solo puede mirar: no puede cambiar nada.": "您的用户只能查看：不能更改任何内容。",
+ "Tu usuario no tiene permiso para esta acción.": "服务器不允许您的用户执行此操作。",
  "Un archivo mío…": "我自己的文件…",
  "Un conmutador de fuentes de la red eléctrica tiene una avería y queda abierto": "电网的电源切换开关故障并保持断开",
  "Un contador de la red eléctrica avisa de una alarma": "有电网电表报警",

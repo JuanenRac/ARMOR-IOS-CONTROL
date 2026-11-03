@@ -79,16 +79,19 @@ public enum SignIn: Equatable, Sendable {
 public struct SessionFacts: Equatable, Sendable {
     public var role: String
     public var deviceLock: String
-    public init(role: String = "", deviceLock: String = "user") { self.role = role; self.deviceLock = deviceLock }
+    /// What the person may do: what the server announced, else what the role allowed before it announced anything.
+    public var capabilities: Capabilities
+    public init(role: String = "", deviceLock: String = "user", capabilities: Capabilities? = nil) { self.role = role; self.deviceLock = deviceLock; self.capabilities = capabilities ?? Capabilities.fromRole(role) }
 
     /// From the answer of `GET /api/v1/studio/session`.
     public static func parse(_ json: JSON) -> SessionFacts {
         let role = json.object("user")?.str("role") ?? ""
         let lock = json.object("capabilities")?.object("security")?.str("client.device_lock") ?? ""
-        return SessionFacts(role: role, deviceLock: lock.isEmpty ? "user" : lock)
+        return SessionFacts(role: role, deviceLock: lock.isEmpty ? "user" : lock, capabilities: Capabilities.of(session: json, role: role))
     }
-    public var canChange: Bool { role == "admin" || role == "operator" }
-    public var isAdmin: Bool { role == "admin" }
+    public func can(_ action: String) -> Bool { capabilities.can(action) }
+    public var canChange: Bool { can(CapabilityAction.operate) }
+    public var isAdmin: Bool { can(CapabilityAction.administer) }
 }
 
 // MARK: status

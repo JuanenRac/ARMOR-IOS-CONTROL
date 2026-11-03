@@ -21,6 +21,8 @@ struct HomeView: View {
     private var modes: ArmingModesView? { model.state.armingModes.flatMap { $0.enabled ? $0 : nil } }
 
     private var canChange: Bool { model.state.facts.canChange }
+    private var canArm: Bool { model.state.facts.can(CapabilityAction.arm) }
+    private var canDisarm: Bool { model.state.facts.can(CapabilityAction.disarm) }
 
     var body: some View {
         NavigationStack {
@@ -42,13 +44,13 @@ struct HomeView: View {
                         if model.state.lastRefreshFailed { Text(model.tr("Servidor sin respuesta")).font(.caption).foregroundColor(Theme.amber) }
                         if model.state.snapshot.armed {
                             if modes != nil {
-                                Button(model.tr("Modo de armado")) { pickMode = true }.buttonStyle(PrimaryButtonStyle(color: Theme.ok)).disabled(!canChange || model.busy)
+                                Button(model.tr("Modo de armado")) { pickMode = true }.buttonStyle(PrimaryButtonStyle(color: Theme.ok)).disabled(!canArm || model.busy)
                             }
-                            Button(model.tr("Desarmar")) { pin = ""; askDisarm = true }.buttonStyle(PrimaryButtonStyle(color: Theme.amber)).disabled(!canChange || model.busy)
+                            Button(model.tr("Desarmar")) { pin = ""; askDisarm = true }.buttonStyle(PrimaryButtonStyle(color: Theme.amber)).disabled(!canDisarm || model.busy)
                         } else if modes != nil {
-                            Button(model.tr("Armar")) { pickMode = true }.buttonStyle(PrimaryButtonStyle(color: Theme.ok)).disabled(!canChange || model.busy)
+                            Button(model.tr("Armar")) { pickMode = true }.buttonStyle(PrimaryButtonStyle(color: Theme.ok)).disabled(!canArm || model.busy)
                         } else {
-                            Button(model.tr("Armar")) { Task { await prepareArm() } }.buttonStyle(PrimaryButtonStyle(color: Theme.ok)).disabled(!canChange || model.busy)
+                            Button(model.tr("Armar")) { Task { await prepareArm() } }.buttonStyle(PrimaryButtonStyle(color: Theme.ok)).disabled(!canArm || model.busy)
                         }
                         if !canChange { Text(model.tr("Tu usuario solo puede mirar: no puede cambiar nada.")).font(.caption).foregroundColor(Theme.muted) }
                     }

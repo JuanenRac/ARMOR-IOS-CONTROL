@@ -35,7 +35,7 @@ struct MoreView: View {
                     NavigationLink(model.tr("Ayuda")) { HelpView() }
                     NavigationLink(model.tr("Dispositivos")) { DevicesView() }
                     NavigationLink(model.tr("Meteorología")) { WeatherView() }
-                    if model.state.facts.role == "admin" || model.state.facts.role == "operator" { NavigationLink(model.tr("Informes")) { ReportsView() } }
+                    if model.state.facts.canChange { NavigationLink(model.tr("Informes")) { ReportsView() } }
                     if model.state.facts.canChange {
                         NavigationLink(model.tr("Solar")) { SolarView() }
                         NavigationLink(model.tr("Eléctrica")) { ElectricalView() }

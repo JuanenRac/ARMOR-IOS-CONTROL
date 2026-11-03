@@ -279,6 +279,7 @@
  "Tu administrador lo exige en este servidor.": "O seu administrador exige-o neste servidor.",
  "Tu contraseña (para confirmar que eres tú)": "A sua palavra-passe (para confirmar que é o utilizador)",
  "Tu usuario solo puede mirar: no puede cambiar nada.": "O seu utilizador só pode olhar: não pode alterar nada.",
+ "Tu usuario no tiene permiso para esta acción.": "O servidor não permite que o seu utilizador faça isto.",
  "Un archivo mío…": "Um ficheiro meu…",
  "Un conmutador de fuentes de la red eléctrica tiene una avería y queda abierto": "Um comutador de fontes da rede tem uma avaria e fica aberto",
  "Un contador de la red eléctrica avisa de una alarma": "Um contador da rede avisa de um alarme",

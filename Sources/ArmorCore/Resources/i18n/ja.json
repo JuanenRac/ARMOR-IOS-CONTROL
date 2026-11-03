@@ -279,6 +279,7 @@
  "Tu administrador lo exige en este servidor.": "このサーバーでは管理者が必須にしています。",
  "Tu contraseña (para confirmar que eres tú)": "パスワード（本人確認のため）",
  "Tu usuario solo puede mirar: no puede cambiar nada.": "このユーザーは閲覧のみで、何も変更できません。",
+ "Tu usuario no tiene permiso para esta acción.": "サーバーはこのユーザーにこの操作を許可していません。",
  "Un archivo mío…": "自分のファイル…",
  "Un conmutador de fuentes de la red eléctrica tiene una avería y queda abierto": "系統の電源切替スイッチが故障し、開いたままです",
  "Un contador de la red eléctrica avisa de una alarma": "系統メーターがアラームを通知しています",

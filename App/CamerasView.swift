@@ -107,7 +107,7 @@ struct CameraDetail: View {
             HStack {
                 Button { Task { await snapshot() } } label: { Label(model.tr("Foto"), systemImage: "camera") }
                 Button { pad.toggle() } label: { Label(model.tr("Mover la cámara"), systemImage: "dpad") }
-            }.buttonStyle(.bordered).tint(Theme.accent).disabled(!model.state.facts.canChange)
+            }.buttonStyle(.bordered).tint(Theme.accent).disabled(!model.state.facts.can(CapabilityAction.cameraControl))
             if pad { PtzPad { command in Task { await ptz(command) } } }
             Spacer()
         }

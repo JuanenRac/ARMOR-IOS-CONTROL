@@ -279,6 +279,7 @@
  "Tu administrador lo exige en este servidor.": "Dein Administrator verlangt das auf diesem Server.",
  "Tu contraseña (para confirmar que eres tú)": "Ihr Passwort (zur Bestätigung)",
  "Tu usuario solo puede mirar: no puede cambiar nada.": "Ihr Benutzer darf nur ansehen: Er kann nichts ändern.",
+ "Tu usuario no tiene permiso para esta acción.": "Der Server erlaubt Ihrem Benutzer diese Aktion nicht.",
  "Un archivo mío…": "Eine eigene Datei …",
  "Un conmutador de fuentes de la red eléctrica tiene una avería y queda abierto": "Ein Quellenumschalter des Netzes hat einen Fehler und bleibt offen",
  "Un contador de la red eléctrica avisa de una alarma": "Ein Netzzähler meldet einen Alarm",

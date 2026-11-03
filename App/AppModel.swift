@@ -301,6 +301,7 @@ final class AppModel: ObservableObject {
             switch error {
             case .lockRefused: show(tr("No se ha confirmado con el bloqueo del teléfono: no se ha hecho nada."), error: true)
             case .readOnly: show(tr("Tu usuario solo puede mirar: no puede cambiar nada."), error: true)
+            case .notAllowed: show(tr("Tu usuario no tiene permiso para esta acción."), error: true)
             case .notSignedIn: show(tr("Inicia sesión primero."), error: true)
             case .elevationDeclined: show(tr("No se ha hecho nada: hace falta confirmar tu identidad."), error: true)
             }

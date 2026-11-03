@@ -46,14 +46,14 @@ struct ActiveAlarms: View {
                     Text("\(alarm.sourceId) · \(alarm.raisedAt)").font(.caption).foregroundColor(Theme.muted)
                     HStack {
                         Button(model.tr("Detalles")) { detail = alarm }.accessibilityHint(model.tr("Ver detalles de la alarma"))
-                        if !alarm.acknowledged, model.state.facts.canChange {
+                        if !alarm.acknowledged, model.state.facts.can(CapabilityAction.acknowledge) {
                             Button(model.tr("Confirmar")) { Task { await model.order { _ in try await model.controller.acknowledge(alarm.id) } } }
                         }
                     }.buttonStyle(.bordered).tint(Theme.accent)
                 }
                 .listRowBackground(Theme.surface)
             }
-            if model.state.unseenAlarms > 1, model.state.facts.canChange {
+            if model.state.unseenAlarms > 1, model.state.facts.can(CapabilityAction.acknowledge) {
                 Button(model.tr("Confirmar todas")) { Task { await model.order { _ in try await model.controller.acknowledgeAll() } } }
             }
             if !model.state.recent.isEmpty {

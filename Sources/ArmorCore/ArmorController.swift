@@ -9,6 +9,8 @@ public enum ControllerError: Error, Equatable, Sendable {
     case lockRefused
     /// The role of the signed-in user only lets it look.
     case readOnly
+    /// The server does not allow this person this one action (it announced its capabilities and the action is not among them).
+    case notAllowed
     /// Not signed in.
     case notSignedIn
     /// The proof of identity the server asked for was not given.
@@ -142,9 +144,10 @@ public final class ArmorController: @unchecked Sendable {
     // MARK: orders
 
     /// Runs an order behind the lock of the phone, and, if the server asks for a new proof of identity, asks the person and tries again once.
-    public func guarded(reason: String, asker: ElevationAsker? = nil, _ action: @escaping @Sendable (String) async throws -> Void) async throws {
+    public func guarded(reason: String, needs: String = CapabilityAction.operate, asker: ElevationAsker? = nil, _ action: @escaping @Sendable (String) async throws -> Void) async throws {
         let origin = try origin()
         guard state.facts.canChange else { throw ControllerError.readOnly }
+        guard state.facts.can(needs) else { throw ControllerError.notAllowed }
         guard await gate.allow(reason: reason) else { throw ControllerError.lockRefused }
         do { try await action(origin) }
         catch let error as ArmorApiError where error.isElevationRequired {
@@ -156,29 +159,29 @@ public final class ArmorController: @unchecked Sendable {
     }
 
     public func arm(asker: ElevationAsker? = nil) async throws {
-        try await guarded(reason: translator.tr("Armar el sistema"), asker: asker) { [api] origin in try await api.setMode(origin, mode: "armed", pin: nil) }
+        try await guarded(reason: translator.tr("Armar el sistema"), needs: CapabilityAction.arm, asker: asker) { [api] origin in try await api.setMode(origin, mode: "armed", pin: nil) }
     }
 
     public func disarm(pin: String?, asker: ElevationAsker? = nil) async throws {
-        try await guarded(reason: translator.tr("Desarmar el sistema"), asker: asker) { [api] origin in try await api.setMode(origin, mode: "disarmed", pin: pin) }
+        try await guarded(reason: translator.tr("Desarmar el sistema"), needs: CapabilityAction.disarm, asker: asker) { [api] origin in try await api.setMode(origin, mode: "disarmed", pin: pin) }
     }
 
     /// Arms the system in a mode of the server (Away, Home or Night). Behind the lock of the phone like arming; a refusal that the picker answers (the confirmation of a mode with nothing assigned, a
     /// PIN) comes as an `ArmorApiError` whose `code` says which.
     public func armInMode(_ mode: String, pin: String?, confirmUnassigned: Bool, asker: ElevationAsker? = nil) async throws {
-        try await guarded(reason: translator.tr("Armar el sistema"), asker: asker) { [api] origin in
+        try await guarded(reason: translator.tr("Armar el sistema"), needs: CapabilityAction.arm, asker: asker) { [api] origin in
             try await api.setArmingMode(origin, mode: mode, pin: pin, confirmUnassigned: confirmUnassigned)
         }
     }
 
     public func armPanel(_ node: String, mode: String, force: Bool, profile: String?, asker: ElevationAsker? = nil) async throws {
-        try await guarded(reason: translator.trf("Armar %s", node), asker: asker) { [api] origin in
+        try await guarded(reason: translator.trf("Armar %s", node), needs: CapabilityAction.arm, asker: asker) { [api] origin in
             try await api.sendAlarmCommand(origin, node: node, mode: mode, force: force, pin: nil, profile: profile)
         }
     }
 
     public func disarmPanel(_ node: String, pin: String?, asker: ElevationAsker? = nil) async throws {
-        try await guarded(reason: translator.trf("Desarmar %s", node), asker: asker) { [api] origin in
+        try await guarded(reason: translator.trf("Desarmar %s", node), needs: CapabilityAction.disarm, asker: asker) { [api] origin in
             try await api.sendAlarmCommand(origin, node: node, mode: nil, force: false, pin: pin, profile: nil)
         }
     }
@@ -187,8 +190,8 @@ public final class ArmorController: @unchecked Sendable {
         try await guarded(reason: translator.tr("Silenciar la alarma"), asker: asker) { [api] origin in try await api.silenceAlarmSiren(origin, node: node, pin: pin) }
     }
 
-    public func acknowledge(_ id: String) async throws { try await guarded(reason: translator.tr("Confirmar"), asker: nil) { [api] origin in try await api.acknowledgeAlarm(origin, id: id) } }
-    public func acknowledgeAll() async throws { try await guarded(reason: translator.tr("Confirmar todas"), asker: nil) { [api] origin in try await api.acknowledgeAllAlarms(origin) } }
+    public func acknowledge(_ id: String) async throws { try await guarded(reason: translator.tr("Confirmar"), needs: CapabilityAction.acknowledge, asker: nil) { [api] origin in try await api.acknowledgeAlarm(origin, id: id) } }
+    public func acknowledgeAll() async throws { try await guarded(reason: translator.tr("Confirmar todas"), needs: CapabilityAction.acknowledge, asker: nil) { [api] origin in try await api.acknowledgeAllAlarms(origin) } }
 
     public func command(device: SiteDevice, command: String, confirmed: Bool, asker: ElevationAsker? = nil) async throws {
         try await guarded(reason: translator.tr("Dispositivos"), asker: asker) { [api] origin in try await api.commandDevice(origin, id: device.id, command: command, confirm: confirmed) }
