@@ -4,7 +4,7 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
-- **The alarm code `alarm_siren_fault` (the siren of a panel may not sound) is told in the eight languages:** the same as the Android app. The copies of the shared table of alarm codes and of their help follow the originals, and the Spanish fallback knows the code.
+- **The alarm code `alarm_siren_fault` (the siren of a panel may not sound) is told in the eight languages:** the same as the Android app. The copies of the shared table of alarm codes and of their help follow the originals.
 
 ## [0.0.2] - The iOS app follows the capabilities the server announces, shares a diagnostic report, refuses oversized answers and adds the weather, network, node finder, services and security screens of the Android app
 

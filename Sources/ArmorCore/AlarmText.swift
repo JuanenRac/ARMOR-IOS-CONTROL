@@ -52,7 +52,6 @@ public enum AlarmText {
         "alarm_sounding": "¡La alarma está sonando!",
         "alarm_tamper": "Una zona de la alarma indica sabotaje (cable cortado o en cortocircuito)",
         "alarm_zone_trouble": "Una zona de la alarma no se puede leer: no está vigilando",
-        "alarm_siren_fault": "La sirena de la alarma podría no sonar: su cableado está abierto, en cortocircuito o ilegible",
         "alarm_locked_out": "La central de alarma está bloqueada tras PIN erróneos",
         "alarm_offline": "Un nodo de alarma ha dejado de responder",
         "duress_disarm": "El sistema se desarmó con el PIN de coacción: puede que alguien esté siendo obligado",
