@@ -14,11 +14,13 @@ struct AlarmsView: View {
                     Text(model.tr("Alarmas")).tag(0)
                     Text(model.tr("Centrales de alarma")).tag(1)
                     Text(model.tr("Historial")).tag(2)
+                    Text(model.tr("Conexiones")).tag(3)
                 }
                 .pickerStyle(.segmented).padding(.horizontal)
                 switch section {
                 case 0: ActiveAlarms()
                 case 1: PanelsList()
+                case 3: ConnectionsList()
                 default: HistoryList()
                 }
             }
@@ -171,5 +173,40 @@ struct HistoryList: View {
         }
         .scrollContentBackground(.hidden)
         .refreshable { await model.refresh() }
+    }
+}
+
+/// Every device or app the server has seen, with when it was last seen and its open sessions. An administrator also gets the address; nothing secret is ever in the list.
+struct ConnectionsList: View {
+    @EnvironmentObject var model: AppModel
+    @State private var clients: [ConnectionClient]?
+    @State private var failed = false
+
+    private func load() async {
+        guard let origin = model.activeOrigin else { return }
+        do { clients = try await model.controller.api.connections(origin); failed = false } catch { failed = clients == nil }
+    }
+
+    var body: some View {
+        List {
+            if failed { Text(model.tr("No se pudo leer la lista de conexiones.")).foregroundColor(Theme.muted) }
+            else if let clients, clients.isEmpty { Text(model.tr("Ningún cliente se ha conectado todavía.")).foregroundColor(Theme.muted) }
+            else if let clients {
+                Text(model.tr("Dispositivos y apps que se conectan")).font(.footnote).foregroundColor(Theme.muted).listRowBackground(Color.clear)
+                ForEach(clients) { client in
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(ConnectionsParser.title(client, model.translator)).font(.subheadline.weight(.semibold))
+                        Text(model.trf("Última vez: %s", client.lastSeen)).font(.caption).foregroundColor(Theme.muted)
+                        Text([model.trf("Sesiones abiertas: %d", client.activeSessions), model.trf("Inicios de sesión: %d", client.loginsOk), model.trf("Rechazados: %d", client.loginsFailed)].joined(separator: " · "))
+                            .font(.caption).foregroundColor(client.loginsFailed > 0 ? Theme.amber : Theme.muted)
+                        if let ip = client.ip { Text(ip).font(.caption).foregroundColor(Theme.muted) }
+                    }.listRowBackground(Theme.surface)
+                }
+                if clients.allSatisfy({ $0.ip == nil }) { Text(model.tr("Las direcciones solo las ven los administradores.")).font(.caption2).foregroundColor(Theme.muted).listRowBackground(Color.clear) }
+            } else { Text(model.tr("Buscando datos…")).foregroundColor(Theme.muted).listRowBackground(Color.clear) }
+        }
+        .scrollContentBackground(.hidden)
+        .task { while !Task.isCancelled { await load(); try? await Task.sleep(nanoseconds: 10_000_000_000) } }
+        .refreshable { await load() }
     }
 }
