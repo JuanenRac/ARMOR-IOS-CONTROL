@@ -4,6 +4,7 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+- **The pairing code of a node is read and written in the core:** `PairingCode` builds and parses the text of the pairing QR code (name of the node and address of the server, nothing else) exactly as the Android app and the shared library do, with tests. The screens that show and scan it follow the Android ones.
 - **The alarm code `alarm_siren_fault` (the siren of a panel may not sound) is told in the eight languages:** the same as the Android app. The copies of the shared table of alarm codes and of their help follow the originals.
 
 ## [0.0.2] - The iOS app follows the capabilities the server announces, shares a diagnostic report, refuses oversized answers and adds the weather, network, node finder, services and security screens of the Android app
