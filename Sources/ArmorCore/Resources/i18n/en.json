@@ -1106,5 +1106,14 @@
  "El nodo de red no ha encontrado ninguno todavía. Escribe la dirección arriba.": "The network node has not found any yet. Type the address above.",
  "Se borran sus avisos de salud en el servidor. Si el nodo sigue encendido, volverá a aparecer.": "Its health warnings are deleted on the server. If the node is still on, it will appear again.",
  "No se pudo abrir el nodo en %s. Comprueba que el móvil está en la misma red y que el nodo está encendido.": "The node could not be opened at %s. Check that the phone is on the same network and that the node is on.",
- "Reintentar": "Retry"
+ "Reintentar": "Retry",
+ "1 persona": "1 person",
+ "%s personas": "%s people",
+ "%s/%s nodos": "%s/%s nodes",
+ "Arrastra y pellizca · doble toque para centrar": "Drag and pinch · double tap to center",
+ "Hay detecciones de un nodo que no está enlazado a un radar del diseño.": "There are detections from a node that is not linked to a radar of the design.",
+ "Aún no hay un radar diseñado": "No radar designed yet",
+ "Coloca tus radares en el Diseñador de sitio de Studio y aparecerán aquí, con las personas que detectan.": "Place your radars in Studio's Site designer and they will appear here, with the people they detect.",
+ "Recargar el diseño": "Reload the design",
+ "No se pudo leer el diseño del sitio.": "The site design could not be read."
 }

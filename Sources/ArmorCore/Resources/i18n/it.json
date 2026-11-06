@@ -1106,5 +1106,14 @@
  "El nodo de red no ha encontrado ninguno todavía. Escribe la dirección arriba.": "Il nodo di rete non ne ha ancora trovati. Scrivi l'indirizzo qui sopra.",
  "Se borran sus avisos de salud en el servidor. Si el nodo sigue encendido, volverá a aparecer.": "I suoi avvisi di salute vengono cancellati sul server. Se il nodo è ancora acceso, ricomparirà.",
  "No se pudo abrir el nodo en %s. Comprueba que el móvil está en la misma red y que el nodo está encendido.": "Non è stato possibile aprire il nodo a %s. Controlla che il telefono sia nella stessa rete e che il nodo sia acceso.",
- "Reintentar": "Riprova"
+ "Reintentar": "Riprova",
+ "1 persona": "1 persona",
+ "%s personas": "%s persone",
+ "%s/%s nodos": "%s/%s nodi",
+ "Arrastra y pellizca · doble toque para centrar": "Trascina e pizzica · doppio tocco per centrare",
+ "Hay detecciones de un nodo que no está enlazado a un radar del diseño.": "Ci sono rilevamenti da un nodo non collegato a un radar del disegno.",
+ "Aún no hay un radar diseñado": "Ancora nessun radar progettato",
+ "Coloca tus radares en el Diseñador de sitio de Studio y aparecerán aquí, con las personas que detectan.": "Posiziona i tuoi radar nel Progettista del sito di Studio e appariranno qui, con le persone che rilevano.",
+ "Recargar el diseño": "Ricarica il disegno",
+ "No se pudo leer el diseño del sitio.": "Non è stato possibile leggere il progetto del sito."
 }

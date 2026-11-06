@@ -1106,5 +1106,14 @@
  "El nodo de red no ha encontrado ninguno todavía. Escribe la dirección arriba.": "ネットワークノードはまだ見つけていません。上にアドレスを入力してください。",
  "Se borran sus avisos de salud en el servidor. Si el nodo sigue encendido, volverá a aparecer.": "サーバー上のこのノードの健全性警告が削除されます。ノードがまだ電源オンなら、再び表示されます。",
  "No se pudo abrir el nodo en %s. Comprueba que el móvil está en la misma red y que el nodo está encendido.": "%s のノードを開けませんでした。スマホが同じネットワークにあり、ノードの電源が入っているか確認してください。",
- "Reintentar": "再試行"
+ "Reintentar": "再試行",
+ "1 persona": "1人",
+ "%s personas": "%s 人",
+ "%s/%s nodos": "%s/%s ノード",
+ "Arrastra y pellizca · doble toque para centrar": "ドラッグとピンチ・ダブルタップで中央へ",
+ "Hay detecciones de un nodo que no está enlazado a un radar del diseño.": "設計上のレーダーに紐付いていないノードからの検知があります。",
+ "Aún no hay un radar diseñado": "レーダーの設計はまだありません",
+ "Coloca tus radares en el Diseñador de sitio de Studio y aparecerán aquí, con las personas que detectan.": "Studioのサイトデザイナーにレーダーを配置すると、検知した人とともにここに表示されます。",
+ "Recargar el diseño": "設計を再読み込み",
+ "No se pudo leer el diseño del sitio.": "サイトの設計を読み込めませんでした。"
 }

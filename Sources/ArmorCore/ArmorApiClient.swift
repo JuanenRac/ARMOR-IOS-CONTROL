@@ -118,6 +118,8 @@ public final class ArmorApiClient: ArmorApi, @unchecked Sendable {
 
     public func forgetNode(_ origin: String, id: String) async throws { _ = try await send(origin, "/api/v1/node-health/" + Self.part(id), "DELETE", nil, [204, 404]) }
 
+    public func site(_ origin: String) async throws -> SiteDesign? { SiteParser.parse(try await getJson(origin, "/api/v1/site")) }
+
     public func nodeControlOperations(_ origin: String) async throws -> [ControlOperationView] { NodeControlParser.list(try await getJson(origin, "/api/v1/nodes/control/operations")) }
 
     public func nodeControlOperation(_ origin: String, id: String) async throws -> ControlOperationView {

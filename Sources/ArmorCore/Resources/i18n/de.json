@@ -1106,5 +1106,14 @@
  "El nodo de red no ha encontrado ninguno todavía. Escribe la dirección arriba.": "Der Netzwerk-Knoten hat noch keinen gefunden. Geben Sie oben die Adresse ein.",
  "Se borran sus avisos de salud en el servidor. Si el nodo sigue encendido, volverá a aparecer.": "Seine Gesundheitswarnungen werden auf dem Server gelöscht. Ist der Knoten noch eingeschaltet, erscheint er wieder.",
  "No se pudo abrir el nodo en %s. Comprueba que el móvil está en la misma red y que el nodo está encendido.": "Der Knoten konnte unter %s nicht geöffnet werden. Prüfen Sie, ob das Handy im selben Netz ist und der Knoten läuft.",
- "Reintentar": "Erneut versuchen"
+ "Reintentar": "Erneut versuchen",
+ "1 persona": "1 Person",
+ "%s personas": "%s Personen",
+ "%s/%s nodos": "%s/%s Knoten",
+ "Arrastra y pellizca · doble toque para centrar": "Ziehen und zusammenziehen · Doppeltippen zum Zentrieren",
+ "Hay detecciones de un nodo que no está enlazado a un radar del diseño.": "Es gibt Erkennungen von einem Knoten, der keinem Radar des Entwurfs zugeordnet ist.",
+ "Aún no hay un radar diseñado": "Noch kein Radar geplant",
+ "Coloca tus radares en el Diseñador de sitio de Studio y aparecerán aquí, con las personas que detectan.": "Platzieren Sie Ihre Radare im Standortplaner von Studio, dann erscheinen sie hier mit den erkannten Personen.",
+ "Recargar el diseño": "Entwurf neu laden",
+ "No se pudo leer el diseño del sitio.": "Der Entwurf des Standorts konnte nicht gelesen werden."
 }

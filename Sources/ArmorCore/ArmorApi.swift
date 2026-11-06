@@ -87,6 +87,8 @@ public protocol ArmorApi: Sendable {
     func nodeHealth(_ origin: String) async throws -> NodeHealthOverview
     /// Every device and app the server has seen (the Connections list of the history); the addresses come only for an administrator.
     func connections(_ origin: String) async throws -> [ConnectionClient]
+    /// The site as Studio designed it (terrain, buildings, radars, cameras); nil when no design has been saved yet.
+    func site(_ origin: String) async throws -> SiteDesign?
     /// Forgets a node that was taken away, with its health warnings (an administrator only; a node the server no longer knows is not a failure).
     func forgetNode(_ origin: String, id: String) async throws
     /// Gives one order (restart, pause, resume, standby, identify, diagnostics, maintenance_on, maintenance_off) to one node; an administrator who proved themselves a moment ago. `confirm` is the node's name where it is asked.
@@ -136,6 +138,7 @@ extension ArmorApi {
     func services(_ origin: String) async throws -> ServicesOverview { throw ArmorApiError(message: "not supported", status: nil) }
     func nodeHealth(_ origin: String) async throws -> NodeHealthOverview { throw ArmorApiError(message: "not supported", status: nil) }
     func connections(_ origin: String) async throws -> [ConnectionClient] { throw ArmorApiError(message: "not supported", status: nil) }
+    func site(_ origin: String) async throws -> SiteDesign? { throw ArmorApiError(message: "not supported", status: nil) }
     func forgetNode(_ origin: String, id: String) async throws { throw ArmorApiError(message: "not supported", status: nil) }
     func nodeControl(_ origin: String, nodeId: String, operation: String, confirm: String?, durationS: Int?) async throws -> ControlOperationView { throw ArmorApiError(message: "not supported", status: nil) }
     func nodesControl(_ origin: String, operation: String, mode: String, confirm: String?, durationS: Int?) async throws -> ControlOperationView { throw ArmorApiError(message: "not supported", status: nil) }

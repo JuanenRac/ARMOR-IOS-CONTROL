@@ -1106,5 +1106,14 @@
  "El nodo de red no ha encontrado ninguno todavía. Escribe la dirección arriba.": "O nó de rede ainda não encontrou nenhum. Escreva o endereço acima.",
  "Se borran sus avisos de salud en el servidor. Si el nodo sigue encendido, volverá a aparecer.": "Os seus avisos de saúde são apagados no servidor. Se o nó ainda estiver ligado, voltará a aparecer.",
  "No se pudo abrir el nodo en %s. Comprueba que el móvil está en la misma red y que el nodo está encendido.": "Não foi possível abrir o nó em %s. Verifique se o telemóvel está na mesma rede e se o nó está ligado.",
- "Reintentar": "Tentar de novo"
+ "Reintentar": "Tentar de novo",
+ "1 persona": "1 pessoa",
+ "%s personas": "%s pessoas",
+ "%s/%s nodos": "%s/%s nós",
+ "Arrastra y pellizca · doble toque para centrar": "Arraste e belisque · toque duplo para centrar",
+ "Hay detecciones de un nodo que no está enlazado a un radar del diseño.": "Há deteções de um nó que não está ligado a um radar do desenho.",
+ "Aún no hay un radar diseñado": "Ainda não há um radar desenhado",
+ "Coloca tus radares en el Diseñador de sitio de Studio y aparecerán aquí, con las personas que detectan.": "Coloque os seus radares no Desenhador do local do Studio e aparecerão aqui, com as pessoas que detetam.",
+ "Recargar el diseño": "Recarregar o desenho",
+ "No se pudo leer el diseño del sitio.": "Não foi possível ler o desenho do local."
 }

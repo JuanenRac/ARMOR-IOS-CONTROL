@@ -1106,5 +1106,14 @@
  "El nodo de red no ha encontrado ninguno todavía. Escribe la dirección arriba.": "网络节点尚未发现任何节点。请在上方输入地址。",
  "Se borran sus avisos de salud en el servidor. Si el nodo sigue encendido, volverá a aparecer.": "服务器上该节点的健康警告将被删除。如果节点仍在运行，它会再次出现。",
  "No se pudo abrir el nodo en %s. Comprueba que el móvil está en la misma red y que el nodo está encendido.": "无法在 %s 打开节点。请确认手机与节点在同一网络且节点已开机。",
- "Reintentar": "重试"
+ "Reintentar": "重试",
+ "1 persona": "1 人",
+ "%s personas": "%s 人",
+ "%s/%s nodos": "%s/%s 个节点",
+ "Arrastra y pellizca · doble toque para centrar": "拖动和捏合 · 双击居中",
+ "Hay detecciones de un nodo que no está enlazado a un radar del diseño.": "有来自未关联到设计中雷达的节点的检测。",
+ "Aún no hay un radar diseñado": "还没有设计雷达",
+ "Coloca tus radares en el Diseñador de sitio de Studio y aparecerán aquí, con las personas que detectan.": "在 Studio 的场地设计器中放置雷达，它们会连同检测到的人员显示在这里。",
+ "Recargar el diseño": "重新加载设计",
+ "No se pudo leer el diseño del sitio.": "无法读取站点设计。"
 }

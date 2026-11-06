@@ -105,6 +105,8 @@ public struct FieldNode: Equatable, Sendable, Identifiable {
     public let targetCount: Int
     public let alertLevel: String
     public let stale: Bool
+    /// The people the radars of this node follow, in the frame of each radar (for the radar screen).
+    public var targets: [LiveTarget] = []
 }
 
 public struct ArmorSnapshot: Equatable, Sendable {
@@ -123,7 +125,7 @@ public struct ArmorSnapshot: Equatable, Sendable {
         let nodes = nodeObject.keys.sorted().compactMap { id -> FieldNode? in
             guard let node = nodeObject[id] as? JSON else { return nil }
             return FieldNode(id: id, online: node.bool("online"), lux: node.double("lux"), targetCount: node.int("target_count"),
-                             alertLevel: node.str("alert_level", "normal"), stale: node.bool("stale"))
+                             alertLevel: node.str("alert_level", "normal"), stale: node.bool("stale"), targets: SiteParser.targets(node))
         }
         let armingMode = root.str("arming_mode")
         return ArmorSnapshot(mode: root.str("mode", "disarmed"), revision: root.int("revision"), updatedAt: root.str("updated_at"), nodes: nodes, armingMode: armingMode.isEmpty ? nil : armingMode, panelSync: PanelSyncView.parse(root.object("panel_sync")))
