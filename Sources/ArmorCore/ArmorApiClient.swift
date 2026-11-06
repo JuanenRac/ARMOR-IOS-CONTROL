@@ -99,6 +99,26 @@ public final class ArmorApiClient: ArmorApi, @unchecked Sendable {
 
     public func services(_ origin: String) async throws -> ServicesOverview { ServicesParser.overview(try await getJson(origin, "/api/v1/system/services")) }
     public func nodeHealth(_ origin: String) async throws -> NodeHealthOverview { NodeHealthParser.overview(try await getJson(origin, "/api/v1/node-health")) }
+
+    public func nodeControl(_ origin: String, nodeId: String, operation: String, confirm: String?, durationS: Int?) async throws -> ControlOperationView {
+        var body: JSON = ["operation": operation]
+        if let confirm { body["confirm"] = confirm }
+        if let durationS { body["duration_s"] = durationS }
+        return NodeControlParser.operation(try Json.object(try await send(origin, "/api/v1/nodes/" + Self.part(nodeId) + "/control", "POST", body, [202])))
+    }
+
+    public func nodesControl(_ origin: String, operation: String, mode: String, confirm: String?, durationS: Int?) async throws -> ControlOperationView {
+        var body: JSON = ["operation": operation, "mode": mode]
+        if let confirm { body["confirm"] = confirm }
+        if let durationS { body["duration_s"] = durationS }
+        return NodeControlParser.operation(try Json.object(try await send(origin, "/api/v1/nodes/control", "POST", body, [202])))
+    }
+
+    public func nodeControlOperations(_ origin: String) async throws -> [ControlOperationView] { NodeControlParser.list(try await getJson(origin, "/api/v1/nodes/control/operations")) }
+
+    public func nodeControlOperation(_ origin: String, id: String) async throws -> ControlOperationView {
+        NodeControlParser.operation(try await getJson(origin, "/api/v1/nodes/control/operations/" + Self.part(id)))
+    }
     public func mySessions(_ origin: String) async throws -> [SessionInfo] { SecurityParser.sessions(try await getJson(origin, "/api/v1/studio/sessions")) }
     public func endSession(_ origin: String, id: String) async throws { _ = try await send(origin, "/api/v1/studio/sessions/\(Self.part(id))", "DELETE", nil, [204]) }
     public func endOtherSessions(_ origin: String) async throws { _ = try await send(origin, "/api/v1/studio/sessions/end-others", "POST", nil, [204]) }

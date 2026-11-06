@@ -25,6 +25,9 @@ public struct NodeHealthView: Equatable, Sendable, Identifiable {
     public let restarts24h: Int
     /// The codes of the warnings the server raised: "node_low_memory", "node_frequent_resets", "node_link_flapping", "node_weak_signal", and for a radar node "node_sensor_bluetooth_open", "node_radar_masked" and "node_wifi_jam".
     public let warnings: [String]
+    /// What the control of the node says: "running", "paused" or "standby" (empty when the server says nothing), and whether maintenance is on.
+    public let controlState: String
+    public let maintenance: Bool
     public var id: String { nodeId }
     public var needsLook: Bool { status == "warning" }
     public var silent: Bool { status == "stale" }
@@ -69,7 +72,8 @@ public enum NodeHealthParser {
             heapFree: report.int("heap_free"), heapMin: report.int("heap_min"),
             link: report.str("link", "none"), linkUp: report.bool("link_up"), rssiDbm: report.has("rssi_dbm") ? report.int("rssi_dbm") : nil,
             brokerConnections: report.int("broker_reconnects"), lowStackTasks: report.int("low_stack_tasks"), lastError: nonEmpty(report.str("last_error")),
-            restarts24h: json.int("restarts_24h"), warnings: json.objects("warnings").map { $0.str("code") })
+            restarts24h: json.int("restarts_24h"), warnings: json.objects("warnings").map { $0.str("code") },
+            controlState: json.object("control")?.str("state") ?? "", maintenance: json.object("control")?.bool("maintenance") ?? false)
     }
 }
 

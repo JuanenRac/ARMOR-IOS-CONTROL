@@ -44,6 +44,7 @@ struct MoreView: View {
                         NavigationLink(model.tr("Salud de los nodos")) { NodeHealthScreen() }
                     }
                     if model.state.facts.isAdmin { NavigationLink(model.tr("Mantenimiento de baterías")) { BatteryView() } }
+                    if model.state.facts.isAdmin { NavigationLink(model.tr("Control de nodos")) { NodeControlView() } }
                     NavigationLink(model.tr("Configurar un nodo")) { NodeSetupView() }
                 }.listRowBackground(Theme.surface)
                 Section {

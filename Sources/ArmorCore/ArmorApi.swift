@@ -85,6 +85,13 @@ public protocol ArmorApi: Sendable {
     func services(_ origin: String) async throws -> ServicesOverview
     /// The health report of every node, with the warnings the server raised about each (an operator session is needed).
     func nodeHealth(_ origin: String) async throws -> NodeHealthOverview
+    /// Gives one order (restart, pause, resume, standby, identify, diagnostics, maintenance_on, maintenance_off) to one node; an administrator who proved themselves a moment ago. `confirm` is the node's name where it is asked.
+    func nodeControl(_ origin: String, nodeId: String, operation: String, confirm: String?, durationS: Int?) async throws -> ControlOperationView
+    /// The same order to every node that reports; `mode` is "now" or "rolling" (only a restart can be rolling); `confirm` is the word RESTART, PAUSE or STANDBY where it is asked.
+    func nodesControl(_ origin: String, operation: String, mode: String, confirm: String?, durationS: Int?) async throws -> ControlOperationView
+    /// The orders of the last weeks with a line per node; never a token.
+    func nodeControlOperations(_ origin: String) async throws -> [ControlOperationView]
+    func nodeControlOperation(_ origin: String, id: String) async throws -> ControlOperationView
     /// The open sessions of the signed-in account, this one marked.
     func mySessions(_ origin: String) async throws -> [SessionInfo]
     func endSession(_ origin: String, id: String) async throws
@@ -124,6 +131,10 @@ extension ArmorApi {
     func scanNetworkNow(_ origin: String) async throws { throw ArmorApiError(message: "not supported", status: nil) }
     func services(_ origin: String) async throws -> ServicesOverview { throw ArmorApiError(message: "not supported", status: nil) }
     func nodeHealth(_ origin: String) async throws -> NodeHealthOverview { throw ArmorApiError(message: "not supported", status: nil) }
+    func nodeControl(_ origin: String, nodeId: String, operation: String, confirm: String?, durationS: Int?) async throws -> ControlOperationView { throw ArmorApiError(message: "not supported", status: nil) }
+    func nodesControl(_ origin: String, operation: String, mode: String, confirm: String?, durationS: Int?) async throws -> ControlOperationView { throw ArmorApiError(message: "not supported", status: nil) }
+    func nodeControlOperations(_ origin: String) async throws -> [ControlOperationView] { throw ArmorApiError(message: "not supported", status: nil) }
+    func nodeControlOperation(_ origin: String, id: String) async throws -> ControlOperationView { throw ArmorApiError(message: "not supported", status: nil) }
     func mySessions(_ origin: String) async throws -> [SessionInfo] { throw ArmorApiError(message: "not supported", status: nil) }
     func endSession(_ origin: String, id: String) async throws { throw ArmorApiError(message: "not supported", status: nil) }
     func endOtherSessions(_ origin: String) async throws { throw ArmorApiError(message: "not supported", status: nil) }
