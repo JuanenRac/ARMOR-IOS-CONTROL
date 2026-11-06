@@ -4,6 +4,8 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+## [0.0.3] - The pairing code of a node is read and written in the core: PairingCode builds and parses the text of the pairing QR code (name of the node and address of the server, nothing else) exactly as the Android app and the shared... (and 1 more changes)
+
 - **The pairing code of a node is read and written in the core:** `PairingCode` builds and parses the text of the pairing QR code (name of the node and address of the server, nothing else) exactly as the Android app and the shared library do, with tests. The screens that show and scan it follow the Android ones.
 - **The alarm code `alarm_siren_fault` (the siren of a panel may not sound) is told in the eight languages:** the same as the Android app. The copies of the shared table of alarm codes and of their help follow the originals.
 
