@@ -125,6 +125,22 @@ public final class ArmorApiClient: ArmorApi, @unchecked Sendable {
     public func nodeControlOperation(_ origin: String, id: String) async throws -> ControlOperationView {
         NodeControlParser.operation(try await getJson(origin, "/api/v1/nodes/control/operations/" + Self.part(id)))
     }
+    public func machineUpdateState(_ origin: String) async throws -> MachineUpdateState { MachineUpdateParser.state(try await getJson(origin, "/api/v1/admin/machine-update")) }
+
+    public func machineUpdatePreview(_ origin: String, project: String) async throws -> MachineUpdatePreview {
+        MachineUpdateParser.preview(try Json.object(try await send(origin, "/api/v1/admin/machine-update/preview", "POST", ["project": project], [200])))
+    }
+
+    public func machineUpdateApply(_ origin: String, project: String, planId: String, confirm: String, code: String?) async throws -> String {
+        var body: JSON = ["project": project, "plan_id": planId, "confirm": confirm]
+        if let code, !code.isEmpty { body["totp"] = code }
+        return MachineUpdateParser.startedId(try Json.object(try await send(origin, "/api/v1/admin/machine-update/apply", "POST", body, [202])))
+    }
+
+    public func machineUpdateJob(_ origin: String, id: String, since: Int) async throws -> MachineJobView {
+        MachineUpdateParser.job(try await getJson(origin, "/api/v1/admin/machine-update/jobs/" + Self.part(id) + "?since=\(max(0, since))"))
+    }
+
     public func mySessions(_ origin: String) async throws -> [SessionInfo] { SecurityParser.sessions(try await getJson(origin, "/api/v1/studio/sessions")) }
     public func endSession(_ origin: String, id: String) async throws { _ = try await send(origin, "/api/v1/studio/sessions/\(Self.part(id))", "DELETE", nil, [204]) }
     public func endOtherSessions(_ origin: String) async throws { _ = try await send(origin, "/api/v1/studio/sessions/end-others", "POST", nil, [204]) }

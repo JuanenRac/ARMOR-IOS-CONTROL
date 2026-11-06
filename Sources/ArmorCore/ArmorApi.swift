@@ -98,6 +98,14 @@ public protocol ArmorApi: Sendable {
     /// The orders of the last weeks with a line per node; never a token.
     func nodeControlOperations(_ origin: String) async throws -> [ControlOperationView]
     func nodeControlOperation(_ origin: String, id: String) async throws -> ControlOperationView
+    /// Whether updating the programs of the machine from the phone is switched on (here and on the maintenance helper) and which programs can be updated; an administrator.
+    func machineUpdateState(_ origin: String) async throws -> MachineUpdateState
+    /// Step one: what is installed against the newest release of `project`; nothing changes. When an update is available the answer carries a plan that is good once and for a few minutes.
+    func machineUpdatePreview(_ origin: String, project: String) async throws -> MachineUpdatePreview
+    /// Step two: updates `project` with the plan of its preview; `confirm` is the name typed again, `code` the one-time code of the administrator when there is one (passed on, never kept). Returns the id of the job.
+    func machineUpdateApply(_ origin: String, project: String, planId: String, confirm: String, code: String?) async throws -> String
+    /// The steps, percentage and log of the job an apply started, from the log line `since` on.
+    func machineUpdateJob(_ origin: String, id: String, since: Int) async throws -> MachineJobView
     /// The open sessions of the signed-in account, this one marked.
     func mySessions(_ origin: String) async throws -> [SessionInfo]
     func endSession(_ origin: String, id: String) async throws
@@ -144,6 +152,10 @@ extension ArmorApi {
     func nodesControl(_ origin: String, operation: String, mode: String, confirm: String?, durationS: Int?) async throws -> ControlOperationView { throw ArmorApiError(message: "not supported", status: nil) }
     func nodeControlOperations(_ origin: String) async throws -> [ControlOperationView] { throw ArmorApiError(message: "not supported", status: nil) }
     func nodeControlOperation(_ origin: String, id: String) async throws -> ControlOperationView { throw ArmorApiError(message: "not supported", status: nil) }
+    func machineUpdateState(_ origin: String) async throws -> MachineUpdateState { throw ArmorApiError(message: "not supported", status: nil) }
+    func machineUpdatePreview(_ origin: String, project: String) async throws -> MachineUpdatePreview { throw ArmorApiError(message: "not supported", status: nil) }
+    func machineUpdateApply(_ origin: String, project: String, planId: String, confirm: String, code: String?) async throws -> String { throw ArmorApiError(message: "not supported", status: nil) }
+    func machineUpdateJob(_ origin: String, id: String, since: Int) async throws -> MachineJobView { throw ArmorApiError(message: "not supported", status: nil) }
     func mySessions(_ origin: String) async throws -> [SessionInfo] { throw ArmorApiError(message: "not supported", status: nil) }
     func endSession(_ origin: String, id: String) async throws { throw ArmorApiError(message: "not supported", status: nil) }
     func endOtherSessions(_ origin: String) async throws { throw ArmorApiError(message: "not supported", status: nil) }

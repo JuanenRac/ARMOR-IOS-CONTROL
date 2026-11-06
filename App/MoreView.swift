@@ -46,6 +46,7 @@ struct MoreView: View {
                     }
                     if model.state.facts.isAdmin { NavigationLink(model.tr("Mantenimiento de baterías")) { BatteryView() } }
                     if model.state.facts.isAdmin { NavigationLink(model.tr("Control de nodos")) { NodeControlView() } }
+                    if model.state.facts.isAdmin { NavigationLink(model.tr("Actualizar el equipo")) { MachineUpdateView() } }
                     NavigationLink(model.tr("Configurar nodos")) { NodesView() }
                     NavigationLink(model.tr("Configurar un nodo")) { NodeSetupView() }
                 }.listRowBackground(Theme.surface)
