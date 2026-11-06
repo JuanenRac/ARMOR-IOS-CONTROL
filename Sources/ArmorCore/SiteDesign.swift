@@ -113,9 +113,18 @@ public enum SiteParser {
         #endif
     }
 
+    /// A JSON number as a Double (a whole number may arrive as an Int, a fraction as a Double, and on Apple platforms either as an NSNumber); a boolean or a text is not a number.
+    private static func asDouble(_ value: Any) -> Double? {
+        if isBoolean(value) { return nil }
+        if let whole = value as? Int { return Double(whole) }
+        if let fraction = value as? Double { return fraction }
+        if let number = value as? NSNumber { return number.doubleValue }
+        return nil
+    }
+
     /// The floor of a radar of the design: a whole number from 0 to 29, or nil (anything else is not a floor).
     static func floorOf(_ sensor: JSON) -> Int? {
-        guard let raw = sensor["floor"], !(raw is NSNull), !isBoolean(raw), let number = (raw as? NSNumber)?.doubleValue else { return nil }
+        guard let raw = sensor["floor"], !(raw is NSNull), let number = asDouble(raw) else { return nil }
         return number == number.rounded(.down) && number >= 0 && number < 30 ? Int(number) : nil
     }
 
@@ -134,7 +143,7 @@ public enum SiteParser {
             let corners = points(b, "points")
             if corners.count < 3 { return nil }
             let roof = b.object("roof")
-            var floors = ((b["floors"] as? [Any]) ?? []).map { value -> Double in min(20, max(1, (value as? NSNumber)?.doubleValue ?? 2.8)) }
+            var floors = ((b["floors"] as? [Any]) ?? []).map { value -> Double in min(20, max(1, asDouble(value) ?? 2.8)) }
             if floors.isEmpty { floors = [2.8] }
             return SiteBuilding(id: b.str("id"), name: b.str("name"), points: corners, base: number(b, "base", 0), floors: floors, thickness: number(b, "thickness", 0.25), color: colour(b, "color"),
                                 roofStyle: roof?.str("style", "flat") ?? "flat", roofSlope: roof.map { number($0, "slope", 20) } ?? 20, roofColor: colour(b, "roofColor"))
