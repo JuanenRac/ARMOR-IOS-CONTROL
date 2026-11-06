@@ -110,7 +110,7 @@ final class NodeSetupModel: ObservableObject {
                 reply = await ask("setup", args)
             } else { reply = await ask("login", args) }
             busy = false
-            if reply.ok { admin = hello.setup || reply.data.str("role") == "admin"; message = ""; step = .configure }
+            if reply.ok { admin = hello.setup || (reply.data["role"] as? String) == "admin"; message = ""; step = .configure }
             else { message = NodeProtocol.errorText(reply.error, t) }
         }
     }
