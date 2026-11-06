@@ -1,3 +1,5 @@
 "CFBundleDisplayName" = "A.R.M.O.R.";
 "NSFaceIDUsageDescription" = "Confirme que c'est bien vous avant d'armer, de désarmer ou de couper le son d'une alarme.";
 "NSLocalNetworkUsageDescription" = "Se connecte à votre serveur A.R.M.O.R. sur le réseau de la maison.";
+"NSBluetoothAlwaysUsageDescription" = "Trouve et configure un nœud A.R.M.O.R. par Bluetooth.";
+"NSCameraUsageDescription" = "Lit le code QR d'appairage d'un nœud.";

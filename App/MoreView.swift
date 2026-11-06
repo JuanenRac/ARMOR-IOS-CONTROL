@@ -41,8 +41,10 @@ struct MoreView: View {
                         NavigationLink(model.tr("Eléctrica")) { ElectricalView() }
                         NavigationLink(model.tr("Red")) { NetworkView() }
                         NavigationLink(model.tr("Servicios")) { ServicesView() }
+                        NavigationLink(model.tr("Salud de los nodos")) { NodeHealthScreen() }
                     }
                     if model.state.facts.isAdmin { NavigationLink(model.tr("Mantenimiento de baterías")) { BatteryView() } }
+                    NavigationLink(model.tr("Configurar un nodo")) { NodeSetupView() }
                 }.listRowBackground(Theme.surface)
                 Section {
                     LabeledContent(model.tr("Usuario"), value: model.state.facts.role)

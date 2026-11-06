@@ -83,6 +83,8 @@ public protocol ArmorApi: Sendable {
     func scanNetworkNow(_ origin: String) async throws
     /// Every service of the system, running or not.
     func services(_ origin: String) async throws -> ServicesOverview
+    /// The health report of every node, with the warnings the server raised about each (an operator session is needed).
+    func nodeHealth(_ origin: String) async throws -> NodeHealthOverview
     /// The open sessions of the signed-in account, this one marked.
     func mySessions(_ origin: String) async throws -> [SessionInfo]
     func endSession(_ origin: String, id: String) async throws
@@ -121,6 +123,7 @@ extension ArmorApi {
     func network(_ origin: String) async throws -> NetworkOverview { throw ArmorApiError(message: "not supported", status: nil) }
     func scanNetworkNow(_ origin: String) async throws { throw ArmorApiError(message: "not supported", status: nil) }
     func services(_ origin: String) async throws -> ServicesOverview { throw ArmorApiError(message: "not supported", status: nil) }
+    func nodeHealth(_ origin: String) async throws -> NodeHealthOverview { throw ArmorApiError(message: "not supported", status: nil) }
     func mySessions(_ origin: String) async throws -> [SessionInfo] { throw ArmorApiError(message: "not supported", status: nil) }
     func endSession(_ origin: String, id: String) async throws { throw ArmorApiError(message: "not supported", status: nil) }
     func endOtherSessions(_ origin: String) async throws { throw ArmorApiError(message: "not supported", status: nil) }

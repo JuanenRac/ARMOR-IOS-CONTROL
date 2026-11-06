@@ -33,7 +33,7 @@ REQUIRED = (
     "App/Resources/Assets.xcassets/Contents.json",
 )
 INFO_LANGS = ("en", "es", "de", "fr", "it", "ja", "zh-Hans", "pt-PT")
-REQUIRED_PLIST_KEYS = ("NSFaceIDUsageDescription", "NSLocalNetworkUsageDescription", "NSAllowsLocalNetworking", "CFBundleLocalizations")
+REQUIRED_PLIST_KEYS = ("NSFaceIDUsageDescription", "NSLocalNetworkUsageDescription", "NSBluetoothAlwaysUsageDescription", "NSCameraUsageDescription", "NSAllowsLocalNetworking", "CFBundleLocalizations")
 FORBIDDEN = (
     (re.compile(r"NSAllowsArbitraryLoads"), "App Transport Security is opened wide"),
     (re.compile(r'(?i)password\s*[:=]\s*"[^"$\\]{3,}"'), "a literal password"),
@@ -89,8 +89,8 @@ def check_structure(problems: list[str]) -> None:
             problems.append(f"missing InfoPlist.strings for {code}")
         else:
             text = strings.read_text(encoding="utf-8")
-            if "NSFaceIDUsageDescription" not in text or "NSLocalNetworkUsageDescription" not in text:
-                problems.append(f"{code}: InfoPlist.strings without the Face ID or local network text")
+            if any(key not in text for key in ("NSFaceIDUsageDescription", "NSLocalNetworkUsageDescription", "NSBluetoothAlwaysUsageDescription", "NSCameraUsageDescription")):
+                problems.append(f"{code}: InfoPlist.strings without the Face ID, local network, Bluetooth or camera text")
     project = (ROOT / "project.yml").read_text(encoding="utf-8") if (ROOT / "project.yml").is_file() else ""
     for key in REQUIRED_PLIST_KEYS:
         if key not in project:

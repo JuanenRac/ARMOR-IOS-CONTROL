@@ -98,6 +98,7 @@ public final class ArmorApiClient: ArmorApi, @unchecked Sendable {
     public func scanNetworkNow(_ origin: String) async throws { _ = try await send(origin, "/api/v1/network/commands", "POST", ["type": "scan_now"], [200, 201, 202]) }
 
     public func services(_ origin: String) async throws -> ServicesOverview { ServicesParser.overview(try await getJson(origin, "/api/v1/system/services")) }
+    public func nodeHealth(_ origin: String) async throws -> NodeHealthOverview { NodeHealthParser.overview(try await getJson(origin, "/api/v1/node-health")) }
     public func mySessions(_ origin: String) async throws -> [SessionInfo] { SecurityParser.sessions(try await getJson(origin, "/api/v1/studio/sessions")) }
     public func endSession(_ origin: String, id: String) async throws { _ = try await send(origin, "/api/v1/studio/sessions/\(Self.part(id))", "DELETE", nil, [204]) }
     public func endOtherSessions(_ origin: String) async throws { _ = try await send(origin, "/api/v1/studio/sessions/end-others", "POST", nil, [204]) }
