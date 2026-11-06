@@ -109,15 +109,16 @@ public enum SiteParser {
         if let number = value as? NSNumber { return CFGetTypeID(number) == CFBooleanGetTypeID() }
         return false
         #else
-        return value is Bool
+        // elsewhere (the tests on Linux) a number is not told from a boolean when it is boxed, so only a real Swift Bool counts: 0 and 1 stay numbers
+        return type(of: value) == Bool.self
         #endif
     }
 
     /// A JSON number as a Double (a whole number may arrive as an Int, a fraction as a Double, and on Apple platforms either as an NSNumber); a boolean or a text is not a number.
     private static func asDouble(_ value: Any) -> Double? {
         if isBoolean(value) { return nil }
-        if let whole = value as? Int { return Double(whole) }
         if let fraction = value as? Double { return fraction }
+        if let whole = value as? Int { return Double(whole) }
         if let number = value as? NSNumber { return number.doubleValue }
         return nil
     }

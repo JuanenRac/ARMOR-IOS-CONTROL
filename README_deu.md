@@ -22,14 +22,14 @@
   <img src="https://img.shields.io/badge/Language-Swift-f05138.svg" alt="Sprache">
   <img src="https://img.shields.io/badge/UI-SwiftUI-0a84ff.svg" alt="UI">
   <img src="https://img.shields.io/badge/Languages-8-00E5FF.svg" alt="Sprachen">
-  <img src="https://img.shields.io/badge/Tests-295%20passing-2ea44f.svg" alt="Tests">
+  <img src="https://img.shields.io/badge/Tests-322%20passing-2ea44f.svg" alt="Tests">
   <img src="https://img.shields.io/badge/Version-0.0.3-0f6cbd.svg" alt="Version">
   <img src="https://img.shields.io/badge/Maturity-scaffolding-FFB020.svg" alt="Reifegrad">
 </p>
 
 ---
 
-**Ehrlichkeitsprüfung - was heute läuft:** Die Regeln der App (Serververbindung, Auswertung der Antworten, Adressauswahl, Telefonsperre, Tresor der Sitzung, Vertrauen in das Zertifikat, Alarmrichtlinie, Anwendungsfälle, MJPEG-Zerlegung) sind das Swift-Paket `ArmorCore`, abgedeckt durch 295 Unit-Tests, die mit `swift test` unter macOS oder Linux laufen; `tools/ios_lint.py` prüft Struktur, die acht Sprachtabellen und den Vertrag ohne Mac. **Noch nicht** belegt: Die SwiftUI-Bildschirme und die Teile, die ein iPhone brauchen (Face ID, Schlüsselbund, Zertifikatsregeln, Live-Kamera, Push über Firebase), wurden weder in Xcode gebaut noch auf einem Gerät ausgeführt.
+**Ehrlichkeitsprüfung - was heute läuft:** Die Regeln der App (Serververbindung, Auswertung der Antworten, Adressauswahl, Telefonsperre, Tresor der Sitzung, Vertrauen in das Zertifikat, Alarmrichtlinie, Anwendungsfälle, MJPEG-Zerlegung) sind das Swift-Paket `ArmorCore`, abgedeckt durch 322 Unit-Tests, die mit `swift test` unter macOS oder Linux laufen; `tools/ios_lint.py` prüft Struktur, die acht Sprachtabellen und den Vertrag ohne Mac. **Noch nicht** belegt: Die SwiftUI-Bildschirme und die Teile, die ein iPhone brauchen (Face ID, Schlüsselbund, Zertifikatsregeln, Live-Kamera, Push über Firebase), wurden weder in Xcode gebaut noch auf einem Gerät ausgeführt.
 
 ---
 
@@ -41,8 +41,8 @@
 | Reifegrad | Gerüst |
 | Rolle | iPhone-Bedienclient für ARMOR-SERVER (Familie: Clients, übergeordnet: ARMOR-SERVER) |
 | Technik | Swift 5.9+ / SwiftUI, iOS 16+ |
-| Tests | 295 (`swift test`) |
-| Sprachen | 8 (1008 Sätze je Sprache, von `ios_lint.py` geprüft) |
+| Tests | 322 (`swift test`) |
+| Sprachen | 8 (1117 Sätze je Sprache, von `ios_lint.py` geprüft) |
 | Läuft auf | Ein iPhone mit iOS 16+; die Tests laufen auf macOS oder Linux |
 | Auf echter Hardware | Noch nicht auf einem iPhone ausgeführt; die Regeln werden unter Linux getestet |
 | Lizenz | GPL-3.0-or-later |
@@ -58,7 +58,7 @@ Jede Zeile ist ein Teil dieses Repositorys, und die Ampel sagt, wie weit er heut
 | Bereich | Stand | Was das hier bedeutet |
 |---|---|---|
 | Software | 🟡 | Die Regeln der App sind ein Swift-Paket (`ArmorCore`), und die SwiftUI-App wird von der CI unter macOS für den Simulator gebaut; sie lief nicht auf einem iPhone. |
-| Tests | 🟡 | 295 Unit-Tests bestehen mit `swift test` unter macOS oder Linux, und `tools/ios_lint.py` prüft Struktur, die Tabellen der acht Sprachen und den Vertrag ohne Mac; auf einem Gerät läuft kein Test. |
+| Tests | 🟡 | 322 Unit-Tests bestehen mit `swift test` unter macOS oder Linux, und `tools/ios_lint.py` prüft Struktur, die Tabellen der acht Sprachen und den Vertrag ohne Mac; auf einem Gerät läuft kein Test. |
 | Oberfläche | 🟠 | Die SwiftUI-Bildschirme werden von der CI unter macOS für den Simulator gebaut, wurden aber nicht auf einem iPhone ausgeführt. |
 | Hardware | 🔴 | Sie lief nicht auf einem iPhone: Die Regeln sind nur unter Linux getestet. |
 | Sicherheit | 🟠 | Die Sperre des Telefons, der Tresor der Sitzung und das Vertrauen ins Zertifikat sind unter Linux getestete Regeln; Face ID, der Schlüsselbund und die Zertifikatsregeln liefen nicht auf einem Gerät. |
@@ -79,6 +79,9 @@ Jede Zeile ist ein Teil dieses Repositorys, und die Ampel sagt, wie weit er heut
 * **Acht Sprachen** (Englisch, Spanisch, Deutsch, Französisch, Italienisch, Japanisch, Chinesisch und Portugiesisch aus Portugal), wählbar unter *Mehr > Sprache* oder dem Telefon folgend, mit einer Hilfe zu jedem Bildschirm.
 * **Einen Feldknoten über Bluetooth einrichten, und sein Kopplungscode:** Mehr > Einen Knoten einrichten findet die Knoten, die sich melden, meldet sich mit einem Benutzer des Knotens an oder legt seinen Administrator mit dem Einrichtungscode an und stellt Name, WLAN, Adresse, Broker und Bluetooth-Modus ein; danach sucht die App den Knoten erneut und sagt, ob er dem Netz beigetreten ist oder warum nicht. Sie zeigt den QR-Code eines Knotens (sein Name und die Serveradresse, kein Geheimnis) und liest einen mit der Kamera. Sie folgt der Android-App; die Regeln sind getestet, Funk und Kamera wurden nicht auf einem iPhone ausprobiert.
 * **Der Zustand der Knoten:** Mehr > Zustand der Knoten (Bediener und Administratoren) zeigt, was jeder Knoten meldet (Laufzeit, Grund des Neustarts, Speicher, Verbindung, letzter Fehler), und die Warnungen des Servers, die Knoten mit Handlungsbedarf zuerst.
+* **Steuerung der Knoten (Administratoren):** Mehr > Knotensteuerung startet neu, pausiert, setzt fort, schaltet in Bereitschaft, identifiziert, fordert eine Diagnose an oder schaltet die Wartung ein und aus, für einen Knoten oder alle; heikle Befehle verlangen, den Namen des Knotens erneut einzutippen, und die Zeile jedes Knotens zeigt, wie weit er gekommen ist. Nichts löscht Einstellungen oder Zugangsdaten oder schaltet einen Knoten aus.
+* **Der Konfigurator eines Knotens in der App:** Mehr > Knoten einrichten öffnet die eigene Webseite des Knotens (über seine Adresse im Heimnetz oder über den Server von überall), beschränkt auf diesen Knoten. Das Speichern einer Datei von der Seite (der Export der Einstellungen) ist noch nicht übernommen.
+* **Die verbundenen Geräte und der Radarplan:** *Alarme > Verbindungen* listet die Geräte und Apps, die der Server gesehen hat; *Mehr > Radar* zeichnet den Standort, wie Studio ihn entworfen hat, in 2D mit den Personen, denen die Radare folgen (die 3D-Ansicht der Android-App ist noch nicht übernommen).
 * **Scharfschaltmodi des Servers (Abwesend, Zuhause, Nacht):** Hat der Server die Scharfschaltmodi eingeschaltet (Studio, Konfiguration > Sicherheit), öffnet die Schaltfläche zum Scharfschalten auf dem Statusbildschirm eine Auswahl, um in einem Modus scharf zu schalten, zu wechseln oder unscharf zu schalten; ein Modus ohne Zuweisung verlangt eine Bestätigung, ein Wechsel zu einem Modus mit weniger Schutz verlangt die PIN wie das Unscharfschalten, und der Status zeigt den aktiven Modus. Das Scharfschalten aus dem unscharfen Zustand führt zuerst die Prüfung vor dem Scharfschalten aus, wie ein einfaches Scharfschalten. Bei ausgeschalteten Modi schaltet die App wie bisher scharf und unscharf. Sie folgt der Android-App; der Code und seine Tests sind geschrieben und wurden weder kompiliert noch auf einem iPhone ausprobiert.
 * **Solar, Batterien und Stromnetz, für Administratoren und Bediener:** Mehr > Solar zeigt die Summen (Sonne, Verbrauch, Ladezustand, Netz) und jeden Wechselrichter und jede Batterie mit Werten, Zellen, Zählern und Ereignisprotokoll; Mehr > Elektrisch zeigt den Netzeingang, die Stromkreise und die Gleichstromschienen mit den Umschaltern; Mehr > Batteriewartung (nur Administratoren) bietet die einfachen Vorgänge an einer Pylontech-Batterie in zwei Schritten (der Knoten prüft, der Bildschirm zeigt genau, was geschehen wird, und geschrieben wird erst, nachdem die Seriennummer erneut eingegeben wurde). Die Bildschirme fragen alle paar Sekunden erneut, in einem Takt aus einer Konfigurationsdatei. Sie folgt der Android-App; der Code und seine Tests sind geschrieben und wurden weder kompiliert noch auf einem iPhone ausprobiert.
 * **Wetter, Netzwerk, Knotensuche, Dienste und Sicherheit:** Mehr > Wetter zeigt das Wetter eines gewählten Ortes (jetzt, der Regen der nächsten Stunde, 48 Stunden, zehn Tage, Luft, Pollen, Sonne und Mond) mit einem Live-Regen- und Wolkenradar; nur die Koordinaten des Ortes verlassen das Telefon, der Server ist nicht beteiligt. Mehr > Netzwerk zeigt das Internet, die Geräte, die Ausfälle und was sich geändert hat; die Bildschirme Solar und Elektrisch enthalten ein Feld, das Knoten im Netzwerk sucht. Mehr > Dienste listet die Programme und Feldknoten auf, laufend oder nicht. Mehr > Sicherheit verwaltet den zweiten Faktor des Kontos, die offenen Sitzungen und wie der Server das Telefon sieht (für Administratoren auch das VPN ins Haus und die dynamische Adresse; der private Schlüssel eines Geräts wird einmal angezeigt, nie gespeichert, und das Kopieren ist aus, solange die Einstellungen es nicht erlauben). Ein Solar-, Batterie- oder Stromalarm öffnet aus seinem Detail den passenden Bildschirm. Sie folgt der Android-App; der Code und seine Tests sind geschrieben und wurden weder kompiliert noch auf einem iPhone ausprobiert.
@@ -115,7 +118,7 @@ Die Berechtigungstexte (Face ID, lokales Netzwerk) gibt es in allen acht Sprache
 
 ## 🔌 Schnittstellen
 
-Er ist ein Client: Er ruft 27 Pfade von ARMOR-SERVER auf (`tools/ios_lint.py` zählt sie und prüft, dass auch der Android-Client sie aufruft) und zerlegt den MJPEG-Strom der Kameras mit eigenem Parser (`MjpegParser.swift`).
+Er ist ein Client: Er ruft 58 Pfade von ARMOR-SERVER auf (`tools/ios_lint.py` zählt sie und prüft, dass auch der Android-Client sie aufruft) und zerlegt den MJPEG-Strom der Kameras mit eigenem Parser (`MjpegParser.swift`).
 
 | Teil | Was sie festlegt |
 |---|---|
@@ -139,7 +142,7 @@ In der App: die zwei Adressen, *Angemeldet bleiben*, die Telefonsperre und die S
 **Voraussetzungen:** ein Mac mit Xcode 15+ und iOS 16+ zum Bauen der App; Swift 5.9+ (macOS oder Linux) für die Tests; Python 3.11 für die Prüfungen.
 
 ```sh
-swift test                  # 295 tests of ArmorCore (macOS or Linux)
+swift test                  # 322 tests of ArmorCore (macOS or Linux)
 python tools/ios_lint.py    # structure, eight languages, contract (any system)
 xcodegen generate           # then open ARMOR-IOS-CONTROL.xcodeproj in Xcode (on a Mac)
 ```
@@ -165,10 +168,11 @@ python -I tools/armor_ci_validate.py
 | `EndpointTests.swift`, `MjpegTests.swift`, `TranslatorTests.swift` | 7 + 10 + 7 | Die Adressauswertung, das MJPEG-Zerlegen und der Übersetzer |
 | `ResponseLimitTests.swift` | 2 | Die längste Antwort, die die App von einem Server annimmt |
 | `NodeBleTests.swift`, `NodeHealthTests.swift` | 17 + 5 | Der Bluetooth-Kanal eines Knotens (Rahmen, Anfragen, Einrichtungscode, Einstellungen, SHA-256) und der Zustand der Knoten |
+| `NodeControlTests.swift`, `ConnectionsTests.swift`, `NodePanelTests.swift`, `SiteDesignTests.swift` | 8 + 2 + 6 + 11 | Die Steuerung der Knoten, die Verbindungen, die Adresse der Seite eines Knotens und der Radarplan |
 | `PolicyTests.swift`, `AlarmCodesTests.swift`, `AlarmFactsTests.swift` | 6 + 4 + 7 | Die Alarmrichtlinie und die Alarmcodes |
 | `SolarTests.swift`, `BatteryTests.swift`, `ElectricalTests.swift`, `ScreenPollingTests.swift`, `EquipmentClientTests.swift`, `AlarmRouteTests.swift`, `NetworkTests.swift`, `WeatherTests.swift`, `ServicesSecurityTests.swift` | 14 + 10 + 5 + 3 + 10 + 2 + 9 + 11 + 8 | Solar, Batterien, Stromnetz und die Aufrufe des Clients |
 
-Die 295 Tests laufen mit Daten eines echten Servers. `tools/ios_lint.py` besteht ohne Mac: 72 Swift-Dateien, 1008 Sätze in 8 Sprachen, 51 Serverpfade. Kein Test läuft auf einem Gerät.
+Die 322 Tests laufen mit Daten eines echten Servers. `tools/ios_lint.py` besteht ohne Mac: 79 Swift-Dateien, 1117 Sätze in 8 Sprachen, 58 Serverpfade. Kein Test läuft auf einem Gerät.
 
 ## 🏗️ Build und Veröffentlichung
 
@@ -195,7 +199,7 @@ Das Xcode-Projekt wird aus `project.yml` mit XcodeGen erzeugt: Wähle ein Signin
 ARMOR-IOS-CONTROL/
 ├── Sources/ArmorCore/                   die Regeln der App: ein Swift-Paket
 ├── App/                                 die SwiftUI-Bildschirme und die Teile, die ein iPhone brauchen
-├── Tests/                               295 Tests und Daten eines echten Servers
+├── Tests/                               322 Tests und Daten eines echten Servers
 ├── docs/                                die Anleitungen dieses Repositorys
 ├── tools/                               die gemeinsamen CI-Prüfungen und Projektwerkzeuge
 ├── .github/                             CI-Workflow sowie Vorlagen für Issues und Pull Requests

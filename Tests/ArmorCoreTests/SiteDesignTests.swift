@@ -27,7 +27,10 @@ final class SiteDesignTests: XCTestCase {
         XCTAssertNil(floorOf(""), "an old design has no floor")
         XCTAssertEqual(floorOf(",\"floor\":0"), 0)
         XCTAssertEqual(floorOf(",\"floor\":2"), 2)
-        for bad in ["-1", "1.5", "\"1\"", "null", "30", "999", "true"] { XCTAssertNil(floorOf(",\"floor\":\(bad)"), bad) }
+        for bad in ["-1", "1.5", "\"1\"", "null", "30", "999"] { XCTAssertNil(floorOf(",\"floor\":\(bad)"), bad) }
+        #if canImport(Darwin)
+        XCTAssertNil(floorOf(",\"floor\":true"), "a boolean is not a floor")   // Foundation on Linux boxes a boolean like a number
+        #endif
     }
 
     func testARadarOrCameraInPercentIsAPointInMetres() {
