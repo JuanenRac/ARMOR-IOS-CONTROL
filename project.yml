@@ -55,4 +55,17 @@ targets:
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
     scheme:
-      testTargets: []
+      testTargets: [ARMORTests]
+  ARMORTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: Tests/ARMORTests
+    dependencies:
+      - target: ARMOR
+      - package: ArmorCore
+        product: ArmorCore
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        SWIFT_VERSION: "5.9"

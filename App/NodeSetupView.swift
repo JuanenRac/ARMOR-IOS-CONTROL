@@ -442,14 +442,9 @@ private struct PairingSection: View {
 }
 
 enum PairingQr {
-    /// The QR code of a text as a picture (black on white, scaled up without blurring), or nil when it cannot be drawn.
+    /// The QR code of a text as a picture (black on white, scaled up without blurring), or nil when it cannot be drawn. The drawing is `ArmorCore.QrImage`, which the tests read back.
     static func image(_ text: String) -> UIImage? {
-        let filter = CIFilter.qrCodeGenerator()
-        filter.message = Data(text.utf8)
-        filter.correctionLevel = "M"
-        guard let output = filter.outputImage else { return nil }
-        let scaled = output.transformed(by: CGAffineTransform(scaleX: 12, y: 12))
-        guard let cg = CIContext().createCGImage(scaled, from: scaled.extent) else { return nil }
+        guard let cg = QrImage.make(text) else { return nil }
         return UIImage(cgImage: cg)
     }
 }

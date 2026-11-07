@@ -22,6 +22,10 @@ on:
         description: "Also run the ArmorCore tests on an iPhone simulator (xcodebuild test)"
         type: boolean
         default: false
+      test_app:
+        description: "Also run the tests of the app itself (sheet of proof of identity, QR picture) on an iPhone simulator"
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -72,3 +76,26 @@ jobs:
       - name: Run the tests on the simulator
         run: |
           xcodebuild test -scheme ArmorCore -destination "platform=iOS Simulator,name=${{ steps.device.outputs.name }}" CODE_SIGNING_ALLOWED=NO
+
+  app-tests:
+    name: xcodebuild test (the app on an iPhone simulator)
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.test_app }}
+    runs-on: macos-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Make the Xcode project
+        run: |
+          brew install xcodegen
+          xcodegen generate
+      - name: Pick an iPhone simulator that is installed
+        id: device
+        run: |
+          name="$(xcrun simctl list devices available | grep -m1 -o 'iPhone [^(]*' | sed 's/ *$//')"
+          echo "name=${name}" >> "$GITHUB_OUTPUT"
+          echo "Testing on: ${name}"
+      - name: Run the tests of the app
+        run: |
+          xcodebuild test -project ARMOR-IOS-CONTROL.xcodeproj -scheme ARMOR -destination "platform=iOS Simulator,name=${{ steps.device.outputs.name }}" CODE_SIGNING_ALLOWED=NO

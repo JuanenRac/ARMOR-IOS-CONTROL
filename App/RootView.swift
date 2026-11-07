@@ -1,6 +1,7 @@
 // ARMOR-IOS-CONTROL - the shell: the locked screen, the sign-in, or the tabs, with the messages and the question of the proof of identity over them.
 // Copyright (C) 2026 JuanenRac (Electro Hobby 3D). GPL-3.0-or-later.
 import SwiftUI
+import ArmorCore
 
 struct RootView: View {
     @EnvironmentObject var model: AppModel
@@ -57,8 +58,11 @@ struct ElevationSheet: View {
                     SecureField(model.tr("Tu contraseña (para confirmar que eres tú)"), text: $password)
                     TextField(model.tr("o código de la aplicación"), text: $code).keyboardType(.numberPad)
                 }
-                Button(model.tr("Confirmar")) { model.answerElevation(request, password: password, code: code) }
-                    .disabled(password.isEmpty && code.isEmpty)
+                Button(model.tr("Confirmar")) {
+                    let answer = ElevationForm.answer(password: password, code: code)
+                    model.answerElevation(request, password: answer.password, code: answer.code)
+                }
+                    .disabled(!ElevationForm.canConfirm(password: password, code: code))
                 Button(model.tr("Cancelar"), role: .cancel) { model.declineElevation(request) }
             }
             .navigationTitle(model.tr("Confirma que eres tú"))

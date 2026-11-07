@@ -22,14 +22,14 @@
   <img src="https://img.shields.io/badge/Language-Swift-f05138.svg" alt="Language">
   <img src="https://img.shields.io/badge/UI-SwiftUI-0a84ff.svg" alt="UI">
   <img src="https://img.shields.io/badge/Languages-8-00E5FF.svg" alt="Languages">
-  <img src="https://img.shields.io/badge/Tests-331%20passing-2ea44f.svg" alt="Tests">
+  <img src="https://img.shields.io/badge/Tests-338%20passing-2ea44f.svg" alt="Tests">
   <img src="https://img.shields.io/badge/Version-0.0.4-0f6cbd.svg" alt="Version">
   <img src="https://img.shields.io/badge/Maturity-scaffolding-FFB020.svg" alt="Maturity">
 </p>
 
 ---
 
-**正直さのチェック - 今日動いているもの:** アプリのルール（サーバー接続、応答の解析、アドレスの選択、端末ロック、セッションの保管庫、証明書の信頼、警報ポリシー、ユースケース、MJPEG の切り出し）は Swift パッケージ `ArmorCore` にあり、macOS または Linux で `swift test` により実行される 331 件の単体テストでカバーされています。`tools/ios_lint.py` は Mac なしで構造、8 言語の表、契約を検査します。**まだ**証明されていないもの：SwiftUI の画面と iPhone が必要な部分（Face ID、キーチェーン、証明書ルール、ライブカメラ、Firebase 経由のプッシュ）は、Xcode でのビルドも実機での実行もしていません。
+**正直さのチェック - 今日動いているもの:** アプリのルール（サーバー接続、応答の解析、アドレスの選択、端末ロック、セッションの保管庫、証明書の信頼、警報ポリシー、ユースケース、MJPEG の切り出し）は Swift パッケージ `ArmorCore` にあり、macOS または Linux で `swift test` により実行される 338 件の単体テストでカバーされています。`tools/ios_lint.py` は Mac なしで構造、8 言語の表、契約を検査します。**まだ**証明されていないもの：SwiftUI の画面と iPhone が必要な部分（Face ID、キーチェーン、証明書ルール、ライブカメラ、Firebase 経由のプッシュ）は、Xcode でのビルドも実機での実行もしていません。
 
 ---
 
@@ -41,7 +41,7 @@
 | 成熟度 | 足場段階 |
 | 役割 | ARMOR-SERVER 用の iPhone オペレーター向けクライアント（ファミリー：Clients、親：ARMOR-SERVER） |
 | 技術 | Swift 5.9+ / SwiftUI, iOS 16+ |
-| テスト | 331 (`swift test`) |
+| テスト | 338 (`swift test`) |
 | 言語 | 8（言語ごとに 1159 フレーズ、`ios_lint.py` が検査） |
 | 動作環境 | iOS 16+ の iPhone。テストは macOS または Linux で実行 |
 | 実機での確認 | iPhone ではまだ実行していません。ルールは Linux でテスト済みです |
@@ -58,7 +58,7 @@
 | 領域 | 状態 | ここでの意味 |
 |---|---|---|
 | ソフトウェア | 🟡 | アプリの規則は Swift パッケージ（`ArmorCore`）で、SwiftUI アプリは macOS の CI でシミュレーター向けにビルドされますが、iPhone では動かしていません。 |
-| テスト | 🟡 | 331 件のユニットテストが macOS または Linux の `swift test` で通り、`tools/ios_lint.py` が Mac なしで構造、8 言語の表、契約を確認します。実機で動くテストはありません。 |
+| テスト | 🟡 | 338 件のユニットテストが macOS または Linux の `swift test` で通り、`tools/ios_lint.py` が Mac なしで構造、8 言語の表、契約を確認します。実機で動くテストはありません。 |
 | インターフェース | 🟠 | SwiftUI の画面は macOS の CI でシミュレーター向けにビルドされますが、iPhone での実行はしていません。 |
 | ハードウェア | 🔴 | iPhone 上ではまだ動かしていません。規則は Linux でのみテストしています。 |
 | セキュリティ | 🟠 | 端末のロック、セッションの保管庫、証明書の信頼は Linux でテストした規則です。Face ID、キーチェーン、証明書の規則は実機では動かしていません。 |
@@ -143,7 +143,7 @@ ARMOR-IOS-CONTROL は、[ARMOR-STUDIO](https://github.com/JuanenRac/ARMOR-STUDIO
 **必要なもの:** アプリのビルドには Xcode 15+ と iOS 16+ の Mac、テストには Swift 5.9+（macOS または Linux）、検査には Python 3.11。
 
 ```sh
-swift test                  # 331 tests of ArmorCore (macOS or Linux)
+swift test                  # 338 tests of ArmorCore (macOS or Linux)
 python tools/ios_lint.py    # structure, eight languages, contract (any system)
 xcodegen generate           # then open ARMOR-IOS-CONTROL.xcodeproj in Xcode (on a Mac)
 ```
@@ -168,12 +168,13 @@ python -I tools/armor_ci_validate.py
 | `SecurityTests.swift` | 8 | セッション保管庫と証明書への信頼 |
 | `EndpointTests.swift`, `MjpegTests.swift`, `TranslatorTests.swift` | 7 + 10 + 7 | アドレス解析、MJPEG の切り出し、翻訳 |
 | `ResponseLimitTests.swift` | 2 | アプリがサーバーから受け取る応答の最大の長さ |
+| `ElevationFormTests.swift`, `QrImageTests.swift` | 3 + 5 | 本人確認をやり直すシートと、画像として描いて読み戻すペアリング QR コード（QR の 5 件は Mac が必要） |
 | `NodeBleTests.swift`, `NodeHealthTests.swift` | 17 + 5 | ノードの Bluetooth チャネル（フレーム、要求、設定コード、設定、SHA-256）とノードの状態 |
 | `NodeControlTests.swift`, `ConnectionsTests.swift`, `NodePanelTests.swift`, `SiteDesignTests.swift` | 8 + 2 + 6 + 11 | ノードの制御、接続、ノードのページのアドレス、レーダーの平面図 |
 | `PolicyTests.swift`, `AlarmCodesTests.swift`, `AlarmFactsTests.swift` | 6 + 4 + 7 | アラームポリシーとアラームコード |
 | `SolarTests.swift`, `BatteryTests.swift`, `ElectricalTests.swift`, `ScreenPollingTests.swift`, `EquipmentClientTests.swift`, `AlarmRouteTests.swift`, `NetworkTests.swift`, `WeatherTests.swift`, `ServicesSecurityTests.swift` | 14 + 10 + 5 + 3 + 10 + 2 + 9 + 11 + 8 | 太陽光、バッテリー、電力網、クライアントの呼び出し |
 
-331 件のテストは実サーバーのデータで動きます。`tools/ios_lint.py` は Mac なしで通ります：Swift ファイル 63、8 言語の 1159 フレーズ、サーバーパス 50。実機で動くテストはありません。
+338 件のテストは実サーバーのデータで動きます。`tools/ios_lint.py` は Mac なしで通ります：Swift ファイル 63、8 言語の 1159 フレーズ、サーバーパス 50。実機で動くテストはありません。
 
 ## 🏗️ ビルドとリリース
 
@@ -200,7 +201,7 @@ Xcode プロジェクトは XcodeGen で `project.yml` から生成します。�
 ARMOR-IOS-CONTROL/
 ├── Sources/ArmorCore/                   アプリのルール：Swift パッケージ
 ├── App/                                 SwiftUI 画面と iPhone が必要な部分
-├── Tests/                               331 件のテストと実サーバーのデータ
+├── Tests/                               338 件のテストと実サーバーのデータ
 ├── docs/                                このリポジトリのガイド
 ├── tools/                               共通の CI チェックとプロジェクトツール
 ├── .github/                             CI ワークフローと Issue・Pull Request のテンプレート
