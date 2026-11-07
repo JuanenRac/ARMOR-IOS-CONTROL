@@ -4,6 +4,8 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+- **A manual job runs the ArmorCore tests on an iPhone simulator:** the workflow "Swift tests" gets the input `test_on_simulator` (off; it never runs on a push) that picks an installed iPhone simulator on a macOS runner and runs `xcodebuild test` for the package, next to the `swift test` of every push. It checks the code on the platform of the app, not the screens on a phone.
+
 - **Update the machine from the phone:** the same as the Android app. More > Update the machine (administrators only) shows the programs the maintenance helper can update, checks what is installed against the newest release without changing anything, and applies the update of one program after its name is typed again, the one-time code of the administrator, the lock of the phone and, outside the house, a new proof of identity. The plan of the check is good once and counts down on the screen, the job shows its steps, bar and log, every refusal of the server has its own words, and the screen offers nothing while the server or the helper has the switch off (the default). Only a signed release is ever put in place. Texts in the eight languages. Written without a Mac: not yet seen on a device.
 ## [0.0.4] - Set up a field node over Bluetooth: the same as the Android app. More > Set up a node finds the nodes that advertise, connects (iOS asks to pair when the node asks), signs in with a user of the node or creates its... (and 7 more changes)
 
