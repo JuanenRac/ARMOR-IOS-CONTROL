@@ -1158,5 +1158,17 @@
  "Actualización en curso": "Update in progress",
  "Registro": "Log",
  "Nueva comprobación": "New check",
- "Esta imagen está hecha para otra placa distinta de la del nodo: no se ha enviado.": "This image is built for another board than the node's: it was not sent."
+ "Esta imagen está hecha para otra placa distinta de la del nodo: no se ha enviado.": "This image is built for another board than the node's: it was not sent.",
+ "Grabaciones": "Recordings",
+ "No hay grabaciones": "No recordings",
+ "Las fotos y vídeos que hagas con las cámaras aparecerán aquí.": "The photos and videos you make with the cameras will appear here.",
+ "¿Borrar la grabación?": "Delete the recording?",
+ "Se borra del servidor y no se puede deshacer.": "It is deleted from the server and cannot be undone.",
+ "Borrar": "Delete",
+ "Vídeo": "Video",
+ "Ver": "View",
+ "Actualizar": "Refresh",
+ "No se pudo abrir la grabación.": "The recording could not be opened.",
+ "No se pudo borrar la grabación.": "The recording could not be deleted.",
+ "No se pudo leer la lista de grabaciones.": "The list of recordings could not be read."
 }

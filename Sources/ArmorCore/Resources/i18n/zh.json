@@ -1158,5 +1158,17 @@
  "Actualización en curso": "正在更新",
  "Registro": "日志",
  "Nueva comprobación": "重新检查",
- "Esta imagen está hecha para otra placa distinta de la del nodo: no se ha enviado.": "该镜像是为与节点不同的开发板构建的：未发送。"
+ "Esta imagen está hecha para otra placa distinta de la del nodo: no se ha enviado.": "该镜像是为与节点不同的开发板构建的：未发送。",
+ "Grabaciones": "录像",
+ "No hay grabaciones": "没有录像",
+ "Las fotos y vídeos que hagas con las cámaras aparecerán aquí.": "用摄像头拍摄的照片和视频会显示在这里。",
+ "¿Borrar la grabación?": "要删除录像吗？",
+ "Se borra del servidor y no se puede deshacer.": "将从服务器删除，且无法撤销。",
+ "Borrar": "删除",
+ "Vídeo": "视频",
+ "Ver": "查看",
+ "Actualizar": "刷新",
+ "No se pudo abrir la grabación.": "无法打开该录像。",
+ "No se pudo borrar la grabación.": "无法删除该录像。",
+ "No se pudo leer la lista de grabaciones.": "无法读取录像列表。"
 }

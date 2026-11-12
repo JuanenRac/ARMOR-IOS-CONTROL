@@ -40,6 +40,12 @@ public protocol ArmorApi: Sendable {
     /// `quality` is what the app asks for explicitly: "low" (the lighter picture), "normal" or "auto" (the server decides by where the person came from).
     func streamTicket(_ origin: String, cameraId: String, quality: String) async throws -> String
     func snapshot(_ origin: String, cameraId: String) async throws
+    /// The photos and videos the cameras made, newest first as the server lists them, and the cameras recording right now.
+    func media(_ origin: String) async throws -> MediaCatalogueView
+    /// Deletes one file of the library from the server (it cannot be undone); the server refuses a viewer.
+    func deleteMedia(_ origin: String, item: MediaItemView) async throws
+    /// Takes one file of the library to a temporary file of the phone, to be shown; a file longer than `EvidenceParser.largestFile` is refused. The caller deletes the file when it is done.
+    func mediaFile(_ origin: String, item: MediaItemView) async throws -> URL
     func ptz(_ origin: String, cameraId: String, command: String) async throws
     func voiceAvailable(_ origin: String) async throws -> Bool
     /// One written command; arming and disarming need a second turn: send the same phrase again with the token of the first answer.
@@ -132,6 +138,9 @@ public protocol ArmorApi: Sendable {
 }
 
 extension ArmorApi {
+    func media(_ origin: String) async throws -> MediaCatalogueView { throw ArmorApiError(message: "not supported", status: nil) }
+    func deleteMedia(_ origin: String, item: MediaItemView) async throws { throw ArmorApiError(message: "not supported", status: nil) }
+    func mediaFile(_ origin: String, item: MediaItemView) async throws -> URL { throw ArmorApiError(message: "not supported", status: nil) }
     func dailySummary(_ origin: String, date: String, language: String) async throws -> DailySummaryView { throw ArmorApiError(message: "not supported", status: nil) }
     func heatmap(_ origin: String, camera: String?) async throws -> HeatmapView { throw ArmorApiError(message: "not supported", status: nil) }
     func solar(_ origin: String) async throws -> SolarOverview { throw ArmorApiError(message: "not supported", status: nil) }

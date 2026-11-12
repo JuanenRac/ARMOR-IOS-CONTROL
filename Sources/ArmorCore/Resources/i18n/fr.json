@@ -1158,5 +1158,17 @@
  "Actualización en curso": "Mise à jour en cours",
  "Registro": "Journal",
  "Nueva comprobación": "Nouvelle vérification",
- "Esta imagen está hecha para otra placa distinta de la del nodo: no se ha enviado.": "Cette image est conçue pour une autre carte que celle du nœud : elle n'a pas été envoyée."
+ "Esta imagen está hecha para otra placa distinta de la del nodo: no se ha enviado.": "Cette image est conçue pour une autre carte que celle du nœud : elle n'a pas été envoyée.",
+ "Grabaciones": "Enregistrements",
+ "No hay grabaciones": "Aucun enregistrement",
+ "Las fotos y vídeos que hagas con las cámaras aparecerán aquí.": "Les photos et vidéos que vous faites avec les caméras apparaîtront ici.",
+ "¿Borrar la grabación?": "Supprimer l'enregistrement ?",
+ "Se borra del servidor y no se puede deshacer.": "Elle est supprimée du serveur et ne peut pas être annulée.",
+ "Borrar": "Supprimer",
+ "Vídeo": "Vidéo",
+ "Ver": "Voir",
+ "Actualizar": "Actualiser",
+ "No se pudo abrir la grabación.": "Impossible d'ouvrir l'enregistrement.",
+ "No se pudo borrar la grabación.": "Impossible de supprimer l'enregistrement.",
+ "No se pudo leer la lista de grabaciones.": "Impossible de lire la liste des enregistrements."
 }

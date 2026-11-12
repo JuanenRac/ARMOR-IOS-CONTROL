@@ -1158,5 +1158,17 @@
  "Actualización en curso": "Atualização em curso",
  "Registro": "Registo",
  "Nueva comprobación": "Nova verificação",
- "Esta imagen está hecha para otra placa distinta de la del nodo: no se ha enviado.": "Esta imagem é feita para outra placa que não a do nó: não foi enviada."
+ "Esta imagen está hecha para otra placa distinta de la del nodo: no se ha enviado.": "Esta imagem é feita para outra placa que não a do nó: não foi enviada.",
+ "Grabaciones": "Gravações",
+ "No hay grabaciones": "Sem gravações",
+ "Las fotos y vídeos que hagas con las cámaras aparecerán aquí.": "As fotos e os vídeos que fizer com as câmaras aparecerão aqui.",
+ "¿Borrar la grabación?": "Apagar a gravação?",
+ "Se borra del servidor y no se puede deshacer.": "É apagada do servidor e não se pode desfazer.",
+ "Borrar": "Apagar",
+ "Vídeo": "Vídeo",
+ "Ver": "Ver",
+ "Actualizar": "Atualizar",
+ "No se pudo abrir la grabación.": "Não foi possível abrir a gravação.",
+ "No se pudo borrar la grabación.": "Não foi possível apagar a gravação.",
+ "No se pudo leer la lista de grabaciones.": "Não foi possível ler a lista de gravações."
 }

@@ -238,6 +238,27 @@ public final class ArmorApiClient: ArmorApi, @unchecked Sendable {
     }
 
     public func snapshot(_ origin: String, cameraId: String) async throws { _ = try await send(origin, "/api/v1/cameras/\(Self.part(cameraId))/snapshot", "POST", nil, [201]) }
+    public func media(_ origin: String) async throws -> MediaCatalogueView { EvidenceParser.catalogue(try await getJson(origin, "/api/v1/media")) }
+
+    public func deleteMedia(_ origin: String, item: MediaItemView) async throws { _ = try await send(origin, EvidenceParser.path(item), "DELETE", nil, [204]) }
+
+    public func mediaFile(_ origin: String, item: MediaItemView) async throws -> URL {
+        let request = try request(origin, EvidenceParser.path(item), "GET", nil)
+        let location: URL, response: URLResponse
+        do { (location, response) = try await session.download(for: request) } catch { DiagnosticLog.shared.record(method: "GET", path: EvidenceParser.path(item), status: 0); throw ArmorApiError(message: error.localizedDescription, status: nil) }
+        let status = (response as? HTTPURLResponse)?.statusCode ?? 0
+        DiagnosticLog.shared.record(method: "GET", path: EvidenceParser.path(item), status: status)
+        let attributes = try? FileManager.default.attributesOfItem(atPath: location.path)
+        let size = (attributes?[.size] as? NSNumber)?.intValue ?? 0
+        if status != 200 { try? FileManager.default.removeItem(at: location); throw ArmorApiError(message: "Server operation failed (HTTP \(status))", status: status) }
+        if size > EvidenceParser.largestFile { try? FileManager.default.removeItem(at: location); throw ArmorApiError(message: "The file is longer than \(EvidenceParser.largestFile) bytes", status: nil) }
+        // the name keeps its ending so the player knows what it was given; the folder is the phone's temporary one
+        let ending = URL(fileURLWithPath: item.file).pathExtension
+        let kept = FileManager.default.temporaryDirectory.appendingPathComponent("armor-media-\(UUID().uuidString)" + (ending.isEmpty ? "" : "." + ending))
+        try FileManager.default.moveItem(at: location, to: kept)
+        return kept
+    }
+
     public func ptz(_ origin: String, cameraId: String, command: String) async throws { _ = try await send(origin, "/api/v1/cameras/\(Self.part(cameraId))/ptz", "POST", ["command": command], [200]) }
 
     public func streamTicket(_ origin: String, cameraId: String, quality: String) async throws -> String {

@@ -34,6 +34,7 @@ struct MoreView: View {
                     NavigationLink(model.tr("Voz de las alarmas")) { VoiceSettingsView() }
                     NavigationLink(model.tr("Ayuda")) { HelpView() }
                     NavigationLink(model.tr("Dispositivos")) { DevicesView() }
+                    NavigationLink(model.tr("Grabaciones")) { EvidenceView() }
                     NavigationLink(model.tr("Radar")) { RadarView() }
                     NavigationLink(model.tr("Meteorología")) { WeatherView() }
                     if model.state.facts.canChange { NavigationLink(model.tr("Informes")) { ReportsView() } }

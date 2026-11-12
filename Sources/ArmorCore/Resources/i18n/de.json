@@ -1158,5 +1158,17 @@
  "Actualización en curso": "Aktualisierung läuft",
  "Registro": "Protokoll",
  "Nueva comprobación": "Neue Prüfung",
- "Esta imagen está hecha para otra placa distinta de la del nodo: no se ha enviado.": "Dieses Image ist für eine andere Platine als die des Knotens gebaut: es wurde nicht gesendet."
+ "Esta imagen está hecha para otra placa distinta de la del nodo: no se ha enviado.": "Dieses Image ist für eine andere Platine als die des Knotens gebaut: es wurde nicht gesendet.",
+ "Grabaciones": "Aufnahmen",
+ "No hay grabaciones": "Keine Aufnahmen",
+ "Las fotos y vídeos que hagas con las cámaras aparecerán aquí.": "Fotos und Videos, die Sie mit den Kameras machen, erscheinen hier.",
+ "¿Borrar la grabación?": "Aufnahme löschen?",
+ "Se borra del servidor y no se puede deshacer.": "Sie wird vom Server gelöscht und lässt sich nicht rückgängig machen.",
+ "Borrar": "Löschen",
+ "Vídeo": "Video",
+ "Ver": "Ansehen",
+ "Actualizar": "Aktualisieren",
+ "No se pudo abrir la grabación.": "Die Aufnahme konnte nicht geöffnet werden.",
+ "No se pudo borrar la grabación.": "Die Aufnahme konnte nicht gelöscht werden.",
+ "No se pudo leer la lista de grabaciones.": "Die Liste der Aufnahmen konnte nicht gelesen werden."
 }

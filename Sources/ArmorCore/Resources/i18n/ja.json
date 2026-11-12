@@ -1158,5 +1158,17 @@
  "Actualización en curso": "更新中",
  "Registro": "ログ",
  "Nueva comprobación": "もう一度確認",
- "Esta imagen está hecha para otra placa distinta de la del nodo: no se ha enviado.": "このイメージはノードとは別のボード用です。送信されませんでした。"
+ "Esta imagen está hecha para otra placa distinta de la del nodo: no se ha enviado.": "このイメージはノードとは別のボード用です。送信されませんでした。",
+ "Grabaciones": "録画",
+ "No hay grabaciones": "録画なし",
+ "Las fotos y vídeos que hagas con las cámaras aparecerán aquí.": "カメラで撮った写真や動画がここに表示されます。",
+ "¿Borrar la grabación?": "録画を削除しますか？",
+ "Se borra del servidor y no se puede deshacer.": "サーバーから削除され、元に戻せません。",
+ "Borrar": "削除",
+ "Vídeo": "動画",
+ "Ver": "見る",
+ "Actualizar": "更新",
+ "No se pudo abrir la grabación.": "録画を開けませんでした。",
+ "No se pudo borrar la grabación.": "録画を削除できませんでした。",
+ "No se pudo leer la lista de grabaciones.": "録画の一覧を読み込めませんでした。"
 }

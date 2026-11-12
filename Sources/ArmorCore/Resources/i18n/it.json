@@ -1158,5 +1158,17 @@
  "Actualización en curso": "Aggiornamento in corso",
  "Registro": "Registro",
  "Nueva comprobación": "Nuovo controllo",
- "Esta imagen está hecha para otra placa distinta de la del nodo: no se ha enviado.": "Questa immagine è fatta per una scheda diversa da quella del nodo: non è stata inviata."
+ "Esta imagen está hecha para otra placa distinta de la del nodo: no se ha enviado.": "Questa immagine è fatta per una scheda diversa da quella del nodo: non è stata inviata.",
+ "Grabaciones": "Registrazioni",
+ "No hay grabaciones": "Nessuna registrazione",
+ "Las fotos y vídeos que hagas con las cámaras aparecerán aquí.": "Le foto e i video che fai con le telecamere appariranno qui.",
+ "¿Borrar la grabación?": "Eliminare la registrazione?",
+ "Se borra del servidor y no se puede deshacer.": "Viene eliminata dal server e non si può annullare.",
+ "Borrar": "Elimina",
+ "Vídeo": "Video",
+ "Ver": "Vedi",
+ "Actualizar": "Aggiorna",
+ "No se pudo abrir la grabación.": "Impossibile aprire la registrazione.",
+ "No se pudo borrar la grabación.": "Impossibile eliminare la registrazione.",
+ "No se pudo leer la lista de grabaciones.": "Impossibile leggere l'elenco delle registrazioni."
 }
