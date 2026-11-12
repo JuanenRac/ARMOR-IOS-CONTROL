@@ -26,6 +26,10 @@ on:
         description: "Also run the tests of the app itself (sheet of proof of identity, QR picture) on an iPhone simulator"
         type: boolean
         default: false
+      test_server:
+        description: "Also run the readers of the screens against a real ARMOR-SERVER started on the runner"
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -99,3 +103,39 @@ jobs:
       - name: Run the tests of the app
         run: |
           xcodebuild test -project ARMOR-IOS-CONTROL.xcodeproj -scheme ARMOR -destination "platform=iOS Simulator,name=${{ steps.device.outputs.name }}" CODE_SIGNING_ALLOWED=NO
+
+  screens-live:
+    name: Screens against the real server
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.test_server }}
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # The real server: it listens on the loopback of the runner with an administrator of its own and an empty data folder, and the tests reach it there.
+      - name: Check out the server
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: JuanenRac/ARMOR-SERVER
+          path: server
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "22"
+      - name: Build and start the server
+        working-directory: server
+        shell: bash
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
+          mkdir -p "$RUNNER_TEMP/armor-data"
+          ARMOR_HOST=127.0.0.1 ARMOR_PORT=18080 ARMOR_DATA_DIR="$RUNNER_TEMP/armor-data"             ARMOR_INGEST_TOKEN="$(printf 'i%.0s' $(seq 1 32))" ARMOR_CONTROL_TOKEN="$(printf 'c%.0s' $(seq 1 32))" ARMOR_OPERATOR_TOKEN="$(printf 'o%.0s' $(seq 1 32))"             ARMOR_CAMERA_CONFIG_KEY="$(printf 'k%.0s' $(seq 1 40))" ARMOR_STUDIO_USERNAME=admin ARMOR_STUDIO_PASSWORD=correct-horse-battery             nohup node dist/server.mjs >"$RUNNER_TEMP/server.log" 2>&1 &
+          for _ in $(seq 1 30); do curl -fsS http://127.0.0.1:18080/healthz >/dev/null 2>&1 && exit 0; sleep 1; done
+          cat "$RUNNER_TEMP/server.log"; exit 1
+      - name: Run the live tests
+        env:
+          ARMOR_SERVER_URL: http://127.0.0.1:18080
+        run: swift test --filter ServerLiveTests
+

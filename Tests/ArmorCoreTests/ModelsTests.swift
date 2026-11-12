@@ -88,6 +88,11 @@ final class ModelsTests: XCTestCase {
         let needs = VoiceReply.parse(["accepted": true, "outcome": "confirmation-needed", "intent": "arm", "speech": "Voy a armar", "confirmation_token": "tok"])
         XCTAssertEqual(needs.line(t), "Voy a armar. ¿Armo el sistema?")
         XCTAssertEqual(needs.confirmationToken, "tok")
+        // Silencing in the challenge mode of the server: the phone shows no number, so it gets the signed confirmation to send back, never less.
+        let silence = VoiceReply.parse(["accepted": false, "executed": false, "outcome": "confirmation-needed", "intent": "silence", "speech": "Confirma", "confirmation_token": "t.k"])
+        XCTAssertEqual(silence.line(t), "Confirma. ¿Lo hago?")
+        XCTAssertEqual(silence.confirmationToken, "t.k")
+        XCTAssertFalse(silence.executed)
         XCTAssertEqual(VoiceReply.parse(["outcome": "not-understood"]).line(t), "No lo he entendido. Di «ayuda» para saber qué puedo hacer.")
     }
 }
