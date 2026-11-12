@@ -42,6 +42,7 @@ targets:
         NSLocalNetworkUsageDescription: Reaches your A.R.M.O.R. server on your home network.
         NSBluetoothAlwaysUsageDescription: Finds and sets up an A.R.M.O.R. node over Bluetooth.
         NSCameraUsageDescription: Reads the pairing QR code of a node.
+        NSMicrophoneUsageDescription: Records the phrase of a spoken command to send it to your A.R.M.O.R. server, only when you turn that option on and tap the button.
         NSAppTransportSecurity:
           # plain http is allowed only for addresses of the local network; the app itself refuses http to anything else
           NSAllowsLocalNetworking: true

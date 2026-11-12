@@ -3,3 +3,4 @@
 "NSLocalNetworkUsageDescription" = "Verbindet mit Ihrem A.R.M.O.R.-Server im Heimnetz.";
 "NSBluetoothAlwaysUsageDescription" = "Findet einen A.R.M.O.R.-Knoten und richtet ihn über Bluetooth ein.";
 "NSCameraUsageDescription" = "Liest den Kopplungs-QR-Code eines Knotens.";
+"NSMicrophoneUsageDescription" = "Nimmt den Satz eines gesprochenen Befehls auf, um ihn an Ihren A.R.M.O.R.-Server zu senden, nur wenn Sie diese Option einschalten und die Taste tippen.";

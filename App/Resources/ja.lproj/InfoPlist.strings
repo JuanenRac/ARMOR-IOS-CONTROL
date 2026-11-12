@@ -3,3 +3,4 @@
 "NSLocalNetworkUsageDescription" = "ご自宅のネットワーク上の A.R.M.O.R. サーバーに接続します。";
 "NSBluetoothAlwaysUsageDescription" = "A.R.M.O.R. ノードを Bluetooth で見つけて設定します。";
 "NSCameraUsageDescription" = "ノードのペアリング用 QR コードを読み取ります。";
+"NSMicrophoneUsageDescription" = "音声コマンドのフレーズを録音して A.R.M.O.R. サーバーに送信します。このオプションをオンにしてボタンをタップしたときだけ使用されます。";

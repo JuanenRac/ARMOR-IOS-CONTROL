@@ -3,3 +3,4 @@
 "NSLocalNetworkUsageDescription" = "Liga ao seu servidor A.R.M.O.R. na rede de casa.";
 "NSBluetoothAlwaysUsageDescription" = "Encontra e configura um nó A.R.M.O.R. por Bluetooth.";
 "NSCameraUsageDescription" = "Lê o código QR de emparelhamento de um nó.";
+"NSMicrophoneUsageDescription" = "Grava a frase de um comando falado para a enviar ao seu servidor A.R.M.O.R., apenas quando ativa essa opção e toca no botão.";

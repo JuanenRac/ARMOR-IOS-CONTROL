@@ -1,11 +1,13 @@
 // ARMOR-IOS-CONTROL - the assistant: written commands (a closed list the voice service of the server understands, in eight languages), with a confirmation bound to the person for arming and disarming.
-// Dictation is the keyboard's own microphone key: the app never records audio itself.
+// Dictation is the keyboard's own microphone key. The app records audio itself only through the second button, the spoken turn, which exists once the person turned it on in More
+// (SpokenTurnViews.swift); it sends the sound to the server and shows the number of the challenge mode when the server asks for one.
 // Copyright (C) 2026 JuanenRac (Electro Hobby 3D). GPL-3.0-or-later.
 import SwiftUI
 import ArmorCore
 
 struct AssistantView: View {
     @EnvironmentObject var model: AppModel
+    @EnvironmentObject var spoken: SpokenTurnModel
     @State private var text = ""
     @State private var lines: [(mine: Bool, text: String)] = []
     @State private var pending: (phrase: String, token: String)?
@@ -47,15 +49,24 @@ struct AssistantView: View {
                             }
                         }.padding(.horizontal)
                     }
+                    if let shown = spoken.challenge { ChallengeCard(challenge: shown) { spoken.clearChallenge() }.padding(.horizontal) }
+                    if let notice = spoken.notice { Text(notice).font(.footnote).foregroundColor(Theme.muted).padding(.horizontal) }
+                    if spoken.listening { Text(model.tr("Te escucho: toca el botón otra vez cuando acabes.")).font(.footnote).foregroundColor(Theme.accent).padding(.horizontal) }
+                    if spoken.sending { Text(model.tr("Enviando tu voz al servidor…")).font(.footnote).foregroundColor(Theme.muted).padding(.horizontal) }
                     HStack {
                         TextField(model.tr("Escribe o di órdenes: armar, desarmar, el estado o silenciar la alarma"), text: $text).textFieldStyle(.roundedBorder).submitLabel(.send)
                             .onSubmit { Task { await send() } }
+                        if spoken.enabled {
+                            Button { Task { await tapSpoken() } } label: { Image(systemName: spoken.listening ? "stop.circle.fill" : "waveform") }
+                                .accessibilityLabel(spoken.listening ? model.tr("Terminar de hablar") : model.tr("Hablar al servidor")).disabled(working || spoken.sending)
+                        }
                         Button { Task { await send() } } label: { Image(systemName: "paperplane.fill") }.disabled(text.trimmingCharacters(in: .whitespaces).isEmpty || working)
                     }.padding()
                 }
             }
             .background(Theme.background)
             .navigationTitle(model.tr("Asistente"))
+            .onDisappear { spoken.clearChallenge() }   // the number does not outlive the screen
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Button { speak.toggle(); if !speak { AlarmSpeaker.shared.stop() } } label: { Image(systemName: speak ? "speaker.wave.2.fill" : "speaker.slash.fill") }
@@ -74,6 +85,20 @@ struct AssistantView: View {
         if chosen == nil { text = "" }
         lines.append((true, phrase)); pending = nil; working = true; defer { working = false }
         await ask(phrase, token: nil)
+    }
+
+    /// The spoken turn: a first tap listens, the next one sends. A person who can only look (a viewer) cannot start one.
+    private func tapSpoken() async {
+        if spoken.listening { spoken.stopListening(); return }
+        guard let origin = model.activeOrigin, model.state.facts.canChange else {
+            spoken.notice = model.tr("Tu usuario solo puede mirar: no puede cambiar nada.")
+            return
+        }
+        guard let heard = await spoken.run(origin: origin, api: model.controller.api, language: model.translator.language, translator: model.translator) else { return }
+        lines.append((true, heard.heard.isEmpty ? "…" : heard.heard))
+        lines.append((false, heard.reply))
+        // The number is shown, never said: if the reply carried it, the phone does not read it aloud.
+        if speak, spoken.challenge.map({ !heard.reply.contains($0.number) }) ?? true { AlarmSpeaker.shared.say(heard.reply, voice: model.voice, language: model.translator.language) }
     }
 
     private func confirm(_ item: (phrase: String, token: String)) async {

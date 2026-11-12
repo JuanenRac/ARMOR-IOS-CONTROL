@@ -32,6 +32,7 @@ struct MoreView: View {
                     NavigationLink(model.tr("Qué avisos quiero")) { NoticeSettingsView() }
                     NavigationLink(model.tr("Sonido de cada aviso")) { SoundSettingsView() }
                     NavigationLink(model.tr("Voz de las alarmas")) { VoiceSettingsView() }
+                    NavigationLink(model.tr("Orden hablada al servidor")) { SpokenTurnSettingsView() }
                     NavigationLink(model.tr("Ayuda")) { HelpView() }
                     NavigationLink(model.tr("Dispositivos")) { DevicesView() }
                     NavigationLink(model.tr("Grabaciones")) { EvidenceView() }

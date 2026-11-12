@@ -275,6 +275,20 @@ public final class ArmorApiClient: ArmorApi, @unchecked Sendable {
         return VoiceReply.parse(try Json.object(try await send(origin, "/api/v1/voice/command", "POST", body, [200])))
     }
 
+    /// The request of a spoken turn: the sound raw (16 kHz, 16-bit, mono) with the voice token and the language; the session is not what authenticates it.
+    func voiceTurnRequest(_ origin: String, pcm: Data, language: String, voiceToken: String) throws -> URLRequest {
+        var request = try self.request(origin, "/api/v1/voice/turn", "POST", nil)
+        request.setValue("audio/L16;rate=16000", forHTTPHeaderField: "Content-Type")
+        request.setValue(voiceToken, forHTTPHeaderField: "X-Armor-Voice-Token")
+        request.setValue(language, forHTTPHeaderField: "X-Armor-Language")
+        request.httpBody = pcm
+        return request
+    }
+
+    public func voiceTurn(_ origin: String, pcm: Data, language: String, voiceToken: String) async throws -> JSON {
+        try Json.object(try ResponseLimit.check(try await perform(try voiceTurnRequest(origin, pcm: pcm, language: language, voiceToken: voiceToken), "/api/v1/voice/turn", [200]), limit: ResponseLimit.json))
+    }
+
     // MARK: session
 
     public func signIn(_ origin: String, username: String, password: String) async throws -> SignIn {
@@ -345,7 +359,11 @@ public final class ArmorApiClient: ArmorApi, @unchecked Sendable {
     }
 
     private func send(_ origin: String, _ path: String, _ method: String, _ body: JSON?, _ expected: Set<Int>) async throws -> Data {
-        let request = try request(origin, path, method, body)
+        try await perform(try request(origin, path, method, body), path, expected)
+    }
+
+    private func perform(_ request: URLRequest, _ path: String, _ expected: Set<Int>) async throws -> Data {
+        let method = request.httpMethod ?? "GET"
         let data: Data, response: URLResponse
         do { (data, response) = try await session.data(for: request) } catch { DiagnosticLog.shared.record(method: method, path: path, status: 0); throw ArmorApiError(message: error.localizedDescription, status: nil) }
         let status = (response as? HTTPURLResponse)?.statusCode ?? 0

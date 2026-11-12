@@ -22,6 +22,8 @@ final class AppModel: ObservableObject {
     let policy: LockPolicy
     let gate: LockGate
     let controller: ArmorController
+    /// The spoken turn of the Assistant: off until the person turns it on in More.
+    let spokenTurn: SpokenTurnModel
     private let monitor = NWPathMonitor()
     private var pollTask: Task<Void, Never>?
 
@@ -69,6 +71,7 @@ final class AppModel: ObservableObject {
         let policy = LockPolicy(settings: settings, availability: { auth.availability() })
         let gate = LockGate(policy: policy, auth: auth, translator: translator)
         let vault = SessionVault(secrets: KeychainSecrets(), prefs: prefs)
+        self.spokenTurn = SpokenTurnModel(prefs: prefs)
         self.pins = pins; self.trust = trust; self.translator = translator; self.lockSettings = settings; self.policy = policy; self.gate = gate; self.vault = vault
         self.controller = ArmorController(api: api, vault: vault, gate: gate, lockSettings: settings, translator: translator)
         self.language = code

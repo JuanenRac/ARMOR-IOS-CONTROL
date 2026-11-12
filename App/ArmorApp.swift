@@ -12,6 +12,7 @@ struct ArmorApp: App {
         WindowGroup {
             RootView()
                 .environmentObject(model)
+                .environmentObject(model.spokenTurn)
                 .preferredColorScheme(.dark)
                 .task { await model.start() }
                 .onChange(of: scenePhase) { phase in model.scenePhaseChanged(phase) }
