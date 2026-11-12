@@ -81,13 +81,15 @@ final class EvidenceClientTests: XCTestCase {
     }
 
     func testDeletingAFileSendsTheDeleteToItsFolderAndAViewerIsRefused() async throws {
-        StubProtocol.routes["DELETE /api/v1/media/cam-front/snapshots/a.jpg"] = (204, "")
+        StubProtocol.routes["DELETE /api/v1/media/cam-front/snapshots/a.jpg"] = (204, "{}")
         try await api.deleteMedia(origin, item: photo)
         XCTAssertEqual(StubProtocol.seen.last?.httpMethod, "DELETE")
         StubProtocol.routes["DELETE /api/v1/media/cam-front/snapshots/a.jpg"] = (403, #"{"error":"forbidden"}"#)
         do { try await api.deleteMedia(origin, item: photo); XCTFail("must refuse") } catch let error as ArmorApiError { XCTAssertEqual(error.status, 403) } catch { XCTFail("\(error)") }
     }
 
+    // Downloads through a stand-in protocol are only supported by Foundation on Apple systems: these two run in the macOS job.
+#if !canImport(FoundationNetworking)
     func testAFileIsTakenToATemporaryCopyThatKeepsItsEnding() async throws {
         StubProtocol.routes["GET /api/v1/media/cam-front/recordings/b.mp4"] = (200, "VIDEO-BYTES")
         let video = MediaItemView(id: "2", cameraId: "cam-front", kind: "recording", file: "b.mp4", createdAt: "", bytes: 11)
@@ -101,6 +103,7 @@ final class EvidenceClientTests: XCTestCase {
         StubProtocol.routes["GET /api/v1/media/cam-front/snapshots/a.jpg"] = (404, #"{"error":"not_found"}"#)
         do { _ = try await api.mediaFile(origin, item: photo); XCTFail("must refuse") } catch let error as ArmorApiError { XCTAssertEqual(error.status, 404) } catch { XCTFail("\(error)") }
     }
+#endif
 
     func testAnApiWithoutTheLibraryRefusesInsteadOfInventingOne() async {
         let bare = FakeApi()
