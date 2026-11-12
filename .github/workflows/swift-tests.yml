@@ -42,7 +42,12 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+      # The readers of the messages are tried against the vectors of the shared contracts, which live next to this repository; here they are fetched and their absence is a failure, not a skipped test.
+      - name: Fetch the shared contracts
+        run: git clone --depth 1 https://github.com/JuanenRac/ARMOR-COMMON.git ../ARMOR-COMMON
       - name: Run the unit tests
+        env:
+          ARMOR_REQUIRE_SIBLINGS: "1"
         run: swift test
 
   app-build:
