@@ -1157,5 +1157,6 @@
  "Desde fuera de casa se pedirá la contraseña otra vez. Si la versión no está firmada, no se toca nada.": "Von außerhalb des Hauses wird das Passwort erneut abgefragt. Ist die Version nicht signiert, wird nichts verändert.",
  "Actualización en curso": "Aktualisierung läuft",
  "Registro": "Protokoll",
- "Nueva comprobación": "Neue Prüfung"
+ "Nueva comprobación": "Neue Prüfung",
+ "Esta imagen está hecha para otra placa distinta de la del nodo: no se ha enviado.": "Dieses Image ist für eine andere Platine als die des Knotens gebaut: es wurde nicht gesendet."
 }

@@ -144,6 +144,7 @@ public enum SecurityText {
     public static func error(_ code: String, _ t: Translator) -> String {
         switch code {
         case "bad_proof": return t.tr("Eso no es correcto.")
+        case "wrong_board": return t.tr("Esta imagen está hecha para otra placa distinta de la del nodo: no se ha enviado.")
         case "bad_code": return t.tr("Ese código no es correcto.")
         case "totp_locked": return t.tr("Demasiados códigos erróneos: espera un poco y vuelve a intentarlo.")
         case "challenge_expired": return t.tr("El acceso ha tardado demasiado: empieza de nuevo.")

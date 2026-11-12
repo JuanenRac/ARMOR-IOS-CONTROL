@@ -1157,5 +1157,6 @@
  "Desde fuera de casa se pedirá la contraseña otra vez. Si la versión no está firmada, no se toca nada.": "在家外操作时会再次要求输入密码。如果版本未签名，则不会做任何更改。",
  "Actualización en curso": "正在更新",
  "Registro": "日志",
- "Nueva comprobación": "重新检查"
+ "Nueva comprobación": "重新检查",
+ "Esta imagen está hecha para otra placa distinta de la del nodo: no se ha enviado.": "该镜像是为与节点不同的开发板构建的：未发送。"
 }

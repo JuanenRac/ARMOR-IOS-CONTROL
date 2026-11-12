@@ -93,6 +93,7 @@ final class ServicesSecurityTests: XCTestCase {
         let t = plain("es")
         XCTAssertEqual(SecurityText.error("bad_code", t), "Ese código no es correcto.")
         XCTAssertTrue(SecurityText.error("totp_locked", t).contains("Demasiados"))
+        XCTAssertTrue(SecurityText.error("wrong_board", t).contains("otra placa"))
         XCTAssertTrue(SecurityText.error("whatever", t).contains("No se ha cambiado nada"))
         let refusal = ArmorApiError(message: "x", status: 401, body: #"{"code":"bad_proof"}"#)
         XCTAssertEqual(SecurityText.errorText(refusal, t), "Eso no es correcto.")

@@ -1157,5 +1157,6 @@
  "Desde fuera de casa se pedirá la contraseña otra vez. Si la versión no está firmada, no se toca nada.": "From outside the house the password will be asked again. If the version is not signed, nothing is touched.",
  "Actualización en curso": "Update in progress",
  "Registro": "Log",
- "Nueva comprobación": "New check"
+ "Nueva comprobación": "New check",
+ "Esta imagen está hecha para otra placa distinta de la del nodo: no se ha enviado.": "This image is built for another board than the node's: it was not sent."
 }

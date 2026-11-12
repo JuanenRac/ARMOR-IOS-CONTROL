@@ -4,6 +4,8 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+- **A firmware image made for another board is refused in the words of the person, as in Studio:** the answer `wrong_board` of the server now has its own phrase (in the eight languages) next to `bad_proof` and the other codes of the security screens, instead of the general "it did not work"; a test covers it.
+
 - **The sheet that asks for the proof of identity again and the pairing QR code are tested:** the rules of the sheet (the button works with a password or a code, a code of only spaces is nothing, the code is sent without spaces) moved into `ArmorCore` as `ElevationForm`, and the drawing of the pairing QR code moved there as `QrImage`, which also reads a still picture back, so a test draws the code and reads it with no camera. The app gets its own test target (`ARMORTests`, run inside the app on a simulator) that checks the sheet answers and closes, draws itself, and that the QR code the app draws reads back. A second manual job of the "Swift tests" workflow (`test_app`) generates the Xcode project and runs it; nothing runs on a push. Tests: 338 (before 330), 5 of them need a Mac.
 - **A manual job runs the ArmorCore tests on an iPhone simulator:** the workflow "Swift tests" gets the input `test_on_simulator` (off; it never runs on a push) that picks an installed iPhone simulator on a macOS runner and runs `xcodebuild test` for the package, next to the `swift test` of every push. It checks the code on the platform of the app, not the screens on a phone.
 

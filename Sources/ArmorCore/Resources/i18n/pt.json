@@ -1157,5 +1157,6 @@
  "Desde fuera de casa se pedirá la contraseña otra vez. Si la versión no está firmada, no se toca nada.": "Fora de casa, a palavra-passe será pedida outra vez. Se a versão não estiver assinada, não se mexe em nada.",
  "Actualización en curso": "Atualização em curso",
  "Registro": "Registo",
- "Nueva comprobación": "Nova verificação"
+ "Nueva comprobación": "Nova verificação",
+ "Esta imagen está hecha para otra placa distinta de la del nodo: no se ha enviado.": "Esta imagem é feita para outra placa que não a do nó: não foi enviada."
 }

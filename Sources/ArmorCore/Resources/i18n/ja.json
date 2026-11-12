@@ -1157,5 +1157,6 @@
  "Desde fuera de casa se pedirá la contraseña otra vez. Si la versión no está firmada, no se toca nada.": "家の外からは、パスワードを再度求められます。署名されていない版の場合、何も変更されません。",
  "Actualización en curso": "更新中",
  "Registro": "ログ",
- "Nueva comprobación": "もう一度確認"
+ "Nueva comprobación": "もう一度確認",
+ "Esta imagen está hecha para otra placa distinta de la del nodo: no se ha enviado.": "このイメージはノードとは別のボード用です。送信されませんでした。"
 }
