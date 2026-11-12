@@ -240,7 +240,7 @@ final class SpokenTurnTests: XCTestCase {
         XCTAssertEqual(entries.first, "11|event_10")
         XCTAssertEqual(entries.last, "60|event_59")
         trail.record("heard: silencia\nla alarma, 1234")
-        XCTAssertEqual(trail.entries().last, "61|heardsilencialaalarma1234")
+        XCTAssertEqual(trail.entries().last, "61|heard:silencialaalarma1234")
         XCTAssertFalse(trail.entries().last!.contains(" "))
     }
 
