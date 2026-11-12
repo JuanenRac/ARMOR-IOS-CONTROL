@@ -34,7 +34,22 @@ public struct HeatmapView: Equatable, Sendable {
 public enum ReportsParser {
     public static let languages = ["en", "es", "de", "fr", "it", "ja", "zh", "pt"]
 
+    /// The summary of a day. A document that is the message `daily_summary` of the shared contract (an unknown member is ignored) is read through it; anything else is read by the
+    /// tolerant reader below, so a summary the contract does not describe still shows what it has.
     public static func summary(_ json: JSON) -> DailySummaryView {
+        if let message = Contract.parseTolerant("daily_summary", json) as? Contract.DailySummary {
+            let findings = message.findings.map { item -> ReportFinding in
+                let about = [item.subject.code, item.subject.zone, item.subject.node].compactMap { $0 }.filter { !$0.isEmpty }.joined(separator: " / ")
+                return ReportFinding(kind: item.kind, subject: about.isEmpty ? "-" : about, count: Int(item.count))
+            }
+            let totals = message.summary.totals
+            return DailySummaryView(date: message.date, language: message.language, events: Int(totals.events), alarms: Int(totals.alarms), serious: Int(totals.serious_alarms),
+                                    falseAlarms: Int(totals.false_alarms), text: message.text, findings: findings, aiNote: (message.ai_note ?? "").isEmpty ? nil : message.ai_note)
+        }
+        return legacySummary(json)
+    }
+
+    private static func legacySummary(_ json: JSON) -> DailySummaryView {
         let totals = json.object("summary")?.object("totals")
         let findings: [ReportFinding] = json.objects("findings").map { item in
             let subject = item.object("subject")
@@ -50,7 +65,10 @@ public enum ReportsParser {
     }
 
     public static func heatmap(_ json: JSON, png: Data?) -> HeatmapView {
-        HeatmapView(cameraId: json.str("camera_id"), cols: json.int("cols"), rows: json.int("rows"), positions: json.int("accepted_positions"), png: png)
+        if let message = Contract.parseTolerant("heatmap", json) as? Contract.Heatmap {
+            return HeatmapView(cameraId: message.camera_id, cols: Int(message.cols), rows: Int(message.rows), positions: Int(message.accepted_positions), png: png)
+        }
+        return HeatmapView(cameraId: json.str("camera_id"), cols: json.int("cols"), rows: json.int("rows"), positions: json.int("accepted_positions"), png: png)
     }
 
     /// A day as YYYY-MM-DD that is a real day from the year 2000 (what the server accepts).

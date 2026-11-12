@@ -23,6 +23,17 @@ public enum ConnectionsParser {
 
     /// A client from the server's JSON, or nil when it is not a well-formed one (never trusted blindly).
     public static func client(_ json: JSON) -> ConnectionClient? {
+        if let message = Contract.parseTolerant("connection_client", json) as? Contract.ConnectionClient, kinds.contains(message.kind) {
+            func clean(_ value: String?) -> String? { value.flatMap { $0.trimmingCharacters(in: .whitespaces).isEmpty ? nil : $0 } }
+            return ConnectionClient(id: message.id, kind: message.kind, user: clean(message.user), label: clean(message.label), appVersion: clean(message.app_version),
+                                    firstSeen: message.first_seen, lastSeen: message.last_seen,
+                                    activeSessions: Int(max(0, message.active_sessions)), loginsOk: Int(max(0, message.logins_ok)), loginsFailed: Int(max(0, message.logins_failed)),
+                                    ip: clean(message.ip), agent: clean(message.agent))
+        }
+        return legacyClient(json)
+    }
+
+    private static func legacyClient(_ json: JSON) -> ConnectionClient? {
         let id = json.str("id"), kind = json.str("kind")
         guard id.count == 16, id.allSatisfy({ ($0 >= "0" && $0 <= "9") || ($0 >= "a" && $0 <= "f") }), kinds.contains(kind) else { return nil }
         return ConnectionClient(id: id, kind: kind, user: text(json, "user"), label: text(json, "label"), appVersion: text(json, "app_version"),

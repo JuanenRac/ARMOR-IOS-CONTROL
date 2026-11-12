@@ -196,4 +196,67 @@ final class ContractConformanceTests: XCTestCase {
         XCTAssertFalse(Contract.isBool(try XCTUnwrap(flags["b"])))
         XCTAssertFalse(Contract.isBool(try XCTUnwrap(flags["c"])))
     }
+
+    // MARK: the tolerant reading (an unknown member never empties a screen)
+
+    /// The document with a member the schema does not name added to every closed object (`additionalProperties: false`), where the schema is followed down.
+    private func withUnknownMembers(_ value: Any, _ schema: [String: Any]) -> Any {
+        if let object = value as? [String: Any] {
+            let properties = schema["properties"] as? [String: Any] ?? [:]
+            var out: [String: Any] = [:]
+            for (name, child) in object {
+                if let rule = properties[name] as? [String: Any] { out[name] = withUnknownMembers(child, rule) } else { out[name] = child }
+            }
+            if let extra = schema["additionalProperties"], Contract.isBool(extra), !Contract.asFlag(extra) { out["zz_unknown_member"] = "a newer server" }
+            return out
+        }
+        if let list = value as? [Any], let items = schema["items"] as? [String: Any] { return list.map { withUnknownMembers($0, items) } }
+        return value
+    }
+
+    func testAnUnknownMemberAnywhereDoesNotStopAValidCaseAndChangesNothingOfWhatIsRead() throws {
+        var failed: [String] = []
+        var checked = 0
+        for item in try allCases() where item.valid {
+            guard let object = document(item) as? [String: Any], let schema = Contract.schemas[item.schema] else { continue }
+            let extended = try XCTUnwrap(withUnknownMembers(object, schema) as? [String: Any])
+            checked += 1
+            guard Contract.parseTolerant(item.schema, extended) != nil else { failed.append("\(item.label) is refused with an unknown member"); continue }
+            guard let cleaned = Contract.withoutUnknownMembers(item.schema, extended), let original = Contract.rewrite(item.schema, object), let again = Contract.rewrite(item.schema, cleaned) else {
+                failed.append("\(item.label) cannot be written back")
+                continue
+            }
+            if try text(again) != text(original) { failed.append("\(item.label) reads differently with an unknown member") }
+        }
+        XCTAssertEqual(Array(failed.prefix(30)), [])
+        XCTAssertGreaterThan(checked, 500)
+    }
+
+    func testTheTolerantReadingStillRefusesWhatIsReallyWrong() throws {
+        var wrongly: [String] = []
+        for item in try allCases() where !item.valid {
+            guard let object = document(item) as? [String: Any], let schema = Contract.schemas[item.schema] else { continue }
+            // an invalid case that holds only an unknown member becomes valid once it is dropped; every other invalid case must stay refused
+            let onlyExtra = Contract.check(item.schema, knownOnly(object, schema)) == nil
+            if !onlyExtra && Contract.parseTolerant(item.schema, object) != nil { wrongly.append(item.label) }
+        }
+        XCTAssertEqual(Array(wrongly.prefix(30)), [])
+        XCTAssertNil(Contract.parseTolerant("not_a_message", [:]))
+        XCTAssertNil(Contract.parseTolerant("telemetry", [:]))
+    }
+
+    func testTheReportsAndTheClientsOfTheAppReadAMessageWithAnUnknownMember() throws {
+        let cases = try allCases()
+        let summary = try XCTUnwrap(cases.first { $0.valid && $0.schema == "daily_summary" })
+        var day = try XCTUnwrap(document(summary) as? [String: Any])
+        let schema = try XCTUnwrap(Contract.schemas["daily_summary"])
+        day = try XCTUnwrap(withUnknownMembers(day, schema) as? [String: Any])
+        let view = ReportsParser.summary(day)
+        XCTAssertEqual(view.date, day["date"] as? String)
+        XCTAssertEqual(view.text, day["text"] as? String)
+        let client = try XCTUnwrap(cases.first { $0.valid && $0.schema == "connection_client" })
+        var seen = try XCTUnwrap(document(client) as? [String: Any])
+        seen["zz_unknown_member"] = 1
+        XCTAssertEqual(ConnectionsParser.client(seen)?.id, seen["id"] as? String)
+    }
 }
