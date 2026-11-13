@@ -1183,6 +1183,56 @@
    "ja": "意味: 警報パネルが警戒モードを確認しませんでした。サーバーはそのモードを守っていますが、パネルは守っていないかもしれません。\n確認: どのパネルで、なぜか（詳細に各応答があります）を確認してください：存在しないプロファイル、オフラインまたは未知のパネル、拒否したパネル。モードのページで直して再度警戒してください。それまでそのパネルは保護が弱い可能性があります。",
    "zh": "含义: 某台报警主机没有确认布防模式：服务器按该模式守护，但主机可能没有。\n检查: 查看是哪台主机以及原因（详情列出了每个应答）：配置文件不存在、主机离线或未知，或被其拒绝。在“模式”页面修正后重新布防；在此之前该主机的保护可能较弱。",
    "pt": "Significa: Uma central de alarme não confirmou o modo de armação: o servidor defende o modo, a central pode não o fazer.\nVerifique: Que central e porquê (o detalhe lista cada resposta): um perfil que não existe, uma central offline ou desconhecida, ou uma que recusou. Corrija na página dos modos e arme de novo; até lá essa central pode estar menos protegida."
+  },
+  "grid_export_unexpected": {
+   "en": "Means: The house is feeding the grid by more than the limit you set although the installation is set not to export.\nCheck: The inverter settings (zero export), the meter on the connection to the grid and its sign, and the limits of the energy balance.",
+   "es": "Significa: La casa está inyectando a la red por encima del límite fijado aunque la instalación esta configurada para no exportar.\nRevisa: Los ajustes del inversor (inyección cero), el contador de la conexión a la red y su signo, y los límites del balance energético.",
+   "de": "Bedeutung: Das Haus speist mehr als die eingestellte Grenze ins Netz ein, obwohl die Anlage nicht einspeisen soll.\nPrüfen: Die Einstellungen des Wechselrichters (Nulleinspeisung), den Zähler am Netzanschluss und sein Vorzeichen sowie die Grenzen der Energiebilanz.",
+   "fr": "Signification: La maison injecte dans le réseau plus que la límite fixée alors que l'installation ne doit pas exporter.\nÀ vérifier: Les réglages de l'onduleur (injection zéro), le compteur du raccordement au réseau et son signe, et les límites du bilan énergétique.",
+   "it": "Significato: La casa sta immettendo in rete più del límite impostato anche se l'impianto non deve esportare.\nControlla: Le impostazioni dell'inverter (immissione zero), il contatore sul collegamento alla rete e il suo segno, e i limiti del bilancio energético.",
+   "ja": "意味: 設備は売電しない設定ですが、設定した上限を超えて系統へ逆潮流しています。\n確認: インバーターの設定(ゼロ売電)、系統接続点のメーターとその符号、エネルギー収支の上限。",
+   "zh": "含义: 装置设置为不向电网送电，但住宅送入电网的功率超过了您设定的限值。\n检查: 逆变器设置(零馈入)、电网接入点的电表及其符号，以及能量平衡的限值。",
+   "pt": "Significa: A casa está a injetar nà rede acima do límite definido, embora a instalação esteja configurada para não exportar.\nVerifique: As definições do inversor (injeção zero), o contador da ligação à rede e o seu sinal, e os límites do balanco energético."
+  },
+  "meter_mismatch": {
+   "en": "Means: The consumption worked out from the solar plant and the grid meter differs a lot from the load the inverters report, for longer than the time you set.\nCheck: That each meter measures what it should (the current clamps, their direction and the sign of the grid meter) and that none has stopped answering.",
+   "es": "Significa: El consumo calculado con la planta solar y el contador de red difiere mucho de la carga que informan los inversores, durante mas del tiempo fijado.\nRevisa: Que cada contador mide lo que debe (las pinzas, su sentido y el signo del contador de red) y que ninguno ha dejado de responder.",
+   "de": "Bedeutung: Der aus Solaranlage und Netzzähler berechnete Verbrauch weicht länger als die eingestellte Zeit stark von der Last ab, die die Wechselrichter melden.\nPrüfen: Ob jeder Zähler misst, was er soll (die Stromzangen, ihre Richtung und das Vorzeichen des Netzzählers) und ob keiner mehr antwortet.",
+   "fr": "Signification: La consommation calculée a partir de la centrale solaire et du compteur de réseau differe beaucoup de la charge que signalent les onduleurs, plus longtemps que le delai fixe.\nÀ vérifier: Que chaque compteur mesure ce qu'il doit (les pinces, leur sens et le signe du compteur de réseau) et qu'aucun n'a cesse de répondre.",
+   "it": "Significato: Il consumo calcolato da impianto solare e contatore di rete differisce molto dal carico indicato dagli inverter, per più del tempo impostato.\nControlla: Che ogni contatore misuri ciò che deve (le pinze, il loro verso e il segno del contatore di rete) e che nessuno abbia smesso di rispondere.",
+   "ja": "意味: 太陽光発電設備と系統メーターから計算した消費量が、インバーターの報告する負荷と、設定した時間を超えて大きく異なっています。\n確認: 各メーターが正しく測定しているか(電流クランプとその向き、系統メーターの符号)、応答しなくなったものがないか。",
+   "zh": "含义: 根据光伏系统和电网电表算出的用电量，与逆变器报告的负载相差很大，且超过了设定时间。\n检查: 各电表是否测量正确(电流钳及其方向、电网电表的符号)，以及是否有电表不再应答。",
+   "pt": "Significa: O consumo calculado com a central solar e o contador dà rede difere muito da carga que os inversores indicam, durante mais do tempo definido.\nVerifique: Que cada contador mede o que deve (as pinças, o seu sentido e o sinal do contador dà rede) e que nenhum deixou de responder."
+  },
+  "consumption_appliance_stopped": {
+   "en": "Means: A channel you asked to watch was drawing power and has been flat at zero for hours.\nCheck: That the appliance is not off or unplugged, its fuse or breaker, and the meter of that channel.",
+   "es": "Significa: Un canal que pediste vigilar consumía y lleva horas sin consumir nada.\nRevisa: Que el aparato no este apagado o desenchufado, su fusible o magnetotérmico, y el contador de ese canal.",
+   "de": "Bedeutung: Ein überwachter Kanal hat Strom verbraucht und liegt seit Stunden bei null.\nPrüfen: Ob das Gerät nicht aus oder ausgesteckt ist, seine Sicherung und den Zähler dieses Kanals.",
+   "fr": "Signification: Un canal surveillé consommait et reste a zero depuis des heures.\nÀ vérifier: Que l'appareil n'est pas éteint ou débranché, son fusible ou disjoncteur, et le compteur de ce canal.",
+   "it": "Significato: Un canale sorvegliato consumava e da ore è fermo a zero.\nControlla: Che l'apparecchio non sia spento o scollegato, il suo fusibile o interruttore e il contatore di quel canale.",
+   "ja": "意味: 監視しているチャンネルは電力を使っていましたが、数時間ゼロのままです。\n確認: 機器が消えていたりプラグが抜けていないか、ヒューズやブレーカー、そのチャンネルのメーター。",
+   "zh": "含义: 您监控的通道原本在用电，现在已持续数小时为零。\n检查: 电器是否关闭或被拔掉、它的保险丝或断路器，以及该通道的电表。",
+   "pt": "Significa: Um canal que pediu para vigiar consumía e está a zero ha horas.\nVerifique: Que o aparelho não esta desligado ou desligado da tomada, o seu fusível ou disjuntor, e o contador desse canal."
+  },
+  "consumption_standby_high": {
+   "en": "Means: The lowest draw of a watched channel in the last hours is clearly higher than its usual night standby.\nCheck: What was left on (a heater, a charger, a pump), and whether a device is faulty and draws all the time.",
+   "es": "Significa: El consumo mínimo de un canal vigilado en las últimas horas es claramente mayor que su consumo en reposo habitual de noche.\nRevisa: Que se ha quedado encendido (una estufa, un cargador, una bomba) y si algun aparato esta averiado y consume todo el rato.",
+   "de": "Bedeutung: Der niedrigste Bezug eines überwachten Kanals in den letzten Stunden liegt deutlich über seinem üblichen nächtlichen Ruheverbrauch.\nPrüfen: Was eingeschaltet geblieben ist (eine Heizung, ein Ladegerät, eine Pumpe) und ob ein Gerät defekt ist und ständig zieht.",
+   "fr": "Signification: La consommation minimale d'un canal surveillé ces dernières heures est nettement plus haute que sa veille nocturne habituelle.\nÀ vérifier: Ce qui est reste allumé (un radiateur, un chargeur, une pompe) et si un appareil est en panne et consomme en permanence.",
+   "it": "Significato: Il consumo mínimo di un canale sorvegliato nelle ultime ore è nettamente più alto del suo solito standby notturno.\nControlla: Cosa è rimasto acceso (una stufa, un caricabatterie, una pompa) e se un apparecchio è guasto e consuma di continuo.",
+   "ja": "意味: 監視中のチャンネルの直近数時間の最小消費が、いつもの夜間待機電力より明らかに高くなっています。\n確認: 付けっぱなしのもの(ヒーター、充電器、ポンプ)がないか、故障して常に電力を使っている機器がないか。",
+   "zh": "含义: 被监控通道最近几小时的最低用电明显高于平时夜间的待机用电。\n检查: 是否有设备一直开着(取暖器、充电器、水泵)，或有设备故障而持续耗电。",
+   "pt": "Significa: O consumo mínimo de um canal vigiado nas últimas horas é claramente mais alto do que o seu consumo habitual em espera de noite.\nVerifique: O que ficou ligado (um aquecedor, um carregador, uma bomba) e se algum aparelho esta avariado e consome sempre."
+  },
+  "consumption_phase_down": {
+   "en": "Means: One phase of a three-phase meter reads less than half the voltage of the others.\nCheck: The breaker or fuse of that phase, the supply from the grid, and the voltage connection of the meter.",
+   "es": "Significa: Una fase de un contador trifásico marca menos de la mitad de tensión que las otras.\nRevisa: El magnetotérmico o fusible de esa fase, el suministro de la red y la conexión de tensión del contador.",
+   "de": "Bedeutung: Eine Phase eines Drehstromzählers zeigt weniger als die halbe Spannung der anderen.\nPrüfen: Den Sicherungsautomaten oder die Sicherung dieser Phase, die Versorgung aus dem Netz und den Spannungsanschluss des Zählers.",
+   "fr": "Signification: Une phase d'un compteur triphasé indique moins de la moitié de la tensión des autres.\nÀ vérifier: Le disjoncteur ou le fusible de cette phase, l'alimentation du réseau et le raccordement de tensión du compteur.",
+   "it": "Significato: Una fase di un contatore trifase indica meno della metà della tensióne delle altre.\nControlla: L'interruttore o il fusibile di quella fase, l'alimentazione dalla rete e il collegamento di tensióne del contatore.",
+   "ja": "意味: 三相メーターの一相の電圧が、他の相の半分未満です。\n確認: その相のブレーカーまたはヒューズ、系統からの供給、メーターの電圧接続。",
+   "zh": "含义: 三相电表中有一相的电压不到其他相的一半。\n检查: 该相的断路器或保险丝、电网供电，以及电表的电压接线。",
+   "pt": "Significa: Uma fase de um contador trifásico indica menos de metade da tensão das outras.\nVerifique: O disjuntor ou fusível dessa fase, a alimentação dà rede e a ligação de tensão do contador."
   }
  }
 }
