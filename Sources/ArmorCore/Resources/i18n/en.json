@@ -1173,6 +1173,7 @@
  "No se pudo leer la lista de grabaciones.": "The list of recordings could not be read.",
  "La orden hablada está apagada: enciéndela en Ajustes.": "The spoken command is off: turn it on in Settings.",
  "Falta la clave de voz: escríbela en Ajustes.": "The voice key is missing: enter it in Settings.",
+ "El servidor no permite la voz desde el móvil: un administrador debe activarla en Studio.": "The server does not allow voice from the phone: an administrator must turn it on in Studio.",
  "Sin permiso para el micrófono no puedo escucharte. Puedes escribir la orden.": "Without permission for the microphone I cannot hear you. You can type the command.",
  "No he oído nada. Prueba otra vez.": "I heard nothing. Try again.",
  "La respuesta del servidor no es válida: no la muestro.": "The answer of the server is not valid: I am not showing it.",

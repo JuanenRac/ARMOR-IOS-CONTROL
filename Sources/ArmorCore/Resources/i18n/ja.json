@@ -1173,6 +1173,7 @@
  "No se pudo leer la lista de grabaciones.": "録画の一覧を読み込めませんでした。",
  "La orden hablada está apagada: enciéndela en Ajustes.": "音声コマンドはオフです。設定でオンにしてください。",
  "Falta la clave de voz: escríbela en Ajustes.": "音声キーがありません。設定で入力してください。",
+ "El servidor no permite la voz desde el móvil: un administrador debe activarla en Studio.": "サーバーはスマートフォンからの音声を許可していません。管理者が Studio でオンにする必要があります。",
  "Sin permiso para el micrófono no puedo escucharte. Puedes escribir la orden.": "マイクの許可がないと、あなたの声を聞き取れません。コマンドを入力することもできます。",
  "No he oído nada. Prueba otra vez.": "何も聞こえませんでした。もう一度お試しください。",
  "La respuesta del servidor no es válida: no la muestro.": "サーバーの応答が正しくないため、表示しません。",
