@@ -153,6 +153,9 @@ public final class StoreTurnAudit: TurnAudit {
 /// What a turn needs from the server: the audio, the language and the voice token in, the JSON of the answer out.
 public typealias TurnSender = @Sendable (_ origin: String, _ pcm: Data, _ language: String, _ voiceToken: String) async throws -> JSON
 
+/// What a turn needs when the phone has no voice token: the audio and the language in, the JSON of the answer out; the session of the person does the rest.
+public typealias SessionTurnSender = @Sendable (_ origin: String, _ pcm: Data, _ language: String) async throws -> JSON
+
 public final class SpokenTurnController {
     /// A tenth of a second: less than that is a tap, not a phrase.
     public static let minBytes = 3_200
@@ -165,22 +168,29 @@ public final class SpokenTurnController {
     private let send: TurnSender
     private let audit: TurnAudit
     private let clock: () -> Date
+    /// Used when no voice token was entered: the turn goes with the session through the route of the phone, which the server keeps closed until an administrator opens it in Studio.
+    private let sendWithSession: SessionTurnSender?
 
-    public init(settings: SpokenTurnSettings, tokens: VoiceTokenVault, recorder: TurnRecorder, send: @escaping TurnSender, audit: TurnAudit, clock: @escaping () -> Date = Date.init) {
-        self.settings = settings; self.tokens = tokens; self.recorder = recorder; self.send = send; self.audit = audit; self.clock = clock
+    public init(settings: SpokenTurnSettings, tokens: VoiceTokenVault, recorder: TurnRecorder, send: @escaping TurnSender, audit: TurnAudit, clock: @escaping () -> Date = Date.init, sendWithSession: SessionTurnSender? = nil) {
+        self.settings = settings; self.tokens = tokens; self.recorder = recorder; self.send = send; self.audit = audit; self.clock = clock; self.sendWithSession = sendWithSession
     }
 
     /// One turn: checks the switch, the voice token and the permission - in that order, and the microphone is touched only after all three - records, sends and reads the answer.
     public func run(origin: String, language: String, shouldStop: @escaping @Sendable () -> Bool = { false }) async -> SpokenTurnOutcome {
         guard settings.enabled else { audit.record("blocked_switch_off"); return .off }
-        guard let token = tokens.load() else { audit.record("no_token"); return .noToken }
+        let token = tokens.load()
+        guard token != nil || sendWithSession != nil else { audit.record("no_token"); return .noToken }
         guard await recorder.requestPermission() else { return permissionRefused() }
         let sound = await recorder.record(shouldStop: shouldStop)
         guard sound.count >= Self.minBytes, sound.count % 2 == 0 else { audit.record("nothing_heard"); return .nothingHeard }
         let pcm = sound.count > Self.maxBytes ? sound.prefix(Self.maxBytes) : sound
         audit.record("sent")
         let json: JSON
-        do { json = try await send(origin, Data(pcm), language, token) }
+        do {
+            if let token = token { json = try await send(origin, Data(pcm), language, token) }
+            else if let sendWithSession = sendWithSession { json = try await sendWithSession(origin, Data(pcm), language) }
+            else { audit.record("no_token"); return .noToken }
+        }
         catch {
             let code = Self.errorCode(error)
             audit.record("failed:" + String((code ?? "network").prefix(24)))
@@ -214,6 +224,7 @@ public enum SpokenTurnText {
         case .malformed: return t.tr("La respuesta del servidor no es válida: no la muestro.")
         case .failed(let code):
             switch code {
+            case "mobile_voice_disabled": return t.tr("El servidor no permite la voz desde el móvil: un administrador debe activarla en Studio.")
             case "unauthorized": return t.tr("El servidor no acepta la clave de voz.")
             case "voice_unavailable": return t.tr("Este sistema no tiene instalado el asistente de voz.")
             case "voice_not_answering": return t.tr("El asistente de voz no responde ahora mismo.")

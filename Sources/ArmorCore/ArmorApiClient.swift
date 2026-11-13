@@ -289,6 +289,19 @@ public final class ArmorApiClient: ArmorApi, @unchecked Sendable {
         try Json.object(try ResponseLimit.check(try await perform(try voiceTurnRequest(origin, pcm: pcm, language: language, voiceToken: voiceToken), "/api/v1/voice/turn", [200]), limit: ResponseLimit.json))
     }
 
+    /// The request of a spoken turn with the session: the sound raw with the language, to the route of the phone; no voice token.
+    func mobileVoiceTurnRequest(_ origin: String, pcm: Data, language: String) throws -> URLRequest {
+        var request = try self.request(origin, "/api/v1/voice/mobile-turn", "POST", nil)
+        request.setValue("audio/L16;rate=16000", forHTTPHeaderField: "Content-Type")
+        request.setValue(language, forHTTPHeaderField: "X-Armor-Language")
+        request.httpBody = pcm
+        return request
+    }
+
+    public func mobileVoiceTurn(_ origin: String, pcm: Data, language: String) async throws -> JSON {
+        try Json.object(try ResponseLimit.check(try await perform(try mobileVoiceTurnRequest(origin, pcm: pcm, language: language), "/api/v1/voice/mobile-turn", [200]), limit: ResponseLimit.json))
+    }
+
     // MARK: session
 
     public func signIn(_ origin: String, username: String, password: String) async throws -> SignIn {

@@ -4,6 +4,7 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+- **The spoken turn can go with the session of the person, with no voice token on the phone (as on Android):** when no voice token was entered, the sound goes raw to `POST /api/v1/voice/mobile-turn`; the server keeps it closed (403 `mobile_voice_disabled`, told in words in the eight languages) until an administrator turns on "Voice commands from the phone" in Studio, and never opens it to a viewer. The switch of the phone, the permission of the microphone and the confirmations are unchanged. Tests of the controller and of the request. Not compiled here: the build and the tests run on macOS in Actions.
 - **The pictures of the app are taken by a UI test on a simulator:** the sign-in carries accessibility identifiers, the project has a UI test target `ARMORUITests` (skipped when no server is given) that signs in against a real server and goes through the sections of the bar at the bottom taking a picture of each, and the workflow `ios-shots.yml` (by hand or on a branch `shots-run/<name>`, never on main) starts a real server on the Mac, runs it on an iPhone simulator and keeps the pictures as an artifact; the first pictures are in `images/screenshots`.
 
 ## [0.0.5] - Tolerant contract readers, spoken orders and phone recordings

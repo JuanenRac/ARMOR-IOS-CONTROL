@@ -53,6 +53,9 @@ public protocol ArmorApi: Sendable {
     /// One spoken turn: `pcm` is 16 kHz 16-bit little-endian mono sound, sent raw to `POST /api/v1/voice/turn` with the voice token (not the session). The answer is the JSON of the voice reply as the
     /// server gave it; the caller reads it strictly with `VoiceTurnResult.parse`. Used only while the person's switch for it is on.
     func voiceTurn(_ origin: String, pcm: Data, language: String, voiceToken: String) async throws -> JSON
+    /// The same spoken turn with the SESSION of the person instead of the voice token: the sound goes raw to `POST /api/v1/voice/mobile-turn`. The server answers 403 `mobile_voice_disabled` until an
+    /// administrator turns on "Voice commands from the phone" in Studio, and never to a viewer.
+    func mobileVoiceTurn(_ origin: String, pcm: Data, language: String) async throws -> JSON
 
     // session
     func signIn(_ origin: String, username: String, password: String) async throws -> SignIn
@@ -142,6 +145,7 @@ public protocol ArmorApi: Sendable {
 
 extension ArmorApi {
     func voiceTurn(_ origin: String, pcm: Data, language: String, voiceToken: String) async throws -> JSON { throw ArmorApiError(message: "not supported", status: nil) }
+    func mobileVoiceTurn(_ origin: String, pcm: Data, language: String) async throws -> JSON { throw ArmorApiError(message: "not supported", status: nil) }
     func media(_ origin: String) async throws -> MediaCatalogueView { throw ArmorApiError(message: "not supported", status: nil) }
     func deleteMedia(_ origin: String, item: MediaItemView) async throws { throw ArmorApiError(message: "not supported", status: nil) }
     func mediaFile(_ origin: String, item: MediaItemView) async throws -> URL { throw ArmorApiError(message: "not supported", status: nil) }

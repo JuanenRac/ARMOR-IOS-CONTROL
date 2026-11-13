@@ -1173,6 +1173,7 @@
  "No se pudo leer la lista de grabaciones.": "Die Liste der Aufnahmen konnte nicht gelesen werden.",
  "La orden hablada está apagada: enciéndela en Ajustes.": "Der gesprochene Befehl ist aus: Schalte ihn in den Einstellungen ein.",
  "Falta la clave de voz: escríbela en Ajustes.": "Der Sprachschlüssel fehlt: Gib ihn in den Einstellungen ein.",
+ "El servidor no permite la voz desde el móvil: un administrador debe activarla en Studio.": "Der Server erlaubt keine Sprache vom Telefon: Ein Administrator muss sie in Studio einschalten.",
  "Sin permiso para el micrófono no puedo escucharte. Puedes escribir la orden.": "Ohne Berechtigung für das Mikrofon kann ich dich nicht hören. Du kannst den Befehl tippen.",
  "No he oído nada. Prueba otra vez.": "Ich habe nichts gehört. Versuche es noch einmal.",
  "La respuesta del servidor no es válida: no la muestro.": "Die Antwort des Servers ist ungültig: Ich zeige sie nicht an.",

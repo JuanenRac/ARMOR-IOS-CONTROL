@@ -1173,6 +1173,7 @@
  "No se pudo leer la lista de grabaciones.": "Impossible de lire la liste des enregistrements.",
  "La orden hablada está apagada: enciéndela en Ajustes.": "La commande vocale est désactivée : activez-la dans les Réglages.",
  "Falta la clave de voz: escríbela en Ajustes.": "La clé vocale manque : saisissez-la dans les Réglages.",
+ "El servidor no permite la voz desde el móvil: un administrador debe activarla en Studio.": "Le serveur n'autorise pas la voix depuis le téléphone : un administrateur doit l'activer dans Studio.",
  "Sin permiso para el micrófono no puedo escucharte. Puedes escribir la orden.": "Sans l'autorisation du microphone, je ne peux pas vous entendre. Vous pouvez saisir la commande.",
  "No he oído nada. Prueba otra vez.": "Je n'ai rien entendu. Réessayez.",
  "La respuesta del servidor no es válida: no la muestro.": "La réponse du serveur n'est pas valide : je ne l'affiche pas.",
