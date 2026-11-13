@@ -1,0 +1,70 @@
+# Takes the pictures of the app for the README on an iPhone simulator, against a real ARMOR-SERVER on the same Mac (by hand or on a branch named shots-run/<anything>, never on main). The pictures are the artifact "ios-screenshots"; reduce them to a palette of 128 colours (under 400 KiB) before they go to images/screenshots. The UI test is skipped when no server is given..
+# Copyright (C) 2026 JuanenRac (Electro Hobby 3D). GPL-3.0-or-later.
+name: iOS screenshots
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["shots-run/**"]
+
+permissions:
+  contents: read
+
+jobs:
+  shots:
+    runs-on: macos-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Check out the server
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: JuanenRac/ARMOR-SERVER
+          path: server
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "22"
+
+      - name: Build and start the server
+        working-directory: server
+        shell: bash
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
+          mkdir -p "$RUNNER_TEMP/armor-data"
+          ARMOR_HOST=127.0.0.1 ARMOR_PORT=18080 ARMOR_DATA_DIR="$RUNNER_TEMP/armor-data"           ARMOR_INGEST_TOKEN="$(printf 'i%.0s' $(seq 1 32))" ARMOR_CONTROL_TOKEN="$(printf 'c%.0s' $(seq 1 32))" ARMOR_OPERATOR_TOKEN="$(printf 'o%.0s' $(seq 1 32))"           ARMOR_CAMERA_CONFIG_KEY="$(printf 'k%.0s' $(seq 1 40))" ARMOR_STUDIO_USERNAME=admin ARMOR_STUDIO_PASSWORD=correct-horse-battery           nohup node dist/server.mjs >"$RUNNER_TEMP/server.log" 2>&1 &
+          for _ in $(seq 1 30); do curl -fsS http://127.0.0.1:18080/healthz >/dev/null 2>&1 && exit 0; sleep 1; done
+          cat "$RUNNER_TEMP/server.log"; exit 1
+
+      - name: Make the Xcode project
+        run: |
+          brew install xcodegen
+          xcodegen generate
+
+      - name: Pick an iPhone simulator
+        id: device
+        run: |
+          name="$(xcrun simctl list devices available | grep -m1 -o 'iPhone [^(]*' | sed 's/ *$//')"
+          echo "name=${name}" >> "$GITHUB_OUTPUT"
+
+      - name: Take the pictures
+        run: |
+          mkdir -p "$RUNNER_TEMP/shots"
+          TEST_RUNNER_ARMOR_SERVER_HOST=127.0.0.1 TEST_RUNNER_ARMOR_SERVER_PORT=18080 TEST_RUNNER_ARMOR_SHOTS_DIR="$RUNNER_TEMP/shots"             xcodebuild test -project ARMOR-IOS-CONTROL.xcodeproj -scheme ARMOR -destination "platform=iOS Simulator,name=${{ steps.device.outputs.name }}"             -only-testing:ARMORUITests CODE_SIGNING_ALLOWED=NO -resultBundlePath "$RUNNER_TEMP/result.xcresult"
+
+      - name: Keep the pictures
+        if: ${{ always() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ios-screenshots
+          path: |
+            ${{ runner.temp }}/shots
+            ${{ runner.temp }}/result.xcresult
+          retention-days: 3
+          if-no-files-found: warn

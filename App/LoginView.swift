@@ -36,8 +36,8 @@ struct LoginView: View {
                     .id(pending.challenge)
                 } else {
                     Card {
-                        TextField(model.tr("Usuario"), text: $username).textFieldStyle(.roundedBorder).textInputAutocapitalization(.never).autocorrectionDisabled()
-                        SecureField(model.tr("Contraseña"), text: $password).textFieldStyle(.roundedBorder)
+                        TextField(model.tr("Usuario"), text: $username).textFieldStyle(.roundedBorder).textInputAutocapitalization(.never).autocorrectionDisabled().accessibilityIdentifier("login-user")
+                        SecureField(model.tr("Contraseña"), text: $password).textFieldStyle(.roundedBorder).accessibilityIdentifier("login-password")
                         Toggle(model.tr("Recordarme en este móvil"), isOn: $remember).tint(Theme.accent)
                         Text(model.tr("Con «Recordarme» el usuario y la contraseña se guardan cifrados en este móvil, solo para este servidor. Quita la marca y se olvidan.")).font(.caption).foregroundColor(Theme.muted)
                         if let warning = secureWarning { Text(warning).font(.caption).foregroundColor(Theme.amber) }
@@ -45,7 +45,7 @@ struct LoginView: View {
                             model.saveInstallation(draft)
                             Task { await model.signIn(username: username, password: password, remember: remember) }
                         }
-                        .buttonStyle(PrimaryButtonStyle()).disabled(model.busy || username.isEmpty || password.isEmpty)
+                        .buttonStyle(PrimaryButtonStyle()).disabled(model.busy || username.isEmpty || password.isEmpty).accessibilityIdentifier("login-submit")
                     }
                 }
             }
@@ -76,8 +76,8 @@ struct AddressFields: View {
         VStack(alignment: .leading, spacing: 8) {
             Text(model.tr("En casa")).font(.subheadline.weight(.semibold))
             HStack {
-                TextField("192.168.0.180", text: $draft.homeHost).textFieldStyle(.roundedBorder).keyboardType(.URL).textInputAutocapitalization(.never).autocorrectionDisabled()
-                TextField(model.tr("Puerto"), text: $draft.homePort).textFieldStyle(.roundedBorder).keyboardType(.numberPad).frame(width: 80)
+                TextField("192.168.0.180", text: $draft.homeHost).textFieldStyle(.roundedBorder).keyboardType(.URL).textInputAutocapitalization(.never).autocorrectionDisabled().accessibilityIdentifier("login-server")
+                TextField(model.tr("Puerto"), text: $draft.homePort).textFieldStyle(.roundedBorder).keyboardType(.numberPad).frame(width: 80).accessibilityIdentifier("login-port")
             }
             Text(model.tr("Fuera de casa")).font(.subheadline.weight(.semibold))
             HStack {
