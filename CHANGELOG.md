@@ -4,6 +4,7 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+- **The copy of the shared contract is brought up to date:** `ArmorContract.swift` is again what ARMOR-COMMON generates (the vision event has a ceiling for the number of the followed object), which the conformance test of the package compares.
 - **The pictures of the app are taken by a UI test on a simulator:** the sign-in carries accessibility identifiers, the project has a UI test target `ARMORUITests` (skipped when no server is given) that signs in against a real server and goes through the sections of the bar at the bottom taking a picture of each, and the workflow `ios-shots.yml` (by hand or on a branch `shots-run/<name>`, never on main) starts a real server on the Mac, runs it on an iPhone simulator and keeps the pictures as an artifact; the first pictures are in `images/screenshots`.
 
 ## [0.0.5] - Tolerant contract readers, spoken orders and phone recordings
