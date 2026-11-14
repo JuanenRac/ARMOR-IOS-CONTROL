@@ -59,6 +59,53 @@ final class SecurityTests: XCTestCase {
         XCTAssertNil(vault.loadSession(origin: "http://a:1"))
         XCTAssertNil(vault.rememberedLogin(origin: "http://a:1"))
     }
+    func testVaultKeepsTheSessionOfEachServerAndForgetsOneAtATime() {
+        let vault = SessionVault(secrets: MemorySecrets(), prefs: MemoryStore())
+        vault.saveSession(SessionCookie(name: "n", value: "one"), origin: "https://house:1")
+        vault.saveSession(SessionCookie(name: "n", value: "two"), origin: "https://workshop:1")
+        XCTAssertEqual(vault.origins(), ["https://house:1", "https://workshop:1"])
+        XCTAssertEqual(vault.loadSession(origin: "https://house:1")?.value, "one", "the server saved first keeps its own session")
+        XCTAssertEqual(vault.loadSession(origin: "https://workshop:1")?.value, "two")
+        vault.saveSession(SessionCookie(name: "n", value: "one-again"), origin: "https://house:1")
+        XCTAssertEqual(vault.origins().count, 2, "a server is listed once")
+        vault.forget(origin: "https://house:1")
+        XCTAssertNil(vault.loadSession(origin: "https://house:1"))
+        XCTAssertEqual(vault.loadSession(origin: "https://workshop:1")?.value, "two")
+        XCTAssertEqual(vault.origins(), ["https://workshop:1"])
+    }
+    func testSigningOutForgetsOnlyTheServerInUseAndForgetAllForgetsEveryServer() {
+        let vault = SessionVault(secrets: MemorySecrets(), prefs: MemoryStore())
+        vault.saveSession(SessionCookie(name: "n", value: "one"), origin: "https://house:1")
+        vault.saveSession(SessionCookie(name: "n", value: "two"), origin: "https://workshop:1")
+        vault.dropSession()
+        XCTAssertNil(vault.loadSession(origin: "https://workshop:1"), "the one in use is signed out")
+        XCTAssertEqual(vault.loadSession(origin: "https://house:1")?.value, "one", "the other keeps its session")
+        vault.forgetAll()
+        XCTAssertNil(vault.loadSession(origin: "https://house:1"))
+        XCTAssertEqual(vault.origins(), [])
+    }
+    func testASessionKeptBeforeTheListStillLoads() {
+        let secrets = MemorySecrets()
+        secrets.write("session_cookie", "o\u{1F}n\u{1F}v", tiedToUnlock: false)
+        let vault = SessionVault(secrets: secrets, prefs: MemoryStore())
+        XCTAssertEqual(vault.loadSession(origin: "o")?.value, "v")
+        XCTAssertNil(vault.loadSession(origin: "other"))
+        vault.dropSession()
+        XCTAssertNil(vault.loadSession(origin: "o"))
+    }
+    func testEveryServerSessionMovesWithTheUnlockOption() {
+        let secrets = MemorySecrets()
+        let vault = SessionVault(secrets: secrets, prefs: MemoryStore())
+        vault.saveSession(SessionCookie(name: "n", value: "one"), origin: "a")
+        vault.saveSession(SessionCookie(name: "n", value: "two"), origin: "b")
+        XCTAssertTrue(vault.setTiedToUnlock(true))
+        for key in ["session_cookie", "session_cookie|a", "session_cookie|b", "session_origins"] { XCTAssertEqual(secrets.items[key]?.tied, true, key) }
+        secrets.phoneLocked = true
+        XCTAssertFalse(vault.readable())
+        XCTAssertEqual(vault.origins(), [], "locked is not lost, only unreadable")
+        secrets.phoneLocked = false
+        XCTAssertEqual(vault.origins(), ["a", "b"])
+    }
     func testTyingTheKeyToTheUnlockMovesWhatIsKeptAndLeavesItAloneWhileLocked() {
         let secrets = MemorySecrets()
         let vault = SessionVault(secrets: secrets, prefs: MemoryStore())
