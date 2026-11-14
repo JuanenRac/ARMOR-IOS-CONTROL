@@ -1204,5 +1204,7 @@
  "Cambiar la casa por mi ubicación actual": "自宅を現在地に変更する",
  "Casa guardada.": "自宅を保存しました。",
  "No se pudo leer tu ubicación.": "現在地を取得できませんでした。",
- "Se necesita el permiso de ubicación, también con la app cerrada, para avisarte al salir.": "外出時にお知らせするには、アプリを閉じていても使える位置情報の権限が必要です。"
+ "Se necesita el permiso de ubicación, también con la app cerrada, para avisarte al salir.": "外出時にお知らせするには、アプリを閉じていても使える位置情報の権限が必要です。",
+ "Servidores guardados en este teléfono": "この電話に保存されたサーバー",
+ "Toca uno para entrar sin escribir la contraseña.": "タップするとパスワードを入力せずに入れます。"
 }

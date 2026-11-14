@@ -90,13 +90,13 @@ public final class ArmorController: @unchecked Sendable {
         api.restoreSessionCookie(origin, cookie)
         do {
             let facts = try await api.sessionFacts(origin)
-            if facts.role.isEmpty { vault.dropSession(); api.forgetSession(origin); return false }
+            if facts.role.isEmpty { vault.forget(origin: origin); api.forgetSession(origin); return false }
             lockSettings.server = ServerLock.parse(facts.deviceLock)
             if let renewed = api.sessionCookie(origin) { vault.saveSession(renewed, origin: origin) }
             update { $0.origin = origin; $0.signedIn = true; $0.facts = facts }
             return true
         } catch let error as ArmorApiError {
-            if error.isUnauthorized { vault.dropSession(); api.forgetSession(origin) }
+            if error.isUnauthorized { vault.forget(origin: origin); api.forgetSession(origin) }
             return false
         } catch { return false }
     }

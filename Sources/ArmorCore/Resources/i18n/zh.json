@@ -1204,5 +1204,7 @@
  "Cambiar la casa por mi ubicación actual": "把家改为我当前的位置",
  "Casa guardada.": "已保存家的位置。",
  "No se pudo leer tu ubicación.": "无法读取你的位置。",
- "Se necesita el permiso de ubicación, también con la app cerrada, para avisarte al salir.": "需要位置权限（应用关闭时也要），才能在你离家时提醒你。"
+ "Se necesita el permiso de ubicación, también con la app cerrada, para avisarte al salir.": "需要位置权限（应用关闭时也要），才能在你离家时提醒你。",
+ "Servidores guardados en este teléfono": "此手机上保存的服务器",
+ "Toca uno para entrar sin escribir la contraseña.": "点按其中一个，无需输入密码即可进入。"
 }

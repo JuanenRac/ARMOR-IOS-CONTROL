@@ -18,6 +18,22 @@ struct LoginView: View {
                 Text("A.R.M.O.R.").font(.system(size: 32, weight: .black)).foregroundColor(Theme.accent)
                 Text(model.tr("Conecta con el servidor e inicia sesión para dar órdenes.")).foregroundColor(Theme.muted)
 
+                if !model.keptServers.isEmpty {
+                    Card {
+                        Text(model.tr("Servidores guardados en este teléfono")).font(.subheadline.weight(.semibold))
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 8) {
+                                ForEach(model.keptServers, id: \.self) { server in
+                                    Button(ServerChoice.label(server)) { Task { await model.pickServer(server); draft = model.installation } }
+                                        .buttonStyle(.bordered).tint(server == model.activeOrigin ? Theme.accent : Theme.muted).disabled(model.busy)
+                                        .accessibilityIdentifier("login-server-choice")
+                                }
+                            }
+                        }
+                        Text(model.tr("Toca uno para entrar sin escribir la contraseña.")).font(.caption).foregroundColor(Theme.muted)
+                    }
+                }
+
                 Card {
                     Text(model.tr("Servidor")).font(.headline)
                     AddressFields(draft: $draft)

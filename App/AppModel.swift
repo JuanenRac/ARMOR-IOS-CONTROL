@@ -198,6 +198,16 @@ final class AppModel: ObservableObject {
         new.save(to: prefs)
     }
 
+    /// The servers whose session is kept on this phone, the one in use first (empty while the phone is locked and the list cannot be read).
+    var keptServers: [String] { ServerChoice.offered(vault.origins(), inUse: activeOrigin ?? "") }
+
+    /// Goes back to a server the person signed in to before: its address is set (the away address of the previous one is dropped) and its kept session is tried, so the password is not asked again.
+    func pickServer(_ origin: String) async {
+        guard let picked = ServerChoice.installation(for: origin) else { return }
+        saveInstallation(picked)
+        await openKept()
+    }
+
     var isAway: Bool {
         guard let origin = activeOrigin, let endpoint = ServerEndpoint.parse(origin) else { return false }
         return Reach.isAway(endpoint, installation: installation)

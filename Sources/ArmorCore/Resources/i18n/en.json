@@ -1204,5 +1204,7 @@
  "Cambiar la casa por mi ubicación actual": "Change home to my current location",
  "Casa guardada.": "Home saved.",
  "No se pudo leer tu ubicación.": "Your location could not be read.",
- "Se necesita el permiso de ubicación, también con la app cerrada, para avisarte al salir.": "The location permission, also with the app closed, is needed to warn you when you leave."
+ "Se necesita el permiso de ubicación, también con la app cerrada, para avisarte al salir.": "The location permission, also with the app closed, is needed to warn you when you leave.",
+ "Servidores guardados en este teléfono": "Servers kept on this phone",
+ "Toca uno para entrar sin escribir la contraseña.": "Tap one to go in without typing the password."
 }
