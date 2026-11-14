@@ -104,6 +104,24 @@ final class AppModel: ObservableObject {
     private var presenceStore: PresenceStore { PresenceStore(prefs) }
     var presenceEnabled: Bool { presenceStore.enabled }
     var presenceShare: Bool { presenceStore.share }
+    // MARK: picture in the notice of a camera
+
+    private var noticePhotoStore: NoticePhotoStore { NoticePhotoStore(prefs) }
+    var noticePhotoEnabled: Bool { noticePhotoStore.enabled }
+    func setNoticePhotoEnabled(_ on: Bool) { noticePhotoStore.enabled = on; objectWillChange.send() }
+
+    /// The picture of a camera as a file the notice can attach, asked of the own server with the session the phone keeps; nil without a session, an answer or a picture.
+    private func noticePhotoAttachment(_ camera: String) async -> UNNotificationAttachment? {
+        guard NoticePhoto.validCameraId(camera) else { return nil }
+        if !controller.state.signedIn || activeOrigin == nil {
+            guard await connect(), let origin = activeOrigin, await controller.restore(origin: origin) else { return nil }
+        }
+        guard let origin = activeOrigin, let data = try? await controller.api.cameraStill(origin, cameraId: camera, limit: NoticePhoto.maxBytes), let ext = NoticePhoto.fileExtension(of: data) else { return nil }
+        let file = FileManager.default.temporaryDirectory.appendingPathComponent("armor-notice-\(UUID().uuidString).\(ext)")
+        do { try data.write(to: file, options: .atomic) } catch { return nil }
+        return try? UNNotificationAttachment(identifier: "armor-camera", url: file, options: nil)
+    }
+
     var presenceHasHome: Bool { presenceStore.home != nil }
     var presenceAuthorized: Bool { PresenceMonitor.shared.authorized }
 
@@ -388,6 +406,14 @@ final class AppModel: ObservableObject {
         }
         let request = UNNotificationRequest(identifier: "armor-\(notice.id)", content: content, trigger: nil)   // the event id: a push for the same event replaces it
         UNUserNotificationCenter.current().add(request)
+        // The picture of the camera, when the person asked for it: the notice is shown at once and replaced, without sound, by the same notice with the picture if the server gives it.
+        if let camera = notice.cameraId, NoticePhoto.wanted(enabled: noticePhotoEnabled, notice: notice) {
+            Task { [weak self] in
+                guard let self, let attachment = await self.noticePhotoAttachment(camera), let again = content.mutableCopy() as? UNMutableNotificationContent else { return }
+                again.attachments = [attachment]; again.sound = nil; again.interruptionLevel = .passive
+                try? await UNUserNotificationCenter.current().add(UNNotificationRequest(identifier: request.identifier, content: again, trigger: nil))
+            }
+        }
         if AlarmSpeech.shouldSpeak(decision, enabled: speaksAlarms, voice: voice, severity: notice.severity) {
             AlarmSpeaker.shared.say("\(notice.title). \(notice.text)", voice: voice, language: language)
         }

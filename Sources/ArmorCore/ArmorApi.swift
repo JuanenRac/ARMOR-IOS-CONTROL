@@ -29,6 +29,8 @@ public protocol ArmorApi: Sendable {
     func panicGesture(_ origin: String) async throws
     /// Tells the server only the word "home" or "away" for the signed-in person (PUT /api/v1/presence/me, behind the option presence.by_user). The position of the phone is never sent.
     func setPresence(_ origin: String, state: String) async throws
+    /// The still picture of a camera right now (GET /api/v1/cameras/{id}/snapshot, an operator): the bytes of a JPEG, refused when longer than `limit`.
+    func cameraStill(_ origin: String, cameraId: String, limit: Int) async throws -> Data
     func alarmPanels(_ origin: String) async throws -> [AlarmPanelView]
     func armProfiles(_ origin: String) async throws -> [ArmProfileView]
     func alarmCommandsEnabled(_ origin: String) async throws -> Bool
@@ -147,6 +149,7 @@ public protocol ArmorApi: Sendable {
 
 extension ArmorApi {
     func setPresence(_ origin: String, state: String) async throws { throw ArmorApiError(message: "not supported", status: nil) }
+    func cameraStill(_ origin: String, cameraId: String, limit: Int) async throws -> Data { throw ArmorApiError(message: "not supported", status: nil) }
     func voiceTurn(_ origin: String, pcm: Data, language: String, voiceToken: String) async throws -> JSON { throw ArmorApiError(message: "not supported", status: nil) }
     func media(_ origin: String) async throws -> MediaCatalogueView { throw ArmorApiError(message: "not supported", status: nil) }
     func deleteMedia(_ origin: String, item: MediaItemView) async throws { throw ArmorApiError(message: "not supported", status: nil) }
