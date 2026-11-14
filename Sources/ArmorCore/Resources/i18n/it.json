@@ -1206,5 +1206,9 @@
  "No se pudo leer tu ubicación.": "Non è stato possibile leggere la tua posizione.",
  "Se necesita el permiso de ubicación, también con la app cerrada, para avisarte al salir.": "Serve il permesso di posizione, anche con l'app chiusa, per avvisarti all'uscita.",
  "Servidores guardados en este teléfono": "Server salvati su questo telefono",
- "Toca uno para entrar sin escribir la contraseña.": "Tocca un server per entrare senza digitare la password."
+ "Toca uno para entrar sin escribir la contraseña.": "Tocca un server per entrare senza digitare la password.",
+ "Escanear el código de alta": "Scansiona il codice di configurazione",
+ "Ese código no es un código de alta de A.R.M.O.R.": "Quel codice non è un codice di configurazione di A.R.M.O.R.",
+ "No se pudo comprobar el código de alta: ha caducado, ya se usó o el servidor no responde.": "Non è stato possibile verificare il codice di configurazione: è scaduto, è già stato usato o il server non risponde.",
+ "Servidor añadido: %s. Escribe tu usuario y tu contraseña.": "Server aggiunto: %s. Digita utente e password."
 }

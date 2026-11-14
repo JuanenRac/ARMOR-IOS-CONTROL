@@ -1206,5 +1206,9 @@
  "No se pudo leer tu ubicación.": "Não foi possível ler a sua localização.",
  "Se necesita el permiso de ubicación, también con la app cerrada, para avisarte al salir.": "É necessária a permissão de localização, também com a aplicação fechada, para o avisar ao sair.",
  "Servidores guardados en este teléfono": "Servidores guardados neste telemóvel",
- "Toca uno para entrar sin escribir la contraseña.": "Toque num para entrar sem escrever a palavra-passe."
+ "Toca uno para entrar sin escribir la contraseña.": "Toque num para entrar sem escrever a palavra-passe.",
+ "Escanear el código de alta": "Ler o código de registo",
+ "Ese código no es un código de alta de A.R.M.O.R.": "Esse código não é um código de registo do A.R.M.O.R.",
+ "No se pudo comprobar el código de alta: ha caducado, ya se usó o el servidor no responde.": "Não foi possível verificar o código de registo: caducou, já foi utilizado ou o servidor não responde.",
+ "Servidor añadido: %s. Escribe tu usuario y tu contraseña.": "Servidor adicionado: %s. Escreva o utilizador e a palavra-passe."
 }

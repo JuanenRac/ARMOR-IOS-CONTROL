@@ -1206,5 +1206,9 @@
  "No se pudo leer tu ubicación.": "Votre position n'a pas pu être lue.",
  "Se necesita el permiso de ubicación, también con la app cerrada, para avisarte al salir.": "L'autorisation de localisation, aussi avec l'application fermée, est nécessaire pour vous prévenir à la sortie.",
  "Servidores guardados en este teléfono": "Serveurs enregistrés sur ce téléphone",
- "Toca uno para entrar sin escribir la contraseña.": "Touchez-en un pour entrer sans saisir le mot de passe."
+ "Toca uno para entrar sin escribir la contraseña.": "Touchez-en un pour entrer sans saisir le mot de passe.",
+ "Escanear el código de alta": "Scanner le code d'installation",
+ "Ese código no es un código de alta de A.R.M.O.R.": "Ce code n'est pas un code d'installation d'A.R.M.O.R.",
+ "No se pudo comprobar el código de alta: ha caducado, ya se usó o el servidor no responde.": "Le code d'installation n'a pas pu être vérifié : il a expiré, il a déjà servi ou le serveur ne répond pas.",
+ "Servidor añadido: %s. Escribe tu usuario y tu contraseña.": "Serveur ajouté : %s. Saisissez votre utilisateur et votre mot de passe."
 }

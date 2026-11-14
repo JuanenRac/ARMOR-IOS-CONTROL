@@ -11,6 +11,8 @@ struct LoginView: View {
     @State private var code = ""
     @State private var draft = SavedInstallation()
     @State private var showAddresses = false
+    @State private var scanning = false
+    @State private var scanMessage = ""
 
     var body: some View {
         ScrollView {
@@ -32,6 +34,12 @@ struct LoginView: View {
                         }
                         Text(model.tr("Toca uno para entrar sin escribir la contraseña.")).font(.caption).foregroundColor(Theme.muted)
                     }
+                }
+
+                Card {
+                    Button { scanMessage = ""; scanning = true } label: { Label(model.tr("Escanear el código de alta"), systemImage: "qrcode.viewfinder") }
+                        .buttonStyle(.bordered).disabled(model.busy).accessibilityIdentifier("login-scan-enrolment")
+                    if !scanMessage.isEmpty { Text(scanMessage).font(.caption).foregroundColor(Theme.amber) }
                 }
 
                 Card {
@@ -66,6 +74,17 @@ struct LoginView: View {
                 }
             }
             .padding()
+        }
+        .sheet(isPresented: $scanning) {
+            NavigationStack {
+                QRScannerView(onCode: { code in
+                    scanning = false
+                    Task { scanMessage = await model.enrol(scanned: code); draft = model.installation }
+                }, onFail: { scanning = false; scanMessage = model.tr("No se pudo abrir el lector de códigos en este teléfono.") })
+                .ignoresSafeArea()
+                .navigationTitle(model.tr("Escanear el código de alta")).navigationBarTitleDisplayMode(.inline)
+                .toolbar { ToolbarItem(placement: .cancellationAction) { Button(model.tr("Cancelar")) { scanning = false } } }
+            }
         }
         .onAppear {
             draft = model.installation
