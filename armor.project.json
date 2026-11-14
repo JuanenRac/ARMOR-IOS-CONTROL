@@ -20,5 +20,5 @@
   "parent": "ARMOR-SERVER",
   "native_version": "0.0.5",
   "build": "python tools/ios_lint.py && swift test",
-  "notes": "The iPhone client authenticates to ARMOR-SERVER with the user-facing Studio session, like the Android client. Camera credentials and RTSP URLs remain server-side. The rules of the app are in the ArmorCore Swift package, tested without a phone; the screens are built with Xcode (XcodeGen description in project.yml) and have not been run on a device yet."
+  "notes": "The iPhone client authenticates to ARMOR-SERVER with the user-facing Studio session, like the Android client. Camera credentials and RTSP URLs remain server-side. The rules of the app are in the ArmorCore Swift package, tested without a phone; the screens are built with Xcode (XcodeGen description in project.yml) and have not been run on a device yet. The project also holds the Apple Watch app of ARMOR-WATCH as an embedded watchOS target (off until the phone says so; built for the simulator in GitHub Actions, never run on a real watch)."
 }
