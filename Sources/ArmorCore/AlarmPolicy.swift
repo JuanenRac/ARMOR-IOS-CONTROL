@@ -11,9 +11,11 @@ public struct AlarmNotice: Equatable, Sendable {
     public let kind: String
     /// The alarm the notice is about, when the server said which: the notice then carries the action "Confirm".
     public let alarmId: String?
+    /// The camera the notice is about (a camera that stopped answering): the notice can carry its picture.
+    public let cameraId: String?
 
-    public init(id: Int, title: String, text: String, severity: String, kind: String = NoticeKinds.system, alarmId: String? = nil) {
-        self.id = id; self.title = title; self.text = text; self.severity = severity; self.kind = kind; self.alarmId = alarmId
+    public init(id: Int, title: String, text: String, severity: String, kind: String = NoticeKinds.system, alarmId: String? = nil, cameraId: String? = nil) {
+        self.id = id; self.title = title; self.text = text; self.severity = severity; self.kind = kind; self.alarmId = alarmId; self.cameraId = cameraId
     }
 }
 
@@ -31,7 +33,7 @@ public enum AlarmPolicy {
             case event.type == "alert" && event.to == "high":
                 return AlarmNotice(id: event.id, title: t.tr("ALERTA ALTA"), text: t.trf("%s: %s objetivos", event.subject, event.targets ?? 0), severity: "high", kind: "alert")
             case event.type == "camera" && event.to == "offline":
-                return AlarmNotice(id: event.id, title: t.tr("Cámara sin respuesta"), text: event.subject, severity: "high", kind: "camera")
+                return AlarmNotice(id: event.id, title: t.tr("Cámara sin respuesta"), text: event.subject, severity: "high", kind: "camera", cameraId: NoticePhoto.validCameraId(event.subject) ? event.subject : nil)
             case event.type == "node" && armed && event.to == "offline":
                 return AlarmNotice(id: event.id, title: t.tr("Nodo fuera de línea"), text: event.subject, severity: "high", kind: "node")
             case event.type == "node" && armed && event.to == "stale":
