@@ -91,6 +91,46 @@ final class AppModel: ObservableObject {
             Task { @MainActor in self?.place = place; self?.networkAvailable = path.status == .satisfied }
         }
         monitor.start(queue: DispatchQueue(label: "armor.network"))
+        PresenceMonitor.shared.onLeft = { [weak self] in await self?.remindOnLeaving() }
+        PresenceMonitor.shared.onAuthorization = { [weak self] in Task { @MainActor in self?.objectWillChange.send() } }
+        PresenceMonitor.shared.apply()
+    }
+
+    // MARK: reminder on leaving home
+
+    private var presenceStore: PresenceStore { PresenceStore(prefs) }
+    var presenceEnabled: Bool { presenceStore.enabled }
+    var presenceHasHome: Bool { presenceStore.home != nil }
+    var presenceAuthorized: Bool { PresenceMonitor.shared.authorized }
+
+    func setPresenceEnabled(_ on: Bool) { presenceStore.enabled = on; PresenceMonitor.shared.apply() }
+    func askPresencePermission() { PresenceMonitor.shared.askPermission() }
+
+    /// Saves the place the phone is in as home and starts watching the circle around it.
+    func saveHomeHere(_ done: @escaping (Bool) -> Void) {
+        PresenceMonitor.shared.readPlace { [weak self] place in
+            Task { @MainActor in
+                guard let self, let place, place.valid else { done(false); return }
+                self.presenceStore.home = place
+                PresenceMonitor.shared.apply()
+                done(true)
+            }
+        }
+    }
+
+    /// The phone left home: reads whether the system is armed (nothing else is asked of the server) and says so.
+    func remindOnLeaving() async {
+        let store = presenceStore
+        guard store.enabled else { return }
+        var mode: String?
+        if await connect(), let origin = activeOrigin, await controller.restore(origin: origin) { mode = (try? await controller.api.status(origin))?.mode }
+        let now = Int64(Date().timeIntervalSince1970 * 1000)
+        guard let kind = PresenceDecision.onLeft(mode: mode, lastReminderMs: store.lastReminderMs, nowMs: now) else { return }
+        store.lastReminderMs = now
+        switch kind {
+        case .armNow: post(AlarmNotice(id: PresenceConfig.noticeId, title: tr("¿Armas la alarma?"), text: tr("Has salido de casa y el sistema está desarmado."), severity: "warning"))
+        case .check: post(AlarmNotice(id: PresenceConfig.noticeId, title: tr("Comprueba la alarma"), text: tr("Has salido de casa y no he podido comprobar si la alarma está armada."), severity: "warning"))
+        }
     }
 
     func tr(_ es: String) -> String { _ = language; return translator.tr(es) }
