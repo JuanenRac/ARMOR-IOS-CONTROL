@@ -11,12 +11,36 @@ struct LoginView: View {
     @State private var code = ""
     @State private var draft = SavedInstallation()
     @State private var showAddresses = false
+    @State private var scanning = false
+    @State private var scanMessage = ""
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 14) {
                 Text("A.R.M.O.R.").font(.system(size: 32, weight: .black)).foregroundColor(Theme.accent)
                 Text(model.tr("Conecta con el servidor e inicia sesión para dar órdenes.")).foregroundColor(Theme.muted)
+
+                if !model.keptServers.isEmpty {
+                    Card {
+                        Text(model.tr("Servidores guardados en este teléfono")).font(.subheadline.weight(.semibold))
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 8) {
+                                ForEach(model.keptServers, id: \.self) { server in
+                                    Button(ServerChoice.label(server)) { Task { await model.pickServer(server); draft = model.installation } }
+                                        .buttonStyle(.bordered).tint(server == model.activeOrigin ? Theme.accent : Theme.muted).disabled(model.busy)
+                                        .accessibilityIdentifier("login-server-choice")
+                                }
+                            }
+                        }
+                        Text(model.tr("Toca uno para entrar sin escribir la contraseña.")).font(.caption).foregroundColor(Theme.muted)
+                    }
+                }
+
+                Card {
+                    Button { scanMessage = ""; scanning = true } label: { Label(model.tr("Escanear el código de alta"), systemImage: "qrcode.viewfinder") }
+                        .buttonStyle(.bordered).disabled(model.busy).accessibilityIdentifier("login-scan-enrolment")
+                    if !scanMessage.isEmpty { Text(scanMessage).font(.caption).foregroundColor(Theme.amber) }
+                }
 
                 Card {
                     Text(model.tr("Servidor")).font(.headline)
@@ -50,6 +74,17 @@ struct LoginView: View {
                 }
             }
             .padding()
+        }
+        .sheet(isPresented: $scanning) {
+            NavigationStack {
+                QRScannerView(onCode: { code in
+                    scanning = false
+                    Task { scanMessage = await model.enrol(scanned: code); draft = model.installation }
+                }, onFail: { scanning = false; scanMessage = model.tr("No se pudo abrir el lector de códigos en este teléfono.") })
+                .ignoresSafeArea()
+                .navigationTitle(model.tr("Escanear el código de alta")).navigationBarTitleDisplayMode(.inline)
+                .toolbar { ToolbarItem(placement: .cancellationAction) { Button(model.tr("Cancelar")) { scanning = false } } }
+            }
         }
         .onAppear {
             draft = model.installation

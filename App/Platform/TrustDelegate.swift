@@ -28,11 +28,15 @@ final class TrustDelegate: NSObject, URLSessionDelegate {
         let systemTrusts = SecTrustEvaluateWithError(trust, &error)
         let chain = (SecTrustCopyCertificateChain(trust) as? [SecCertificate]) ?? []
         let hashes = chain.compactMap(TrustDelegate.spkiPin)
-        switch pins.decide(host: host, chainPins: hashes, systemTrusts: systemTrusts) {
+        // the fingerprint of each whole certificate, in the same positions as the pins (a certificate without a pin keeps its place with an empty text)
+        let fingerprints = chain.map { certificate in Data(SHA256.hash(data: SecCertificateCopyData(certificate) as Data)).map { String(format: "%02x", $0) }.joined() }
+        let aligned = chain.compactMap(TrustDelegate.spkiPin).count == chain.count
+        switch pins.decide(host: host, chainPins: hashes, systemTrusts: systemTrusts, chainFingerprints: aligned ? fingerprints : []) {
         case .trusted:
             completionHandler(.useCredential, URLCredential(trust: trust))
         case .firstUse(let pin):
             pins.add(pin, for: host)
+            pins.clearExpected(for: host)
             onPinned?(host, pin)
             completionHandler(.useCredential, URLCredential(trust: trust))
         case .mismatch:

@@ -36,16 +36,34 @@ public final class PinStore {
 
     public func clear(for host: String) { store.remove(key(host)) }
 
+    private func expectKey(_ host: String) -> String { "ca_expect_" + host.lowercased() }
+
+    /// The fingerprint (SHA-256 of the whole certificate, 64 lower-case hex characters) of the local authority that a set-up QR code named for `host`. The next connection waits for it: if the chain holds
+    /// that very certificate, its key is paired as a QR with a pin would. It never refuses a connection by itself.
+    public func expectAuthority(_ fingerprint: String, for host: String) {
+        guard fingerprint.count == 64, fingerprint.unicodeScalars.allSatisfy({ ($0 >= "0" && $0 <= "9") || ($0 >= "a" && $0 <= "f") }) else { return }
+        store.put(expectKey(host), fingerprint)
+    }
+
+    public func expectedAuthority(for host: String) -> String? {
+        let value = store.get(expectKey(host)) ?? ""
+        return value.isEmpty ? nil : value
+    }
+
+    public func clearExpected(for host: String) { store.remove(expectKey(host)) }
+
     /// A SHA-256 in base64 is 44 characters with one "=" at the end.
     public static func isWellFormed(_ pin: String) -> Bool {
         pin.count == 44 && pin.hasSuffix("=") && pin.dropLast().allSatisfy { $0.isLetter || $0.isNumber || $0 == "+" || $0 == "/" } && pin.allSatisfy(\.isASCII)
     }
 
     /// Decides about a chain: `chainPins` are the pins of every certificate of the chain, the leaf first; `systemTrusts` is the answer of the system's own evaluation.
-    public func decide(host: String, chainPins: [String], systemTrusts: Bool) -> PinDecision {
+    public func decide(host: String, chainPins: [String], systemTrusts: Bool, chainFingerprints: [String] = []) -> PinDecision {
         let kept = pins(for: host)
         if !kept.isEmpty { return chainPins.contains { kept.contains($0) } ? .trusted : .mismatch }
         guard let first = chainPins.first else { return .mismatch }
+        // a set-up QR code named the authority of this installation: the chain that holds exactly that certificate pairs its key, whether or not the system knows the authority
+        if let expected = expectedAuthority(for: host), let index = chainFingerprints.firstIndex(of: expected), chainPins.indices.contains(index) { return .firstUse(pin: chainPins[index]) }
         // the key worth pinning is the one of the authority when there is one above the leaf, and the leaf's own when the server stands alone
         let candidate = chainPins.count > 1 ? chainPins[chainPins.count - 1] : first
         return systemTrusts ? .firstUse(pin: candidate) : .unknownAuthority(pin: candidate)

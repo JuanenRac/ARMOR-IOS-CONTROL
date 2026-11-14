@@ -32,6 +32,7 @@ struct MoreView: View {
                     NavigationLink(model.tr("Qué avisos quiero")) { NoticeSettingsView() }
                     NavigationLink(model.tr("Sonido de cada aviso")) { SoundSettingsView() }
                     NavigationLink(model.tr("Voz de las alarmas")) { VoiceSettingsView() }
+                    NavigationLink(model.tr("Recordatorio al salir de casa")) { PresenceView() }
                     NavigationLink(model.tr("Orden hablada al servidor")) { SpokenTurnSettingsView() }
                     NavigationLink(model.tr("Ayuda")) { HelpView() }
                     NavigationLink(model.tr("Dispositivos")) { DevicesView() }
@@ -127,6 +128,13 @@ struct LockSettingsView: View {
                 Toggle(model.tr("Atar la clave de la sesión al desbloqueo del teléfono"), isOn: Binding(get: { model.tiedToUnlock }, set: { on in Task { await model.setTiedToUnlock(on) } }))
                 if model.tiedToUnlock {
                     Text(model.tr("Aviso: con esto, tras reiniciar el teléfono, las alarmas no llegarán hasta que lo desbloquees por primera vez.")).font(.caption).foregroundColor(Theme.amber)
+                }
+            }
+            Section(footer: Text(model.tr("Desactivado por defecto. Si tu administrador lo permite, este teléfono guarda una clave que no sale de él y renueva la sesión firmando un reto, sin pedirte otra vez la contraseña y el código. Tu administrador puede cerrarlo desde Studio."))) {
+                Toggle(model.tr("Teléfono de confianza"), isOn: Binding(get: { model.trustedOn }, set: { on in Task { await model.setTrusted(on) } }))
+                    .disabled(!model.trustedOffered && !model.trustedOn)
+                if !model.trustedOffered {
+                    Text(model.tr("Tu administrador no ha activado los teléfonos de confianza en este servidor.")).font(.caption).foregroundColor(Theme.muted)
                 }
             }
         }

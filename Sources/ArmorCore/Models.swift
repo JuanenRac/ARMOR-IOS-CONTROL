@@ -81,13 +81,19 @@ public struct SessionFacts: Equatable, Sendable {
     public var deviceLock: String
     /// What the person may do: what the server announced, else what the role allowed before it announced anything.
     public var capabilities: Capabilities
-    public init(role: String = "", deviceLock: String = "user", capabilities: Capabilities? = nil) { self.role = role; self.deviceLock = deviceLock; self.capabilities = capabilities ?? Capabilities.fromRole(role) }
+    /// The administrator turned on the hidden panic gesture (the option `client.panic_gesture`); without it the app never listens for the gesture.
+    public var panicGesture: Bool
+    /// The administrator lets a phone register as a trusted one (the option `client.trusted_devices`); without it the app never offers it.
+    public var trustedDevices: Bool
+    public init(role: String = "", deviceLock: String = "user", capabilities: Capabilities? = nil, panicGesture: Bool = false, trustedDevices: Bool = false) { self.trustedDevices = trustedDevices; self.role = role; self.deviceLock = deviceLock; self.capabilities = capabilities ?? Capabilities.fromRole(role); self.panicGesture = panicGesture }
 
     /// From the answer of `GET /api/v1/studio/session`.
     public static func parse(_ json: JSON) -> SessionFacts {
         let role = json.object("user")?.str("role") ?? ""
         let lock = json.object("capabilities")?.object("security")?.str("client.device_lock") ?? ""
-        return SessionFacts(role: role, deviceLock: lock.isEmpty ? "user" : lock, capabilities: Capabilities.of(session: json, role: role))
+        let panic = json.object("capabilities")?.object("security")?["client.panic_gesture"] as? Bool ?? false
+        let trusted = json.object("capabilities")?.object("security")?["client.trusted_devices"] as? Bool ?? false
+        return SessionFacts(role: role, deviceLock: lock.isEmpty ? "user" : lock, capabilities: Capabilities.of(session: json, role: role), panicGesture: panic, trustedDevices: trusted)
     }
     public func can(_ action: String) -> Bool { capabilities.can(action) }
     public var canChange: Bool { can(CapabilityAction.operate) }
@@ -191,6 +197,8 @@ public struct ArmorEvent: Equatable, Sendable, Identifiable {
     public var code: String? = nil
     public var sourceType: String? = nil
     public var field: String? = nil
+    /// The alarm an event of kind alarm is about, when the server said which (the action "Confirm" of its notice acknowledges it).
+    public var alarmId: String? = nil
 
     static let known: Set<String> = ["alert", "node", "camera", "mode", "device", "alarm"]
 
@@ -218,7 +226,7 @@ public struct ArmorEvent: Equatable, Sendable, Identifiable {
         switch type {
         case "alarm":
             return ArmorEvent(id: id, at: json.str("at"), type: type, subject: subject, from: nil, to: text("state"), targets: nil, mode: nil,
-                              severity: text("severity"), code: text("code"), sourceType: text("source_type"))
+                              severity: text("severity"), code: text("code"), sourceType: text("source_type"), alarmId: text("alarm_id"))
         case "device":
             return ArmorEvent(id: id, at: json.str("at"), type: type, subject: subject, from: text("from"), to: text("to"), targets: nil, mode: nil, code: text("kind"), field: text("field"))
         default:

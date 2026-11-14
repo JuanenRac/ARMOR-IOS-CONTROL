@@ -25,6 +25,9 @@ struct CamerasView: View {
     @EnvironmentObject var model: AppModel
     @StateObject private var list = CameraList()
     @State private var visible: [String] = []
+    /// The camera a notice asked to open: shown in full screen on top of the grid.
+    @State private var opened: CameraView?
+    @State private var showOpened = false
 
     var body: some View {
         NavigationStack {
@@ -54,8 +57,21 @@ struct CamerasView: View {
             }
             .background(Theme.background)
             .navigationTitle(model.tr("Cámaras"))
-            .task { await list.load(model: model) }
+            .task { await list.load(model: model); takeRequest() }
             .refreshable { await list.load(model: model) }
+            .onChange(of: model.requestedCamera) { _ in takeRequest() }
+            .onChange(of: list.loaded) { _ in takeRequest() }
+            .navigationDestination(isPresented: $showOpened) { if let camera = opened { CameraDetail(camera: camera) } }
+        }
+    }
+
+    /// A notice asked to open a camera: once the list is here, it is shown in full screen; a camera the server does not have is forgotten.
+    private func takeRequest() {
+        guard let id = model.requestedCamera else { return }
+        switch OpenCamera.resolve(requested: id, cameras: withLensWindows(list.cameras, model.translator), loaded: list.loaded) {
+        case .wait: return
+        case .open(let camera): opened = camera; showOpened = true; model.requestedCamera = nil
+        case .drop: model.requestedCamera = nil
         }
     }
 }

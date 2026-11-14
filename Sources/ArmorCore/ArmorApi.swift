@@ -24,6 +24,13 @@ public protocol ArmorApi: Sendable {
     func alarms(_ origin: String) async throws -> (active: [Alarm], recent: [Alarm])
     func acknowledgeAlarm(_ origin: String, id: String) async throws
     func acknowledgeAllAlarms(_ origin: String) async throws
+    /// The hidden panic gesture: `POST /api/v1/alarm/panic-gesture` raises the silent duress alarm of the signed-in person. The server answers the same `{ok:true}` whether an alarm was raised or the quiet
+    /// time had not ended, and 404 while the administrator has the option off (the caller then forgets the gesture). Nothing of it is kept in the diagnostic log.
+    func panicGesture(_ origin: String) async throws
+    /// Tells the server only the word "home" or "away" for the signed-in person (PUT /api/v1/presence/me, behind the option presence.by_user). The position of the phone is never sent.
+    func setPresence(_ origin: String, state: String) async throws
+    /// The still picture of a camera right now (GET /api/v1/cameras/{id}/snapshot, an operator): the bytes of a JPEG, refused when longer than `limit`.
+    func cameraStill(_ origin: String, cameraId: String, limit: Int) async throws -> Data
     func alarmPanels(_ origin: String) async throws -> [AlarmPanelView]
     func armProfiles(_ origin: String) async throws -> [ArmProfileView]
     func alarmCommandsEnabled(_ origin: String) async throws -> Bool
@@ -69,8 +76,17 @@ public protocol ArmorApi: Sendable {
     func restoreSessionCookie(_ origin: String, _ cookie: SessionCookie)
     func forgetSession(_ origin: String)
     /// Tells the server the token APNs gave this phone, so it can push alarms to it (a server with push off answers 409, which is not a failure of the app).
-    func registerPush(_ origin: String, token: String) async throws
+    /// `language` is the one of the app: the server writes the push notices in it.
+    func registerPush(_ origin: String, token: String, language: String) async throws
     func unregisterPush(_ origin: String, token: String) async throws
+    /// Registers this phone as a trusted one with the public half of its key (base64 DER); the server's id for it. A server that is not offering it answers 404.
+    func trustRegister(_ origin: String, name: String, publicKey: String) async throws -> String
+    /// A one-time challenge for the trusted phone `id` to sign.
+    func trustChallenge(_ origin: String, id: String) async throws -> String
+    /// Gives the signature (base64 DER) of the challenge; the server opens a session and its cookie becomes the one of the client.
+    func trustSession(_ origin: String, id: String, challenge: String, signature: String) async throws
+    /// Ends this phone as a trusted one.
+    func trustRemove(_ origin: String, id: String) async throws
 
     // reports, solar, electrical and battery maintenance (declared here, not only in the extension below, so a call through the protocol reaches the real client)
     /// The summary of a day in a language, for administrators and operators; the server refuses (404 off, 403 role, 503 not set up...) with a code that `ReportRefusal` turns into words.
@@ -144,6 +160,12 @@ public protocol ArmorApi: Sendable {
 }
 
 extension ArmorApi {
+    func trustRegister(_ origin: String, name: String, publicKey: String) async throws -> String { throw ArmorApiError(message: "not supported", status: nil) }
+    func trustChallenge(_ origin: String, id: String) async throws -> String { throw ArmorApiError(message: "not supported", status: nil) }
+    func trustSession(_ origin: String, id: String, challenge: String, signature: String) async throws { throw ArmorApiError(message: "not supported", status: nil) }
+    func trustRemove(_ origin: String, id: String) async throws { throw ArmorApiError(message: "not supported", status: nil) }
+    func setPresence(_ origin: String, state: String) async throws { throw ArmorApiError(message: "not supported", status: nil) }
+    func cameraStill(_ origin: String, cameraId: String, limit: Int) async throws -> Data { throw ArmorApiError(message: "not supported", status: nil) }
     func voiceTurn(_ origin: String, pcm: Data, language: String, voiceToken: String) async throws -> JSON { throw ArmorApiError(message: "not supported", status: nil) }
     func mobileVoiceTurn(_ origin: String, pcm: Data, language: String) async throws -> JSON { throw ArmorApiError(message: "not supported", status: nil) }
     func media(_ origin: String) async throws -> MediaCatalogueView { throw ArmorApiError(message: "not supported", status: nil) }

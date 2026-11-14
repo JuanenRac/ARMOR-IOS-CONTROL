@@ -31,6 +31,9 @@ struct NoticeSettingsView: View {
                 row(model.tr("Silenciar todos los avisos"), note: model.tr("No aparece ninguna notificación."), on: settings.muted) { var next = settings; next.muted = $0; model.setNotices(next) }
                 row(model.tr("Avisos sin sonido"), note: model.tr("Aparecen sin sonido ni vibración y el móvil no los dice en voz alta (las críticas siguen sonando)."), on: settings.silent, disabled: settings.muted) { var next = settings; next.silent = $0; model.setNotices(next) }
             }
+            Section(footer: Text(model.tr("El móvil le pide la foto de la cámara a tu propio servidor cuando llega el aviso. No pasa por los servidores de Google."))) {
+                row(model.tr("Foto en los avisos de cámara"), note: nil, on: model.noticePhotoEnabled, disabled: settings.muted) { model.setNoticePhotoEnabled($0) }
+            }
             Section(header: Text(model.tr("Avisarme de") + " · " + model.tr("Por gravedad"))) {
                 row(model.tr("Altas"), on: !settings.mutedSeverities.contains("high"), disabled: settings.muted) { model.setNotices(settings.withSeverity("high", off: !$0)) }
                 row(model.tr("Avisos (gravedad baja)"), on: !settings.mutedSeverities.contains("warning"), disabled: settings.muted) { model.setNotices(settings.withSeverity("warning", off: !$0)) }

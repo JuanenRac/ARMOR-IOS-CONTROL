@@ -18,14 +18,20 @@ final class AppModel: ObservableObject {
     let trust: TrustDelegate
     let pins: PinStore
     let vault: SessionVault
+    let enrolmentReader: EnrolmentReader
     let lockSettings: LockSettings
     let policy: LockPolicy
     let gate: LockGate
     let controller: ArmorController
+    let trustedSettings: TrustedPhoneSettings
     /// The spoken turn of the Assistant: off until the person turns it on in More.
     let spokenTurn: SpokenTurnModel
     private let monitor = NWPathMonitor()
     private var pollTask: Task<Void, Never>?
+    /// The channel of small live notices of the server, open while the app is polling, and when the last notice came (the asking slows down while they arrive).
+    private var liveChannel: LiveChannel?
+    private var lastNoticeAt: Date?
+    private var noticeRead = false
 
     // what the screens show
     @Published var screen: Screen = .starting
@@ -43,6 +49,11 @@ final class AppModel: ObservableObject {
     @Published var voiceAvailable = false
     @Published var tiedToUnlock: Bool
     @Published var pendingElevation: ElevationRequest?
+    /// The place the main tabs show, and the camera a notice asked to open (held until the Cameras place takes it).
+    @Published var selectedTab = MainTab.status
+    @Published var requestedCamera: String?
+    /// This phone is a trusted one for the server (off by default): a key that never leaves the phone renews the session by signing a challenge.
+    @Published var trustedOn: Bool
     @Published var rememberedUser: String = ""
     // what the person chose about the notices (kept in the preferences of the app)
     @Published var notices = NoticeSettings()
@@ -72,8 +83,15 @@ final class AppModel: ObservableObject {
         let gate = LockGate(policy: policy, auth: auth, translator: translator)
         let vault = SessionVault(secrets: KeychainSecrets(), prefs: prefs)
         self.spokenTurn = SpokenTurnModel(prefs: prefs)
+        self.enrolmentReader = EnrolmentReader(session: session)
         self.pins = pins; self.trust = trust; self.translator = translator; self.lockSettings = settings; self.policy = policy; self.gate = gate; self.vault = vault
-        self.controller = ArmorController(api: api, vault: vault, gate: gate, lockSettings: settings, translator: translator)
+        let trustedSettings = TrustedPhoneSettings(prefs)
+        let phoneName = UIDevice.current.userInterfaceIdiom == .pad ? "iPad" : "iPhone"
+        let made = ArmorController(api: api, vault: vault, gate: gate, lockSettings: settings, translator: translator)
+        made.trusted = TrustedPhone(api: api, signer: SecureEnclaveSigner(), settings: trustedSettings, phoneName: { phoneName })
+        self.controller = made
+        self.trustedSettings = trustedSettings
+        self.trustedOn = trustedSettings.enabled
         self.language = code
         self.installation = SavedInstallation.load(from: prefs)
         self.lockStatus = policy.status()
@@ -87,6 +105,77 @@ final class AppModel: ObservableObject {
             Task { @MainActor in self?.place = place; self?.networkAvailable = path.status == .satisfied }
         }
         monitor.start(queue: DispatchQueue(label: "armor.network"))
+        PresenceMonitor.shared.onLeft = { [weak self] in await self?.remindOnLeaving() }
+        PresenceMonitor.shared.onWord = { [weak self] word in await self?.tellPresence(word) }
+        PresenceMonitor.shared.onAuthorization = { [weak self] in Task { @MainActor in self?.objectWillChange.send() } }
+        PresenceMonitor.shared.apply()
+    }
+
+    // MARK: reminder on leaving home
+
+    private var presenceStore: PresenceStore { PresenceStore(prefs) }
+    var presenceEnabled: Bool { presenceStore.enabled }
+    var presenceShare: Bool { presenceStore.share }
+    // MARK: picture in the notice of a camera
+
+    private var noticePhotoStore: NoticePhotoStore { NoticePhotoStore(prefs) }
+    var noticePhotoEnabled: Bool { noticePhotoStore.enabled }
+    func setNoticePhotoEnabled(_ on: Bool) { noticePhotoStore.enabled = on; objectWillChange.send() }
+
+    /// The picture of a camera as a file the notice can attach, asked of the own server with the session the phone keeps; nil without a session, an answer or a picture.
+    private func noticePhotoAttachment(_ camera: String) async -> UNNotificationAttachment? {
+        guard NoticePhoto.validCameraId(camera) else { return nil }
+        if !controller.state.signedIn || activeOrigin == nil {
+            guard await connect(), let origin = activeOrigin, await controller.restore(origin: origin) else { return nil }
+        }
+        guard let origin = activeOrigin, let data = try? await controller.api.cameraStill(origin, cameraId: camera, limit: NoticePhoto.maxBytes), let ext = NoticePhoto.fileExtension(of: data) else { return nil }
+        let file = FileManager.default.temporaryDirectory.appendingPathComponent("armor-notice-\(UUID().uuidString).\(ext)")
+        do { try data.write(to: file, options: .atomic) } catch { return nil }
+        return try? UNNotificationAttachment(identifier: "armor-camera", url: file, options: nil)
+    }
+
+    var presenceHasHome: Bool { presenceStore.home != nil }
+    var presenceAuthorized: Bool { PresenceMonitor.shared.authorized }
+
+    func setPresenceEnabled(_ on: Bool) { presenceStore.enabled = on; PresenceMonitor.shared.apply() }
+    func setPresenceShare(_ on: Bool) { presenceStore.share = on; PresenceMonitor.shared.apply() }
+    func askPresencePermission() { PresenceMonitor.shared.askPermission() }
+
+    /// Saves the place the phone is in as home and starts watching the circle around it.
+    func saveHomeHere(_ done: @escaping (Bool) -> Void) {
+        PresenceMonitor.shared.readPlace { [weak self] place in
+            Task { @MainActor in
+                guard let self, let place, place.valid else { done(false); return }
+                self.presenceStore.home = place
+                PresenceMonitor.shared.apply()
+                done(true)
+            }
+        }
+    }
+
+    /// The phone crossed the circle: tells the server only the word, with the session the phone keeps; nothing when there is no usable session or the person turned it off.
+    func tellPresence(_ word: String) async {
+        guard presenceStore.share, PresenceShare.valid(word) else { return }
+        if !controller.state.signedIn || activeOrigin == nil {
+            guard await connect(), let origin = activeOrigin, await controller.restore(origin: origin) else { return }
+        }
+        guard let origin = activeOrigin else { return }
+        try? await controller.api.setPresence(origin, state: word)   // tried again at the next change of side
+    }
+
+    /// The phone left home: reads whether the system is armed (nothing else is asked of the server) and says so.
+    func remindOnLeaving() async {
+        let store = presenceStore
+        guard store.enabled else { return }
+        var mode: String?
+        if await connect(), let origin = activeOrigin, await controller.restore(origin: origin) { mode = (try? await controller.api.status(origin))?.mode }
+        let now = Int64(Date().timeIntervalSince1970 * 1000)
+        guard let kind = PresenceDecision.onLeft(mode: mode, lastReminderMs: store.lastReminderMs, nowMs: now) else { return }
+        store.lastReminderMs = now
+        switch kind {
+        case .armNow: post(AlarmNotice(id: PresenceConfig.noticeId, title: tr("¿Armas la alarma?"), text: tr("Has salido de casa y el sistema está desarmado."), severity: "warning"))
+        case .check: post(AlarmNotice(id: PresenceConfig.noticeId, title: tr("Comprueba la alarma"), text: tr("Has salido de casa y no he podido comprobar si la alarma está armada."), severity: "warning"))
+        }
     }
 
     func tr(_ es: String) -> String { _ = language; return translator.tr(es) }
@@ -154,6 +243,31 @@ final class AppModel: ObservableObject {
         new.save(to: prefs)
     }
 
+    /// A set-up QR code was scanned: the address and the authority it names are checked with the server (the code works once) and, only when both agree, the address is set and the person types
+    /// their user and password. Returns what to tell the person.
+    func enrol(scanned text: String) async -> String {
+        guard let read = EnrolmentCode.parse(text), let picked = ServerChoice.installation(for: read.origin), let host = URL(string: read.origin)?.host else {
+            return tr("Ese código no es un código de alta de A.R.M.O.R.")
+        }
+        // the authority the code names is waited for by the connection that asks the server for its facts, so a private authority can be paired without installing it
+        if !read.caFingerprint.isEmpty { pins.expectAuthority(read.caFingerprint, for: host) }
+        let facts = try? await enrolmentReader.read(read)
+        pins.clearExpected(for: host)
+        guard let facts, EnrolmentCode.agrees(read, facts) else { return tr("No se pudo comprobar el código de alta: ha caducado, ya se usó o el servidor no responde.") }
+        saveInstallation(picked)
+        return trf("Servidor añadido: %s. Escribe tu usuario y tu contraseña.", ServerChoice.label(read.origin))
+    }
+
+    /// The servers whose session is kept on this phone, the one in use first (empty while the phone is locked and the list cannot be read).
+    var keptServers: [String] { ServerChoice.offered(vault.origins(), inUse: activeOrigin ?? "") }
+
+    /// Goes back to a server the person signed in to before: its address is set (the away address of the previous one is dropped) and its kept session is tried, so the password is not asked again.
+    func pickServer(_ origin: String) async {
+        guard let picked = ServerChoice.installation(for: origin) else { return }
+        saveInstallation(picked)
+        await openKept()
+    }
+
     var isAway: Bool {
         guard let origin = activeOrigin, let endpoint = ServerEndpoint.parse(origin) else { return false }
         return Reach.isAway(endpoint, installation: installation)
@@ -195,6 +309,11 @@ final class AppModel: ObservableObject {
         screen = .login
     }
 
+    /// The hidden panic gesture was made on the shield of the status card (see PanicGesture.swift). Silent: no message, no sound.
+    func panicGesture() {
+        Task { await controller.panicGesture(); state = controller.state }
+    }
+
     private func enterMain() {
         state = controller.state
         screen = .main
@@ -203,6 +322,7 @@ final class AppModel: ObservableObject {
         startPolling()
         requestNotificationPermission()
         Task { await registerPush() }
+        if trustedOn, state.facts.trustedDevices { Task { await controller.trustThisPhone() } }   // quietly: a server that wants a proof first is left for the switch to ask
     }
 
     // MARK: push
@@ -216,23 +336,48 @@ final class AppModel: ObservableObject {
     /// Tells the server the token of this phone (a server with push off answers 409, which is not a failure).
     func registerPush() async {
         guard screen == .main, let origin = activeOrigin, let token = prefs.get("push_token") else { return }
-        try? await controller.api.registerPush(origin, token: token)
+        try? await controller.api.registerPush(origin, token: token, language: language)
     }
 
     // MARK: polling and notices
 
     func startPolling() {
         pollTask?.cancel()
+        startLiveChannel()
         pollTask = Task { [weak self] in
             while !Task.isCancelled {
                 await self?.refresh()
-                let seconds: UInt64 = (self?.isAway ?? false) ? 10 : 5
-                try? await Task.sleep(nanoseconds: seconds * 1_000_000_000)
+                let base: Double = (self?.isAway ?? false) ? 10 : 5
+                let seconds = LiveNotices.pollDelay(base: base, lastNotice: self?.lastNoticeAt, now: Date())
+                try? await Task.sleep(nanoseconds: UInt64(seconds * 1_000_000_000))
             }
         }
     }
 
-    func stopPolling() { pollTask?.cancel(); pollTask = nil }
+    func stopPolling() { pollTask?.cancel(); pollTask = nil; liveChannel?.stop(); liveChannel = nil }
+
+    /// The small notices of the server (an alarm, a device, a solar device, a network node or a design changed): the app reads again at once, a burst being one read.
+    private func startLiveChannel() {
+        liveChannel?.stop(); liveChannel = nil
+        guard let origin = activeOrigin else { return }
+        let api = controller.api
+        let channel = LiveChannel(origin: origin, trust: trust, cookie: { api.sessionCookie(origin) }, onNotice: { [weak self] notice in
+            Task { @MainActor in self?.liveNotice(notice) }
+        })
+        liveChannel = channel
+        channel.start()
+    }
+
+    private func liveNotice(_ notice: LiveNotice) {
+        lastNoticeAt = Date()
+        guard notice.type != "design", !noticeRead else { return }
+        noticeRead = true
+        Task { [weak self] in
+            try? await Task.sleep(nanoseconds: 300_000_000)
+            self?.noticeRead = false
+            await self?.refresh()
+        }
+    }
 
     func refresh() async {
         let notices = await controller.refresh()
@@ -243,6 +388,17 @@ final class AppModel: ObservableObject {
 
     private func requestNotificationPermission() {
         UNUserNotificationCenter.current().delegate = NotificationPresenter.shared   // the notices also show while the app is open
+        // a notice that knows its alarm carries the action "Confirm": it acknowledges the alarm with the session the phone keeps, without opening the app
+        let confirm = UNNotificationAction(identifier: NoticeActions.acknowledgeActionId, title: tr("Confirmar"), options: [])
+        // a notice about a camera offers to open it: the app comes to the front on the Cameras place with that camera in full screen
+        let open = UNNotificationAction(identifier: NoticeActions.openCameraActionId, title: tr("Abrir cámara"), options: [.foreground])
+        UNUserNotificationCenter.current().setNotificationCategories([
+            UNNotificationCategory(identifier: NoticeActions.categoryId, actions: [confirm], intentIdentifiers: [], options: []),
+            UNNotificationCategory(identifier: NoticeActions.openCameraCategoryId, actions: [open], intentIdentifiers: [], options: []),
+            UNNotificationCategory(identifier: NoticeActions.ackAndOpenCategoryId, actions: [confirm, open], intentIdentifiers: [], options: []),
+        ])
+        NotificationPresenter.shared.onAcknowledge = { [weak self] id in await self?.acknowledgeFromNotice(id) }
+        NotificationPresenter.shared.onOpenCamera = { [weak self] id in await self?.openCameraFromNotice(id) }
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { _, _ in }
     }
 
@@ -254,6 +410,7 @@ final class AppModel: ObservableObject {
         content.title = notice.title
         content.body = notice.text
         content.threadIdentifier = "armor-alarms"
+        if let category = NoticeActions.category(alarmId: notice.alarmId, cameraId: notice.cameraId) { content.categoryIdentifier = category; content.userInfo = NoticeActions.userInfo(alarmId: notice.alarmId, cameraId: notice.cameraId) }
         let critical = notice.severity == "critical"
         if decision == .silent {
             content.sound = nil
@@ -269,9 +426,35 @@ final class AppModel: ObservableObject {
         }
         let request = UNNotificationRequest(identifier: "armor-\(notice.id)", content: content, trigger: nil)   // the event id: a push for the same event replaces it
         UNUserNotificationCenter.current().add(request)
+        // The picture of the camera, when the person asked for it: the notice is shown at once and replaced, without sound, by the same notice with the picture if the server gives it.
+        if let camera = notice.cameraId, NoticePhoto.wanted(enabled: noticePhotoEnabled, notice: notice) {
+            Task { [weak self] in
+                guard let self, let attachment = await self.noticePhotoAttachment(camera), let again = content.mutableCopy() as? UNMutableNotificationContent else { return }
+                again.attachments = [attachment]; again.sound = nil; again.interruptionLevel = .passive
+                try? await UNUserNotificationCenter.current().add(UNNotificationRequest(identifier: request.identifier, content: again, trigger: nil))
+            }
+        }
         if AlarmSpeech.shouldSpeak(decision, enabled: speaksAlarms, voice: voice, severity: notice.severity) {
             AlarmSpeaker.shared.say("\(notice.title). \(notice.text)", voice: voice, language: language)
         }
+    }
+
+    /// The action "Open camera" of a notice: the request is held and the Cameras place is shown; it takes the request once the person is recognised and the camera is known.
+    func openCameraFromNotice(_ camera: String) {
+        guard OpenCamera.valid(camera) else { return }
+        requestedCamera = camera
+        selectedTab = .cameras
+    }
+
+    /// The action "Confirm" of a notice: the alarm is acknowledged with the session the phone keeps; if the app was woken just for this, the server is reached and the kept session tried first.
+    /// Nothing is shown when it fails: the person can still open the app.
+    func acknowledgeFromNotice(_ alarmId: String) async {
+        guard NoticeActions.validAlarmId(alarmId) else { return }
+        if !controller.state.signedIn || activeOrigin == nil {
+            guard await connect(), let origin = activeOrigin, await controller.restore(origin: origin) else { return }
+        }
+        guard let origin = activeOrigin else { return }
+        try? await controller.api.acknowledgeAlarm(origin, id: alarmId)
     }
 
     func setNotices(_ next: NoticeSettings) { notices = next; NoticePreferences.save(prefs, next) }
@@ -389,6 +572,27 @@ final class AppModel: ObservableObject {
     }
 
     func setGrace(_ seconds: Int) { lockSettings.graceSeconds = seconds; refreshLock() }
+
+    /// Whether the server lets a phone be a trusted one (the option of the administrator).
+    var trustedOffered: Bool { state.facts.trustedDevices }
+
+    /// The switch of the trusted phone: on registers this phone (asking for a new proof of identity first when the server wants one), off makes the server forget it.
+    func setTrusted(_ on: Bool) async {
+        trustedSettings.enabled = on
+        trustedOn = on
+        if !on { await controller.untrustThisPhone(); return }
+        let asker: ElevationAsker = { [weak self] in
+            guard let self else { return nil }
+            return await withCheckedContinuation { continuation in
+                Task { @MainActor in self.pendingElevation = ElevationRequest(continuation) }
+            }
+        }
+        switch await controller.trustThisPhone(asker: asker) {
+        case .done: show(tr("Este teléfono ya es de confianza."), error: false)
+        case .unavailable: show(tr("Este servidor no ofrece teléfonos de confianza."), error: true)
+        case .failed, .needsProof, .off: show(tr("El servidor no ha aceptado este teléfono como de confianza."), error: true)
+        }
+    }
 
     func setTiedToUnlock(_ on: Bool) async {
         switch await gate.prove() {

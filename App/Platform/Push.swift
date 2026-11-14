@@ -17,6 +17,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
     static var onToken: ((String) -> Void)?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+        _ = PresenceMonitor.shared   // the circle around home is watched from the start, also when the app was woken by the phone leaving it
         #if canImport(FirebaseMessaging)
         if Bundle.main.path(forResource: "GoogleService-Info", ofType: "plist") != nil {
             FirebaseApp.configure()

@@ -47,6 +47,9 @@ public final class ArmorController: @unchecked Sendable {
     private let lock = NSLock()
     private var current = ArmorState()
     private let seen = SeenEvents()
+    private var panicSending = false
+    /// The trusted phone of the app (nil in a test or a preview: then nothing is renewed). Set once, before the first sign-in.
+    public var trusted: TrustedPhone?
 
     public init(api: ArmorApi, vault: SessionVault, gate: LockGate, lockSettings: LockSettings, translator: Translator) {
         self.api = api; self.vault = vault; self.gate = gate; self.lockSettings = lockSettings; self.translator = translator
@@ -85,24 +88,54 @@ public final class ArmorController: @unchecked Sendable {
 
     /// Opens the app already signed in when the server still honours the kept session; false when the person must sign in (the kept session is dropped when the server refused it).
     public func restore(origin: String) async -> Bool {
-        guard let cookie = vault.loadSession(origin: origin) else { return false }
-        api.restoreSessionCookie(origin, cookie)
+        if let cookie = vault.loadSession(origin: origin) {
+            api.restoreSessionCookie(origin, cookie)
+        } else {
+            // nothing kept: a trusted phone can still open the session by signing a challenge
+            guard await trusted?.renew(origin) == true else { return false }
+        }
         do {
-            let facts = try await api.sessionFacts(origin)
-            if facts.role.isEmpty { vault.dropSession(); api.forgetSession(origin); return false }
+            let facts = try await sessionFactsRenewing(origin)
+            if facts.role.isEmpty { vault.forget(origin: origin); api.forgetSession(origin); return false }
             lockSettings.server = ServerLock.parse(facts.deviceLock)
             if let renewed = api.sessionCookie(origin) { vault.saveSession(renewed, origin: origin) }
             update { $0.origin = origin; $0.signedIn = true; $0.facts = facts }
             return true
         } catch let error as ArmorApiError {
-            if error.isUnauthorized { vault.dropSession(); api.forgetSession(origin) }
+            if error.isUnauthorized { vault.forget(origin: origin); api.forgetSession(origin) }
             return false
         } catch { return false }
+    }
+
+    /// The facts of the session; when the server refuses the session and this phone is a trusted one, a new session is opened by signing a challenge and the question is asked once more.
+    private func sessionFactsRenewing(_ origin: String) async throws -> SessionFacts {
+        do { return try await api.sessionFacts(origin) } catch let error as ArmorApiError where error.isUnauthorized {
+            guard await trusted?.renew(origin) == true else { throw error }
+            return try await api.sessionFacts(origin)
+        }
+    }
+
+    /// Registers this phone as a trusted one on the server in use, when the person asked for it and the server offers it (a server that wants a new proof of identity first is left for the switch to ask).
+    /// With an `asker`, a server that wants a new proof of identity first is answered: the person is asked, the proof is given and the registration is tried once more.
+    @discardableResult
+    public func trustThisPhone(asker: ElevationAsker? = nil) async -> TrustResult {
+        guard let phone = trusted, let origin = state.origin, state.signedIn else { return .unavailable }
+        let result = await phone.register(origin, offered: state.facts.trustedDevices)
+        guard result == .needsProof, let asker, let proof = await asker() else { return result }
+        do { try await api.elevate(origin, password: proof.password, code: proof.code) } catch { return .failed }
+        return await phone.register(origin, offered: state.facts.trustedDevices)
+    }
+
+    /// The person turned the switch off: the server forgets this phone and so does the app.
+    public func untrustThisPhone() async {
+        guard let phone = trusted, let origin = state.origin else { return }
+        await phone.end(origin)
     }
 
     /// Ends the session at the server (whatever it says) and forgets it here.
     public func signOut(forgetLogin: Bool = true) async {
         if let origin = state.origin {
+            await trusted?.end(origin)   // a signed-out phone is no longer trusted by the server (asked while the session still stands)
             try? await api.closeSession(origin)
             api.forgetSession(origin)
         }
@@ -115,7 +148,9 @@ public final class ArmorController: @unchecked Sendable {
 
     /// Reads the status, the alarms and the history; returns the notices of what is new since the last time (the first call only records where the history stands).
     @discardableResult
-    public func refresh() async -> [AlarmNotice] {
+    public func refresh() async -> [AlarmNotice] { await refresh(afterRenewal: false) }
+
+    private func refresh(afterRenewal: Bool) async -> [AlarmNotice] {
         guard let origin = state.origin, state.signedIn else { return [] }
         do {
             async let snapshot = api.status(origin)
@@ -129,6 +164,10 @@ public final class ArmorController: @unchecked Sendable {
             update { $0.snapshot = status; $0.active = list.active; $0.recent = list.recent; $0.events = history; $0.panels = panels; $0.armingModes = modes; $0.lastRefreshFailed = false }
             return notices
         } catch let error as ArmorApiError {
+            if error.isUnauthorized, !afterRenewal, await trusted?.renew(origin) == true {
+                if let renewed = api.sessionCookie(origin) { vault.saveSession(renewed, origin: origin) }
+                return await refresh(afterRenewal: true)
+            }
             if error.isUnauthorized { update { $0.signedIn = false } }
             update { $0.lastRefreshFailed = true }
             return []
@@ -188,6 +227,29 @@ public final class ArmorController: @unchecked Sendable {
 
     public func silencePanel(_ node: String, pin: String?, asker: ElevationAsker? = nil) async throws {
         try await guarded(reason: translator.tr("Silenciar la alarma"), asker: asker) { [api] origin in try await api.silenceAlarmSiren(origin, node: node, pin: pin) }
+    }
+
+    /// The hidden panic gesture was made: asks the server for the silent duress alarm. Nothing shows, whatever happens (no message, no sound): the person may be watched, so it also goes without the lock of
+    /// the phone. Only while the server offers it and the person may operate; a 404 means the option was turned off since the session began, so the app stops listening; a lost connection is tried once more
+    /// after two seconds.
+    private func beginPanic() -> Bool { lock.lock(); defer { lock.unlock() }; if panicSending { return false }; panicSending = true; return true }
+    private func endPanic() { lock.lock(); panicSending = false; lock.unlock() }
+
+    public func panicGesture() async {
+        let now = state
+        guard let origin = now.origin, now.signedIn, now.facts.panicGesture, now.facts.canChange else { return }
+        guard beginPanic() else { return }
+        defer { endPanic() }
+        var tries = 0
+        while true {
+            do { try await api.panicGesture(origin); return }
+            catch let error as ArmorApiError {
+                if error.status == 404 { update { $0.facts.panicGesture = false }; return }
+                tries += 1
+                if error.status != nil || tries >= PanicGesture.tries { return }
+                try? await Task.sleep(nanoseconds: PanicGesture.retryMs * 1_000_000)
+            } catch { return }
+        }
     }
 
     public func acknowledge(_ id: String) async throws { try await guarded(reason: translator.tr("Confirmar"), needs: CapabilityAction.acknowledge, asker: nil) { [api] origin in try await api.acknowledgeAlarm(origin, id: id) } }

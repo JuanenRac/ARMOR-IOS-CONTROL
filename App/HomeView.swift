@@ -6,6 +6,7 @@ import ArmorCore
 struct HomeView: View {
     @EnvironmentObject var model: AppModel
     @State private var preflight: Preflight?
+    @StateObject private var nodeHealth = NodeHealthState()
     @State private var confirmArm = false
     @State private var askDisarm = false
     @State private var pin = ""
@@ -32,6 +33,7 @@ struct HomeView: View {
                         HStack {
                             Image(systemName: model.state.snapshot.armed ? "lock.shield.fill" : "lock.open.fill").font(.largeTitle)
                                 .foregroundColor(model.state.snapshot.armed ? Theme.ok : Theme.amber)
+                                .panicGesture(offered: model.state.facts.panicGesture && model.state.facts.canChange) { model.panicGesture() }   // hidden: only while the server offers it
                             VStack(alignment: .leading) {
                                 Text(model.state.snapshot.armed ? model.tr("Sistema ARMADO") : model.tr("Sistema DESARMADO")).font(.title3.weight(.bold))
                                 Text(model.isAway ? model.tr("Fuera de casa") : model.tr("En casa")).font(.caption).foregroundColor(Theme.muted)
@@ -70,6 +72,8 @@ struct HomeView: View {
 
                     EquipmentCards()
 
+                    censusCard
+
                     Card {
                         Text(model.tr("Estado de los nodos")).font(.headline)
                         ForEach(model.state.snapshot.nodes) { node in
@@ -88,6 +92,7 @@ struct HomeView: View {
             .background(Theme.background)
             .navigationTitle("A.R.M.O.R.")
             .refreshable { await model.refresh() }
+            .task { if model.state.facts.canChange { await nodeHealth.watch(model: model) } }
             .confirmationDialog(model.tr("¿Armar el sistema?"), isPresented: $confirmArm, titleVisibility: .visible) {
                 Button(model.tr("Armar igualmente"), role: .destructive) { Task { if let mode = modeAfterCheck { modeAfterCheck = nil; await chooseMode(mode, checked: true) } else { await arm() } } }
                 Button(model.tr("Cancelar"), role: .cancel) {}
@@ -121,6 +126,33 @@ struct HomeView: View {
                 SecureField(model.tr("PIN (si tienes uno)"), text: $pin).keyboardType(.numberPad)
                 Button(model.tr("Sí, desarmar"), role: .destructive) { Task { await disarm() } }
                 Button(model.tr("Cancelar"), role: .cancel) {}
+            }
+        }
+    }
+
+    /// Every kind of node (radar, solar, electrical, alarm, wall panel), not only the radar nodes of the live stream; a tap opens the health of the nodes when the server gave it.
+    @ViewBuilder private var censusCard: some View {
+        let census = NodeCensus.of(radar: model.state.snapshot.nodes, health: nodeHealth.overview)
+        if census.total > 0 {
+            let tint = census.online < census.total ? Theme.amber : Theme.accent
+            let summary = Card {
+                HStack {
+                    Image(systemName: "point.3.connected.trianglepath.dotted").foregroundColor(tint)
+                    VStack(alignment: .leading) {
+                        HStack(spacing: 6) {
+                            Text("\(census.online)/\(census.total)").font(.subheadline.weight(.bold))
+                            Text(model.tr("Nodos en línea")).font(.subheadline.weight(.semibold))
+                        }
+                        Text(model.tr("Nodos por tipo") + ": " + census.families.map { "\(NodeHealthText.family($0.family, model.translator)) \($0.online)/\($0.total)" }.joined(separator: " · "))
+                            .font(.caption).foregroundColor(Theme.muted).lineLimit(2)
+                    }
+                    Spacer()
+                }
+            }
+            if let overview = nodeHealth.overview, !overview.isEmpty {
+                NavigationLink { NodeHealthScreen() } label: { summary }.buttonStyle(.plain)
+            } else {
+                summary
             }
         }
     }

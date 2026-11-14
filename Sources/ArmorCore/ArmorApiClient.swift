@@ -205,6 +205,16 @@ public final class ArmorApiClient: ArmorApi, @unchecked Sendable {
 
     public func acknowledgeAlarm(_ origin: String, id: String) async throws { _ = try await send(origin, "/api/v1/alarms/\(Self.part(id))/acknowledge", "POST", nil, [200]) }
     public func acknowledgeAllAlarms(_ origin: String) async throws { _ = try await send(origin, "/api/v1/alarms/acknowledge", "POST", nil, [200]) }
+    public func panicGesture(_ origin: String) async throws { _ = try await send(origin, "/api/v1/alarm/panic-gesture", "POST", [:], [200]) }
+    /// The still picture of a camera right now, as the bytes the server gives (nothing is saved on the server); longer than `limit` is refused.
+    public func cameraStill(_ origin: String, cameraId: String, limit: Int) async throws -> Data {
+        try ResponseLimit.check(try await send(origin, "/api/v1/cameras/\(Self.part(cameraId))/snapshot", "GET", nil, [200]), limit: limit)
+    }
+    /// Tells the server only the word for the signed-in person; any other word is refused here and never sent.
+    public func setPresence(_ origin: String, state: String) async throws {
+        guard PresenceShare.valid(state) else { throw ArmorApiError(message: "The presence word is home or away", status: nil) }
+        _ = try await send(origin, "/api/v1/presence/me", "PUT", ["state": state], [200])
+    }
 
     public func sendAlarmCommand(_ origin: String, node: String, mode: String?, force: Bool, pin: String?, profile: String?) async throws {
         var body: JSON = ["node": node, "action": mode == nil ? "disarm" : "arm"]
@@ -325,8 +335,30 @@ public final class ArmorApiClient: ArmorApi, @unchecked Sendable {
         _ = try await send(origin, "/api/v1/studio/elevate", "POST", body, [200])
     }
 
-    public func registerPush(_ origin: String, token: String) async throws { _ = try await send(origin, "/api/v1/push/register", "POST", ["token": token], [200, 201, 409]) }
+    public func registerPush(_ origin: String, token: String, language: String) async throws {
+        var body: JSON = ["token": token]
+        if !language.isEmpty { body["language"] = language }
+        _ = try await send(origin, "/api/v1/push/register", "POST", body, [200, 201, 409])
+    }
     public func unregisterPush(_ origin: String, token: String) async throws { _ = try await send(origin, "/api/v1/push/unregister", "POST", ["token": token], [200]) }
+
+    public func trustRegister(_ origin: String, name: String, publicKey: String) async throws -> String {
+        let data = try await send(origin, "/api/v1/devices/trust", "POST", ["name": name, "public_key": publicKey], [201])
+        return ((try? Json.object(data)) ?? [:]).str("id")
+    }
+
+    public func trustChallenge(_ origin: String, id: String) async throws -> String {
+        let data = try await send(origin, "/api/v1/devices/trust/challenge", "POST", ["id": id], [200])
+        return ((try? Json.object(data)) ?? [:]).str("challenge")
+    }
+
+    public func trustSession(_ origin: String, id: String, challenge: String, signature: String) async throws {
+        _ = try await send(origin, "/api/v1/devices/trust/session", "POST", ["id": id, "challenge": challenge, "signature": signature], [201])
+    }
+
+    public func trustRemove(_ origin: String, id: String) async throws {
+        _ = try await send(origin, "/api/v1/devices/trust/\(Self.part(id))", "DELETE", nil, [204])
+    }
 
     public func sessionCookie(_ origin: String) -> SessionCookie? {
         guard let url = URL(string: origin), let jar = session.configuration.httpCookieStorage else { return nil }
