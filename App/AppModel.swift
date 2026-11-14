@@ -49,6 +49,9 @@ final class AppModel: ObservableObject {
     @Published var voiceAvailable = false
     @Published var tiedToUnlock: Bool
     @Published var pendingElevation: ElevationRequest?
+    /// The place the main tabs show, and the camera a notice asked to open (held until the Cameras place takes it).
+    @Published var selectedTab = MainTab.status
+    @Published var requestedCamera: String?
     /// This phone is a trusted one for the server (off by default): a key that never leaves the phone renews the session by signing a challenge.
     @Published var trustedOn: Bool
     @Published var rememberedUser: String = ""
@@ -387,8 +390,15 @@ final class AppModel: ObservableObject {
         UNUserNotificationCenter.current().delegate = NotificationPresenter.shared   // the notices also show while the app is open
         // a notice that knows its alarm carries the action "Confirm": it acknowledges the alarm with the session the phone keeps, without opening the app
         let confirm = UNNotificationAction(identifier: NoticeActions.acknowledgeActionId, title: tr("Confirmar"), options: [])
-        UNUserNotificationCenter.current().setNotificationCategories([UNNotificationCategory(identifier: NoticeActions.categoryId, actions: [confirm], intentIdentifiers: [], options: [])])
+        // a notice about a camera offers to open it: the app comes to the front on the Cameras place with that camera in full screen
+        let open = UNNotificationAction(identifier: NoticeActions.openCameraActionId, title: tr("Abrir cámara"), options: [.foreground])
+        UNUserNotificationCenter.current().setNotificationCategories([
+            UNNotificationCategory(identifier: NoticeActions.categoryId, actions: [confirm], intentIdentifiers: [], options: []),
+            UNNotificationCategory(identifier: NoticeActions.openCameraCategoryId, actions: [open], intentIdentifiers: [], options: []),
+            UNNotificationCategory(identifier: NoticeActions.ackAndOpenCategoryId, actions: [confirm, open], intentIdentifiers: [], options: []),
+        ])
         NotificationPresenter.shared.onAcknowledge = { [weak self] id in await self?.acknowledgeFromNotice(id) }
+        NotificationPresenter.shared.onOpenCamera = { [weak self] id in await self?.openCameraFromNotice(id) }
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { _, _ in }
     }
 
@@ -400,7 +410,7 @@ final class AppModel: ObservableObject {
         content.title = notice.title
         content.body = notice.text
         content.threadIdentifier = "armor-alarms"
-        if let category = NoticeActions.category(alarmId: notice.alarmId) { content.categoryIdentifier = category; content.userInfo = NoticeActions.userInfo(alarmId: notice.alarmId) }
+        if let category = NoticeActions.category(alarmId: notice.alarmId, cameraId: notice.cameraId) { content.categoryIdentifier = category; content.userInfo = NoticeActions.userInfo(alarmId: notice.alarmId, cameraId: notice.cameraId) }
         let critical = notice.severity == "critical"
         if decision == .silent {
             content.sound = nil
@@ -427,6 +437,13 @@ final class AppModel: ObservableObject {
         if AlarmSpeech.shouldSpeak(decision, enabled: speaksAlarms, voice: voice, severity: notice.severity) {
             AlarmSpeaker.shared.say("\(notice.title). \(notice.text)", voice: voice, language: language)
         }
+    }
+
+    /// The action "Open camera" of a notice: the request is held and the Cameras place is shown; it takes the request once the person is recognised and the camera is known.
+    func openCameraFromNotice(_ camera: String) {
+        guard OpenCamera.valid(camera) else { return }
+        requestedCamera = camera
+        selectedTab = .cameras
     }
 
     /// The action "Confirm" of a notice: the alarm is acknowledged with the session the phone keeps; if the app was woken just for this, the server is reached and the kept session tried first.
