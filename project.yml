@@ -14,6 +14,9 @@ packages:
   Firebase:
     url: https://github.com/firebase/firebase-ios-sdk
     from: 11.0.0
+  # The core of the Apple Watch app lives in ARMOR-WATCH (watchos/), checked out next to this folder (the workflows clone it; on a Mac: git clone it beside this repository).
+  ArmorWatchCore:
+    path: ../ARMOR-WATCH/watchos
 targets:
   ARMOR:
     type: application
@@ -27,6 +30,9 @@ targets:
         product: ArmorCore
       - package: Firebase
         product: FirebaseMessaging
+      # the Apple Watch app travels inside the iPhone app (Embed Watch Content); it stays off until the person turns the option on in the phone
+      - target: ArmorWatch
+        embed: true
     info:
       path: Generated/Info.plist
       properties:
@@ -83,3 +89,32 @@ targets:
       base:
         GENERATE_INFOPLIST_FILE: YES
         SWIFT_VERSION: "5.9"
+  ArmorWatch:
+    type: application
+    platform: watchOS
+    deploymentTarget: "10.0"
+    sources:
+      - path: ../ARMOR-WATCH/watchos/App
+        name: ArmorWatch
+    dependencies:
+      - package: ArmorWatchCore
+        product: ArmorWatchCore
+    # the watch app travels inside the iPhone app, so it carries the same version and build number as the app
+    info:
+      path: Generated/WatchInfo.plist
+      properties:
+        CFBundleDisplayName: A.R.M.O.R.
+        CFBundleShortVersionString: "0.0.5"
+        CFBundleVersion: "2"
+        CFBundleDevelopmentRegion: en
+        CFBundleLocalizations: [en, es, de, fr, it, ja, zh-Hans, pt-PT]
+        # a watch app that needs the iPhone of the person: it has no login, no network and no keys of its own, and writes nothing to storage
+        WKApplication: true
+        WKCompanionAppBundleIdentifier: es.electrohobby3d.armor.ios
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: es.electrohobby3d.armor.ios.watchkitapp
+        MARKETING_VERSION: "0.0.5"
+        CURRENT_PROJECT_VERSION: "2"
+        SWIFT_VERSION: "5.9"
+        CODE_SIGNING_ALLOWED: NO

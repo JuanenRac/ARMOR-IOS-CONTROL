@@ -42,6 +42,8 @@ jobs:
           for _ in $(seq 1 30); do curl -fsS http://127.0.0.1:18080/healthz >/dev/null 2>&1 && exit 0; sleep 1; done
           cat "$RUNNER_TEMP/server.log"; exit 1
 
+      - name: Fetch the Apple Watch app (it is built inside this one)
+        run: git clone --depth 1 https://github.com/JuanenRac/ARMOR-WATCH.git ../ARMOR-WATCH
       - name: Make the Xcode project
         run: |
           brew install xcodegen

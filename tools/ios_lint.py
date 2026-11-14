@@ -111,6 +111,38 @@ def check_structure(problems: list[str]) -> None:
         problems.append("fewer than eight test files in Tests/ArmorCoreTests")
 
 
+def check_watch(problems: list[str]) -> None:
+    """The Apple Watch app (the sources live in ARMOR-WATCH) travels inside the app of the phone: the project describes it, embeds it and gives it the same identity and version."""
+    project = (ROOT / "project.yml").read_text(encoding="utf-8") if (ROOT / "project.yml").is_file() else ""
+    phone, _, watch = project.partition("\n  ArmorWatch:\n")
+    if not watch:
+        problems.append("project.yml has no ArmorWatch target (the Apple Watch app inside the app of the phone)")
+        return
+    if "target: ArmorWatch" not in phone or "embed: true" not in phone:
+        problems.append("the ARMOR target does not embed the ArmorWatch target")
+    if "platform: watchOS" not in watch or "WKApplication: true" not in watch:
+        problems.append("the ArmorWatch target is not a watchOS application")
+    if "WKCompanionAppBundleIdentifier: es.electrohobby3d.armor.ios\n" not in watch or "PRODUCT_BUNDLE_IDENTIFIER: es.electrohobby3d.armor.ios.watchkitapp" not in watch:
+        problems.append("the bundle identifiers of the watch app are not those of a companion of es.electrohobby3d.armor.ios")
+    if "WKRunsIndependentlyOfCompanionApp" in watch or "NSAppTransportSecurity" in watch:
+        problems.append("the watch app must not run on its own nor open the network: the phone is the only side that talks to the server")
+    if "../ARMOR-WATCH/watchos" not in project:
+        problems.append("project.yml does not point to the sources of ARMOR-WATCH")
+    for code in INFO_LANGS:
+        if code not in re.search(r"CFBundleLocalizations: \[([^\]]*)\]", watch).group(1):  # type: ignore[union-attr]
+            problems.append(f"the watch app lacks the language {code}")
+    for key in ("CFBundleShortVersionString", "CURRENT_PROJECT_VERSION", "MARKETING_VERSION", "CFBundleVersion"):
+        phone_value = re.search(rf'{key}: "([^"]+)"', phone)
+        watch_value = re.search(rf'{key}: "([^"]+)"', watch)
+        if not phone_value or not watch_value or phone_value.group(1) != watch_value.group(1):
+            problems.append(f"{key} of the watch app is not the one of the app of the phone")
+    # every job that makes the Xcode project needs the sources of the watch next to this folder
+    for flow in sorted((ROOT / ".github" / "workflows").glob("*.yml")):
+        text = flow.read_text(encoding="utf-8")
+        if "xcodegen generate" in text and "JuanenRac/ARMOR-WATCH.git ../ARMOR-WATCH" not in text:
+            problems.append(f"{flow.name} makes the Xcode project without fetching ARMOR-WATCH")
+
+
 # a Swift interpolation, with one level of parentheses inside: \(name) or \(Self.part(id))
 INTERPOLATION = re.compile(r"\\\((?:[^()]|\([^()]*\))*\)")
 HOLE = re.compile(r"%(?:\d+\$)?[sd]")
@@ -257,6 +289,7 @@ def check_public_text(problems: list[str]) -> None:
 def main() -> int:
     problems: list[str] = []
     check_structure(problems)
+    check_watch(problems)
     check_languages(problems)
     check_contract(problems)
     check_alarm_codes(problems)
