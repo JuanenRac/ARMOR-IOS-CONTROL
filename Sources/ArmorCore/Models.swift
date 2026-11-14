@@ -83,14 +83,17 @@ public struct SessionFacts: Equatable, Sendable {
     public var capabilities: Capabilities
     /// The administrator turned on the hidden panic gesture (the option `client.panic_gesture`); without it the app never listens for the gesture.
     public var panicGesture: Bool
-    public init(role: String = "", deviceLock: String = "user", capabilities: Capabilities? = nil, panicGesture: Bool = false) { self.role = role; self.deviceLock = deviceLock; self.capabilities = capabilities ?? Capabilities.fromRole(role); self.panicGesture = panicGesture }
+    /// The administrator lets a phone register as a trusted one (the option `client.trusted_devices`); without it the app never offers it.
+    public var trustedDevices: Bool
+    public init(role: String = "", deviceLock: String = "user", capabilities: Capabilities? = nil, panicGesture: Bool = false, trustedDevices: Bool = false) { self.trustedDevices = trustedDevices; self.role = role; self.deviceLock = deviceLock; self.capabilities = capabilities ?? Capabilities.fromRole(role); self.panicGesture = panicGesture }
 
     /// From the answer of `GET /api/v1/studio/session`.
     public static func parse(_ json: JSON) -> SessionFacts {
         let role = json.object("user")?.str("role") ?? ""
         let lock = json.object("capabilities")?.object("security")?.str("client.device_lock") ?? ""
         let panic = json.object("capabilities")?.object("security")?["client.panic_gesture"] as? Bool ?? false
-        return SessionFacts(role: role, deviceLock: lock.isEmpty ? "user" : lock, capabilities: Capabilities.of(session: json, role: role), panicGesture: panic)
+        let trusted = json.object("capabilities")?.object("security")?["client.trusted_devices"] as? Bool ?? false
+        return SessionFacts(role: role, deviceLock: lock.isEmpty ? "user" : lock, capabilities: Capabilities.of(session: json, role: role), panicGesture: panic, trustedDevices: trusted)
     }
     public func can(_ action: String) -> Bool { capabilities.can(action) }
     public var canChange: Bool { can(CapabilityAction.operate) }
