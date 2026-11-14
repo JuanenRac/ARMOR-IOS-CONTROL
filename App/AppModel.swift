@@ -199,6 +199,11 @@ final class AppModel: ObservableObject {
         screen = .login
     }
 
+    /// The hidden panic gesture was made on the shield of the status card (see PanicGesture.swift). Silent: no message, no sound.
+    func panicGesture() {
+        Task { await controller.panicGesture(); state = controller.state }
+    }
+
     private func enterMain() {
         state = controller.state
         screen = .main

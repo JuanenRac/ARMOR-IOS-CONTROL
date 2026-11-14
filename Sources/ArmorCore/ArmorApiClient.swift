@@ -205,6 +205,7 @@ public final class ArmorApiClient: ArmorApi, @unchecked Sendable {
 
     public func acknowledgeAlarm(_ origin: String, id: String) async throws { _ = try await send(origin, "/api/v1/alarms/\(Self.part(id))/acknowledge", "POST", nil, [200]) }
     public func acknowledgeAllAlarms(_ origin: String) async throws { _ = try await send(origin, "/api/v1/alarms/acknowledge", "POST", nil, [200]) }
+    public func panicGesture(_ origin: String) async throws { _ = try await send(origin, "/api/v1/alarm/panic-gesture", "POST", [:], [200]) }
 
     public func sendAlarmCommand(_ origin: String, node: String, mode: String?, force: Bool, pin: String?, profile: String?) async throws {
         var body: JSON = ["node": node, "action": mode == nil ? "disarm" : "arm"]

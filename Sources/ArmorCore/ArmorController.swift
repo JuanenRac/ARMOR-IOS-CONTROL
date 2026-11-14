@@ -47,6 +47,7 @@ public final class ArmorController: @unchecked Sendable {
     private let lock = NSLock()
     private var current = ArmorState()
     private let seen = SeenEvents()
+    private var panicSending = false
 
     public init(api: ArmorApi, vault: SessionVault, gate: LockGate, lockSettings: LockSettings, translator: Translator) {
         self.api = api; self.vault = vault; self.gate = gate; self.lockSettings = lockSettings; self.translator = translator
@@ -188,6 +189,29 @@ public final class ArmorController: @unchecked Sendable {
 
     public func silencePanel(_ node: String, pin: String?, asker: ElevationAsker? = nil) async throws {
         try await guarded(reason: translator.tr("Silenciar la alarma"), asker: asker) { [api] origin in try await api.silenceAlarmSiren(origin, node: node, pin: pin) }
+    }
+
+    /// The hidden panic gesture was made: asks the server for the silent duress alarm. Nothing shows, whatever happens (no message, no sound): the person may be watched, so it also goes without the lock of
+    /// the phone. Only while the server offers it and the person may operate; a 404 means the option was turned off since the session began, so the app stops listening; a lost connection is tried once more
+    /// after two seconds.
+    private func beginPanic() -> Bool { lock.lock(); defer { lock.unlock() }; if panicSending { return false }; panicSending = true; return true }
+    private func endPanic() { lock.lock(); panicSending = false; lock.unlock() }
+
+    public func panicGesture() async {
+        let now = state
+        guard let origin = now.origin, now.signedIn, now.facts.panicGesture, now.facts.canChange else { return }
+        guard beginPanic() else { return }
+        defer { endPanic() }
+        var tries = 0
+        while true {
+            do { try await api.panicGesture(origin); return }
+            catch let error as ArmorApiError {
+                if error.status == 404 { update { $0.facts.panicGesture = false }; return }
+                tries += 1
+                if error.status != nil || tries >= PanicGesture.tries { return }
+                try? await Task.sleep(nanoseconds: PanicGesture.retryMs * 1_000_000)
+            } catch { return }
+        }
     }
 
     public func acknowledge(_ id: String) async throws { try await guarded(reason: translator.tr("Confirmar"), needs: CapabilityAction.acknowledge, asker: nil) { [api] origin in try await api.acknowledgeAlarm(origin, id: id) } }
