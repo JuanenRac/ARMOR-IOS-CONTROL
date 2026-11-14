@@ -18,6 +18,7 @@ final class AppModel: ObservableObject {
     let trust: TrustDelegate
     let pins: PinStore
     let vault: SessionVault
+    let enrolmentReader: EnrolmentReader
     let lockSettings: LockSettings
     let policy: LockPolicy
     let gate: LockGate
@@ -76,6 +77,7 @@ final class AppModel: ObservableObject {
         let gate = LockGate(policy: policy, auth: auth, translator: translator)
         let vault = SessionVault(secrets: KeychainSecrets(), prefs: prefs)
         self.spokenTurn = SpokenTurnModel(prefs: prefs)
+        self.enrolmentReader = EnrolmentReader(session: session)
         self.pins = pins; self.trust = trust; self.translator = translator; self.lockSettings = settings; self.policy = policy; self.gate = gate; self.vault = vault
         self.controller = ArmorController(api: api, vault: vault, gate: gate, lockSettings: settings, translator: translator)
         self.language = code
@@ -196,6 +198,21 @@ final class AppModel: ObservableObject {
     func saveInstallation(_ new: SavedInstallation) {
         installation = new
         new.save(to: prefs)
+    }
+
+    /// A set-up QR code was scanned: the address and the authority it names are checked with the server (the code works once) and, only when both agree, the address is set and the person types
+    /// their user and password. Returns what to tell the person.
+    func enrol(scanned text: String) async -> String {
+        guard let read = EnrolmentCode.parse(text), let picked = ServerChoice.installation(for: read.origin), let host = URL(string: read.origin)?.host else {
+            return tr("Ese código no es un código de alta de A.R.M.O.R.")
+        }
+        // the authority the code names is waited for by the connection that asks the server for its facts, so a private authority can be paired without installing it
+        if !read.caFingerprint.isEmpty { pins.expectAuthority(read.caFingerprint, for: host) }
+        let facts = try? await enrolmentReader.read(read)
+        pins.clearExpected(for: host)
+        guard let facts, EnrolmentCode.agrees(read, facts) else { return tr("No se pudo comprobar el código de alta: ha caducado, ya se usó o el servidor no responde.") }
+        saveInstallation(picked)
+        return trf("Servidor añadido: %s. Escribe tu usuario y tu contraseña.", ServerChoice.label(read.origin))
     }
 
     /// The servers whose session is kept on this phone, the one in use first (empty while the phone is locked and the list cannot be read).

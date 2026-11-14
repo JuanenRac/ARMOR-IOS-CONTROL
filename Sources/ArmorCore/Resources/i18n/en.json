@@ -1206,5 +1206,9 @@
  "No se pudo leer tu ubicación.": "Your location could not be read.",
  "Se necesita el permiso de ubicación, también con la app cerrada, para avisarte al salir.": "The location permission, also with the app closed, is needed to warn you when you leave.",
  "Servidores guardados en este teléfono": "Servers kept on this phone",
- "Toca uno para entrar sin escribir la contraseña.": "Tap one to go in without typing the password."
+ "Toca uno para entrar sin escribir la contraseña.": "Tap one to go in without typing the password.",
+ "Escanear el código de alta": "Scan the set-up code",
+ "Ese código no es un código de alta de A.R.M.O.R.": "That code is not an A.R.M.O.R. set-up code.",
+ "No se pudo comprobar el código de alta: ha caducado, ya se usó o el servidor no responde.": "The set-up code could not be checked: it ended, it was already used or the server does not answer.",
+ "Servidor añadido: %s. Escribe tu usuario y tu contraseña.": "Server added: %s. Type your user and password."
 }

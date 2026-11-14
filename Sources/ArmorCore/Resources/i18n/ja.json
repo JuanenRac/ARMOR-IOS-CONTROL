@@ -1206,5 +1206,9 @@
  "No se pudo leer tu ubicación.": "現在地を取得できませんでした。",
  "Se necesita el permiso de ubicación, también con la app cerrada, para avisarte al salir.": "外出時にお知らせするには、アプリを閉じていても使える位置情報の権限が必要です。",
  "Servidores guardados en este teléfono": "この電話に保存されたサーバー",
- "Toca uno para entrar sin escribir la contraseña.": "タップするとパスワードを入力せずに入れます。"
+ "Toca uno para entrar sin escribir la contraseña.": "タップするとパスワードを入力せずに入れます。",
+ "Escanear el código de alta": "セットアップコードを読み取る",
+ "Ese código no es un código de alta de A.R.M.O.R.": "このコードはA.R.M.O.R.のセットアップコードではありません。",
+ "No se pudo comprobar el código de alta: ha caducado, ya se usó o el servidor no responde.": "セットアップコードを確認できませんでした。期限切れ、使用済み、またはサーバーが応答していません。",
+ "Servidor añadido: %s. Escribe tu usuario y tu contraseña.": "サーバーを追加しました：%s。ユーザー名とパスワードを入力してください。"
 }

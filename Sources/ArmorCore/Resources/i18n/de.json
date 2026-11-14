@@ -1206,5 +1206,9 @@
  "No se pudo leer tu ubicación.": "Ihr Standort konnte nicht gelesen werden.",
  "Se necesita el permiso de ubicación, también con la app cerrada, para avisarte al salir.": "Die Standortberechtigung, auch bei geschlossener App, wird benötigt, um Sie beim Verlassen zu benachrichtigen.",
  "Servidores guardados en este teléfono": "Auf diesem Telefon gespeicherte Server",
- "Toca uno para entrar sin escribir la contraseña.": "Tippen Sie auf einen Server, um ohne Passworteingabe hineinzukommen."
+ "Toca uno para entrar sin escribir la contraseña.": "Tippen Sie auf einen Server, um ohne Passworteingabe hineinzukommen.",
+ "Escanear el código de alta": "Einrichtungscode scannen",
+ "Ese código no es un código de alta de A.R.M.O.R.": "Dieser Code ist kein Einrichtungscode von A.R.M.O.R.",
+ "No se pudo comprobar el código de alta: ha caducado, ya se usó o el servidor no responde.": "Der Einrichtungscode konnte nicht geprüft werden: Er ist abgelaufen, wurde schon verwendet oder der Server antwortet nicht.",
+ "Servidor añadido: %s. Escribe tu usuario y tu contraseña.": "Server hinzugefügt: %s. Geben Sie Benutzer und Passwort ein."
 }
