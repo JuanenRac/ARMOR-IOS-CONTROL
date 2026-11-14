@@ -1193,5 +1193,16 @@
  "Guardar la clave": "Enregistrer la clé",
  "Olvidar la clave": "Oublier la clé",
  "El asistente de voz no responde ahora mismo.": "L'assistant vocal ne répond pas pour l'instant.",
- "No se pudo enviar la orden al servidor.": "L'ordre n'a pas pu être envoyé au serveur."
+ "No se pudo enviar la orden al servidor.": "L'ordre n'a pas pu être envoyé au serveur.",
+ "¿Armas la alarma?": "Armer l'alarme ?",
+ "Has salido de casa y el sistema está desarmado.": "Vous avez quitté la maison et le système est désarmé.",
+ "Comprueba la alarma": "Vérifiez l'alarme",
+ "Has salido de casa y no he podido comprobar si la alarma está armada.": "Vous avez quitté la maison et je n'ai pas pu vérifier si l'alarme est armée.",
+ "Recordatorio al salir de casa": "Rappel en quittant la maison",
+ "Te avisa si sales de casa con la alarma desarmada. Todo se queda en el móvil: tu ubicación no se envía a ningún sitio.": "Il vous prévient si vous quittez la maison avec l'alarme désarmée. Tout reste sur le téléphone : votre position n'est envoyée nulle part.",
+ "Usar mi ubicación actual como casa": "Utiliser ma position actuelle comme maison",
+ "Cambiar la casa por mi ubicación actual": "Remplacer la maison par ma position actuelle",
+ "Casa guardada.": "Maison enregistrée.",
+ "No se pudo leer tu ubicación.": "Votre position n'a pas pu être lue.",
+ "Se necesita el permiso de ubicación, también con la app cerrada, para avisarte al salir.": "L'autorisation de localisation, aussi avec l'application fermée, est nécessaire pour vous prévenir à la sortie."
 }

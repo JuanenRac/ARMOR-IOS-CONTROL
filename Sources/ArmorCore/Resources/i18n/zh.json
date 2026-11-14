@@ -1193,5 +1193,16 @@
  "Guardar la clave": "保存密钥",
  "Olvidar la clave": "忘记密钥",
  "El asistente de voz no responde ahora mismo.": "语音助手目前无响应。",
- "No se pudo enviar la orden al servidor.": "无法将命令发送到服务器。"
+ "No se pudo enviar la orden al servidor.": "无法将命令发送到服务器。",
+ "¿Armas la alarma?": "要布防警报吗？",
+ "Has salido de casa y el sistema está desarmado.": "你已离开家，但系统处于撤防状态。",
+ "Comprueba la alarma": "请检查警报",
+ "Has salido de casa y no he podido comprobar si la alarma está armada.": "你已离开家，但我无法确认警报是否已布防。",
+ "Recordatorio al salir de casa": "离家提醒",
+ "Te avisa si sales de casa con la alarma desarmada. Todo se queda en el móvil: tu ubicación no se envía a ningún sitio.": "如果你在警报撤防的状态下离家，它会提醒你。一切都留在手机上：你的位置不会发送到任何地方。",
+ "Usar mi ubicación actual como casa": "将我当前的位置设为家",
+ "Cambiar la casa por mi ubicación actual": "把家改为我当前的位置",
+ "Casa guardada.": "已保存家的位置。",
+ "No se pudo leer tu ubicación.": "无法读取你的位置。",
+ "Se necesita el permiso de ubicación, también con la app cerrada, para avisarte al salir.": "需要位置权限（应用关闭时也要），才能在你离家时提醒你。"
 }

@@ -1193,5 +1193,16 @@
  "Guardar la clave": "キーを保存",
  "Olvidar la clave": "キーを削除",
  "El asistente de voz no responde ahora mismo.": "音声アシスタントは現在応答していません。",
- "No se pudo enviar la orden al servidor.": "命令をサーバーに送信できませんでした。"
+ "No se pudo enviar la orden al servidor.": "命令をサーバーに送信できませんでした。",
+ "¿Armas la alarma?": "警報を警戒状態にしますか？",
+ "Has salido de casa y el sistema está desarmado.": "家を出ましたが、システムは解除されたままです。",
+ "Comprueba la alarma": "警報を確認してください",
+ "Has salido de casa y no he podido comprobar si la alarma está armada.": "家を出ましたが、警報が警戒状態かどうか確認できませんでした。",
+ "Recordatorio al salir de casa": "外出時のリマインダー",
+ "Te avisa si sales de casa con la alarma desarmada. Todo se queda en el móvil: tu ubicación no se envía a ningún sitio.": "警報が解除されたまま家を出ると知らせます。すべてスマートフォン内で完結し、位置情報はどこにも送信されません。",
+ "Usar mi ubicación actual como casa": "現在地を自宅として使う",
+ "Cambiar la casa por mi ubicación actual": "自宅を現在地に変更する",
+ "Casa guardada.": "自宅を保存しました。",
+ "No se pudo leer tu ubicación.": "現在地を取得できませんでした。",
+ "Se necesita el permiso de ubicación, también con la app cerrada, para avisarte al salir.": "外出時にお知らせするには、アプリを閉じていても使える位置情報の権限が必要です。"
 }
