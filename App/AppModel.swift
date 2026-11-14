@@ -344,6 +344,10 @@ final class AppModel: ObservableObject {
 
     private func requestNotificationPermission() {
         UNUserNotificationCenter.current().delegate = NotificationPresenter.shared   // the notices also show while the app is open
+        // a notice that knows its alarm carries the action "Confirm": it acknowledges the alarm with the session the phone keeps, without opening the app
+        let confirm = UNNotificationAction(identifier: NoticeActions.acknowledgeActionId, title: tr("Confirmar"), options: [])
+        UNUserNotificationCenter.current().setNotificationCategories([UNNotificationCategory(identifier: NoticeActions.categoryId, actions: [confirm], intentIdentifiers: [], options: [])])
+        NotificationPresenter.shared.onAcknowledge = { [weak self] id in await self?.acknowledgeFromNotice(id) }
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { _, _ in }
     }
 
@@ -355,6 +359,7 @@ final class AppModel: ObservableObject {
         content.title = notice.title
         content.body = notice.text
         content.threadIdentifier = "armor-alarms"
+        if let category = NoticeActions.category(alarmId: notice.alarmId) { content.categoryIdentifier = category; content.userInfo = NoticeActions.userInfo(alarmId: notice.alarmId) }
         let critical = notice.severity == "critical"
         if decision == .silent {
             content.sound = nil
@@ -373,6 +378,17 @@ final class AppModel: ObservableObject {
         if AlarmSpeech.shouldSpeak(decision, enabled: speaksAlarms, voice: voice, severity: notice.severity) {
             AlarmSpeaker.shared.say("\(notice.title). \(notice.text)", voice: voice, language: language)
         }
+    }
+
+    /// The action "Confirm" of a notice: the alarm is acknowledged with the session the phone keeps; if the app was woken just for this, the server is reached and the kept session tried first.
+    /// Nothing is shown when it fails: the person can still open the app.
+    func acknowledgeFromNotice(_ alarmId: String) async {
+        guard NoticeActions.validAlarmId(alarmId) else { return }
+        if !controller.state.signedIn || activeOrigin == nil {
+            guard await connect(), let origin = activeOrigin, await controller.restore(origin: origin) else { return }
+        }
+        guard let origin = activeOrigin else { return }
+        try? await controller.api.acknowledgeAlarm(origin, id: alarmId)
     }
 
     func setNotices(_ next: NoticeSettings) { notices = next; NoticePreferences.save(prefs, next) }
