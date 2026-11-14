@@ -1228,5 +1228,7 @@
  "Sin datos": "Pas de données",
  "Nodos en línea": "Nœuds en ligne",
  "Nodos por tipo": "Nœuds par type",
- "Ver alarmas": "Voir les alarmes"
+ "Ver alarmas": "Voir les alarmes",
+ "Mostrar las alarmas en el reloj": "Afficher les alarmes sur la montre",
+ "A un Apple Watch emparejado, solo el título y el texto de cada alarma; desde el reloj se pueden confirmar. Apagado por defecto.": "Vers une Apple Watch appairée, seulement le titre et le texte de chaque alarme ; on peut les confirmer depuis la montre. Désactivé par défaut."
 }

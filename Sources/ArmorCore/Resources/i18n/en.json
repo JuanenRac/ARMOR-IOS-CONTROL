@@ -1228,5 +1228,7 @@
  "Sin datos": "No data",
  "Nodos en línea": "Nodes online",
  "Nodos por tipo": "Nodes by kind",
- "Ver alarmas": "View alarms"
+ "Ver alarmas": "View alarms",
+ "Mostrar las alarmas en el reloj": "Show the alarms on the watch",
+ "A un Apple Watch emparejado, solo el título y el texto de cada alarma; desde el reloj se pueden confirmar. Apagado por defecto.": "To a paired Apple Watch, only the title and the text of each alarm; they can be confirmed from the watch. Off by default."
 }
