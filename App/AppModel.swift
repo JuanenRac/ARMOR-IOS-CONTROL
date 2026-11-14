@@ -26,6 +26,10 @@ final class AppModel: ObservableObject {
     let spokenTurn: SpokenTurnModel
     private let monitor = NWPathMonitor()
     private var pollTask: Task<Void, Never>?
+    /// The channel of small live notices of the server, open while the app is polling, and when the last notice came (the asking slows down while they arrive).
+    private var liveChannel: LiveChannel?
+    private var lastNoticeAt: Date?
+    private var noticeRead = false
 
     // what the screens show
     @Published var screen: Screen = .starting
@@ -223,16 +227,41 @@ final class AppModel: ObservableObject {
 
     func startPolling() {
         pollTask?.cancel()
+        startLiveChannel()
         pollTask = Task { [weak self] in
             while !Task.isCancelled {
                 await self?.refresh()
-                let seconds: UInt64 = (self?.isAway ?? false) ? 10 : 5
-                try? await Task.sleep(nanoseconds: seconds * 1_000_000_000)
+                let base: Double = (self?.isAway ?? false) ? 10 : 5
+                let seconds = LiveNotices.pollDelay(base: base, lastNotice: self?.lastNoticeAt, now: Date())
+                try? await Task.sleep(nanoseconds: UInt64(seconds * 1_000_000_000))
             }
         }
     }
 
-    func stopPolling() { pollTask?.cancel(); pollTask = nil }
+    func stopPolling() { pollTask?.cancel(); pollTask = nil; liveChannel?.stop(); liveChannel = nil }
+
+    /// The small notices of the server (an alarm, a device, a solar device, a network node or a design changed): the app reads again at once, a burst being one read.
+    private func startLiveChannel() {
+        liveChannel?.stop(); liveChannel = nil
+        guard let origin = activeOrigin else { return }
+        let api = controller.api
+        let channel = LiveChannel(origin: origin, trust: trust, cookie: { api.sessionCookie(origin) }, onNotice: { [weak self] notice in
+            Task { @MainActor in self?.liveNotice(notice) }
+        })
+        liveChannel = channel
+        channel.start()
+    }
+
+    private func liveNotice(_ notice: LiveNotice) {
+        lastNoticeAt = Date()
+        guard notice.type != "design", !noticeRead else { return }
+        noticeRead = true
+        Task { [weak self] in
+            try? await Task.sleep(nanoseconds: 300_000_000)
+            self?.noticeRead = false
+            await self?.refresh()
+        }
+    }
 
     func refresh() async {
         let notices = await controller.refresh()
