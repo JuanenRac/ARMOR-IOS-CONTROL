@@ -50,7 +50,7 @@ public final class SessionVault {
     @discardableResult
     public func setTiedToUnlock(_ on: Bool) -> Bool {
         var moved = true
-        for key in [Self.cookieKey, Self.loginKey] {
+        for key in keptKeys() {
             switch secrets.read(key) {
             case .value(let text): secrets.write(key, text, tiedToUnlock: on)
             case .locked: moved = false
@@ -63,26 +63,66 @@ public final class SessionVault {
 
     /// False while the secrets cannot be read for a reason that will pass (tied to the unlocking, and the phone is locked).
     public func readable() -> Bool {
-        for key in [Self.cookieKey, Self.loginKey] { if secrets.read(key) == .locked { return false } }
+        for key in keptKeys() { if secrets.read(key) == .locked { return false } }
         return true
     }
 
     static let cookieKey = "session_cookie"
     static let loginKey = "remembered_login"
+    static let listKey = "session_origins"
+    private static func keyOf(_ origin: String) -> String { cookieKey + "|" + origin }
 
+    /// Every place that holds a secret: the session of the server in use, the remembered login, the list of servers and the session of each one.
+    private func keptKeys() -> [String] {
+        [Self.cookieKey, Self.loginKey, Self.listKey] + origins().map(Self.keyOf)
+    }
+
+    /// Remembers the session of `origin`. The session of the server in use stays where it always was, and each server also has a place of its own, so the sessions of several installations
+    /// (the house, a workshop, a client) are kept at once and the phone can go back to one without typing the password again.
     public func saveSession(_ cookie: SessionCookie, origin: String) {
-        secrets.write(Self.cookieKey, Self.join([origin, cookie.name, cookie.value]), tiedToUnlock: tiedToUnlock)
+        let text = Self.join([origin, cookie.name, cookie.value])
+        secrets.write(Self.cookieKey, text, tiedToUnlock: tiedToUnlock)
+        secrets.write(Self.keyOf(origin), text, tiedToUnlock: tiedToUnlock)
+        var known = origins()
+        if !known.contains(origin) { known.append(origin); secrets.write(Self.listKey, Self.join(known), tiedToUnlock: tiedToUnlock) }
+    }
+
+    /// The servers that have a session kept here, in the order they were first saved (empty while the phone is locked and the list cannot be read).
+    public func origins() -> [String] {
+        guard case .value(let text) = secrets.read(Self.listKey) else { return [] }
+        return Self.split(text).filter { !$0.isEmpty }
     }
 
     /// The kept session, for that origin only; nil when there is none, when it belongs to another server, or when the phone is locked (see `readable`).
     public func loadSession(origin: String) -> SessionCookie? {
-        guard case .value(let text) = secrets.read(Self.cookieKey) else { return nil }
-        let parts = Self.split(text)
-        guard parts.count == 3, parts[0] == origin else { return nil }
-        return SessionCookie(name: parts[1], value: parts[2])
+        for key in [Self.keyOf(origin), Self.cookieKey] {
+            guard case .value(let text) = secrets.read(key) else { continue }
+            let parts = Self.split(text)
+            if parts.count == 3, parts[0] == origin { return SessionCookie(name: parts[1], value: parts[2]) }
+        }
+        return nil
     }
 
-    public func dropSession() { secrets.remove(Self.cookieKey) }
+    /// Forgets the session kept for one server (the others stay).
+    public func forget(origin: String) {
+        secrets.remove(Self.keyOf(origin))
+        let left = origins().filter { $0 != origin }
+        if left.isEmpty { secrets.remove(Self.listKey) } else { secrets.write(Self.listKey, Self.join(left), tiedToUnlock: tiedToUnlock) }
+        if case .value(let text) = secrets.read(Self.cookieKey), Self.split(text).first == origin { secrets.remove(Self.cookieKey) }
+    }
+
+    /// Signing out: the session of the server in use is forgotten (the other servers keep theirs).
+    public func dropSession() {
+        if case .value(let text) = secrets.read(Self.cookieKey), let origin = Self.split(text).first { forget(origin: origin) }
+        secrets.remove(Self.cookieKey)
+    }
+
+    /// Forgets every session kept, of every server.
+    public func dropAllSessions() {
+        for origin in origins() { secrets.remove(Self.keyOf(origin)) }
+        secrets.remove(Self.listKey)
+        secrets.remove(Self.cookieKey)
+    }
 
     public func rememberLogin(origin: String, username: String, password: String) {
         secrets.write(Self.loginKey, Self.join([origin, username, password]), tiedToUnlock: tiedToUnlock)
@@ -98,7 +138,7 @@ public final class SessionVault {
     public func forgetLogin() { secrets.remove(Self.loginKey) }
 
     /// The way out of a locked app: forgets the session and the remembered login. The server and its alarms are not touched.
-    public func forgetAll() { dropSession(); forgetLogin() }
+    public func forgetAll() { dropAllSessions(); forgetLogin() }
 
     // the three pieces are kept as one text with a separator that cannot be in any of them (a unit separator)
     private static let separator = "\u{1F}"
