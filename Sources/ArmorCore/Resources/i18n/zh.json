@@ -1215,5 +1215,10 @@
  "Envía solo la palabra en casa o fuera cuando el móvil entra o sale del círculo de casa. Tu ubicación no se envía a ningún sitio.": "手机进入或离开家周围的圆圈时，只发送“在家”或“外出”这个词。你的位置不会发送到任何地方。",
  "Foto en los avisos de cámara": "摄像头通知中附带照片",
  "El móvil le pide la foto de la cámara a tu propio servidor cuando llega el aviso. No pasa por los servidores de Google.": "通知到达时，手机会向你自己的服务器索取摄像头的照片，不会经过谷歌的服务器。",
- "Abrir cámara": "打开摄像头"
+ "Abrir cámara": "打开摄像头",
+ "Armada": "已布防",
+ "Desarmada": "已撤防",
+ "Sin datos": "无数据",
+ "Nodos en línea": "在线节点",
+ "Nodos por tipo": "按类型统计的节点"
 }
