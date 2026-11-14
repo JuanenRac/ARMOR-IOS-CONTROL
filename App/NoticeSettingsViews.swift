@@ -148,6 +148,10 @@ struct VoiceSettingsView: View {
                     Toggle(model.tr("Decir la alarma en voz alta"), isOn: Binding(get: { model.speaksAlarms }, set: { model.setSpeaksAlarms($0) }))
                     Text(model.tr("Con la voz del móvil, para las críticas y las altas.")).font(.caption).foregroundColor(Theme.muted)
                 }
+                VStack(alignment: .leading, spacing: 2) {
+                    Toggle(model.tr("Mostrar las alarmas en el reloj"), isOn: Binding(get: { model.watchRelayOn }, set: { model.setWatchRelay($0) }))
+                    Text(model.tr("A un Apple Watch emparejado, solo el título y el texto de cada alarma; desde el reloj se pueden confirmar. Apagado por defecto.")).font(.caption).foregroundColor(Theme.muted)
+                }
             }
             Section {
                 Picker(model.tr("Voz"), selection: Binding(get: { voice.gender }, set: { var next = voice; next.gender = $0; model.setVoice(next) })) {

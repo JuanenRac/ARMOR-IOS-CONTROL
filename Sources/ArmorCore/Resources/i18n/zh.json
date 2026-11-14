@@ -1228,5 +1228,7 @@
  "Sin datos": "无数据",
  "Nodos en línea": "在线节点",
  "Nodos por tipo": "按类型统计的节点",
- "Ver alarmas": "查看报警"
+ "Ver alarmas": "查看报警",
+ "Mostrar las alarmas en el reloj": "在手表上显示警报",
+ "A un Apple Watch emparejado, solo el título y el texto de cada alarma; desde el reloj se pueden confirmar. Apagado por defecto.": "仅向已配对的 Apple Watch 发送每个警报的标题和正文；可在手表上确认。默认关闭。"
 }

@@ -1228,5 +1228,7 @@
  "Sin datos": "Nessun dato",
  "Nodos en línea": "Nodi online",
  "Nodos por tipo": "Nodi per tipo",
- "Ver alarmas": "Vedi gli allarmi"
+ "Ver alarmas": "Vedi gli allarmi",
+ "Mostrar las alarmas en el reloj": "Mostra gli allarmi sull'orologio",
+ "A un Apple Watch emparejado, solo el título y el texto de cada alarma; desde el reloj se pueden confirmar. Apagado por defecto.": "A un Apple Watch associato, solo il titolo e il testo di ogni allarme; si possono confermare dall'orologio. Spento per impostazione predefinita."
 }

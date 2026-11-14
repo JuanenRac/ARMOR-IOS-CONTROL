@@ -1228,5 +1228,7 @@
  "Sin datos": "データなし",
  "Nodos en línea": "オンラインのノード",
  "Nodos por tipo": "種類別のノード",
- "Ver alarmas": "アラームを見る"
+ "Ver alarmas": "アラームを見る",
+ "Mostrar las alarmas en el reloj": "アラームをウォッチに表示",
+ "A un Apple Watch emparejado, solo el título y el texto de cada alarma; desde el reloj se pueden confirmar. Apagado por defecto.": "ペアリング済みの Apple Watch に、各アラームのタイトルと本文のみを送ります。ウォッチから確認できます。既定ではオフです。"
 }

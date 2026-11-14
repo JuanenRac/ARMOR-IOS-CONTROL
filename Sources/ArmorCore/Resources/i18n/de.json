@@ -1228,5 +1228,7 @@
  "Sin datos": "Keine Daten",
  "Nodos en línea": "Knoten online",
  "Nodos por tipo": "Knoten nach Art",
- "Ver alarmas": "Alarme ansehen"
+ "Ver alarmas": "Alarme ansehen",
+ "Mostrar las alarmas en el reloj": "Alarme auf der Uhr anzeigen",
+ "A un Apple Watch emparejado, solo el título y el texto de cada alarma; desde el reloj se pueden confirmar. Apagado por defecto.": "An eine gekoppelte Apple Watch, nur Titel und Text jedes Alarms; sie lassen sich an der Uhr bestätigen. Standardmäßig aus."
 }

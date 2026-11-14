@@ -60,6 +60,8 @@ final class AppModel: ObservableObject {
     @Published var sounds = SoundSettings()
     @Published var voice = VoiceSettings()
     @Published var speaksAlarms = false
+    /// The alarms on an Apple Watch (off by default): only the title and the text of a notice the person would see go to a paired watch.
+    @Published var watchRelayOn = false
 
     /// A screen asks the person to prove who they are again; the model waits for the answer.
     final class ElevationRequest: Identifiable {
@@ -99,6 +101,7 @@ final class AppModel: ObservableObject {
         self.sounds = SoundPreferences.load(prefs)
         self.voice = VoicePreferences.load(prefs)
         self.speaksAlarms = VoicePreferences.speaks(prefs)
+        self.watchRelayOn = WatchRelay.enabled(prefs)
         self.tiedToUnlock = vault.tiedToUnlock
         monitor.pathUpdateHandler = { [weak self] path in
             let place: NetworkPlace = path.usesInterfaceType(.wifi) || path.usesInterfaceType(.wiredEthernet) ? .home : (path.usesInterfaceType(.cellular) ? .away : .unknown)
@@ -399,12 +402,17 @@ final class AppModel: ObservableObject {
         ])
         NotificationPresenter.shared.onAcknowledge = { [weak self] id in await self?.acknowledgeFromNotice(id) }
         NotificationPresenter.shared.onOpenCamera = { [weak self] id in await self?.openCameraFromNotice(id) }
+        WatchConnectivityRelay.shared.isEnabled = watchRelayOn
+        WatchConnectivityRelay.shared.acknowledge = { [weak self] alarm in await self?.acknowledgeForWatch(alarm) ?? false }
+        WatchConnectivityRelay.shared.start()
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { _, _ in }
     }
 
     private func post(_ notice: AlarmNotice) {
         // What the person chose comes first: some notices are not wanted at all, and some are wanted without sound.
         let decision = notices.decide(notice)
+        // the watch, only while the person turned it on and not for a notice they chose to hide
+        for message in WatchRelay.messages(for: notice, enabled: watchRelayOn && decision != .hide) { WatchConnectivityRelay.shared.send(path: WatchRelay.pathToWatch, payload: message) }
         if decision == .hide { return }
         let content = UNMutableNotificationContent()
         content.title = notice.title
@@ -455,6 +463,23 @@ final class AppModel: ObservableObject {
         }
         guard let origin = activeOrigin else { return }
         try? await controller.api.acknowledgeAlarm(origin, id: alarmId)
+    }
+
+    /// The confirmation that came from the watch: the same as the action of a notice, but it says whether the server took it.
+    func acknowledgeForWatch(_ alarmId: String) async -> Bool {
+        guard NoticeActions.validAlarmId(alarmId) else { return false }
+        if !controller.state.signedIn || activeOrigin == nil {
+            guard await connect(), let origin = activeOrigin, await controller.restore(origin: origin) else { return false }
+        }
+        guard let origin = activeOrigin else { return false }
+        return (try? await controller.api.acknowledgeAlarm(origin, id: alarmId)) != nil
+    }
+
+    func setWatchRelay(_ on: Bool) {
+        watchRelayOn = on
+        WatchRelay.setEnabled(prefs, on)
+        WatchConnectivityRelay.shared.isEnabled = on
+        WatchConnectivityRelay.shared.send(path: WatchRelay.pathToWatch, payload: WatchRelay.relayMessage(on))   // the watch forgets what it showed when the option goes off
     }
 
     func setNotices(_ next: NoticeSettings) { notices = next; NoticePreferences.save(prefs, next) }

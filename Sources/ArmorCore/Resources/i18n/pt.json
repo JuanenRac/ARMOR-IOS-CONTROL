@@ -1228,5 +1228,7 @@
  "Sin datos": "Sem dados",
  "Nodos en línea": "Nós online",
  "Nodos por tipo": "Nós por tipo",
- "Ver alarmas": "Ver alarmes"
+ "Ver alarmas": "Ver alarmes",
+ "Mostrar las alarmas en el reloj": "Mostrar os alarmes no relógio",
+ "A un Apple Watch emparejado, solo el título y el texto de cada alarma; desde el reloj se pueden confirmar. Apagado por defecto.": "Para um Apple Watch emparelhado, só o título e o texto de cada alarme; podem ser confirmados no relógio. Desligado por defeito."
 }
