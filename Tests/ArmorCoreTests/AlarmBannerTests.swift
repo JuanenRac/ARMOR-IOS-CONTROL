@@ -72,7 +72,8 @@ final class AlarmBannerTests: XCTestCase {
             let translator = Translator(language: language)
             for phrase in ["Ver alarmas", "Cerrar", "Confirmar", "ALARMA %s", "%d alarmas sin confirmar"] {
                 XCTAssertFalse(translator.tr(phrase).isEmpty, "\(language) \(phrase)")
-                if language != "es" { XCTAssertNotEqual(translator.tr(phrase), phrase, "\(language) \(phrase) is not translated") }
+                // "Confirmar" is the same word in Portuguese and in Spanish
+                if language != "es" && !(language == "pt" && phrase == "Confirmar") { XCTAssertNotEqual(translator.tr(phrase), phrase, "\(language) \(phrase) is not translated") }
             }
         }
     }
