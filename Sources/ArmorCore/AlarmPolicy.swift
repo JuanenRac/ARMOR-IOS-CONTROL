@@ -9,9 +9,11 @@ public struct AlarmNotice: Equatable, Sendable {
     public let text: String
     public let severity: String
     public let kind: String
+    /// The alarm the notice is about, when the server said which: the notice then carries the action "Confirm".
+    public let alarmId: String?
 
-    public init(id: Int, title: String, text: String, severity: String, kind: String = NoticeKinds.system) {
-        self.id = id; self.title = title; self.text = text; self.severity = severity; self.kind = kind
+    public init(id: Int, title: String, text: String, severity: String, kind: String = NoticeKinds.system, alarmId: String? = nil) {
+        self.id = id; self.title = title; self.text = text; self.severity = severity; self.kind = kind; self.alarmId = alarmId
     }
 }
 
@@ -37,7 +39,7 @@ public enum AlarmPolicy {
             case event.type == "alarm" && event.to == "raised" && sources.contains(event.sourceType ?? ""):
                 let severity = event.severity ?? "warning"
                 return AlarmNotice(id: event.id, title: t.trf("ALARMA %s", AlarmText.severityLabel(severity, t)),
-                                   text: "\(AlarmText.text(event.code ?? "", t)) · \(event.subject)", severity: severity, kind: NoticeKinds.ofAlarm(event.sourceType))
+                                   text: "\(AlarmText.text(event.code ?? "", t)) · \(event.subject)", severity: severity, kind: NoticeKinds.ofAlarm(event.sourceType), alarmId: event.alarmId)
             default: return nil
             }
         }

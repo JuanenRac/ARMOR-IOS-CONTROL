@@ -194,6 +194,8 @@ public struct ArmorEvent: Equatable, Sendable, Identifiable {
     public var code: String? = nil
     public var sourceType: String? = nil
     public var field: String? = nil
+    /// The alarm an event of kind alarm is about, when the server said which (the action "Confirm" of its notice acknowledges it).
+    public var alarmId: String? = nil
 
     static let known: Set<String> = ["alert", "node", "camera", "mode", "device", "alarm"]
 
@@ -221,7 +223,7 @@ public struct ArmorEvent: Equatable, Sendable, Identifiable {
         switch type {
         case "alarm":
             return ArmorEvent(id: id, at: json.str("at"), type: type, subject: subject, from: nil, to: text("state"), targets: nil, mode: nil,
-                              severity: text("severity"), code: text("code"), sourceType: text("source_type"))
+                              severity: text("severity"), code: text("code"), sourceType: text("source_type"), alarmId: text("alarm_id"))
         case "device":
             return ArmorEvent(id: id, at: json.str("at"), type: type, subject: subject, from: text("from"), to: text("to"), targets: nil, mode: nil, code: text("kind"), field: text("field"))
         default:
