@@ -27,6 +27,8 @@ public protocol ArmorApi: Sendable {
     /// The hidden panic gesture: `POST /api/v1/alarm/panic-gesture` raises the silent duress alarm of the signed-in person. The server answers the same `{ok:true}` whether an alarm was raised or the quiet
     /// time had not ended, and 404 while the administrator has the option off (the caller then forgets the gesture). Nothing of it is kept in the diagnostic log.
     func panicGesture(_ origin: String) async throws
+    /// Tells the server only the word "home" or "away" for the signed-in person (PUT /api/v1/presence/me, behind the option presence.by_user). The position of the phone is never sent.
+    func setPresence(_ origin: String, state: String) async throws
     func alarmPanels(_ origin: String) async throws -> [AlarmPanelView]
     func armProfiles(_ origin: String) async throws -> [ArmProfileView]
     func alarmCommandsEnabled(_ origin: String) async throws -> Bool
@@ -144,6 +146,7 @@ public protocol ArmorApi: Sendable {
 }
 
 extension ArmorApi {
+    func setPresence(_ origin: String, state: String) async throws { throw ArmorApiError(message: "not supported", status: nil) }
     func voiceTurn(_ origin: String, pcm: Data, language: String, voiceToken: String) async throws -> JSON { throw ArmorApiError(message: "not supported", status: nil) }
     func media(_ origin: String) async throws -> MediaCatalogueView { throw ArmorApiError(message: "not supported", status: nil) }
     func deleteMedia(_ origin: String, item: MediaItemView) async throws { throw ArmorApiError(message: "not supported", status: nil) }

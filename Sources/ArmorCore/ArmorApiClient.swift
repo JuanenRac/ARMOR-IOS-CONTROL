@@ -206,6 +206,11 @@ public final class ArmorApiClient: ArmorApi, @unchecked Sendable {
     public func acknowledgeAlarm(_ origin: String, id: String) async throws { _ = try await send(origin, "/api/v1/alarms/\(Self.part(id))/acknowledge", "POST", nil, [200]) }
     public func acknowledgeAllAlarms(_ origin: String) async throws { _ = try await send(origin, "/api/v1/alarms/acknowledge", "POST", nil, [200]) }
     public func panicGesture(_ origin: String) async throws { _ = try await send(origin, "/api/v1/alarm/panic-gesture", "POST", [:], [200]) }
+    /// Tells the server only the word for the signed-in person; any other word is refused here and never sent.
+    public func setPresence(_ origin: String, state: String) async throws {
+        guard PresenceShare.valid(state) else { throw ArmorApiError(message: "The presence word is home or away", status: nil) }
+        _ = try await send(origin, "/api/v1/presence/me", "PUT", ["state": state], [200])
+    }
 
     public func sendAlarmCommand(_ origin: String, node: String, mode: String?, force: Bool, pin: String?, profile: String?) async throws {
         var body: JSON = ["node": node, "action": mode == nil ? "disarm" : "arm"]

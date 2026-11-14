@@ -482,6 +482,26 @@
    "zh": "网络上的设备打开了一个端口",
    "pt": "Um dispositivo da rede abriu uma porta"
   },
+  "network_risky_port": {
+   "en": "A device on the network has a risky port open",
+   "es": "Un dispositivo de la red tiene abierto un puerto de riesgo",
+   "de": "Ein Gerät im Netzwerk hat einen riskanten Port offen",
+   "fr": "Un appareil du réseau a un port à risque ouvert",
+   "it": "Un dispositivo della rete ha una porta a rischio aperta",
+   "ja": "ネットワーク上の機器でリスクのあるポートが開いています",
+   "zh": "网络上的设备开放了有风险的端口",
+   "pt": "Um dispositivo da rede tem uma porta de risco aberta"
+  },
+  "network_rogue_dhcp": {
+   "en": "Another DHCP server answers on the network",
+   "es": "Otro servidor DHCP responde en la red",
+   "de": "Ein weiterer DHCP-Server antwortet im Netzwerk",
+   "fr": "Un autre serveur DHCP répond sur le réseau",
+   "it": "Un altro server DHCP risponde sulla rete",
+   "ja": "ネットワーク上で別の DHCP サーバーが応答しています",
+   "zh": "网络上有另一台 DHCP 服务器在响应",
+   "pt": "Outro servidor DHCP responde na rede"
+  },
   "network_offline": {
    "en": "A network node stopped reporting",
    "es": "Un nodo de red ha dejado de informar",
