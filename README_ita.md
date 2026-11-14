@@ -22,14 +22,14 @@
   <img src="https://img.shields.io/badge/Language-Swift-f05138.svg" alt="Linguaggio">
   <img src="https://img.shields.io/badge/UI-SwiftUI-0a84ff.svg" alt="UI">
   <img src="https://img.shields.io/badge/Languages-8-00E5FF.svg" alt="Lingue">
-  <img src="https://img.shields.io/badge/Tests-384%20passing-2ea44f.svg" alt="Test">
+  <img src="https://img.shields.io/badge/Tests-483%20passing-2ea44f.svg" alt="Test">
   <img src="https://img.shields.io/badge/Version-0.0.5-0f6cbd.svg" alt="Versione">
   <img src="https://img.shields.io/badge/Maturity-scaffolding-FFB020.svg" alt="Maturità">
 </p>
 
 ---
 
-**Controllo di onestà - cosa funziona oggi:** le regole dell'app (collegamento al server, lettura delle risposte, scelta dell'indirizzo, blocco del telefono, cassaforte della sessione, fiducia nel certificato, politica degli allarmi, casi d'uso, taglio dell'MJPEG) sono il pacchetto Swift `ArmorCore`, coperto da 384 test unitari che girano con `swift test` su macOS o Linux, e `tools/ios_lint.py` controlla la struttura, le otto tabelle delle lingue e il contratto senza Mac. Ciò che **non** è ancora provato: le schermate SwiftUI e le parti che richiedono un iPhone (Face ID, portachiavi, regole del certificato, telecamera dal vivo, push con Firebase) non sono state compilate in Xcode né eseguite su un dispositivo.
+**Controllo di onestà - cosa funziona oggi:** le regole dell'app (collegamento al server, lettura delle risposte, scelta dell'indirizzo, blocco del telefono, cassaforte della sessione, fiducia nel certificato, politica degli allarmi, casi d'uso, taglio dell'MJPEG) sono il pacchetto Swift `ArmorCore`, coperto da 483 test unitari che girano con `swift test` su macOS o Linux, e `tools/ios_lint.py` controlla la struttura, le otto tabelle delle lingue e il contratto senza Mac. Ciò che **non** è ancora provato: le schermate SwiftUI e le parti che richiedono un iPhone (Face ID, portachiavi, regole del certificato, telecamera dal vivo, push con Firebase) non sono state compilate in Xcode né eseguite su un dispositivo.
 
 ---
 
@@ -41,8 +41,8 @@
 | Maturità | Impalcatura |
 | Ruolo | Client operatore per iPhone di ARMOR-SERVER (famiglia: Clients, padre: ARMOR-SERVER) |
 | Tecnologia | Swift 5.9+ / SwiftUI, iOS 16+ |
-| Test | 384 (`swift test`) |
-| Lingue | 8 (1195 frasi per lingua, verificate da `ios_lint.py`) |
+| Test | 483 (`swift test`) |
+| Lingue | 8 (1229 frasi per lingua, verificate da `ios_lint.py`) |
 | Gira su | Un iPhone con iOS 16+; i test girano su macOS o Linux |
 | Su hardware reale | Non ancora eseguito su un iPhone; le regole sono testate su Linux |
 | Licenza | GPL-3.0-or-later |
@@ -58,7 +58,7 @@ Ogni riga è una parte di questo repository e il semaforo dice a che punto è og
 | Area | Stato | Cosa significa qui |
 |---|---|---|
 | Software | 🟡 | Le regole dell'app sono un pacchetto Swift (`ArmorCore`) e l'app SwiftUI è compilata per il simulatore dalla CI su macOS; non ha girato su un iPhone. |
-| Test | 🟡 | Superano 384 test unitari con `swift test` su macOS o Linux, e `tools/ios_lint.py` controlla la struttura, le tabelle delle otto lingue e il contratto senza un Mac; nessun test gira su un dispositivo. |
+| Test | 🟡 | Superano 483 test unitari con `swift test` su macOS o Linux, e `tools/ios_lint.py` controlla la struttura, le tabelle delle otto lingue e il contratto senza un Mac; nessun test gira su un dispositivo. |
 | Interfaccia | 🟠 | Le schermate SwiftUI sono compilate per il simulatore dalla CI su macOS ma non sono state eseguite su un iPhone. |
 | Hardware | 🔴 | Non ha girato su un iPhone: le regole sono provate solo su Linux. |
 | Sicurezza | 🟠 | Il blocco del telefono, il deposito della sessione e la fiducia nel certificato sono regole provate su Linux; Face ID, il portachiavi e le regole del certificato non sono stati eseguiti su un dispositivo. |
@@ -82,10 +82,14 @@ Ogni riga è una parte di questo repository e il semaforo dice a che punto è og
 * **Controllo dei nodi (amministratori):** Altro > Controllo dei nodi riavvia, mette in pausa, riprende, mette in attesa, identifica, chiede una diagnosi o attiva e termina la manutenzione di un nodo o di tutti; gli ordini delicati chiedono di riscrivere il nome del nodo, e la riga di ogni nodo mostra fin dove è arrivato. Nulla cancella impostazioni o credenziali né spegne un nodo.
 * **Il configuratore di un nodo, nell'app:** Altro > Configura i nodi apre la pagina propria del nodo (dal suo indirizzo nella rete di casa, o tramite il server da qualsiasi posto), limitata a quel nodo. Salvare un file dalla pagina (l'esportazione delle impostazioni) non è ancora portato.
 * **I dispositivi che si collegano e la mappa del radar:** *Allarmi > Connessioni* elenca i dispositivi e le app visti dal server; *Altro > Radar* disegna il sito come l'ha progettato Studio, in 2D, con le persone seguite dai radar (la vista 3D dell'app Android non è ancora portata).
+* **Presenza e una foto nell'avviso (entrambe spente finché non le scegli):** un interruttore lascia che il telefono dica al server solo la parola *in casa* o *fuori* quando attraversa il cerchio del promemoria all'uscita (il luogo non lascia mai il telefono; il server deve avere attiva l'opzione «Presenza per persona»); un altro aggiunge all'avviso di una telecamera che non risponde più la sua foto, richiesta al tuo server e mai tramite un servizio push.
 * **Aggiornare la macchina dal telefono (amministratori):** Altro > Aggiorna la macchina mostra se il server e l'assistente lo consentono (disattivato per impostazione predefinita: con l'interruttore spento non offre nulla), elenca i programmi aggiornabili, mostra un'anteprima con la versione installata e quella pubblicata e un piano monouso con conto alla rovescia, e lo applica dopo aver digitato il nome del progetto, con la tua prova d'identità e il codice monouso dell'amministratore; i passaggi e il registro del lavoro si seguono dal vivo e ogni rifiuto del server è detto in parole semplici.
 * **Modalità di inserimento del server (Fuori casa, In casa, Notte):** quando il server ha attive le modalità di inserimento (Studio, Configurazione > Sicurezza), il pulsante di inserimento della schermata di stato apre un selettore per inserire in una modalità, passare dall'una all'altra o disinserire; una modalità senza nulla di assegnato chiede conferma, un passaggio a una modalità che protegge meno chiede il PIN come disinserire, e lo stato mostra la modalità in vigore. L'inserimento da disinserito esegue prima il controllo prima dell'inserimento, come un inserimento semplice. Con le modalità spente l'app inserisce e disinserisce come prima. Segue l'app Android; il codice e i suoi test sono scritti e non sono stati compilati né provati su un iPhone.
 * **Solare, batterie e rete elettrica, per amministratori e operatori:** Altro > Solare mostra i totali (sole, consumo, stato di carica, rete) e ogni inverter e batteria con i suoi valori, celle, contatori e registro eventi; Altro > Elettrica mostra l'ingresso di rete, i circuiti e i bus in continua con i commutatori; Altro > Manutenzione delle batterie (solo amministratori) offre le operazioni semplici su una batteria Pylontech in due passi (il nodo controlla, la schermata mostra esattamente cosa verrà fatto e si scrive solo dopo aver digitato di nuovo il numero di serie). Le schermate chiedono di nuovo ogni pochi secondi, con un ritmo tenuto in un file di configurazione. Segue l'app Android; il codice e i suoi test sono scritti e non sono stati compilati né provati su un iPhone.
 * **Meteo, rete, ricerca di nodi, servizi e sicurezza:** Altro > Meteo mostra il tempo di un luogo scelto (adesso, la pioggia dell'ora successiva, 48 ore, dieci giorni, aria, polline, sole e luna) con un radar di pioggia e nuvole in diretta; solo le coordinate del luogo lasciano il telefono e il server non interviene. Altro > Rete mostra internet, i dispositivi, le interruzioni e ciò che è cambiato; le schermate Solare ed Elettrica hanno un pannello che cerca nodi sulla rete. Altro > Servizi elenca i programmi e i nodi di campo, attivi o no. Altro > Sicurezza gestisce il secondo fattore dell'account, le sessioni aperte e come il server vede il telefono (per gli amministratori anche la VPN di casa e l'indirizzo dinamico; la chiave privata di un dispositivo si mostra una volta, non viene mai conservata e copiarla è disattivato salvo che le impostazioni lo permettano). Un allarme solare, di batteria o elettrico apre la sua schermata dal dettaglio. Segue l'app Android; il codice e i suoi test sono scritti e non sono stati compilati né provati su un iPhone.
+* **Tutto il sistema nella schermata di stato e una finestra per gli allarmi:** la schermata di stato conta i nodi di ogni tipo (radar, solare, elettrico, centrale d'allarme, pannello a muro), non solo i nodi radar del flusso in diretta, e un tocco apre il loro stato di salute; finché un allarme aspetta una persona, un banner pulsa su tutte le schermate tranne gli allarmi (rosso e rapido se critico, ambra per gli altri, fermo se il telefono è impostato per meno movimento), dice qual è l'allarme peggiore e quanti aspettano, e permette di aprire gli allarmi, confermare dal banner o chiuderlo fino all'arrivo di un altro allarme. Il telefono comunica inoltre al server la lingua dell'app quando si registra per il push, così l'avviso è scritto in quella lingua. Segue l'app Android; il codice e i suoi test sono scritti e non sono stati provati su un iPhone.
+* **Aprire la telecamera da un avviso, e un widget in arrivo:** un avviso su una telecamera (una che ha smesso di rispondere, o un allarme sollevato da una telecamera) porta l'azione «Apri telecamera»; toccandola l'app passa alla sezione Telecamere con quella telecamera a schermo intero. Ciò che dice un widget della schermata Home (inserito, disinserito o nessun dato) è pronto nel nucleo nelle otto lingue, e il suo sorgente aspetta in `docs/widget` che un Mac lo costruisca come target; come il tile dell'app Android, mostra soltanto e apre l'app, non inserisce né disinserisce mai. Segue l'app Android; il codice e i suoi test sono scritti e non sono stati provati su un iPhone.
+* **Un telefono fidato, spento finché non lo accendi:** quando l'amministratore lo consente in Studio, un interruttore in Altro > Blocco con il telefono fa creare al telefono una coppia di chiavi nel Secure Enclave (non si può esportare e funziona solo a telefono sbloccato), registrare la metà pubblica sul server e rinnovare la sessione firmando una sfida monouso invece di chiedere di nuovo la password e il codice. Un telefono che il server non conosce più dimentica il suo identificativo, un telefono bloccato riprova più tardi, e spegnere l'interruttore o uscire fa dimenticare il telefono al server. Segue l'app Android; le regole sono provate con un server finto e una chiave finta, e il Secure Enclave in sé non è stato provato su un iPhone.
 
 ## 🧩 Ruolo in A.R.M.O.R.
 
@@ -119,7 +123,7 @@ I testi dei permessi (Face ID, rete locale) esistono in tutte e otto le lingue. 
 
 ## 🔌 Interfacce
 
-È un client: chiama 64 percorsi di ARMOR-SERVER (`tools/ios_lint.py` li conta e verifica che li chiami anche il client Android) e taglia il flusso MJPEG delle telecamere con un parser proprio (`MjpegParser.swift`).
+È un client: chiama 70 percorsi di ARMOR-SERVER (`tools/ios_lint.py` li conta e verifica che li chiami anche il client Android) e taglia il flusso MJPEG delle telecamere con un parser proprio (`MjpegParser.swift`).
 
 | Parte | Cosa imposta |
 |---|---|
@@ -143,7 +147,7 @@ Nell'app: i due indirizzi, *Ricordami*, il blocco del telefono e la lingua (le o
 **Requisiti:** un Mac con Xcode 15+ e iOS 16+ per compilare l'app; Swift 5.9+ (macOS o Linux) per i test; Python 3.11 per le verifiche.
 
 ```sh
-swift test                  # 384 tests of ArmorCore (macOS or Linux)
+swift test                  # 483 tests of ArmorCore (macOS or Linux)
 python tools/ios_lint.py    # structure, eight languages, contract (any system)
 xcodegen generate           # then open ARMOR-IOS-CONTROL.xcodeproj in Xcode (on a Mac)
 ```
@@ -161,20 +165,21 @@ python -I tools/armor_ci_validate.py
 | File di test | Test | Cosa copre |
 |---|---|---|
 | `ControllerTests.swift` | 15 | I casi d'uso del controller |
-| `ClientTests.swift` | 14 | Il collegamento al server e la sua interpretazione |
+| `ClientTests.swift` | 15 | Il collegamento al server e la sua interpretazione |
 | `LockTests.swift` | 12 | Il blocco del telefono |
 | `ModelsTests.swift` | 12 | I modelli letti dal server |
 | `ReachTests.swift` | 11 | La scelta tra i due indirizzi |
 | `SecurityTests.swift` | 8 | Il deposito della sessione e la fiducia nel certificato |
 | `EndpointTests.swift`, `MjpegTests.swift`, `TranslatorTests.swift` | 7 + 10 + 7 | La lettura degli indirizzi, il taglio MJPEG e il traduttore |
 | `ResponseLimitTests.swift` | 2 | La risposta più lunga che l'app accetta da un server |
+| `OpenCameraTests.swift`, `TrustedPhoneTests.swift`, `AlarmBannerTests.swift` | 8 + 18 + 10 | L'azione telecamera di un avviso, il telefono fidato (le sue regole, con un server finto e una chiave finta) e la finestra d'allarme |
 | `ElevationFormTests.swift`, `QrImageTests.swift` | 3 + 5 | Il foglio della nuova prova d'identità e il QR code di abbinamento disegnato e riletto come immagine (i 5 del QR richiedono un Mac) |
 | `NodeBleTests.swift`, `NodeHealthTests.swift` | 17 + 5 | Il canale Bluetooth di un nodo (trame, richieste, codice di configurazione, impostazioni, SHA-256) e la salute dei nodi |
 | `NodeControlTests.swift`, `ConnectionsTests.swift`, `NodePanelTests.swift`, `SiteDesignTests.swift` | 8 + 2 + 6 + 11 | Il controllo dei nodi, le connessioni, l'indirizzo della pagina di un nodo e la mappa del radar |
 | `PolicyTests.swift`, `AlarmCodesTests.swift`, `AlarmFactsTests.swift` | 6 + 4 + 7 | La politica degli allarmi e i codici di allarme |
 | `SolarTests.swift`, `BatteryTests.swift`, `ElectricalTests.swift`, `ScreenPollingTests.swift`, `EquipmentClientTests.swift`, `AlarmRouteTests.swift`, `NetworkTests.swift`, `WeatherTests.swift`, `ServicesSecurityTests.swift` | 14 + 10 + 5 + 3 + 10 + 2 + 9 + 11 + 8 | Solare, batterie, rete elettrica e chiamate del client |
 
-I 384 test usano dati di un server reale. `tools/ios_lint.py` passa senza Mac: 90 file Swift, 1195 frasi in 8 lingue, 64 percorsi del server. Nessun test gira su un dispositivo.
+I 483 test usano dati di un server reale. `tools/ios_lint.py` passa senza Mac: 108 file Swift, 1229 frasi in 8 lingue, 70 percorsi del server. Nessun test gira su un dispositivo.
 
 ## 🏗️ Compilazione e rilascio
 
@@ -201,7 +206,7 @@ Il progetto Xcode si genera da `project.yml` con XcodeGen: scegli un team di fir
 ARMOR-IOS-CONTROL/
 ├── Sources/ArmorCore/                   le regole dell'app: un pacchetto Swift
 ├── App/                                 le schermate SwiftUI e le parti che richiedono un iPhone
-├── Tests/                               384 test e dati di un server reale
+├── Tests/                               483 test e dati di un server reale
 ├── docs/                                le guide di questo repository
 ├── tools/                               i controlli CI condivisi e gli strumenti del progetto
 ├── .github/                             workflow CI e modelli per issue e pull request
