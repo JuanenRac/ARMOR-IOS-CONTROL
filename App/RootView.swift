@@ -34,6 +34,9 @@ enum MainTab: Hashable { case status, alarms, cameras, assistant, more }
 
 struct MainTabs: View {
     @EnvironmentObject var model: AppModel
+    /// The set of waiting alarms the person closed the banner for; a new alarm brings it back.
+    @State private var closedBanner: String?
+
     var body: some View {
         TabView(selection: $model.selectedTab) {
             HomeView().tabItem { Label(model.tr("Estado"), systemImage: "shield.lefthalf.filled") }.tag(MainTab.status)
@@ -44,6 +47,11 @@ struct MainTabs: View {
             MoreView().tabItem { Label(model.tr("Más"), systemImage: "ellipsis.circle") }.tag(MainTab.more)
         }
         .tint(Theme.accent)
+        .safeAreaInset(edge: .top, spacing: 0) {
+            if model.selectedTab != .alarms, let banner = AlarmBannerPolicy.from(model.state.active, closedKey: closedBanner, model.translator) {
+                AlarmBannerView(banner: banner) { closedBanner = $0 }
+            }
+        }
     }
 }
 
