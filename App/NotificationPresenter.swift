@@ -10,10 +10,19 @@ final class NotificationPresenter: NSObject, UNUserNotificationCenterDelegate {
 
     /// Set by the app: acknowledges the alarm of a notice whose action "Confirm" was touched (the app may have been woken just for this).
     var onAcknowledge: ((String) async -> Void)?
+    /// Set by the app: shows the camera of a notice whose action "Open camera" was touched.
+    var onOpenCamera: ((String) async -> Void)?
 
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
-        guard response.actionIdentifier == NoticeActions.acknowledgeActionId, let id = NoticeActions.alarmId(from: response.notification.request.content.userInfo) else { return }
-        await onAcknowledge?(id)
+        let info = response.notification.request.content.userInfo
+        switch response.actionIdentifier {
+        case NoticeActions.acknowledgeActionId:
+            if let id = NoticeActions.alarmId(from: info) { await onAcknowledge?(id) }
+        case NoticeActions.openCameraActionId:
+            if let id = NoticeActions.cameraId(from: info) { await onOpenCamera?(id) }
+        default:
+            break
+        }
     }
 
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification,

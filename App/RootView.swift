@@ -29,16 +29,19 @@ struct RootView: View {
     }
 }
 
+/// The places of the tab bar, so a notice can ask for one.
+enum MainTab: Hashable { case status, alarms, cameras, assistant, more }
+
 struct MainTabs: View {
     @EnvironmentObject var model: AppModel
     var body: some View {
-        TabView {
-            HomeView().tabItem { Label(model.tr("Estado"), systemImage: "shield.lefthalf.filled") }
+        TabView(selection: $model.selectedTab) {
+            HomeView().tabItem { Label(model.tr("Estado"), systemImage: "shield.lefthalf.filled") }.tag(MainTab.status)
             AlarmsView().tabItem { Label(model.tr("Alarmas"), systemImage: "bell.badge") }
-                .badge(model.state.unseenAlarms)
-            CamerasView().tabItem { Label(model.tr("Cámaras"), systemImage: "video") }
-            AssistantView().tabItem { Label(model.tr("Asistente"), systemImage: "waveform") }
-            MoreView().tabItem { Label(model.tr("Más"), systemImage: "ellipsis.circle") }
+                .badge(model.state.unseenAlarms).tag(MainTab.alarms)
+            CamerasView().tabItem { Label(model.tr("Cámaras"), systemImage: "video") }.tag(MainTab.cameras)
+            AssistantView().tabItem { Label(model.tr("Asistente"), systemImage: "waveform") }.tag(MainTab.assistant)
+            MoreView().tabItem { Label(model.tr("Más"), systemImage: "ellipsis.circle") }.tag(MainTab.more)
         }
         .tint(Theme.accent)
     }
