@@ -1220,5 +1220,10 @@
  "El servidor no ha aceptado este teléfono como de confianza.": "服务器未接受这部手机作为受信任的手机。",
  "Este servidor no ofrece teléfonos de confianza.": "此服务器不提供受信任的手机。",
  "Este teléfono ya es de confianza.": "这部手机现在是受信任的手机。",
- "Desactivado por defecto. Si tu administrador lo permite, este teléfono guarda una clave que no sale de él y renueva la sesión firmando un reto, sin pedirte otra vez la contraseña y el código. Tu administrador puede cerrarlo desde Studio.": "默认关闭。如果管理员允许，这部手机会保存一把永不离开手机的密钥，通过签署挑战来续期会话，而无需再次输入密码和验证码。管理员可在 Studio 中结束它。"
+ "Desactivado por defecto. Si tu administrador lo permite, este teléfono guarda una clave que no sale de él y renueva la sesión firmando un reto, sin pedirte otra vez la contraseña y el código. Tu administrador puede cerrarlo desde Studio.": "默认关闭。如果管理员允许，这部手机会保存一把永不离开手机的密钥，通过签署挑战来续期会话，而无需再次输入密码和验证码。管理员可在 Studio 中结束它。",
+ "Armada": "已布防",
+ "Desarmada": "已撤防",
+ "Sin datos": "无数据",
+ "Nodos en línea": "在线节点",
+ "Nodos por tipo": "按类型统计的节点"
 }

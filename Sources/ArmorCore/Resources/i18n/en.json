@@ -1220,5 +1220,10 @@
  "El servidor no ha aceptado este teléfono como de confianza.": "The server did not accept this phone as a trusted one.",
  "Este servidor no ofrece teléfonos de confianza.": "This server does not offer trusted phones.",
  "Este teléfono ya es de confianza.": "This phone is now a trusted one.",
- "Desactivado por defecto. Si tu administrador lo permite, este teléfono guarda una clave que no sale de él y renueva la sesión firmando un reto, sin pedirte otra vez la contraseña y el código. Tu administrador puede cerrarlo desde Studio.": "Off by default. If your administrator allows it, this phone keeps a key that never leaves it and renews the session by signing a challenge, without asking for the password and the code again. Your administrator can end it from Studio."
+ "Desactivado por defecto. Si tu administrador lo permite, este teléfono guarda una clave que no sale de él y renueva la sesión firmando un reto, sin pedirte otra vez la contraseña y el código. Tu administrador puede cerrarlo desde Studio.": "Off by default. If your administrator allows it, this phone keeps a key that never leaves it and renews the session by signing a challenge, without asking for the password and the code again. Your administrator can end it from Studio.",
+ "Armada": "Armed",
+ "Desarmada": "Disarmed",
+ "Sin datos": "No data",
+ "Nodos en línea": "Nodes online",
+ "Nodos por tipo": "Nodes by kind"
 }

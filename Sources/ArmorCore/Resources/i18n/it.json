@@ -1220,5 +1220,10 @@
  "El servidor no ha aceptado este teléfono como de confianza.": "Il server non ha accettato questo telefono come attendibile.",
  "Este servidor no ofrece teléfonos de confianza.": "Questo server non offre telefoni attendibili.",
  "Este teléfono ya es de confianza.": "Questo telefono ora è attendibile.",
- "Desactivado por defecto. Si tu administrador lo permite, este teléfono guarda una clave que no sale de él y renueva la sesión firmando un reto, sin pedirte otra vez la contraseña y el código. Tu administrador puede cerrarlo desde Studio.": "Disattivato per impostazione predefinita. Se il tuo amministratore lo consente, questo telefono conserva una chiave che non lo lascia mai e rinnova la sessione firmando una sfida, senza chiedere di nuovo password e codice. Il tuo amministratore può terminarlo da Studio."
+ "Desactivado por defecto. Si tu administrador lo permite, este teléfono guarda una clave que no sale de él y renueva la sesión firmando un reto, sin pedirte otra vez la contraseña y el código. Tu administrador puede cerrarlo desde Studio.": "Disattivato per impostazione predefinita. Se il tuo amministratore lo consente, questo telefono conserva una chiave che non lo lascia mai e rinnova la sessione firmando una sfida, senza chiedere di nuovo password e codice. Il tuo amministratore può terminarlo da Studio.",
+ "Armada": "Inserita",
+ "Desarmada": "Disinserita",
+ "Sin datos": "Nessun dato",
+ "Nodos en línea": "Nodi online",
+ "Nodos por tipo": "Nodi per tipo"
 }

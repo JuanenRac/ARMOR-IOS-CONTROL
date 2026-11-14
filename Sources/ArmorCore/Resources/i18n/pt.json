@@ -1220,5 +1220,10 @@
  "El servidor no ha aceptado este teléfono como de confianza.": "O servidor não aceitou este telemóvel como de confiança.",
  "Este servidor no ofrece teléfonos de confianza.": "Este servidor não oferece telemóveis de confiança.",
  "Este teléfono ya es de confianza.": "Este telemóvel já é de confiança.",
- "Desactivado por defecto. Si tu administrador lo permite, este teléfono guarda una clave que no sale de él y renueva la sesión firmando un reto, sin pedirte otra vez la contraseña y el código. Tu administrador puede cerrarlo desde Studio.": "Desligado por predefinição. Se o seu administrador o permitir, este telemóvel guarda uma chave que nunca sai dele e renova a sessão assinando um desafio, sem pedir outra vez a palavra-passe e o código. O seu administrador pode terminá-lo no Studio."
+ "Desactivado por defecto. Si tu administrador lo permite, este teléfono guarda una clave que no sale de él y renueva la sesión firmando un reto, sin pedirte otra vez la contraseña y el código. Tu administrador puede cerrarlo desde Studio.": "Desligado por predefinição. Se o seu administrador o permitir, este telemóvel guarda uma chave que nunca sai dele e renova a sessão assinando um desafio, sem pedir outra vez a palavra-passe e o código. O seu administrador pode terminá-lo no Studio.",
+ "Armada": "Armado",
+ "Desarmada": "Desarmado",
+ "Sin datos": "Sem dados",
+ "Nodos en línea": "Nós online",
+ "Nodos por tipo": "Nós por tipo"
 }

@@ -1220,5 +1220,10 @@
  "El servidor no ha aceptado este teléfono como de confianza.": "Der Server hat dieses Handy nicht als vertrauenswürdig akzeptiert.",
  "Este servidor no ofrece teléfonos de confianza.": "Dieser Server bietet keine vertrauenswürdigen Handys an.",
  "Este teléfono ya es de confianza.": "Dieses Handy ist jetzt vertrauenswürdig.",
- "Desactivado por defecto. Si tu administrador lo permite, este teléfono guarda una clave que no sale de él y renueva la sesión firmando un reto, sin pedirte otra vez la contraseña y el código. Tu administrador puede cerrarlo desde Studio.": "Standardmäßig aus. Wenn Ihr Administrator es erlaubt, behält dieses Handy einen Schlüssel, der es nie verlässt, und erneuert die Sitzung durch Signieren einer Aufgabe, ohne erneut nach Passwort und Code zu fragen. Ihr Administrator kann es in Studio beenden."
+ "Desactivado por defecto. Si tu administrador lo permite, este teléfono guarda una clave que no sale de él y renueva la sesión firmando un reto, sin pedirte otra vez la contraseña y el código. Tu administrador puede cerrarlo desde Studio.": "Standardmäßig aus. Wenn Ihr Administrator es erlaubt, behält dieses Handy einen Schlüssel, der es nie verlässt, und erneuert die Sitzung durch Signieren einer Aufgabe, ohne erneut nach Passwort und Code zu fragen. Ihr Administrator kann es in Studio beenden.",
+ "Armada": "Scharf",
+ "Desarmada": "Unscharf",
+ "Sin datos": "Keine Daten",
+ "Nodos en línea": "Knoten online",
+ "Nodos por tipo": "Knoten nach Art"
 }
