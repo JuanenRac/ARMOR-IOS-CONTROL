@@ -134,7 +134,17 @@ final class ClientTests: XCTestCase {
     }
     func testPushRegistrationAcceptsAServerWithPushOff() async throws {
         StubProtocol.routes["POST /api/v1/push/register"] = (409, "{}")
-        try await api.registerPush(origin, token: "tok")
+        try await api.registerPush(origin, token: "tok", language: "pt")
+    }
+    func testPushRegistrationTellsTheServerTheLanguageOfTheApp() async throws {
+        StubProtocol.routes["POST /api/v1/push/register"] = (200, "{}")
+        try await api.registerPush(origin, token: "tok", language: "pt")
+        let body = try Json.object(Data(StubProtocol.bodies[0].utf8))
+        XCTAssertEqual(body.str("token"), "tok")
+        XCTAssertEqual(body.str("language"), "pt")
+        StubProtocol.bodies.removeAll()
+        try await api.registerPush(origin, token: "tok", language: "")
+        XCTAssertFalse(try Json.object(Data(StubProtocol.bodies[0].utf8)).has("language"))
     }
     func testUnreachableServerHasNoStatus() async {
         final class Failing: URLProtocol {

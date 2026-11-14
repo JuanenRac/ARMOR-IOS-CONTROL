@@ -73,7 +73,8 @@ public protocol ArmorApi: Sendable {
     func restoreSessionCookie(_ origin: String, _ cookie: SessionCookie)
     func forgetSession(_ origin: String)
     /// Tells the server the token APNs gave this phone, so it can push alarms to it (a server with push off answers 409, which is not a failure of the app).
-    func registerPush(_ origin: String, token: String) async throws
+    /// `language` is the one of the app: the server writes the push notices in it.
+    func registerPush(_ origin: String, token: String, language: String) async throws
     func unregisterPush(_ origin: String, token: String) async throws
     /// Registers this phone as a trusted one with the public half of its key (base64 DER); the server's id for it. A server that is not offering it answers 404.
     func trustRegister(_ origin: String, name: String, publicKey: String) async throws -> String

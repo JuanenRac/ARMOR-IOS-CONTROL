@@ -1226,5 +1226,6 @@
  "Desarmada": "Disarmed",
  "Sin datos": "No data",
  "Nodos en línea": "Nodes online",
- "Nodos por tipo": "Nodes by kind"
+ "Nodos por tipo": "Nodes by kind",
+ "Ver alarmas": "View alarms"
 }

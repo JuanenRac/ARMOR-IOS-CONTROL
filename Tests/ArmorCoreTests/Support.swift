@@ -102,7 +102,7 @@ class FakeApi: ArmorApi, @unchecked Sendable {
     func sessionCookie(_ origin: String) -> SessionCookie? { jar ?? cookie }
     func restoreSessionCookie(_ origin: String, _ cookie: SessionCookie) { jar = cookie; record("restore") }
     func forgetSession(_ origin: String) { jar = nil; cookie = nil; record("forget") }
-    func registerPush(_ origin: String, token: String) async throws {}
+    func registerPush(_ origin: String, token: String, language: String) async throws { record("push:\(token):\(language)") }
     func unregisterPush(_ origin: String, token: String) async throws {}
     // the trusted phone
     var trustIssuedId = "0123456789abcdef01234567"

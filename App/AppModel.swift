@@ -336,7 +336,7 @@ final class AppModel: ObservableObject {
     /// Tells the server the token of this phone (a server with push off answers 409, which is not a failure).
     func registerPush() async {
         guard screen == .main, let origin = activeOrigin, let token = prefs.get("push_token") else { return }
-        try? await controller.api.registerPush(origin, token: token)
+        try? await controller.api.registerPush(origin, token: token, language: language)
     }
 
     // MARK: polling and notices
