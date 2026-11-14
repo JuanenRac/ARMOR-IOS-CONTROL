@@ -1193,5 +1193,16 @@
  "Guardar la clave": "Schlüssel speichern",
  "Olvidar la clave": "Schlüssel vergessen",
  "El asistente de voz no responde ahora mismo.": "Der Sprachassistent antwortet gerade nicht.",
- "No se pudo enviar la orden al servidor.": "Der Befehl konnte nicht an den Server gesendet werden."
+ "No se pudo enviar la orden al servidor.": "Der Befehl konnte nicht an den Server gesendet werden.",
+ "¿Armas la alarma?": "Alarm scharf schalten?",
+ "Has salido de casa y el sistema está desarmado.": "Sie haben das Haus verlassen und das System ist unscharf.",
+ "Comprueba la alarma": "Alarm prüfen",
+ "Has salido de casa y no he podido comprobar si la alarma está armada.": "Sie haben das Haus verlassen, und es konnte nicht geprüft werden, ob die Alarmanlage scharf ist.",
+ "Recordatorio al salir de casa": "Erinnerung beim Verlassen des Hauses",
+ "Te avisa si sales de casa con la alarma desarmada. Todo se queda en el móvil: tu ubicación no se envía a ningún sitio.": "Sie werden benachrichtigt, wenn Sie das Haus mit unscharfer Alarmanlage verlassen. Alles bleibt auf dem Handy: Ihr Standort wird nirgendwohin gesendet.",
+ "Usar mi ubicación actual como casa": "Meinen aktuellen Standort als Zuhause verwenden",
+ "Cambiar la casa por mi ubicación actual": "Zuhause auf meinen aktuellen Standort ändern",
+ "Casa guardada.": "Zuhause gespeichert.",
+ "No se pudo leer tu ubicación.": "Ihr Standort konnte nicht gelesen werden.",
+ "Se necesita el permiso de ubicación, también con la app cerrada, para avisarte al salir.": "Die Standortberechtigung, auch bei geschlossener App, wird benötigt, um Sie beim Verlassen zu benachrichtigen."
 }

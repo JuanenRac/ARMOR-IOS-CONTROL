@@ -1193,5 +1193,16 @@
  "Guardar la clave": "Save the key",
  "Olvidar la clave": "Forget the key",
  "El asistente de voz no responde ahora mismo.": "The voice assistant is not answering right now.",
- "No se pudo enviar la orden al servidor.": "The order could not be sent to the server."
+ "No se pudo enviar la orden al servidor.": "The order could not be sent to the server.",
+ "¿Armas la alarma?": "Arm the alarm?",
+ "Has salido de casa y el sistema está desarmado.": "You have left home and the system is disarmed.",
+ "Comprueba la alarma": "Check the alarm",
+ "Has salido de casa y no he podido comprobar si la alarma está armada.": "You have left home and I could not check whether the alarm is armed.",
+ "Recordatorio al salir de casa": "Reminder when leaving home",
+ "Te avisa si sales de casa con la alarma desarmada. Todo se queda en el móvil: tu ubicación no se envía a ningún sitio.": "It tells you if you leave home with the alarm disarmed. Everything stays on the phone: your location is not sent anywhere.",
+ "Usar mi ubicación actual como casa": "Use my current location as home",
+ "Cambiar la casa por mi ubicación actual": "Change home to my current location",
+ "Casa guardada.": "Home saved.",
+ "No se pudo leer tu ubicación.": "Your location could not be read.",
+ "Se necesita el permiso de ubicación, también con la app cerrada, para avisarte al salir.": "The location permission, also with the app closed, is needed to warn you when you leave."
 }

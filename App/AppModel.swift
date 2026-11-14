@@ -26,6 +26,10 @@ final class AppModel: ObservableObject {
     let spokenTurn: SpokenTurnModel
     private let monitor = NWPathMonitor()
     private var pollTask: Task<Void, Never>?
+    /// The channel of small live notices of the server, open while the app is polling, and when the last notice came (the asking slows down while they arrive).
+    private var liveChannel: LiveChannel?
+    private var lastNoticeAt: Date?
+    private var noticeRead = false
 
     // what the screens show
     @Published var screen: Screen = .starting
@@ -87,6 +91,46 @@ final class AppModel: ObservableObject {
             Task { @MainActor in self?.place = place; self?.networkAvailable = path.status == .satisfied }
         }
         monitor.start(queue: DispatchQueue(label: "armor.network"))
+        PresenceMonitor.shared.onLeft = { [weak self] in await self?.remindOnLeaving() }
+        PresenceMonitor.shared.onAuthorization = { [weak self] in Task { @MainActor in self?.objectWillChange.send() } }
+        PresenceMonitor.shared.apply()
+    }
+
+    // MARK: reminder on leaving home
+
+    private var presenceStore: PresenceStore { PresenceStore(prefs) }
+    var presenceEnabled: Bool { presenceStore.enabled }
+    var presenceHasHome: Bool { presenceStore.home != nil }
+    var presenceAuthorized: Bool { PresenceMonitor.shared.authorized }
+
+    func setPresenceEnabled(_ on: Bool) { presenceStore.enabled = on; PresenceMonitor.shared.apply() }
+    func askPresencePermission() { PresenceMonitor.shared.askPermission() }
+
+    /// Saves the place the phone is in as home and starts watching the circle around it.
+    func saveHomeHere(_ done: @escaping (Bool) -> Void) {
+        PresenceMonitor.shared.readPlace { [weak self] place in
+            Task { @MainActor in
+                guard let self, let place, place.valid else { done(false); return }
+                self.presenceStore.home = place
+                PresenceMonitor.shared.apply()
+                done(true)
+            }
+        }
+    }
+
+    /// The phone left home: reads whether the system is armed (nothing else is asked of the server) and says so.
+    func remindOnLeaving() async {
+        let store = presenceStore
+        guard store.enabled else { return }
+        var mode: String?
+        if await connect(), let origin = activeOrigin, await controller.restore(origin: origin) { mode = (try? await controller.api.status(origin))?.mode }
+        let now = Int64(Date().timeIntervalSince1970 * 1000)
+        guard let kind = PresenceDecision.onLeft(mode: mode, lastReminderMs: store.lastReminderMs, nowMs: now) else { return }
+        store.lastReminderMs = now
+        switch kind {
+        case .armNow: post(AlarmNotice(id: PresenceConfig.noticeId, title: tr("¿Armas la alarma?"), text: tr("Has salido de casa y el sistema está desarmado."), severity: "warning"))
+        case .check: post(AlarmNotice(id: PresenceConfig.noticeId, title: tr("Comprueba la alarma"), text: tr("Has salido de casa y no he podido comprobar si la alarma está armada."), severity: "warning"))
+        }
     }
 
     func tr(_ es: String) -> String { _ = language; return translator.tr(es) }
@@ -195,6 +239,11 @@ final class AppModel: ObservableObject {
         screen = .login
     }
 
+    /// The hidden panic gesture was made on the shield of the status card (see PanicGesture.swift). Silent: no message, no sound.
+    func panicGesture() {
+        Task { await controller.panicGesture(); state = controller.state }
+    }
+
     private func enterMain() {
         state = controller.state
         screen = .main
@@ -223,16 +272,41 @@ final class AppModel: ObservableObject {
 
     func startPolling() {
         pollTask?.cancel()
+        startLiveChannel()
         pollTask = Task { [weak self] in
             while !Task.isCancelled {
                 await self?.refresh()
-                let seconds: UInt64 = (self?.isAway ?? false) ? 10 : 5
-                try? await Task.sleep(nanoseconds: seconds * 1_000_000_000)
+                let base: Double = (self?.isAway ?? false) ? 10 : 5
+                let seconds = LiveNotices.pollDelay(base: base, lastNotice: self?.lastNoticeAt, now: Date())
+                try? await Task.sleep(nanoseconds: UInt64(seconds * 1_000_000_000))
             }
         }
     }
 
-    func stopPolling() { pollTask?.cancel(); pollTask = nil }
+    func stopPolling() { pollTask?.cancel(); pollTask = nil; liveChannel?.stop(); liveChannel = nil }
+
+    /// The small notices of the server (an alarm, a device, a solar device, a network node or a design changed): the app reads again at once, a burst being one read.
+    private func startLiveChannel() {
+        liveChannel?.stop(); liveChannel = nil
+        guard let origin = activeOrigin else { return }
+        let api = controller.api
+        let channel = LiveChannel(origin: origin, trust: trust, cookie: { api.sessionCookie(origin) }, onNotice: { [weak self] notice in
+            Task { @MainActor in self?.liveNotice(notice) }
+        })
+        liveChannel = channel
+        channel.start()
+    }
+
+    private func liveNotice(_ notice: LiveNotice) {
+        lastNoticeAt = Date()
+        guard notice.type != "design", !noticeRead else { return }
+        noticeRead = true
+        Task { [weak self] in
+            try? await Task.sleep(nanoseconds: 300_000_000)
+            self?.noticeRead = false
+            await self?.refresh()
+        }
+    }
 
     func refresh() async {
         let notices = await controller.refresh()

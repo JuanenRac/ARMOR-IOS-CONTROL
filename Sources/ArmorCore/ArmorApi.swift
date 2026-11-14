@@ -24,6 +24,9 @@ public protocol ArmorApi: Sendable {
     func alarms(_ origin: String) async throws -> (active: [Alarm], recent: [Alarm])
     func acknowledgeAlarm(_ origin: String, id: String) async throws
     func acknowledgeAllAlarms(_ origin: String) async throws
+    /// The hidden panic gesture: `POST /api/v1/alarm/panic-gesture` raises the silent duress alarm of the signed-in person. The server answers the same `{ok:true}` whether an alarm was raised or the quiet
+    /// time had not ended, and 404 while the administrator has the option off (the caller then forgets the gesture). Nothing of it is kept in the diagnostic log.
+    func panicGesture(_ origin: String) async throws
     func alarmPanels(_ origin: String) async throws -> [AlarmPanelView]
     func armProfiles(_ origin: String) async throws -> [ArmProfileView]
     func alarmCommandsEnabled(_ origin: String) async throws -> Bool

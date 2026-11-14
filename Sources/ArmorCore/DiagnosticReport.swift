@@ -26,7 +26,11 @@ public final class DiagnosticLog: @unchecked Sendable {
         return "/" + parts.prefix(4).joined(separator: "/") + (parts.count > 4 ? "/…" : "")
     }
 
+    /// The route of the hidden panic gesture: it leaves no trace in the report that a person may share, or that somebody looking over the shoulder may read.
+    private static let quietRoute = "/panic-gesture"
+
     public func record(method: String, path: String, status: Int, atMs: Int64 = Int64(Date().timeIntervalSince1970 * 1000)) {
+        if (path.split(separator: "?", maxSplits: 1, omittingEmptySubsequences: false).first ?? "").hasSuffix(Self.quietRoute) { return }
         lock.lock(); defer { lock.unlock() }
         if entries.count >= Self.keep { entries.removeFirst() }
         entries.append(Entry(atMs: atMs, method: String(method.prefix(8)), route: Self.shape(path), status: status))

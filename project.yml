@@ -42,6 +42,8 @@ targets:
         NSLocalNetworkUsageDescription: Reaches your A.R.M.O.R. server on your home network.
         NSBluetoothAlwaysUsageDescription: Finds and sets up an A.R.M.O.R. node over Bluetooth.
         NSCameraUsageDescription: Reads the pairing QR code of a node.
+        NSLocationWhenInUseUsageDescription: Reads where you are once, to save it as your home, only when you turn on the reminder on leaving home.
+        NSLocationAlwaysAndWhenInUseUsageDescription: Notices that your phone leaves home, even with the app closed, to remind you to arm the alarm. Your location is never sent anywhere.
         NSMicrophoneUsageDescription: Records the phrase of a spoken command to send it to your A.R.M.O.R. server, only when you turn that option on and tap the button.
         NSAppTransportSecurity:
           # plain http is allowed only for addresses of the local network; the app itself refuses http to anything else

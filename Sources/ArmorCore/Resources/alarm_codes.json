@@ -192,6 +192,56 @@
    "zh": "电网的电源切换开关发生故障并保持断开",
    "pt": "Um comutador de fonte da rede elétrica tem uma avaria e fica aberto"
   },
+  "grid_export_unexpected": {
+   "en": "The house is feeding the grid although it must not",
+   "es": "La casa está inyectando a la red aunque no debe",
+   "de": "Das Haus speist ins Netz ein, obwohl es das nicht darf",
+   "fr": "La maison injecte dans le réseau alors qu'elle ne le doit pas",
+   "it": "La casa sta immettendo in rete anche se non deve",
+   "ja": "宅内から系統へ逆潮流していますが、許可されていません",
+   "zh": "房屋正在向电网送电，但不应如此",
+   "pt": "A casa está a injetar na rede, embora não deva"
+  },
+  "meter_mismatch": {
+   "en": "The meters of the house do not agree with each other",
+   "es": "Los contadores de la casa no coinciden entre sí",
+   "de": "Die Zähler des Hauses stimmen nicht miteinander überein",
+   "fr": "Les compteurs de la maison ne concordent pas entre eux",
+   "it": "I contatori della casa non concordano tra loro",
+   "ja": "宅内のメーターの値が互いに一致しません",
+   "zh": "房屋的电表读数互不一致",
+   "pt": "Os contadores da casa não coincidem entre si"
+  },
+  "consumption_appliance_stopped": {
+   "en": "An appliance you watch has stopped drawing power",
+   "es": "Un aparato que vigilas ha dejado de consumir",
+   "de": "Ein überwachtes Gerät verbraucht keinen Strom mehr",
+   "fr": "Un appareil surveillé ne consomme plus",
+   "it": "Un apparecchio sorvegliato ha smesso di consumare",
+   "ja": "監視中の機器が電力を消費しなくなりました",
+   "zh": "您监控的电器已停止耗电",
+   "pt": "Um aparelho vigiado deixou de consumir"
+  },
+  "consumption_standby_high": {
+   "en": "The night consumption of a channel is higher than it used to be",
+   "es": "El consumo en reposo de un canal es más alto de lo habitual",
+   "de": "Der Ruheverbrauch eines Kanals ist höher als sonst",
+   "fr": "La consommation de veille d'un canal est plus élevée que d'habitude",
+   "it": "Il consumo in standby di un canale è più alto del solito",
+   "ja": "あるチャンネルの待機電力がいつもより高くなっています",
+   "zh": "某个通道的待机用电高于以往",
+   "pt": "O consumo em espera de um canal é mais alto do que o habitual"
+  },
+  "consumption_phase_down": {
+   "en": "A phase of the mains has lost its voltage",
+   "es": "Una fase de la red ha perdido la tensión",
+   "de": "Eine Phase des Netzes hat ihre Spannung verloren",
+   "fr": "Une phase du réseau a perdu sa tension",
+   "it": "Una fase della rete ha perso la tensione",
+   "ja": "系統の一相が電圧を失いました",
+   "zh": "电网的某一相失去了电压",
+   "pt": "Uma fase da rede perdeu a tensão"
+  },
   "intrusion": {
    "en": "Intrusion detected by the radars",
    "es": "Intrusión detectada por los radares",
