@@ -22,14 +22,14 @@
   <img src="https://img.shields.io/badge/Language-Swift-f05138.svg" alt="Language">
   <img src="https://img.shields.io/badge/UI-SwiftUI-0a84ff.svg" alt="UI">
   <img src="https://img.shields.io/badge/Languages-8-00E5FF.svg" alt="Languages">
-  <img src="https://img.shields.io/badge/Tests-384%20passing-2ea44f.svg" alt="Tests">
+  <img src="https://img.shields.io/badge/Tests-483%20passing-2ea44f.svg" alt="Tests">
   <img src="https://img.shields.io/badge/Version-0.0.5-0f6cbd.svg" alt="Version">
   <img src="https://img.shields.io/badge/Maturity-scaffolding-FFB020.svg" alt="Maturity">
 </p>
 
 ---
 
-**Verificação de honestidade - o que funciona hoje:** as regras da app (ligação ao servidor, leitura das respostas, escolha do endereço, bloqueio do telemóvel, cofre da sessão, confiança no certificado, política de alarmes, casos de uso, corte do MJPEG) são o pacote Swift `ArmorCore`, coberto por 384 testes unitários que correm com `swift test` em macOS ou Linux, e `tools/ios_lint.py` verifica a estrutura, as oito tabelas de idiomas e o contrato sem Mac. O que **ainda não** está provado: os ecrãs SwiftUI e as partes que precisam de um iPhone (Face ID, porta-chaves, regras de certificado, câmara em direto, push com Firebase) não foram compilados no Xcode nem executados num dispositivo.
+**Verificação de honestidade - o que funciona hoje:** as regras da app (ligação ao servidor, leitura das respostas, escolha do endereço, bloqueio do telemóvel, cofre da sessão, confiança no certificado, política de alarmes, casos de uso, corte do MJPEG) são o pacote Swift `ArmorCore`, coberto por 483 testes unitários que correm com `swift test` em macOS ou Linux, e `tools/ios_lint.py` verifica a estrutura, as oito tabelas de idiomas e o contrato sem Mac. O que **ainda não** está provado: os ecrãs SwiftUI e as partes que precisam de um iPhone (Face ID, porta-chaves, regras de certificado, câmara em direto, push com Firebase) não foram compilados no Xcode nem executados num dispositivo.
 
 ---
 
@@ -41,8 +41,8 @@
 | Maturidade | Estrutura inicial |
 | Função | Cliente de operador para iPhone do ARMOR-SERVER (família: Clients, pai: ARMOR-SERVER) |
 | Tecnologia | Swift 5.9+ / SwiftUI, iOS 16+ |
-| Testes | 384 (`swift test`) |
-| Línguas | 8 (1195 frases por língua, verificadas pelo `ios_lint.py`) |
+| Testes | 483 (`swift test`) |
+| Línguas | 8 (1229 frases por língua, verificadas pelo `ios_lint.py`) |
 | Funciona em | Um iPhone com iOS 16+; os testes correm em macOS ou Linux |
 | Em hardware real | Ainda não foi executado num iPhone; as regras são testadas em Linux |
 | Licença | GPL-3.0-or-later |
@@ -58,7 +58,7 @@ Cada linha é uma parte deste repositório e a luz diz até onde chega hoje. É 
 | Área | Estado | O que significa aqui |
 |---|---|---|
 | Software | 🟡 | As regras da app são um pacote Swift (`ArmorCore`) e a app SwiftUI é compilada para o simulador pela CI no macOS; não funcionou num iPhone. |
-| Testes | 🟡 | Passam 384 testes unitários com `swift test` em macOS ou Linux, e o `tools/ios_lint.py` verifica a estrutura, as tabelas dos oito idiomas e o contrato sem um Mac; nenhum teste corre num dispositivo. |
+| Testes | 🟡 | Passam 483 testes unitários com `swift test` em macOS ou Linux, e o `tools/ios_lint.py` verifica a estrutura, as tabelas dos oito idiomas e o contrato sem um Mac; nenhum teste corre num dispositivo. |
 | Interface | 🟠 | Os ecrãs SwiftUI são compilados para o simulador pela CI no macOS, mas não foram executados num iPhone. |
 | Hardware | 🔴 | Não correu num iPhone: as regras só são testadas em Linux. |
 | Segurança | 🟠 | O bloqueio do telefone, o cofre da sessão e a confiança no certificado são regras testadas em Linux; o Face ID, o porta-chaves e as regras do certificado não correram num dispositivo. |
@@ -82,10 +82,14 @@ Cada linha é uma parte deste repositório e a luz diz até onde chega hoje. É 
 * **Controlo dos nós (administradores):** Mais > Controlo dos nós reinicia, pausa, retoma, põe em espera, identifica, pede um diagnóstico ou liga e termina a manutenção de um nó ou de todos; as ordens delicadas pedem para voltar a escrever o nome do nó, e a linha de cada nó mostra até onde chegou. Nada apaga definições ou credenciais nem desliga um nó.
 * **O configurador de um nó, dentro da app:** Mais > Configurar nós abre a página própria do nó (pelo seu endereço na rede de casa, ou através do servidor a partir de qualquer lado), limitada a esse nó. Guardar um ficheiro a partir da página (a exportação das definições) ainda não foi portado.
 * **Os dispositivos que se ligam e o plano do radar:** *Alarmes > Ligações* lista os dispositivos e apps que o servidor viu; *Mais > Radar* desenha o local como o Studio o desenhou, em 2D, com as pessoas que os radares seguem (a vista 3D da app Android ainda não foi portada).
+* **Presença e uma fotografia no aviso (ambas desligadas até escolher):** um interruptor deixa o telemóvel dizer ao servidor apenas a palavra *em casa* ou *fora* ao atravessar o círculo do lembrete ao sair (o local nunca sai do telemóvel; o servidor precisa de ter ligada a sua opção «Presença por pessoa»); outra junta ao aviso de uma câmara que deixou de responder a sua fotografia, pedida ao seu próprio servidor e nunca através de um serviço de push.
 * **Atualizar o equipamento a partir do telemóvel (administradores):** Mais > Atualizar o equipamento mostra se o servidor e o ajudante o permitem (desligado por predefinição: com o interruptor desligado não oferece nada), lista os programas que se podem atualizar, mostra uma pré-visualização com a versão instalada e a publicada e um plano de uso único com contagem decrescente, e aplica-o depois de escrever o nome do projeto, com a sua prova de identidade e o código de uso único do administrador; os passos e o registo do trabalho acompanham-se em direto e cada recusa do servidor é dita em palavras simples.
 * **Modos de armar do servidor (Ausente, Em casa, Noite):** quando o servidor tem os modos de armar ativados (Studio, Configuração > Segurança), o botão de armar do ecrã de estado abre um seletor para armar num modo, mudar de um para outro ou desarmar; um modo sem nada atribuído pede confirmação, uma mudança para um modo que defende menos pede o PIN como desarmar, e o estado mostra o modo em vigor. Armar a partir de desarmado executa primeiro a verificação antes de armar, como um armar normal. Com os modos desligados a app arma e desarma como antes. Segue a app Android; o código e os seus testes estão escritos e não foram compilados nem experimentados num iPhone.
 * **Solar, baterias e rede elétrica, para administradores e operadores:** Mais > Solar mostra os totais (sol, consumo, estado de carga, rede) e cada inversor e bateria com os seus valores, células, contadores e registo de eventos; Mais > Elétrica mostra a entrada de rede, os circuitos e os barramentos de corrente contínua com os comutadores; Mais > Manutenção de baterias (só administradores) oferece as operações simples numa bateria Pylontech em dois passos (o nó verifica, o ecrã mostra exatamente o que será feito, e só se escreve depois de voltar a escrever o número de série). Os ecrãs voltam a perguntar a cada poucos segundos, num ritmo guardado num ficheiro de configuração. Segue a app Android; o código e os seus testes estão escritos e não foram compilados nem experimentados num iPhone.
 * **Tempo, rede, procura de nós, serviços e segurança:** Mais > Meteorologia mostra o tempo de um lugar que escolhe (agora, a chuva da próxima hora, 48 horas, dez dias, ar, pólen, sol e lua) com um radar de chuva e nuvens em direto; só sai do telemóvel a coordenada do lugar e o servidor não intervém. Mais > Rede mostra a internet, os dispositivos, os cortes e o que mudou; os ecrãs Solar e Elétrica têm um painel que procura nós na rede. Mais > Serviços lista os programas e os nós de campo, ativos ou não. Mais > Segurança gere o segundo fator da conta, as sessões abertas e como o servidor vê o telemóvel (para administradores também a VPN da casa e o endereço dinâmico; a chave privada de um dispositivo mostra-se uma vez, nunca fica guardada e copiá-la está desativado, salvo se as definições o permitirem). Um alarme solar, de bateria ou elétrico abre o seu ecrã a partir do detalhe. Segue a app Android; o código e os seus testes estão escritos e não foram compilados nem experimentados num iPhone.
+* **Todo o sistema no ecrã de estado e uma janela para os alarmes:** o ecrã de estado conta os nós de todos os tipos (radar, solar, elétrico, central de alarme, painel de parede), e não só os nós de radar do fluxo em direto, e um toque abre a sua saúde; enquanto um alarme espera por uma pessoa, um aviso pulsa sobre todos os ecrãs exceto os alarmes (vermelho e rápido se for crítico, âmbar nos restantes, parado se o telemóvel estiver definido para menos movimento), diz qual é o pior alarme e quantos esperam, e deixa abrir os alarmes, confirmar a partir do aviso ou fechá-lo até chegar outro alarme. O telemóvel também diz ao servidor o idioma da app ao registar-se para o push, para que o aviso chegue escrito nele. Segue a app Android; o código e os seus testes estão escritos e não foram experimentados num iPhone.
+* **Abrir a câmara a partir de um aviso, e um widget a caminho:** um aviso sobre uma câmara (uma que deixou de responder, ou um alarme levantado por uma câmara) traz a ação "Abrir câmara"; ao tocar, a app passa ao separador Câmaras com essa câmara em ecrã inteiro. O que diz um widget do ecrã inicial (armado, desarmado ou sem dados) está pronto no núcleo nos oito idiomas, e o seu código espera em `docs/widget` até um Mac o construir como alvo; tal como o atalho da app Android, só mostra e abre a app, nunca arma nem desarma. Segue a app Android; o código e os seus testes estão escritos e não foram experimentados num iPhone.
+* **Um telemóvel de confiança, desligado até o ligar:** quando o administrador o permite no Studio, um interruptor em Mais > Bloqueio com o telemóvel faz o telemóvel criar um par de chaves dentro do Secure Enclave (não pode ser exportada e só funciona com o telemóvel desbloqueado), registar a metade pública no servidor e renovar a sessão assinando um desafio de utilização única em vez de pedir de novo a palavra-passe e o código. Um telemóvel que o servidor já não conhece esquece o seu id, um telemóvel bloqueado tenta mais tarde, e desligar o interruptor ou terminar a sessão faz o servidor esquecer o telemóvel. Segue a app Android; as regras são testadas com um servidor falso e uma chave falsa, e o próprio Secure Enclave não foi experimentado num iPhone.
 
 ## 🧩 Papel no A.R.M.O.R.
 
@@ -119,7 +123,7 @@ Os textos de permissões (Face ID, rede local) existem nas oito línguas. Nada d
 
 ## 🔌 Interfaces
 
-É um cliente: chama 64 caminhos do ARMOR-SERVER (o `tools/ios_lint.py` conta-os e verifica que o cliente Android também os chama) e corta o fluxo MJPEG das câmaras com um analisador próprio (`MjpegParser.swift`).
+É um cliente: chama 70 caminhos do ARMOR-SERVER (o `tools/ios_lint.py` conta-os e verifica que o cliente Android também os chama) e corta o fluxo MJPEG das câmaras com um analisador próprio (`MjpegParser.swift`).
 
 | Parte | O que define |
 |---|---|
@@ -143,7 +147,7 @@ Na app: os dois endereços, *Lembrar-me*, o bloqueio do telemóvel e a língua (
 **Requisitos:** um Mac com Xcode 15+ e iOS 16+ para compilar a app; Swift 5.9+ (macOS ou Linux) para os testes; Python 3.11 para as verificações.
 
 ```sh
-swift test                  # 384 tests of ArmorCore (macOS or Linux)
+swift test                  # 483 tests of ArmorCore (macOS or Linux)
 python tools/ios_lint.py    # structure, eight languages, contract (any system)
 xcodegen generate           # then open ARMOR-IOS-CONTROL.xcodeproj in Xcode (on a Mac)
 ```
@@ -161,20 +165,21 @@ python -I tools/armor_ci_validate.py
 | Ficheiro de testes | Testes | O que cobre |
 |---|---|---|
 | `ControllerTests.swift` | 15 | Os casos de uso do controlador |
-| `ClientTests.swift` | 14 | A ligação ao servidor e a sua interpretação |
+| `ClientTests.swift` | 15 | A ligação ao servidor e a sua interpretação |
 | `LockTests.swift` | 12 | O bloqueio do telemóvel |
 | `ModelsTests.swift` | 12 | Os modelos lidos do servidor |
 | `ReachTests.swift` | 11 | A escolha entre os dois endereços |
 | `SecurityTests.swift` | 8 | O cofre da sessão e a confiança no certificado |
 | `EndpointTests.swift`, `MjpegTests.swift`, `TranslatorTests.swift` | 7 + 10 + 7 | A leitura de endereços, o corte MJPEG e o tradutor |
 | `ResponseLimitTests.swift` | 2 | A resposta mais longa que a app aceita de um servidor |
+| `OpenCameraTests.swift`, `TrustedPhoneTests.swift`, `AlarmBannerTests.swift` | 8 + 18 + 10 | A ação de câmara de um aviso, o telemóvel de confiança (as suas regras, com um servidor falso e uma chave falsa) e a janela de alarme |
 | `ElevationFormTests.swift`, `QrImageTests.swift` | 3 + 5 | A folha da nova prova de identidade e o código QR de emparelhamento desenhado e lido como imagem (os 5 do QR precisam de um Mac) |
 | `NodeBleTests.swift`, `NodeHealthTests.swift` | 17 + 5 | O canal Bluetooth de um nó (tramas, pedidos, código de configuração, definições, SHA-256) e a saúde dos nós |
 | `NodeControlTests.swift`, `ConnectionsTests.swift`, `NodePanelTests.swift`, `SiteDesignTests.swift` | 8 + 2 + 6 + 11 | O controlo dos nós, as ligações, o endereço da página de um nó e o plano do radar |
 | `PolicyTests.swift`, `AlarmCodesTests.swift`, `AlarmFactsTests.swift` | 6 + 4 + 7 | A política de alarmes e os códigos de alarme |
 | `SolarTests.swift`, `BatteryTests.swift`, `ElectricalTests.swift`, `ScreenPollingTests.swift`, `EquipmentClientTests.swift`, `AlarmRouteTests.swift`, `NetworkTests.swift`, `WeatherTests.swift`, `ServicesSecurityTests.swift` | 14 + 10 + 5 + 3 + 10 + 2 + 9 + 11 + 8 | Solar, baterias, rede elétrica e as chamadas do cliente |
 
-Os 384 testes usam dados de um servidor real. O `tools/ios_lint.py` passa sem Mac: 90 ficheiros Swift, 1195 frases em 8 línguas, 64 caminhos do servidor. Nenhum teste corre num dispositivo.
+Os 483 testes usam dados de um servidor real. O `tools/ios_lint.py` passa sem Mac: 108 ficheiros Swift, 1229 frases em 8 línguas, 70 caminhos do servidor. Nenhum teste corre num dispositivo.
 
 ## 🏗️ Compilação e publicação
 
@@ -201,7 +206,7 @@ O projeto Xcode gera-se a partir de `project.yml` com o XcodeGen: escolha uma eq
 ARMOR-IOS-CONTROL/
 ├── Sources/ArmorCore/                   as regras da app: um pacote Swift
 ├── App/                                 os ecrãs SwiftUI e as partes que precisam de um iPhone
-├── Tests/                               384 testes e dados de um servidor real
+├── Tests/                               483 testes e dados de um servidor real
 ├── docs/                                os guias deste repositório
 ├── tools/                               as verificações de CI partilhadas e as ferramentas do projeto
 ├── .github/                             fluxo de CI e modelos de issues e pull requests
