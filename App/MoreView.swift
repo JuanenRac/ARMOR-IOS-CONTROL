@@ -130,6 +130,13 @@ struct LockSettingsView: View {
                     Text(model.tr("Aviso: con esto, tras reiniciar el teléfono, las alarmas no llegarán hasta que lo desbloquees por primera vez.")).font(.caption).foregroundColor(Theme.amber)
                 }
             }
+            Section(footer: Text(model.tr("Desactivado por defecto. Si tu administrador lo permite, este teléfono guarda una clave que no sale de él y renueva la sesión firmando un reto, sin pedirte otra vez la contraseña y el código. Tu administrador puede cerrarlo desde Studio."))) {
+                Toggle(model.tr("Teléfono de confianza"), isOn: Binding(get: { model.trustedOn }, set: { on in Task { await model.setTrusted(on) } }))
+                    .disabled(!model.trustedOffered && !model.trustedOn)
+                if !model.trustedOffered {
+                    Text(model.tr("Tu administrador no ha activado los teléfonos de confianza en este servidor.")).font(.caption).foregroundColor(Theme.muted)
+                }
+            }
         }
         .navigationTitle(model.tr("Bloqueo con el teléfono"))
     }

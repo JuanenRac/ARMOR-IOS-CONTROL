@@ -47,7 +47,7 @@ class FakeApi: ArmorApi, @unchecked Sendable {
     func reach(_ origin: String) throws {
         if unreachable.contains(origin) { throw ArmorApiError(message: "timeout", status: nil) }
     }
-    func status(_ origin: String) async throws -> ArmorSnapshot { record("status"); return ArmorSnapshot(mode: statusMode) }
+    func status(_ origin: String) async throws -> ArmorSnapshot { record("status"); if sessionRefused { throw ArmorApiError(message: "refused", status: 401) }; return ArmorSnapshot(mode: statusMode) }
     func history(_ origin: String, limit: Int, before: Int?, after: Int?) async throws -> [ArmorEvent] { record("history"); return historyEvents }
     func preflight(_ origin: String) async throws -> Preflight { Preflight(ready: true, issues: []) }
     func setMode(_ origin: String, mode: String, pin: String?) async throws {
@@ -96,7 +96,7 @@ class FakeApi: ArmorApi, @unchecked Sendable {
     }
     func signIn(_ origin: String, username: String, password: String) async throws -> SignIn { try reach(origin); record("signin:\(username)"); return signInResult }
     func completeSignIn(_ origin: String, challenge: String, code: String) async throws { record("totp:\(challenge):\(code)") }
-    func sessionFacts(_ origin: String) async throws -> SessionFacts { try reach(origin); return facts }
+    func sessionFacts(_ origin: String) async throws -> SessionFacts { try reach(origin); if sessionRefused { throw ArmorApiError(message: "refused", status: 401) }; return facts }
     func closeSession(_ origin: String) async throws { record("close") }
     func elevate(_ origin: String, password: String, code: String) async throws { record("elevate:\(password):\(code)") }
     func sessionCookie(_ origin: String) -> SessionCookie? { jar ?? cookie }
@@ -104,6 +104,43 @@ class FakeApi: ArmorApi, @unchecked Sendable {
     func forgetSession(_ origin: String) { jar = nil; cookie = nil; record("forget") }
     func registerPush(_ origin: String, token: String) async throws {}
     func unregisterPush(_ origin: String, token: String) async throws {}
+    // the trusted phone
+    var trustIssuedId = "0123456789abcdef01234567"
+    var trustRegisterError: ArmorApiError?
+    var trustChallengeError: ArmorApiError?
+    var trustSessionError: ArmorApiError?
+    /// While true the kept session is refused (401) until a trusted session is opened.
+    var sessionRefused = false
+    func trustRegister(_ origin: String, name: String, publicKey: String) async throws -> String {
+        record("trust-register:\(name):\(publicKey)")
+        if let error = trustRegisterError { throw error }
+        return trustIssuedId
+    }
+    func trustChallenge(_ origin: String, id: String) async throws -> String {
+        record("trust-challenge:\(id)")
+        if let error = trustChallengeError { throw error }
+        return "challenge-1"
+    }
+    func trustSession(_ origin: String, id: String, challenge: String, signature: String) async throws {
+        record("trust-session:\(id):\(challenge):\(signature)")
+        if let error = trustSessionError { throw error }
+        sessionRefused = false
+        jar = SessionCookie(name: "armor_studio_sid", value: "renewed")
+    }
+    func trustRemove(_ origin: String, id: String) async throws { record("trust-remove:\(id)") }
+}
+
+/// A key pair that signs with a fixed answer, or is locked (nil).
+final class FakeSigner: DeviceSigner, @unchecked Sendable {
+    var isAvailable = true
+    var key: String? = "BASE64KEY"
+    var signature: Data? = Data([1, 2, 3])
+    private(set) var forgotten = false
+    private(set) var signed: [String] = []
+    func available() -> Bool { isAvailable }
+    func publicKey() -> String? { key }
+    func sign(_ data: Data) -> Data? { signed.append(String(decoding: data, as: UTF8.self)); return signature }
+    func forget() { forgotten = true }
 }
 
 func makeController(api: FakeApi = FakeApi(), auth: FakeAuth = FakeAuth(), language: String = "es") -> (ArmorController, FakeApi, FakeAuth, LockSettings, SessionVault) {
