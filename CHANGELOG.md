@@ -4,6 +4,7 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+- **German, French and Portuguese speak to you in the familiar form, as the Android app does:** every text of the three catalogues and of the permission texts now says du, tu and tu (second person, informal) instead of Sie, vous and the third person, with the same keys and no change to the other languages.
 - **An alarm window in the open app, as the Android app has:** while an alarm waits for a person, a banner over every screen but the alarms pulses (red and fast for a critical one, amber for the rest, still when the phone is set for less motion), says which alarm is the worst and how many wait, and lets the app be used under it; it can open the alarms, confirm from the banner or be closed until another alarm arrives. The alarm of a duress PIN is never shown. Eight languages.
 - **The phone tells the server the language of the app when it registers for push, as the Android app does:** the notice the server sends is written in it.
 - **A notice about a camera offers to open it, as the Android app does:** a camera that stopped answering, or an alarm a camera raised, carries the action "Open camera" (with "Confirm" when the alarm is known); touching it brings the app to the front on the Cameras place with that camera in full screen, once the person is recognised and the camera is on the list (a camera the server does not have, or an id that is not a camera id, is forgotten). The tab bar now has a selection a notice can ask for. Eight languages.

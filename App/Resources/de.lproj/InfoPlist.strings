@@ -1,8 +1,8 @@
 "CFBundleDisplayName" = "A.R.M.O.R.";
-"NSFaceIDUsageDescription" = "Bestätigt, dass Sie es sind, bevor ein Alarm scharf geschaltet, deaktiviert oder stummgeschaltet wird.";
-"NSLocalNetworkUsageDescription" = "Verbindet mit Ihrem A.R.M.O.R.-Server im Heimnetz.";
+"NSFaceIDUsageDescription" = "Bestätigt, dass du es bist, bevor ein Alarm scharf geschaltet, deaktiviert oder stummgeschaltet wird.";
+"NSLocalNetworkUsageDescription" = "Verbindet mit deinem A.R.M.O.R.-Server im Heimnetz.";
 "NSBluetoothAlwaysUsageDescription" = "Findet einen A.R.M.O.R.-Knoten und richtet ihn über Bluetooth ein.";
 "NSCameraUsageDescription" = "Liest den Kopplungs-QR-Code eines Knotens oder den Einrichtungs-QR-Code einer Installation.";
-"NSMicrophoneUsageDescription" = "Nimmt den Satz eines gesprochenen Befehls auf, um ihn an Ihren A.R.M.O.R.-Server zu senden, nur wenn Sie diese Option einschalten und die Taste tippen.";
-"NSLocationWhenInUseUsageDescription" = "Liest einmal, wo Sie sich befinden, um es als Ihr Zuhause zu speichern, nur wenn Sie die Erinnerung beim Verlassen des Hauses einschalten.";
-"NSLocationAlwaysAndWhenInUseUsageDescription" = "Bemerkt, dass Ihr Telefon das Haus verlässt, auch bei geschlossener App, um Sie an das Scharfschalten der Alarmanlage zu erinnern. Ihr Standort wird nirgendwohin gesendet.";
+"NSMicrophoneUsageDescription" = "Nimmt den Satz eines gesprochenen Befehls auf, um ihn an deinen A.R.M.O.R.-Server zu senden, nur wenn du diese Option einschaltest und die Taste tippst.";
+"NSLocationWhenInUseUsageDescription" = "Liest einmal, wo du dich befindest, um es als dein Zuhause zu speichern, nur wenn du die Erinnerung beim Verlassen des Hauses einschaltest.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Bemerkt, dass dein Telefon das Haus verlässt, auch bei geschlossener App, um dich an das Scharfschalten der Alarmanlage zu erinnern. Dein Standort wird nirgendwohin gesendet.";

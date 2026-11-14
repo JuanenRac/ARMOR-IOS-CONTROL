@@ -1,8 +1,8 @@
 "CFBundleDisplayName" = "A.R.M.O.R.";
-"NSFaceIDUsageDescription" = "Confirma que é você antes de armar, desarmar ou silenciar um alarme.";
-"NSLocalNetworkUsageDescription" = "Liga ao seu servidor A.R.M.O.R. na rede de casa.";
+"NSFaceIDUsageDescription" = "Confirma que és tu antes de armar, desarmar ou silenciar um alarme.";
+"NSLocalNetworkUsageDescription" = "Liga ao teu servidor A.R.M.O.R. na rede de casa.";
 "NSBluetoothAlwaysUsageDescription" = "Encontra e configura um nó A.R.M.O.R. por Bluetooth.";
 "NSCameraUsageDescription" = "Lê o código QR de emparelhamento de um nó ou o código QR de registo de uma instalação.";
-"NSMicrophoneUsageDescription" = "Grava a frase de um comando falado para a enviar ao seu servidor A.R.M.O.R., apenas quando ativa essa opção e toca no botão.";
-"NSLocationWhenInUseUsageDescription" = "Lê uma vez onde está para o guardar como a sua casa, apenas quando ativa o lembrete ao sair de casa.";
-"NSLocationAlwaysAndWhenInUseUsageDescription" = "Deteta que o seu telemóvel sai de casa, mesmo com a aplicação fechada, para o lembrar de armar o alarme. A sua localização não é enviada para lado nenhum.";
+"NSMicrophoneUsageDescription" = "Grava a frase de um comando falado para a enviar ao teu servidor A.R.M.O.R., apenas quando ativas essa opção e tocas no botão.";
+"NSLocationWhenInUseUsageDescription" = "Lê uma vez onde estás para o guardar como a tua casa, apenas quando ativas o lembrete ao sair de casa.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Deteta que o teu telemóvel sai de casa, mesmo com a aplicação fechada, para te lembrar de armar o alarme. A tua localização não é enviada para lado nenhum.";
