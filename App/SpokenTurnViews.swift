@@ -77,7 +77,8 @@ final class SpokenTurnModel: ObservableObject {
         listening = true
         let controller = SpokenTurnController(
             settings: settings, tokens: tokens, recorder: recorder,
-            send: { origin, pcm, language, token in try await api.voiceTurn(origin, pcm: pcm, language: language, voiceToken: token) }, audit: audit)
+            send: { origin, pcm, language, token in try await api.voiceTurn(origin, pcm: pcm, language: language, voiceToken: token) }, audit: audit,
+            sendWithSession: { origin, pcm, language in try await api.mobileVoiceTurn(origin, pcm: pcm, language: language) })
         let flag = stopFlag
         let outcome = await controller.run(origin: origin, language: language) { flag.value }
         listening = false

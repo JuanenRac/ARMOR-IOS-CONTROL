@@ -257,4 +257,70 @@ final class SpokenTurnTests: XCTestCase {
         XCTAssertEqual(request.value(forHTTPHeaderField: "Content-Type"), "audio/L16;rate=16000")
         XCTAssertEqual(request.httpBody?.count, 1_000)
     }
+
+    // MARK: with the session of the person, when no voice token was entered
+
+    private func sessionController(_ wire: Wire, _ sessionWire: Wire) -> SpokenTurnController {
+        SpokenTurnController(settings: settings, tokens: tokens, recorder: recorder, send: { _, pcm, _, _ in
+            wire.sent += 1; wire.sentSize = pcm.count; return try wire.answer()
+        }, audit: audit, clock: { [unowned self] in self.now }, sendWithSession: { _, pcm, _ in
+            sessionWire.sent += 1; sessionWire.sentSize = pcm.count; return try sessionWire.answer()
+        })
+    }
+
+    func testWithoutAVoiceTokenTheTurnGoesWithTheSessionWhenTheRouteOfThePhoneIsGiven() async {
+        settings.enabled = true
+        let sessionWire = Wire()
+        let withSession = sessionController(wire, sessionWire)
+        let outcome = await withSession.run(origin: "http://h", language: "es")
+        guard case .answered = outcome else { return XCTFail("\(outcome)") }
+        XCTAssertEqual(sessionWire.sent, 1)
+        XCTAssertEqual(wire.sent, 0)
+        XCTAssertEqual(audit.events, ["sent", "answered"])
+    }
+
+    func testWithAVoiceTokenTheTokenIsStillUsedAndTheSessionIsNot() async {
+        ready()
+        let sessionWire = Wire()
+        let withSession = sessionController(wire, sessionWire)
+        let outcome = await withSession.run(origin: "http://h", language: "es")
+        guard case .answered = outcome else { return XCTFail("\(outcome)") }
+        XCTAssertEqual(wire.sent, 1)
+        XCTAssertEqual(sessionWire.sent, 0)
+    }
+
+    func testTheSwitchAndThePermissionAreStillCheckedBeforeTheSessionIsUsed() async {
+        let sessionWire = Wire()
+        let withSession = sessionController(wire, sessionWire)
+        let off = await withSession.run(origin: "http://h", language: "es")
+        XCTAssertEqual(off, .off)
+        settings.enabled = true
+        recorder.granted = false
+        let denied = await withSession.run(origin: "http://h", language: "es")
+        XCTAssertEqual(denied, .permissionDenied)
+        XCTAssertEqual(sessionWire.sent, 0)
+        XCTAssertEqual(recorder.recordCalls, 0)
+    }
+
+    func testAServerThatKeepsTheVoiceOfThePhoneClosedFailsClosedWithItsCode() async {
+        settings.enabled = true
+        let sessionWire = Wire()
+        sessionWire.answer = { throw ArmorApiError(message: "refused", status: 403, body: #"{"error":"mobile_voice_disabled"}"#) }
+        let withSession = sessionController(wire, sessionWire)
+        let outcome = await withSession.run(origin: "http://h", language: "es")
+        XCTAssertEqual(outcome, .failed(code: "mobile_voice_disabled"))
+        XCTAssertEqual(audit.events, ["sent", "failed:mobile_voice_disabled"])
+    }
+
+    func testTheClientSendsTheSoundRawWithTheSessionAndWithoutAVoiceTokenToTheRouteOfThePhone() throws {
+        let session = ArmorApiClient.makeSession()
+        let client = ArmorApiClient(session: session, clientTag: "test")
+        let request = try client.mobileVoiceTurnRequest("http://127.0.0.1:1", pcm: Data(repeating: 0x41, count: 1_000), language: "es")
+        XCTAssertEqual(request.httpMethod, "POST")
+        XCTAssertEqual(request.url?.path, "/api/v1/voice/mobile-turn")
+        XCTAssertNil(request.value(forHTTPHeaderField: "X-Armor-Voice-Token"))
+        XCTAssertEqual(request.value(forHTTPHeaderField: "X-Armor-Language"), "es")
+        XCTAssertEqual(request.value(forHTTPHeaderField: "Content-Type"), "audio/L16;rate=16000")
+        XCTAssertEqual(request.httpBody?.count, 1_000)
+    }
 }

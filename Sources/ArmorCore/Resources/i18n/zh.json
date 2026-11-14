@@ -1173,6 +1173,7 @@
  "No se pudo leer la lista de grabaciones.": "无法读取录像列表。",
  "La orden hablada está apagada: enciéndela en Ajustes.": "语音指令已关闭:请在设置中开启。",
  "Falta la clave de voz: escríbela en Ajustes.": "缺少语音密钥:请在设置中输入。",
+ "El servidor no permite la voz desde el móvil: un administrador debe activarla en Studio.": "服务器不允许通过手机使用语音：管理员需要在 Studio 中开启。",
  "Sin permiso para el micrófono no puedo escucharte. Puedes escribir la orden.": "没有麦克风权限,我听不到你。你可以输入指令。",
  "No he oído nada. Prueba otra vez.": "我什么也没听到。请再试一次。",
  "La respuesta del servidor no es válida: no la muestro.": "服务器的回复无效:我不会显示它。",

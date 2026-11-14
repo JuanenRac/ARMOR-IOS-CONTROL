@@ -1175,6 +1175,7 @@
  "Falta la clave de voz: escríbela en Ajustes.": "Falta a chave de voz: introduz-a nas Definições.",
  "Sin permiso para el micrófono no puedo escucharte. Puedes escribir la orden.": "Sem permissão para o microfone não consigo ouvir-te. Podes escrever o comando.",
  "No he oído nada. Prueba otra vez.": "Não ouvi nada. Tenta outra vez.",
+ "El servidor no permite la voz desde el móvil: un administrador debe activarla en Studio.": "O servidor não permite a voz a partir do telemóvel: um administrador tem de a ligar no Studio.",
  "La respuesta del servidor no es válida: no la muestro.": "A resposta do servidor não é válida: não a mostro.",
  "El servidor no acepta la clave de voz.": "O servidor não aceita a chave de voz.",
  "Te escucho: toca el botón otra vez cuando acabes.": "Estou a ouvir: toca outra vez no botão quando terminar.",
