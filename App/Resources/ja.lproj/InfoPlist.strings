@@ -2,5 +2,7 @@
 "NSFaceIDUsageDescription" = "警報を設定・解除・消音する前に、ご本人であることを確認します。";
 "NSLocalNetworkUsageDescription" = "ご自宅のネットワーク上の A.R.M.O.R. サーバーに接続します。";
 "NSBluetoothAlwaysUsageDescription" = "A.R.M.O.R. ノードを Bluetooth で見つけて設定します。";
-"NSCameraUsageDescription" = "ノードのペアリング用 QR コードを読み取ります。";
+"NSCameraUsageDescription" = "ノードのペアリング用 QR コード、または設備のセットアップ用 QR コードを読み取ります。";
 "NSMicrophoneUsageDescription" = "音声コマンドのフレーズを録音して A.R.M.O.R. サーバーに送信します。このオプションをオンにしてボタンをタップしたときだけ使用されます。";
+"NSLocationWhenInUseUsageDescription" = "自宅として保存するために現在地を1回だけ読み取ります。外出時のリマインダーをオンにしたときのみです。";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "アプリを閉じていても、スマートフォンが自宅から離れたことを検知し、アラームをセットするよう通知します。位置情報はどこにも送信されません。";

@@ -2,5 +2,7 @@
 "NSFaceIDUsageDescription" = "在布防、撤防或消音警报之前确认是您本人。";
 "NSLocalNetworkUsageDescription" = "连接您家庭网络中的 A.R.M.O.R. 服务器。";
 "NSBluetoothAlwaysUsageDescription" = "通过蓝牙查找并配置 A.R.M.O.R. 节点。";
-"NSCameraUsageDescription" = "读取节点的配对二维码。";
+"NSCameraUsageDescription" = "读取节点的配对二维码或安装的设置二维码。";
 "NSMicrophoneUsageDescription" = "录下语音指令的语句并发送到您的 A.R.M.O.R. 服务器，仅在您开启该选项并点按按钮时使用。";
+"NSLocationWhenInUseUsageDescription" = "仅读取一次您所在的位置，用于保存为您的家，且仅在您开启离家提醒时。";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "即使应用已关闭，也能察觉手机离开家，提醒您设防。您的位置不会发送到任何地方。";

@@ -2,5 +2,7 @@
 "NSFaceIDUsageDescription" = "Confirms that it is you before arming, disarming or silencing an alarm.";
 "NSLocalNetworkUsageDescription" = "Reaches your A.R.M.O.R. server on your home network.";
 "NSBluetoothAlwaysUsageDescription" = "Finds and sets up an A.R.M.O.R. node over Bluetooth.";
-"NSCameraUsageDescription" = "Reads the pairing QR code of a node.";
+"NSCameraUsageDescription" = "Reads the pairing QR code of a node or the set-up QR code of an installation.";
 "NSMicrophoneUsageDescription" = "Records the phrase of a spoken command to send it to your A.R.M.O.R. server, only when you turn that option on and tap the button.";
+"NSLocationWhenInUseUsageDescription" = "Reads where you are once, to save it as your home, only when you turn on the reminder on leaving home.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Notices that your phone leaves home, even with the app closed, to remind you to arm the alarm. Your location is never sent anywhere.";
