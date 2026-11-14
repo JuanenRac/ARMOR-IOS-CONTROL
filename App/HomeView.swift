@@ -32,6 +32,7 @@ struct HomeView: View {
                         HStack {
                             Image(systemName: model.state.snapshot.armed ? "lock.shield.fill" : "lock.open.fill").font(.largeTitle)
                                 .foregroundColor(model.state.snapshot.armed ? Theme.ok : Theme.amber)
+                                .panicGesture(offered: model.state.facts.panicGesture && model.state.facts.canChange) { model.panicGesture() }   // hidden: only while the server offers it
                             VStack(alignment: .leading) {
                                 Text(model.state.snapshot.armed ? model.tr("Sistema ARMADO") : model.tr("Sistema DESARMADO")).font(.title3.weight(.bold))
                                 Text(model.isAway ? model.tr("Fuera de casa") : model.tr("En casa")).font(.caption).foregroundColor(Theme.muted)

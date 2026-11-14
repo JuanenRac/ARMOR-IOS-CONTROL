@@ -81,13 +81,16 @@ public struct SessionFacts: Equatable, Sendable {
     public var deviceLock: String
     /// What the person may do: what the server announced, else what the role allowed before it announced anything.
     public var capabilities: Capabilities
-    public init(role: String = "", deviceLock: String = "user", capabilities: Capabilities? = nil) { self.role = role; self.deviceLock = deviceLock; self.capabilities = capabilities ?? Capabilities.fromRole(role) }
+    /// The administrator turned on the hidden panic gesture (the option `client.panic_gesture`); without it the app never listens for the gesture.
+    public var panicGesture: Bool
+    public init(role: String = "", deviceLock: String = "user", capabilities: Capabilities? = nil, panicGesture: Bool = false) { self.role = role; self.deviceLock = deviceLock; self.capabilities = capabilities ?? Capabilities.fromRole(role); self.panicGesture = panicGesture }
 
     /// From the answer of `GET /api/v1/studio/session`.
     public static func parse(_ json: JSON) -> SessionFacts {
         let role = json.object("user")?.str("role") ?? ""
         let lock = json.object("capabilities")?.object("security")?.str("client.device_lock") ?? ""
-        return SessionFacts(role: role, deviceLock: lock.isEmpty ? "user" : lock, capabilities: Capabilities.of(session: json, role: role))
+        let panic = json.object("capabilities")?.object("security")?["client.panic_gesture"] as? Bool ?? false
+        return SessionFacts(role: role, deviceLock: lock.isEmpty ? "user" : lock, capabilities: Capabilities.of(session: json, role: role), panicGesture: panic)
     }
     public func can(_ action: String) -> Bool { capabilities.can(action) }
     public var canChange: Bool { can(CapabilityAction.operate) }

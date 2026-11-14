@@ -68,6 +68,12 @@ class FakeApi: ArmorApi, @unchecked Sendable {
     func alarms(_ origin: String) async throws -> (active: [Alarm], recent: [Alarm]) { record("alarms"); return ([], []) }
     func acknowledgeAlarm(_ origin: String, id: String) async throws { record("ack:\(id)") }
     func acknowledgeAllAlarms(_ origin: String) async throws { record("ackall") }
+    var panicError: ArmorApiError?
+    var panicErrorOnce = false
+    func panicGesture(_ origin: String) async throws {
+        record("panic")
+        if let error = panicError { if panicErrorOnce { panicError = nil }; throw error }
+    }
     func alarmPanels(_ origin: String) async throws -> [AlarmPanelView] { [] }
     func armProfiles(_ origin: String) async throws -> [ArmProfileView] { [] }
     func alarmCommandsEnabled(_ origin: String) async throws -> Bool { true }
