@@ -4,6 +4,8 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+- **An alarm window in the open app, as the Android app has:** while an alarm waits for a person, a banner over every screen but the alarms pulses (red and fast for a critical one, amber for the rest, still when the phone is set for less motion), says which alarm is the worst and how many wait, and lets the app be used under it; it can open the alarms, confirm from the banner or be closed until another alarm arrives. The alarm of a duress PIN is never shown. Eight languages.
+- **The phone tells the server the language of the app when it registers for push, as the Android app does:** the notice the server sends is written in it.
 - **What a widget of the home screen says about the system is ready, as the Android tile and widget do:** the face (armed, disarmed or no data, from the word of the server for the mode and nothing else) and its three words in the eight languages are in the core, and the source of a small widget that shows it and opens the app sits in `docs/widget`, apart from the app target until a Mac builds it: it can only show, never arm or disarm.
 - **The status screen counts the nodes of every kind, as the Android app does:** besides the radar nodes of the live stream it takes the health every solar, electrical, alarm and wall-panel node reports, counts a node that is in both lists once (online when either says so), and shows "online out of all" with the count of each kind; a tap opens the health of the nodes. Eight languages.
 - **The copy of the shared contract follows the summary of a solar gateway:** `ArmorContract.swift` is again what ARMOR-COMMON generates, with the reader of the summary a solar gateway sends and of the alerts it raises on its own.

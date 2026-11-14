@@ -322,7 +322,11 @@ public final class ArmorApiClient: ArmorApi, @unchecked Sendable {
         _ = try await send(origin, "/api/v1/studio/elevate", "POST", body, [200])
     }
 
-    public func registerPush(_ origin: String, token: String) async throws { _ = try await send(origin, "/api/v1/push/register", "POST", ["token": token], [200, 201, 409]) }
+    public func registerPush(_ origin: String, token: String, language: String) async throws {
+        var body: JSON = ["token": token]
+        if !language.isEmpty { body["language"] = language }
+        _ = try await send(origin, "/api/v1/push/register", "POST", body, [200, 201, 409])
+    }
     public func unregisterPush(_ origin: String, token: String) async throws { _ = try await send(origin, "/api/v1/push/unregister", "POST", ["token": token], [200]) }
 
     public func sessionCookie(_ origin: String) -> SessionCookie? {

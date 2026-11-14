@@ -73,7 +73,8 @@ public protocol ArmorApi: Sendable {
     func restoreSessionCookie(_ origin: String, _ cookie: SessionCookie)
     func forgetSession(_ origin: String)
     /// Tells the server the token APNs gave this phone, so it can push alarms to it (a server with push off answers 409, which is not a failure of the app).
-    func registerPush(_ origin: String, token: String) async throws
+    /// `language` is the one of the app: the server writes the push notices in it.
+    func registerPush(_ origin: String, token: String, language: String) async throws
     func unregisterPush(_ origin: String, token: String) async throws
 
     // reports, solar, electrical and battery maintenance (declared here, not only in the extension below, so a call through the protocol reaches the real client)
