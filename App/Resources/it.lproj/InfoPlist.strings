@@ -2,5 +2,7 @@
 "NSFaceIDUsageDescription" = "Conferma che sei tu prima di armare, disarmare o silenziare un allarme.";
 "NSLocalNetworkUsageDescription" = "Si collega al tuo server A.R.M.O.R. sulla rete di casa.";
 "NSBluetoothAlwaysUsageDescription" = "Trova e configura un nodo A.R.M.O.R. tramite Bluetooth.";
-"NSCameraUsageDescription" = "Legge il codice QR di abbinamento di un nodo.";
+"NSCameraUsageDescription" = "Legge il codice QR di abbinamento di un nodo o il codice QR di configurazione di un'installazione.";
 "NSMicrophoneUsageDescription" = "Registra la frase di un comando vocale per inviarla al tuo server A.R.M.O.R., solo quando attivi quell'opzione e tocchi il pulsante.";
+"NSLocationWhenInUseUsageDescription" = "Legge una volta dove ti trovi per salvarlo come casa tua, solo quando attivi il promemoria all'uscita di casa.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Rileva che il telefono esce di casa, anche con l'app chiusa, per ricordarti di armare l'allarme. La tua posizione non viene inviata da nessuna parte.";
