@@ -14,6 +14,12 @@ final class PresenceMonitor: NSObject, CLLocationManagerDelegate {
     var onLeft: (() async -> Void)? {
         didSet { if onLeft != nil, leftWhileWaiting { leftWhileWaiting = false; Task { await onLeft?() } } }
     }
+    /// Called with the word "home" or "away" when the phone crosses the circle and the person chose to tell the server.
+    var onWord: ((String) async -> Void)? {
+        didSet { if let word = wordWhileWaiting, onWord != nil { wordWhileWaiting = nil; Task { await onWord?(word) } } }
+    }
+    /// The last word heard before anybody was ready to act on it.
+    private var wordWhileWaiting: String?
     /// Called with the place just read, or nil when it could not be read.
     private var onPlace: ((HomePlace?) -> Void)?
     /// Called when the answer about the permission changes.
@@ -44,18 +50,35 @@ final class PresenceMonitor: NSObject, CLLocationManagerDelegate {
         manager.requestLocation()
     }
 
-    /// Watches the circle around the saved home when the reminder is on, and stops when it is off.
+    /// Watches the circle around the saved home when the reminder or the word for the server is on, and stops when both are off.
     func apply() {
         for region in manager.monitoredRegions where region.identifier == PresenceConfig.regionId { manager.stopMonitoring(for: region) }
-        guard store.enabled, let home = store.home, authorized, CLLocationManager.isMonitoringAvailable(for: CLCircularRegion.self) else { return }
+        guard PresenceShare.watching(reminder: store.enabled, share: store.share, hasHome: store.home != nil), let home = store.home, authorized, CLLocationManager.isMonitoringAvailable(for: CLCircularRegion.self) else { return }
         let region = CLCircularRegion(center: CLLocationCoordinate2D(latitude: home.lat, longitude: home.lon), radius: PresenceConfig.radiusM, identifier: PresenceConfig.regionId)
-        region.notifyOnEntry = false
+        region.notifyOnEntry = PresenceShare.notifyOnEntry(share: store.share)
         region.notifyOnExit = true
         manager.startMonitoring(for: region)
+        if store.share { manager.requestState(for: region) }   // announces the side the phone is on now, not only the next change
+    }
+
+    private func tell(_ word: String) {
+        if onWord == nil { wordWhileWaiting = word } else { Task { await onWord?(word) } }
+    }
+
+    func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
+        guard region.identifier == PresenceConfig.regionId, store.share else { return }
+        tell(PresenceShare.word(entered: true))
+    }
+
+    func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion) {
+        guard region.identifier == PresenceConfig.regionId, store.share, state != .unknown else { return }
+        tell(PresenceShare.word(entered: state == .inside))
     }
 
     func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
-        guard region.identifier == PresenceConfig.regionId, store.enabled else { return }
+        guard region.identifier == PresenceConfig.regionId else { return }
+        if store.share { tell(PresenceShare.word(entered: false)) }
+        guard store.enabled else { return }
         if onLeft == nil { leftWhileWaiting = true } else { Task { await onLeft?() } }
     }
 

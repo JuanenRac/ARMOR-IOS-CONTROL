@@ -94,6 +94,7 @@ final class AppModel: ObservableObject {
         }
         monitor.start(queue: DispatchQueue(label: "armor.network"))
         PresenceMonitor.shared.onLeft = { [weak self] in await self?.remindOnLeaving() }
+        PresenceMonitor.shared.onWord = { [weak self] word in await self?.tellPresence(word) }
         PresenceMonitor.shared.onAuthorization = { [weak self] in Task { @MainActor in self?.objectWillChange.send() } }
         PresenceMonitor.shared.apply()
     }
@@ -102,10 +103,12 @@ final class AppModel: ObservableObject {
 
     private var presenceStore: PresenceStore { PresenceStore(prefs) }
     var presenceEnabled: Bool { presenceStore.enabled }
+    var presenceShare: Bool { presenceStore.share }
     var presenceHasHome: Bool { presenceStore.home != nil }
     var presenceAuthorized: Bool { PresenceMonitor.shared.authorized }
 
     func setPresenceEnabled(_ on: Bool) { presenceStore.enabled = on; PresenceMonitor.shared.apply() }
+    func setPresenceShare(_ on: Bool) { presenceStore.share = on; PresenceMonitor.shared.apply() }
     func askPresencePermission() { PresenceMonitor.shared.askPermission() }
 
     /// Saves the place the phone is in as home and starts watching the circle around it.
@@ -118,6 +121,16 @@ final class AppModel: ObservableObject {
                 done(true)
             }
         }
+    }
+
+    /// The phone crossed the circle: tells the server only the word, with the session the phone keeps; nothing when there is no usable session or the person turned it off.
+    func tellPresence(_ word: String) async {
+        guard presenceStore.share, PresenceShare.valid(word) else { return }
+        if !controller.state.signedIn || activeOrigin == nil {
+            guard await connect(), let origin = activeOrigin, await controller.restore(origin: origin) else { return }
+        }
+        guard let origin = activeOrigin else { return }
+        try? await controller.api.setPresence(origin, state: word)   // tried again at the next change of side
     }
 
     /// The phone left home: reads whether the system is armed (nothing else is asked of the server) and says so.

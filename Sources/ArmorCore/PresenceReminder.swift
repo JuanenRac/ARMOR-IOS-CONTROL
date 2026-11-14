@@ -30,6 +30,19 @@ public enum PresenceDecision {
     }
 }
 
+/// What the phone tells the server about being at home: only the word "home" or "away", chosen by the circle around the saved place (the same as the Android app). Off by default and apart from the reminder.
+/// The place never leaves the phone; the server only learns which side of the circle the phone is on.
+public enum PresenceShare {
+    /// The word for crossing the circle: entering says "home", leaving says "away".
+    public static func word(entered: Bool) -> String { entered ? "home" : "away" }
+    /// Whether the circle is watched at all: something is on and a place is saved.
+    public static func watching(reminder: Bool, share: Bool, hasHome: Bool) -> Bool { hasHome && (reminder || share) }
+    /// Whether coming back is heard: only the word needs it (the reminder is about leaving).
+    public static func notifyOnEntry(share: Bool) -> Bool { share }
+    /// Whether the word is one the server accepts.
+    public static func valid(_ word: String) -> Bool { word == "home" || word == "away" }
+}
+
 /// The place saved as home.
 public struct HomePlace: Equatable, Sendable {
     public let lat: Double
@@ -46,6 +59,12 @@ public final class PresenceStore: @unchecked Sendable {
     public var enabled: Bool {
         get { store.get("presence_on") == "1" }
         set { if newValue { store.put("presence_on", "1") } else { store.remove("presence_on") } }
+    }
+
+    /// The phone tells the server "home" or "away" (PUT /api/v1/presence/me). Off by default, per person, and apart from the reminder.
+    public var share: Bool {
+        get { store.get("presence_share") == "1" }
+        set { if newValue { store.put("presence_share", "1") } else { store.remove("presence_share") } }
     }
 
     public var home: HomePlace? {
