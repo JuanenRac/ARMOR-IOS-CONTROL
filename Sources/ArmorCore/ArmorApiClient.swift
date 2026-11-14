@@ -329,6 +329,24 @@ public final class ArmorApiClient: ArmorApi, @unchecked Sendable {
     }
     public func unregisterPush(_ origin: String, token: String) async throws { _ = try await send(origin, "/api/v1/push/unregister", "POST", ["token": token], [200]) }
 
+    public func trustRegister(_ origin: String, name: String, publicKey: String) async throws -> String {
+        let data = try await send(origin, "/api/v1/devices/trust", "POST", ["name": name, "public_key": publicKey], [201])
+        return ((try? Json.object(data)) ?? [:]).str("id")
+    }
+
+    public func trustChallenge(_ origin: String, id: String) async throws -> String {
+        let data = try await send(origin, "/api/v1/devices/trust/challenge", "POST", ["id": id], [200])
+        return ((try? Json.object(data)) ?? [:]).str("challenge")
+    }
+
+    public func trustSession(_ origin: String, id: String, challenge: String, signature: String) async throws {
+        _ = try await send(origin, "/api/v1/devices/trust/session", "POST", ["id": id, "challenge": challenge, "signature": signature], [201])
+    }
+
+    public func trustRemove(_ origin: String, id: String) async throws {
+        _ = try await send(origin, "/api/v1/devices/trust/\(Self.part(id))", "DELETE", nil, [204])
+    }
+
     public func sessionCookie(_ origin: String) -> SessionCookie? {
         guard let url = URL(string: origin), let jar = session.configuration.httpCookieStorage else { return nil }
         return jar.cookies(for: url)?.first { $0.name.hasSuffix(Self.sessionCookieSuffix) && !$0.value.isEmpty }.map { SessionCookie(name: $0.name, value: $0.value) }

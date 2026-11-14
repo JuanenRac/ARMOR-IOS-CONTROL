@@ -23,6 +23,7 @@ final class AppModel: ObservableObject {
     let policy: LockPolicy
     let gate: LockGate
     let controller: ArmorController
+    let trustedSettings: TrustedPhoneSettings
     /// The spoken turn of the Assistant: off until the person turns it on in More.
     let spokenTurn: SpokenTurnModel
     private let monitor = NWPathMonitor()
@@ -48,6 +49,11 @@ final class AppModel: ObservableObject {
     @Published var voiceAvailable = false
     @Published var tiedToUnlock: Bool
     @Published var pendingElevation: ElevationRequest?
+    /// The place the main tabs show, and the camera a notice asked to open (held until the Cameras place takes it).
+    @Published var selectedTab = MainTab.status
+    @Published var requestedCamera: String?
+    /// This phone is a trusted one for the server (off by default): a key that never leaves the phone renews the session by signing a challenge.
+    @Published var trustedOn: Bool
     @Published var rememberedUser: String = ""
     // what the person chose about the notices (kept in the preferences of the app)
     @Published var notices = NoticeSettings()
@@ -79,7 +85,13 @@ final class AppModel: ObservableObject {
         self.spokenTurn = SpokenTurnModel(prefs: prefs)
         self.enrolmentReader = EnrolmentReader(session: session)
         self.pins = pins; self.trust = trust; self.translator = translator; self.lockSettings = settings; self.policy = policy; self.gate = gate; self.vault = vault
-        self.controller = ArmorController(api: api, vault: vault, gate: gate, lockSettings: settings, translator: translator)
+        let trustedSettings = TrustedPhoneSettings(prefs)
+        let phoneName = UIDevice.current.userInterfaceIdiom == .pad ? "iPad" : "iPhone"
+        let made = ArmorController(api: api, vault: vault, gate: gate, lockSettings: settings, translator: translator)
+        made.trusted = TrustedPhone(api: api, signer: SecureEnclaveSigner(), settings: trustedSettings, phoneName: { phoneName })
+        self.controller = made
+        self.trustedSettings = trustedSettings
+        self.trustedOn = trustedSettings.enabled
         self.language = code
         self.installation = SavedInstallation.load(from: prefs)
         self.lockStatus = policy.status()
@@ -310,6 +322,7 @@ final class AppModel: ObservableObject {
         startPolling()
         requestNotificationPermission()
         Task { await registerPush() }
+        if trustedOn, state.facts.trustedDevices { Task { await controller.trustThisPhone() } }   // quietly: a server that wants a proof first is left for the switch to ask
     }
 
     // MARK: push
@@ -377,8 +390,15 @@ final class AppModel: ObservableObject {
         UNUserNotificationCenter.current().delegate = NotificationPresenter.shared   // the notices also show while the app is open
         // a notice that knows its alarm carries the action "Confirm": it acknowledges the alarm with the session the phone keeps, without opening the app
         let confirm = UNNotificationAction(identifier: NoticeActions.acknowledgeActionId, title: tr("Confirmar"), options: [])
-        UNUserNotificationCenter.current().setNotificationCategories([UNNotificationCategory(identifier: NoticeActions.categoryId, actions: [confirm], intentIdentifiers: [], options: [])])
+        // a notice about a camera offers to open it: the app comes to the front on the Cameras place with that camera in full screen
+        let open = UNNotificationAction(identifier: NoticeActions.openCameraActionId, title: tr("Abrir cámara"), options: [.foreground])
+        UNUserNotificationCenter.current().setNotificationCategories([
+            UNNotificationCategory(identifier: NoticeActions.categoryId, actions: [confirm], intentIdentifiers: [], options: []),
+            UNNotificationCategory(identifier: NoticeActions.openCameraCategoryId, actions: [open], intentIdentifiers: [], options: []),
+            UNNotificationCategory(identifier: NoticeActions.ackAndOpenCategoryId, actions: [confirm, open], intentIdentifiers: [], options: []),
+        ])
         NotificationPresenter.shared.onAcknowledge = { [weak self] id in await self?.acknowledgeFromNotice(id) }
+        NotificationPresenter.shared.onOpenCamera = { [weak self] id in await self?.openCameraFromNotice(id) }
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { _, _ in }
     }
 
@@ -390,7 +410,7 @@ final class AppModel: ObservableObject {
         content.title = notice.title
         content.body = notice.text
         content.threadIdentifier = "armor-alarms"
-        if let category = NoticeActions.category(alarmId: notice.alarmId) { content.categoryIdentifier = category; content.userInfo = NoticeActions.userInfo(alarmId: notice.alarmId) }
+        if let category = NoticeActions.category(alarmId: notice.alarmId, cameraId: notice.cameraId) { content.categoryIdentifier = category; content.userInfo = NoticeActions.userInfo(alarmId: notice.alarmId, cameraId: notice.cameraId) }
         let critical = notice.severity == "critical"
         if decision == .silent {
             content.sound = nil
@@ -417,6 +437,13 @@ final class AppModel: ObservableObject {
         if AlarmSpeech.shouldSpeak(decision, enabled: speaksAlarms, voice: voice, severity: notice.severity) {
             AlarmSpeaker.shared.say("\(notice.title). \(notice.text)", voice: voice, language: language)
         }
+    }
+
+    /// The action "Open camera" of a notice: the request is held and the Cameras place is shown; it takes the request once the person is recognised and the camera is known.
+    func openCameraFromNotice(_ camera: String) {
+        guard OpenCamera.valid(camera) else { return }
+        requestedCamera = camera
+        selectedTab = .cameras
     }
 
     /// The action "Confirm" of a notice: the alarm is acknowledged with the session the phone keeps; if the app was woken just for this, the server is reached and the kept session tried first.
@@ -545,6 +572,27 @@ final class AppModel: ObservableObject {
     }
 
     func setGrace(_ seconds: Int) { lockSettings.graceSeconds = seconds; refreshLock() }
+
+    /// Whether the server lets a phone be a trusted one (the option of the administrator).
+    var trustedOffered: Bool { state.facts.trustedDevices }
+
+    /// The switch of the trusted phone: on registers this phone (asking for a new proof of identity first when the server wants one), off makes the server forget it.
+    func setTrusted(_ on: Bool) async {
+        trustedSettings.enabled = on
+        trustedOn = on
+        if !on { await controller.untrustThisPhone(); return }
+        let asker: ElevationAsker = { [weak self] in
+            guard let self else { return nil }
+            return await withCheckedContinuation { continuation in
+                Task { @MainActor in self.pendingElevation = ElevationRequest(continuation) }
+            }
+        }
+        switch await controller.trustThisPhone(asker: asker) {
+        case .done: show(tr("Este teléfono ya es de confianza."), error: false)
+        case .unavailable: show(tr("Este servidor no ofrece teléfonos de confianza."), error: true)
+        case .failed, .needsProof, .off: show(tr("El servidor no ha aceptado este teléfono como de confianza."), error: true)
+        }
+    }
 
     func setTiedToUnlock(_ on: Bool) async {
         switch await gate.prove() {
