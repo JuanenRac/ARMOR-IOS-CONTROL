@@ -1204,5 +1204,7 @@
  "Cambiar la casa por mi ubicación actual": "Remplacer la maison par ma position actuelle",
  "Casa guardada.": "Maison enregistrée.",
  "No se pudo leer tu ubicación.": "Votre position n'a pas pu être lue.",
- "Se necesita el permiso de ubicación, también con la app cerrada, para avisarte al salir.": "L'autorisation de localisation, aussi avec l'application fermée, est nécessaire pour vous prévenir à la sortie."
+ "Se necesita el permiso de ubicación, también con la app cerrada, para avisarte al salir.": "L'autorisation de localisation, aussi avec l'application fermée, est nécessaire pour vous prévenir à la sortie.",
+ "Servidores guardados en este teléfono": "Serveurs enregistrés sur ce téléphone",
+ "Toca uno para entrar sin escribir la contraseña.": "Touchez-en un pour entrer sans saisir le mot de passe."
 }

@@ -1204,5 +1204,7 @@
  "Cambiar la casa por mi ubicación actual": "Zuhause auf meinen aktuellen Standort ändern",
  "Casa guardada.": "Zuhause gespeichert.",
  "No se pudo leer tu ubicación.": "Ihr Standort konnte nicht gelesen werden.",
- "Se necesita el permiso de ubicación, también con la app cerrada, para avisarte al salir.": "Die Standortberechtigung, auch bei geschlossener App, wird benötigt, um Sie beim Verlassen zu benachrichtigen."
+ "Se necesita el permiso de ubicación, también con la app cerrada, para avisarte al salir.": "Die Standortberechtigung, auch bei geschlossener App, wird benötigt, um Sie beim Verlassen zu benachrichtigen.",
+ "Servidores guardados en este teléfono": "Auf diesem Telefon gespeicherte Server",
+ "Toca uno para entrar sin escribir la contraseña.": "Tippen Sie auf einen Server, um ohne Passworteingabe hineinzukommen."
 }
