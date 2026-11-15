@@ -42,3 +42,16 @@ Choose a signing team in Xcode, add the app icon to `App/Resources/Assets.xcasse
 An order the server does not allow to this person, though the person may operate, is refused with "The server does not allow your user to do this." (in the eight languages).
 
 Difference by system: none; it is the port of the Android reading (`SessionCapabilities`). The pure rules are in `Capabilities.swift` and have tests in `CapabilitiesTests.swift`; the screens read them through `SessionFacts.can(_:)`.
+
+## Running the app without hardware: the simulated server and the simulated watch
+
+Everything that depends on a real server, an iPhone or an Apple Watch has a twin in `Tests/ArmorCoreTests/Simulation/`, so the app can be exercised from end to end on any machine with a Swift toolchain:
+
+| Twin | Stands in for | What it does |
+| --- | --- | --- |
+| `SimulatedServer` (behind a URL protocol) | ARMOR-SERVER | The real `ArmorApiClient` talks to it: sign-in with an optional second factor, session, arming with a PIN that locks after three wrong tries, alarms and their confirmation, history, push registration. Ids and times are counted, never read from a clock. |
+| `SimulatedWatch` | the Apple Watch and the Wear OS watch | Takes the place of WatchConnectivity: checks every message against the contract of ARMOR-WATCH, keeps the alerts for their time to live on a clock moved by the test, and gives back the confirmation a tap would make. |
+
+Failures are made on purpose: a cut line, a refusal on one path, an expired session, a watch out of range (the messages are live ones and are lost, not queued), an alert that expired before the tap, a double confirmation, a viewer who tries to give an order. `SimulationScenarioTests` runs the real controller through them.
+
+What this does not prove: Face ID and the Keychain, the certificate rules, the pairing of the phone with a real watch, push delivery by Apple, and the screens on a device. Those stay pending a real iPhone and a real watch.
