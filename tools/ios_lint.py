@@ -112,7 +112,7 @@ def check_structure(problems: list[str]) -> None:
 
 
 def check_watch(problems: list[str]) -> None:
-    """The Apple Watch app (the sources live in ARMOR-WATCH) travels inside the app of the phone: the project describes it, embeds it and gives it the same identity and version."""
+    """The Apple Watch app (the sources live in ARMOR-WATCH) travels inside the app of the phone: the project describes it, embeds it and gives it the same identity and build number and the version of ARMOR-WATCH."""
     project = (ROOT / "project.yml").read_text(encoding="utf-8") if (ROOT / "project.yml").is_file() else ""
     phone, _, watch = project.partition("\n  ArmorWatch:\n")
     if not watch:
@@ -131,11 +131,20 @@ def check_watch(problems: list[str]) -> None:
     for code in INFO_LANGS:
         if code not in re.search(r"CFBundleLocalizations: \[([^\]]*)\]", watch).group(1):  # type: ignore[union-attr]
             problems.append(f"the watch app lacks the language {code}")
-    for key in ("CFBundleShortVersionString", "CURRENT_PROJECT_VERSION", "MARKETING_VERSION", "CFBundleVersion"):
+    # the build number is the one of the phone; the marketing version is the one of ARMOR-WATCH (its manifest), and the two keys of the watch agree with each other
+    for key in ("CURRENT_PROJECT_VERSION", "CFBundleVersion"):
         phone_value = re.search(rf'{key}: "([^"]+)"', phone)
         watch_value = re.search(rf'{key}: "([^"]+)"', watch)
         if not phone_value or not watch_value or phone_value.group(1) != watch_value.group(1):
             problems.append(f"{key} of the watch app is not the one of the app of the phone")
+    marketing = {key: (re.search(rf'{key}: "([^"]+)"', watch) or [None, None])[1] for key in ("CFBundleShortVersionString", "MARKETING_VERSION")}
+    if marketing["CFBundleShortVersionString"] is None or marketing["CFBundleShortVersionString"] != marketing["MARKETING_VERSION"]:
+        problems.append("CFBundleShortVersionString and MARKETING_VERSION of the watch app differ")
+    sibling = ROOT.parent / "ARMOR-WATCH" / "armor.project.json"
+    if sibling.is_file() and marketing["MARKETING_VERSION"]:
+        wanted = json.loads(sibling.read_text(encoding="utf-8")).get("version")
+        if wanted != marketing["MARKETING_VERSION"]:
+            problems.append(f"the version of the watch app ({marketing['MARKETING_VERSION']}) is not the one of ARMOR-WATCH ({wanted})")
     # every job that makes the Xcode project needs the sources of the watch next to this folder
     for flow in sorted((ROOT / ".github" / "workflows").glob("*.yml")):
         text = flow.read_text(encoding="utf-8")
