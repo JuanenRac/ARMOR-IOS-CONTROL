@@ -27,6 +27,22 @@ final class SecurityTests: XCTestCase {
     func testAStandAloneServerPinsItsOwnKey() {
         XCTAssertEqual(PinStore(MemoryStore()).decide(host: "x", chainPins: [a], systemTrusts: true), .firstUse(pin: a))
     }
+    func testAPinInAChainTheSystemDoesNotTrustCountsOnlyWhenTheChainWasVerifiedToIt() {
+        let store = PinStore(MemoryStore())
+        store.add(b, for: "casa")
+        // a forged leaf with a copy of the paired authority behind it: nothing proved the path, so the pin does not count
+        XCTAssertEqual(store.decide(host: "casa", chainPins: [a, b], systemTrusts: false, verifiedPins: []), .mismatch)
+        XCTAssertEqual(store.decide(host: "casa", chainPins: [a, b], systemTrusts: false, verifiedPins: [b]), .trusted)
+        // what the system trusts needs no second proof
+        XCTAssertEqual(store.decide(host: "casa", chainPins: [a, b], systemTrusts: true, verifiedPins: []), .trusted)
+    }
+    func testTheAuthorityNamedByTheQrPairsOnlyWhenTheChainWasVerifiedToIt() {
+        let store = PinStore(MemoryStore())
+        let leaf = String(repeating: "1", count: 64), authority = String(repeating: "2", count: 64)
+        store.expectAuthority(authority, for: "casa")
+        XCTAssertEqual(store.decide(host: "casa", chainPins: [a, b], systemTrusts: false, chainFingerprints: [leaf, authority], verifiedPins: []), .unknownAuthority(pin: b))
+        XCTAssertEqual(store.decide(host: "casa", chainPins: [a, b], systemTrusts: false, chainFingerprints: [leaf, authority], verifiedPins: [b]), .firstUse(pin: b))
+    }
     func testAHostKeepsFourPinsAndCanBeCleared() {
         let store = PinStore(MemoryStore())
         let d = "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD=", e = "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE="

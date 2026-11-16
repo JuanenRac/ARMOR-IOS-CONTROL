@@ -4,6 +4,8 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+- **A saved certificate pin now needs a real chain:** when the system does not trust the chain, the pin counts only if the chain is evaluated again with the pinned certificate as the only anchor (signed path from the leaf, in date, made for the host); the authority named by a set-up QR code is paired the same way. Before, a chain that merely held the pinned certificate behind a forged leaf was accepted. Servers already paired keep working. Tests cover the decision with and without the proof.
+
 ## [0.0.6] - Parity with the Android app: QR sign-in, saved servers, push actions and the watch app
 
 - **The watch app has the version of ARMOR-WATCH:** the `ArmorWatch` target of `project.yml` now carries the marketing version of ARMOR-WATCH (0.0.2) and the build number of the phone (2) instead of the version of the phone; `tools/ios_lint.py` checks that the two version keys of the watch agree, that its build number is the one of the phone and, when ARMOR-WATCH is checked out next to this folder, that the version is the one of its manifest.
