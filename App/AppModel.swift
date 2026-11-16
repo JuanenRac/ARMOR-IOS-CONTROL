@@ -84,6 +84,8 @@ final class AppModel: ObservableObject {
         let policy = LockPolicy(settings: settings, availability: { auth.availability() })
         let gate = LockGate(policy: policy, auth: auth, translator: translator)
         let vault = SessionVault(secrets: KeychainSecrets(), prefs: prefs)
+        let earlier = SavedInstallation.load(from: prefs)
+        vault.forgetIfReinstalled(hasOtherSettings: earlier.endpoints.home != nil || earlier.endpoints.away != nil)   // a reinstalled app does not inherit what the Keychain kept
         self.spokenTurn = SpokenTurnModel(prefs: prefs)
         self.enrolmentReader = EnrolmentReader(session: session)
         self.pins = pins; self.trust = trust; self.translator = translator; self.lockSettings = settings; self.policy = policy; self.gate = gate; self.vault = vault
