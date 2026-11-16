@@ -75,6 +75,22 @@ final class SecurityTests: XCTestCase {
         XCTAssertNil(vault.loadSession(origin: "http://a:1"))
         XCTAssertNil(vault.rememberedLogin(origin: "http://a:1"))
     }
+    func testAReinstalledAppForgetsWhatTheKeychainKeptButAnUpdatedOneKeepsIt() {
+        let secrets = MemorySecrets()
+        let vault = SessionVault(secrets: secrets, prefs: MemoryStore())
+        vault.saveSession(SessionCookie(name: "n", value: "one"), origin: "https://house:1")
+        vault.rememberLogin(origin: "https://house:1", username: "ana", password: "pw")
+        XCTAssertTrue(vault.forgetIfReinstalled(hasOtherSettings: false))
+        XCTAssertTrue(secrets.items.isEmpty)
+        vault.saveSession(SessionCookie(name: "n", value: "two"), origin: "https://house:1")
+        XCTAssertFalse(vault.forgetIfReinstalled(hasOtherSettings: false), "later starts do nothing")
+        XCTAssertEqual(vault.loadSession(origin: "https://house:1")?.value, "two")
+
+        let updated = SessionVault(secrets: MemorySecrets(), prefs: MemoryStore())
+        updated.saveSession(SessionCookie(name: "n", value: "one"), origin: "https://house:1")
+        XCTAssertFalse(updated.forgetIfReinstalled(hasOtherSettings: true))
+        XCTAssertEqual(updated.loadSession(origin: "https://house:1")?.value, "one")
+    }
     func testVaultKeepsTheSessionOfEachServerAndForgetsOneAtATime() {
         let vault = SessionVault(secrets: MemorySecrets(), prefs: MemoryStore())
         vault.saveSession(SessionCookie(name: "n", value: "one"), origin: "https://house:1")

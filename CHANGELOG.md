@@ -4,6 +4,8 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+- **A reinstalled app no longer opens with the sessions or the remembered login of the earlier install:** the Keychain survives an uninstall and the preferences do not, so the first start of an app with no saved server forgets what the Keychain kept (an updated app keeps it). A unit test covers both cases.
+
 - **A saved certificate pin now needs a real chain:** when the system does not trust the chain, the pin counts only if the chain is evaluated again with the pinned certificate as the only anchor (signed path from the leaf, in date, made for the host); the authority named by a set-up QR code is paired the same way. Before, a chain that merely held the pinned certificate behind a forged leaf was accepted. Servers already paired keep working. Tests cover the decision with and without the proof.
 
 ## [0.0.6] - Parity with the Android app: QR sign-in, saved servers, push actions and the watch app
