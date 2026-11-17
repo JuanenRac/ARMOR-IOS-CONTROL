@@ -141,6 +141,7 @@ ARMOR-IOS-CONTROL 是 iPhone 通往同一个 [ARMOR-SERVER](https://github.com/J
 | Xcode / Swift | 15+ / 5.9+ | 用于构建应用／运行测试 |
 | `MARKETING_VERSION`, `CURRENT_PROJECT_VERSION` | 0.0.1, 1 | 应用版本，来自 `project.yml` |
 | `GoogleService-Info.plist` | 用于推送 | 安装环境自己的文件，绝不保存在仓库中 |
+| `pins_strict_chain` | on | 还要求服务器证书链指向配对时保存的那张证书（逐级签名）；保存之前完成的配对仍然有效，并给出提示。可通过证书配对面板中的开关关闭 |
 
 应用内：两个地址、*记住我*、手机锁和语言（八种语言或跟随手机）位于*更多 > 语言*。
 

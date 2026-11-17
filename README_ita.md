@@ -141,6 +141,7 @@ I testi dei permessi (Face ID, rete locale) esistono in tutte e otto le lingue. 
 | Xcode / Swift | 15+ / 5.9+ | Per compilare l'app / per eseguire i test |
 | `MARKETING_VERSION`, `CURRENT_PROJECT_VERSION` | 0.0.1, 1 | La versione dell'app, da `project.yml` |
 | `GoogleService-Info.plist` | per il push | Il file proprio dell'installazione, mai conservato nel repository |
+| `pins_strict_chain` | on | Richiedere anche che la catena del server porti allo stesso certificato conservato all'abbinamento (firmato anello per anello); un abbinamento precedente resta valido, con un avviso. Un interruttore nel pannello di abbinamento dei certificati lo spegne |
 
 Nell'app: i due indirizzi, *Ricordami*, il blocco del telefono e la lingua (le otto lingue o seguire il telefono) in *Altro > Lingua*.
 

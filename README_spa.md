@@ -141,6 +141,7 @@ Es un cliente: llama a 70 rutas de ARMOR-SERVER (`tools/ios_lint.py` las cuenta 
 | Xcode / Swift | 15+ / 5.9+ | Para compilar la app / para ejecutar las pruebas |
 | `MARKETING_VERSION`, `CURRENT_PROJECT_VERSION` | 0.0.1, 1 | La versión de la app, de `project.yml` |
 | `GoogleService-Info.plist` | para push | El fichero propio de la instalación, nunca guardado en el repositorio |
+| `pins_strict_chain` | on | Exigir además que la cadena del servidor lleve al mismo certificado guardado al emparejar (firmado eslabón a eslabón); un emparejamiento anterior a guardarlo sigue valiendo, con un aviso. Un interruptor del panel de emparejamiento de certificados lo apaga |
 
 En la app: las dos direcciones, *Recordarme*, el bloqueo del teléfono y el idioma (los ocho o seguir al teléfono) en *Más > Idioma*.
 
