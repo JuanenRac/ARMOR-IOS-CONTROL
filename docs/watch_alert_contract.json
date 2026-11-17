@@ -1,0 +1,61 @@
+{
+  "contract": "watch-alert-relay",
+  "protocolVersion": 1,
+  "note": "One file, three repositories: ARMOR-WATCH, ARMOR-ANDROID-CONTROL and ARMOR-IOS-CONTROL keep an identical copy and each runs the vectors below against its own code. A change to a message starts here, in every copy. The phone sends the texts already written in the language of the person; the watch writes nothing and keeps nothing.",
+  "paths": {
+    "toWatch": "/armor/alert",
+    "toPhone": "/armor/alert/ack"
+  },
+  "severities": ["info", "warning", "critical"],
+  "limits": {
+    "rawMax": 4096,
+    "alertIdPattern": "^[A-Za-z0-9_-]{1,64}$",
+    "titleMax": 60,
+    "textMax": 160,
+    "ttlSeconds": [5, 600],
+    "pendingMax": 8
+  },
+  "settings": {
+    "bindSender": {
+      "type": "boolean",
+      "default": false,
+      "platforms": ["wear"],
+      "note": "Off (the default): any phone in reach may send. On: the phone that switched the alerts on is the only one listened to until they are switched off. Wear OS only: the Apple Watch talks to its one paired iPhone and has no sender to tell apart."
+    }
+  },
+  "types": {
+    "toWatch": ["relay", "alert", "alert_clear"],
+    "toPhone": ["alert_ack"]
+  },
+  "valid": [
+    {"type": "relay", "protocolVersion": 1, "enabled": true},
+    {"type": "relay", "protocolVersion": 1, "enabled": false},
+    {"type": "alert", "protocolVersion": 1, "alertId": "al-001", "severity": "critical", "title": "Front door", "text": "The front door was opened while the system was armed.", "needsAck": true, "ttlSeconds": 120},
+    {"type": "alert", "protocolVersion": 1, "alertId": "n_2", "severity": "info", "title": "Armed", "text": "The system is armed.", "needsAck": false, "ttlSeconds": 5},
+    {"type": "alert", "protocolVersion": 1, "alertId": "w", "severity": "warning", "title": "Camera", "text": "A camera stopped answering.", "needsAck": false, "ttlSeconds": 600},
+    {"type": "alert_clear", "protocolVersion": 1, "alertId": "al-001"},
+    {"type": "alert_ack", "protocolVersion": 1, "alertId": "al-001"}
+  ],
+  "invalid": [
+    {"why": "no type", "protocolVersion": 1, "enabled": true},
+    {"why": "unknown type", "type": "alert_now", "protocolVersion": 1, "alertId": "a"},
+    {"why": "another protocol version", "type": "relay", "protocolVersion": 2, "enabled": true},
+    {"why": "protocol version as a text", "type": "relay", "protocolVersion": "1", "enabled": true},
+    {"why": "relay switch as a text", "type": "relay", "protocolVersion": 1, "enabled": "true"},
+    {"why": "relay without a switch", "type": "relay", "protocolVersion": 1},
+    {"why": "alert id with a space", "type": "alert_clear", "protocolVersion": 1, "alertId": "a b"},
+    {"why": "alert id over 64 characters", "type": "alert_clear", "protocolVersion": 1, "alertId": {"repeat": "a", "count": 65}},
+    {"why": "acknowledgement without an id", "type": "alert_ack", "protocolVersion": 1},
+    {"why": "unknown severity", "type": "alert", "protocolVersion": 1, "alertId": "a", "severity": "panic", "title": "t", "text": "x", "needsAck": true, "ttlSeconds": 60},
+    {"why": "blank title", "type": "alert", "protocolVersion": 1, "alertId": "a", "severity": "info", "title": "  ", "text": "x", "needsAck": false, "ttlSeconds": 60},
+    {"why": "title over 60 characters", "type": "alert", "protocolVersion": 1, "alertId": "a", "severity": "info", "title": {"repeat": "t", "count": 61}, "text": "x", "needsAck": false, "ttlSeconds": 60},
+    {"why": "blank text", "type": "alert", "protocolVersion": 1, "alertId": "a", "severity": "info", "title": "t", "text": "", "needsAck": false, "ttlSeconds": 60},
+    {"why": "text over 160 characters", "type": "alert", "protocolVersion": 1, "alertId": "a", "severity": "info", "title": "t", "text": {"repeat": "x", "count": 161}, "needsAck": false, "ttlSeconds": 60},
+    {"why": "needs-ack as a text", "type": "alert", "protocolVersion": 1, "alertId": "a", "severity": "info", "title": "t", "text": "x", "needsAck": "yes", "ttlSeconds": 60},
+    {"why": "alert without needs-ack", "type": "alert", "protocolVersion": 1, "alertId": "a", "severity": "info", "title": "t", "text": "x", "ttlSeconds": 60},
+    {"why": "time to live under 5 seconds", "type": "alert", "protocolVersion": 1, "alertId": "a", "severity": "info", "title": "t", "text": "x", "needsAck": false, "ttlSeconds": 4},
+    {"why": "time to live over 600 seconds", "type": "alert", "protocolVersion": 1, "alertId": "a", "severity": "info", "title": "t", "text": "x", "needsAck": false, "ttlSeconds": 601},
+    {"why": "time to live with a fraction", "type": "alert", "protocolVersion": 1, "alertId": "a", "severity": "info", "title": "t", "text": "x", "needsAck": false, "ttlSeconds": 60.5},
+    {"why": "message over 4096 characters", "type": "alert_ack", "protocolVersion": 1, "alertId": "a", "title": "t", "text": {"repeat": "x", "count": 5000}}
+  ]
+}
