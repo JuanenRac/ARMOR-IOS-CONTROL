@@ -141,6 +141,7 @@ Er ist ein Client: Er ruft 70 Pfade von ARMOR-SERVER auf (`tools/ios_lint.py` z�
 | Xcode / Swift | 15+ / 5.9+ | Zum Bauen der App / zum Ausf체hren der Tests |
 | `MARKETING_VERSION`, `CURRENT_PROJECT_VERSION` | 0.0.1, 1 | Die Version der App, aus `project.yml` |
 | `GoogleService-Info.plist` | f체r Push | Die eigene Datei der Installation, nie im Repository |
+| `pins_strict_chain` | on | Zus채tzlich verlangen, dass die Kette des Servers zu dem beim Koppeln gespeicherten Zertifikat f체hrt (Glied f체r Glied signiert); eine Kopplung vor dem Speichern gilt weiter, mit Hinweis. Ein Schalter im Kopplungsbereich der Zertifikate schaltet es ab |
 
 In der App: die zwei Adressen, *Angemeldet bleiben*, die Telefonsperre und die Sprache (die acht Sprachen oder dem Telefon folgen) unter *Mehr > Sprache*.
 

@@ -141,6 +141,7 @@ ARMOR-IOS-CONTROL は、[ARMOR-STUDIO](https://github.com/JuanenRac/ARMOR-STUDIO
 | Xcode / Swift | 15+ / 5.9+ | アプリのビルド／テスト実行用 |
 | `MARKETING_VERSION`, `CURRENT_PROJECT_VERSION` | 0.0.1, 1 | アプリのバージョン（`project.yml` より） |
 | `GoogleService-Info.plist` | プッシュ用 | 設置環境ごとのファイル。リポジトリには置きません |
+| `pins_strict_chain` | on | サーバーのチェーンが、ペアリング時に保存した証明書そのものに（リンクごとの署名で）つながることも要求します。保存前のペアリングは通知付きで引き続き有効です。証明書ペアリングのパネルのスイッチでオフにできます |
 
 アプリ内：2 つのアドレス、*ログイン状態を保持*、電話のロック、言語（8 言語または電話に従う）は *その他 > 言語* にあります。
 

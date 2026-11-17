@@ -141,6 +141,7 @@ Os textos de permissões (Face ID, rede local) existem nas oito línguas. Nada d
 | Xcode / Swift | 15+ / 5.9+ | Para compilar a app / para executar os testes |
 | `MARKETING_VERSION`, `CURRENT_PROJECT_VERSION` | 0.0.1, 1 | A versão da app, de `project.yml` |
 | `GoogleService-Info.plist` | para push | O ficheiro próprio da instalação, nunca guardado no repositório |
+| `pins_strict_chain` | on | Exigir também que a cadeia do servidor leve ao mesmo certificado guardado no emparelhamento (assinado elo a elo); um emparelhamento anterior continua válido, com um aviso. Um interruptor do painel de emparelhamento de certificados desliga-o |
 
 Na app: os dois endereços, *Lembrar-me*, o bloqueio do telemóvel e a língua (as oito ou seguir o telemóvel) em *Mais > Língua*.
 

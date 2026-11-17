@@ -141,6 +141,7 @@ It is a client: it calls 70 paths of ARMOR-SERVER (`tools/ios_lint.py` counts th
 | Xcode / Swift | 15+ / 5.9+ | To build the app / to run the tests |
 | `MARKETING_VERSION`, `CURRENT_PROJECT_VERSION` | 0.0.1, 1 | The version of the app, from `project.yml` |
 | `GoogleService-Info.plist` | for push | The installation's own file, never kept in the repository |
+| `pins_strict_chain` | on | Also require that the chain of the server leads to the very certificate kept when it was paired (signed link by link); a pairing made before it was kept still works, with a notice. A switch in the certificate pairing panel turns it off |
 
 In the app: the two addresses, *Remember me*, the lock of the phone and the language (the eight languages or following the phone) in *More > Language*.
 
