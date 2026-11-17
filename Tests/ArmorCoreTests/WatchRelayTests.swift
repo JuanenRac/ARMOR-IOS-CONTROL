@@ -102,4 +102,59 @@ final class WatchRelayTests: XCTestCase {
         WatchRelay.setEnabled(store, false)
         XCTAssertFalse(WatchRelay.enabled(store))
     }
+
+    // The contract of the watch (docs/watch_alert_contract.json) is one file kept identically in ARMOR-WATCH, here and in the Android app: the phone's side is held to its limits and examples.
+    private func contract() throws -> [String: Any] {
+        var folder = URL(fileURLWithPath: #filePath)
+        for _ in 0..<5 { folder.deleteLastPathComponent(); if FileManager.default.fileExists(atPath: folder.appendingPathComponent("docs/watch_alert_contract.json").path) { break } }
+        let data = try Data(contentsOf: folder.appendingPathComponent("docs/watch_alert_contract.json"))
+        return try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Any])
+    }
+
+    private func expanded(_ value: Any) -> Any {
+        if let box = value as? [String: Any], box.count == 2, let text = box["repeat"] as? String, let count = box["count"] as? Int { return String(repeating: text, count: count) }
+        return value
+    }
+
+    func testTheLimitsAndThePathsOfTheContractAreTheOnesThisAppUses() throws {
+        let contract = try contract()
+        let limits = try XCTUnwrap(contract["limits"] as? [String: Any])
+        XCTAssertEqual(limits["titleMax"] as? Int, WatchRelay.titleMax)
+        XCTAssertEqual(limits["textMax"] as? Int, WatchRelay.textMax)
+        XCTAssertEqual(contract["protocolVersion"] as? Int, WatchRelay.protocolVersion)
+        let paths = try XCTUnwrap(contract["paths"] as? [String: String])
+        XCTAssertEqual(paths["toWatch"], WatchRelay.pathToWatch)
+        XCTAssertEqual(paths["toPhone"], WatchRelay.pathToPhone)
+        let pattern = try XCTUnwrap(limits["alertIdPattern"] as? String)
+        for id in ["a", "al-001", "n_2", String(repeating: "a", count: 64), "", "a b", String(repeating: "a", count: 65), "a/b"] {
+            XCTAssertEqual(id.range(of: pattern, options: .regularExpression) != nil, WatchRelay.validId(id), id)
+        }
+    }
+
+    func testTheConfirmationsOfTheContractAreReadAndTheWrongOnesAreRefused() throws {
+        let contract = try contract()
+        for example in try XCTUnwrap(contract["valid"] as? [[String: Any]]) where example["type"] as? String == "alert_ack" {
+            let text = String(decoding: try JSONSerialization.data(withJSONObject: example), as: UTF8.self)
+            XCTAssertEqual(WatchRelay.parseAck(text), example["alertId"] as? String)
+        }
+        for var example in try XCTUnwrap(contract["invalid"] as? [[String: Any]]) {
+            let why = example.removeValue(forKey: "why") as? String ?? ""
+            for (key, value) in example { example[key] = expanded(value) }
+            guard example["type"] as? String == "alert_ack" else { continue }
+            let text = String(decoding: try JSONSerialization.data(withJSONObject: example), as: UTF8.self)
+            XCTAssertNil(WatchRelay.parseAck(text), why)
+        }
+    }
+
+    func testTheMessagesThePhoneWritesCarryTheTypesOfTheContract() throws {
+        let valid = try XCTUnwrap(try contract()["valid"] as? [[String: Any]])
+        let relays = Set(valid.filter { $0["type"] as? String == "relay" }.compactMap { $0["enabled"] as? Bool })
+        XCTAssertEqual(relays, [true, false])
+        for on in relays {
+            let written = object(WatchRelay.relayMessage(on))
+            XCTAssertEqual(written["type"] as? String, "relay")
+            XCTAssertEqual(written["enabled"] as? Bool, on)
+        }
+        XCTAssertEqual(object(WatchRelay.clearMessage("al-001"))["type"] as? String, "alert_clear")
+    }
 }
