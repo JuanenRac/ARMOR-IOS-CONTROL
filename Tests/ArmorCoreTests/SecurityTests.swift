@@ -43,6 +43,36 @@ final class SecurityTests: XCTestCase {
         XCTAssertEqual(store.decide(host: "casa", chainPins: [a, b], systemTrusts: false, chainFingerprints: [leaf, authority], verifiedPins: []), .unknownAuthority(pin: b))
         XCTAssertEqual(store.decide(host: "casa", chainPins: [a, b], systemTrusts: false, chainFingerprints: [leaf, authority], verifiedPins: [b]), .firstUse(pin: b))
     }
+    func testStrictChainIsOnByDefaultAndCanBeTurnedOff() {
+        let store = PinStore(MemoryStore())
+        XCTAssertTrue(store.strictChain)
+        store.strictChain = false
+        XCTAssertFalse(store.strictChain)
+        XCTAssertEqual(store.strictVerdict(host: "casa", chainCertificates: [], leadsTo: { _ in true }), .off)
+    }
+    func testANewPairingKeepsItsCertificateAndTheChainMustLeadToIt() {
+        let store = PinStore(MemoryStore())
+        let leaf = Data([1, 2, 3]), authority = Data([4, 5, 6]), forged = Data([7, 8, 9])
+        store.add(b, for: "casa")
+        XCTAssertFalse(store.isLegacy(for: "casa"))
+        XCTAssertEqual(store.strictVerdict(host: "casa", chainCertificates: [leaf, authority], leadsTo: { _ in true }), .capture)
+        store.setCertificate(authority, for: "casa")
+        XCTAssertEqual(store.certificate(for: "casa"), authority)
+        XCTAssertEqual(store.strictVerdict(host: "casa", chainCertificates: [leaf, authority], leadsTo: { $0 == authority }), .verified)
+        // a chain that does not hold the kept certificate, or one the system cannot walk to it, is refused
+        XCTAssertEqual(store.strictVerdict(host: "casa", chainCertificates: [leaf, forged], leadsTo: { _ in true }), .broken)
+        XCTAssertEqual(store.strictVerdict(host: "casa", chainCertificates: [forged, authority], leadsTo: { _ in false }), .broken)
+    }
+    func testAnOldPinWithoutACertificateKeepsWorkingAndIsReported() {
+        let memory = MemoryStore()
+        memory.put("pin_casa", b)   // written before certificates were kept
+        let store = PinStore(memory)
+        XCTAssertTrue(store.isLegacy(for: "casa"))
+        XCTAssertEqual(store.strictVerdict(host: "casa", chainCertificates: [Data([1])], leadsTo: { _ in false }), .legacy)
+        store.clear(for: "casa")
+        XCTAssertNil(store.certificate(for: "casa"))
+        XCTAssertFalse(store.isLegacy(for: "casa"))
+    }
     func testAHostKeepsFourPinsAndCanBeCleared() {
         let store = PinStore(MemoryStore())
         let d = "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD=", e = "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE="

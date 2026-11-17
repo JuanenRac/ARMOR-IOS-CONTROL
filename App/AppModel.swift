@@ -641,6 +641,14 @@ final class AppModel: ObservableObject {
         return true
     }
 
+    /// True when a server of this installation was paired before certificates were kept.
+    var hasLegacyPin: Bool {
+        [installation.endpoints.home, installation.endpoints.away].contains { endpoint in
+            guard let endpoint, let host = URL(string: endpoint.origin)?.host else { return false }
+            return pins.isLegacy(for: host)
+        }
+    }
+
     func forgetPins() {
         for endpoint in [installation.endpoints.home, installation.endpoints.away] {
             if let endpoint, let host = URL(string: endpoint.origin)?.host { pins.clear(for: host) }

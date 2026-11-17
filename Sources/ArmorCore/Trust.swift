@@ -3,6 +3,20 @@
 // Copyright (C) 2026 JuanenRac (Electro Hobby 3D). GPL-3.0-or-later.
 import Foundation
 
+/// The answer of the chain and certificate check that follows a matching pin.
+public enum StrictVerdict: Equatable, Sendable {
+    /// The switch is off: the pin alone decides.
+    case off
+    /// The chain leads to the certificate kept at pairing time.
+    case verified
+    /// A pairing made before certificates were kept: accepted, with a notice in the app.
+    case legacy
+    /// A new pairing whose certificate was not kept yet (a pasted QR code): the matching one is kept now.
+    case capture
+    /// The pin matched but the chain does not lead to the kept certificate.
+    case broken
+}
+
 public enum PinDecision: Equatable, Sendable {
     /// The chain holds a key already pinned for this server.
     case trusted
@@ -32,9 +46,39 @@ public final class PinStore {
         var list = pins(for: host).filter { $0 != clean }
         list.append(clean)
         store.put(key(host), list.suffix(4).joined(separator: ","))
+        store.put(newKey(host), "1")
     }
 
-    public func clear(for host: String) { store.remove(key(host)) }
+    public func clear(for host: String) { store.remove(key(host)); store.remove(certKey(host)); store.remove(newKey(host)) }
+
+    private func certKey(_ host: String) -> String { "pin_cert_" + host.lowercased() }
+    private func newKey(_ host: String) -> String { "pin_new_" + host.lowercased() }
+    public static let strictKey = "pins_strict_chain"
+
+    /// True when the chain must also lead to the certificate kept at pairing time (on unless the person turned it off).
+    public var strictChain: Bool {
+        get { store.get(PinStore.strictKey) != "0" }
+        set { store.put(PinStore.strictKey, newValue ? "1" : "0") }
+    }
+
+    /// The DER of the certificate kept when the server was paired; nil for a pairing made before it was kept.
+    public func certificate(for host: String) -> Data? {
+        guard let text = store.get(certKey(host)), !text.isEmpty else { return nil }
+        return Data(base64Encoded: text)
+    }
+
+    public func setCertificate(_ der: Data, for host: String) { store.put(certKey(host), der.base64EncodedString()) }
+
+    /// True for a pin kept before certificates were kept: it still works, with a notice in the app.
+    public func isLegacy(for host: String) -> Bool { !pins(for: host).isEmpty && certificate(for: host) == nil && store.get(newKey(host)) != "1" }
+
+    /// Chain and certificate check for a chain that already matched a pin. `chainCertificates` are the DER of the chain, leaf first; `leadsTo` answers whether the chain, evaluated with that certificate as
+    /// its only anchor, is signed link by link, in date and for the host (the system does that part).
+    public func strictVerdict(host: String, chainCertificates: [Data], leadsTo: (Data) -> Bool) -> StrictVerdict {
+        guard strictChain else { return .off }
+        guard let kept = certificate(for: host) else { return store.get(newKey(host)) == "1" ? .capture : .legacy }
+        return chainCertificates.contains(kept) && leadsTo(kept) ? .verified : .broken
+    }
 
     private func expectKey(_ host: String) -> String { "ca_expect_" + host.lowercased() }
 

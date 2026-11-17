@@ -97,6 +97,9 @@ struct ServerSettings: View {
                     if model.pair(qr: qr) { model.show(model.tr("Servidor emparejado."), error: false); qr = "" } else { model.show(model.tr("Ese código no es correcto."), error: true) }
                 }.disabled(qr.isEmpty)
                 Button(model.tr("Olvidar los certificados guardados"), role: .destructive) { model.forgetPins() }
+                Toggle(model.tr("Exigir la cadena y el certificado emparejado"), isOn: Binding(get: { model.pins.strictChain }, set: { model.pins.strictChain = $0 }))
+                Text(model.tr("Con el interruptor encendido, un servidor emparejado de nuevo solo se acepta si la cadena que presenta lleva hasta el certificado guardado al emparejar, y no solo si la clave coincide.")).font(.footnote).foregroundColor(Theme.muted)
+                if model.pins.strictChain && model.hasLegacyPin { Text(model.tr("Este servidor se emparejó antes de que la app guardara su certificado: sigue funcionando, pero solo se comprueba la clave. Olvida los certificados guardados y vuelve a emparejar para la comprobación completa.")).font(.footnote).foregroundColor(Theme.amber) }
             }
         }
         .navigationTitle(model.tr("Servidor"))

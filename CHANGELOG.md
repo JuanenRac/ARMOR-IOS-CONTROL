@@ -4,6 +4,8 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+- **Certificate chain check for servers paired from now on (pins.strict_chain):** when a server is paired, the app also keeps its certificate, and later connections are accepted only if the chain they present leads to that certificate, signed link by link, and not just because a key matches. A switch in the server settings, on by default, turns it off; servers paired before keep working with a notice in the app until they are paired again.
+
 - The phone keeps its own copy of the watch alert contract and checks its limits, paths, confirmations and messages against it; the contract also lists the `bindSender` setting of the Wear OS app.
 
 - **A reinstalled app no longer opens with the sessions or the remembered login of the earlier install:** the Keychain survives an uninstall and the preferences do not, so the first start of an app with no saved server forgets what the Keychain kept (an updated app keeps it). A unit test covers both cases.
