@@ -45,9 +45,25 @@ final class TrustDelegate: NSObject, URLSessionDelegate {
         }
         switch pins.decide(host: host, chainPins: hashes, systemTrusts: systemTrusts, chainFingerprints: aligned ? fingerprints : [], verifiedPins: verified) {
         case .trusted:
-            completionHandler(.useCredential, URLCredential(trust: trust))
+            // the chain must also lead to the certificate kept at pairing time (new pairings only; an old pin keeps working)
+            let der = chain.map { SecCertificateCopyData($0) as Data }
+            switch pins.strictVerdict(host: host, chainCertificates: der, leadsTo: { kept in
+                guard let anchor = SecCertificateCreateWithData(nil, kept as CFData) else { return false }
+                return TrustDelegate.evaluates(trust, anchoredAt: anchor)
+            }) {
+            case .broken:
+                lock.lock(); mismatchHost = host; lock.unlock()
+                completionHandler(.cancelAuthenticationChallenge, nil)
+            case .capture:
+                let matching = aligned ? zip(chain, hashes).first(where: { pins.pins(for: host).contains($0.1) }) : nil
+                if let matching { pins.setCertificate(SecCertificateCopyData(matching.0) as Data, for: host) }
+                completionHandler(.useCredential, URLCredential(trust: trust))
+            default:
+                completionHandler(.useCredential, URLCredential(trust: trust))
+            }
         case .firstUse(let pin):
             pins.add(pin, for: host)
+            if aligned, let index = hashes.firstIndex(of: pin) { pins.setCertificate(SecCertificateCopyData(chain[index]) as Data, for: host) }
             pins.clearExpected(for: host)
             onPinned?(host, pin)
             completionHandler(.useCredential, URLCredential(trust: trust))

@@ -1,4 +1,5 @@
 {
+ "Con el interruptor encendido, un servidor emparejado de nuevo solo se acepta si la cadena que presenta lleva hasta el certificado guardado al emparejar, y no solo si la clave coincide.": "开启后，之后配对的服务器只有在其出示的证书链指向配对时保存的证书时才会被接受，而不仅仅是密钥相符。",
  "El resumen diario está apagado. Un administrador lo enciende en Configuración > Seguridad (\"Resumen de un día\").": "每日摘要已关闭。管理员可在“配置 > 安全”（“单日摘要”）中开启。",
  "El mapa de calor está apagado. Un administrador lo enciende en Configuración > Seguridad (\"Mapa de calor de actividad\").": "热力图已关闭。管理员可在“配置 > 安全”（“活动热力图”）中开启。",
  "Eso no es un día (usa una fecha real desde el año 2000).": "这不是有效的日期（请使用 2000 年以后的真实日期）。",
@@ -9,6 +10,8 @@
  "El resumen diario no está configurado en el servidor (el servicio de resumen y su archivo de ajustes).": "服务器上尚未设置每日摘要（摘要服务及其设置文件）。",
  "El propio servicio de resumen tiene el resumen apagado en su archivo de ajustes.": "摘要服务在其自身的设置文件中关闭了摘要。",
  "El servidor está haciendo otro informe. Inténtalo de nuevo en unos segundos.": "服务器正在生成另一份报告。请几秒后再试。",
+ "Este servidor se emparejó antes de que la app guardara su certificado: sigue funcionando, pero solo se comprueba la clave. Olvida los certificados guardados y vuelve a emparejar para la comprobación completa.": "此服务器在应用保存其证书之前就已配对：它仍可使用，但只检查密钥。请忘记已保存的证书并重新配对，以进行完整检查。",
+ "Exigir la cadena y el certificado emparejado": "要求证书链和已配对的证书",
  "No se pudo hacer el informe (el servicio falló o respondió algo que no es un informe). No se ha inventado nada.": "无法生成报告（服务失败，或返回的不是报告）。没有编造任何内容。",
  "Demasiadas peticiones este minuto. Espera un poco e inténtalo de nuevo.": "这一分钟请求过多。请稍等再试。",
  "Solo un administrador o un operador puede pedir los informes.": "只有管理员或操作员可以请求报告。",

@@ -1,4 +1,5 @@
 {
+ "Con el interruptor encendido, un servidor emparejado de nuevo solo se acepta si la cadena que presenta lleva hasta el certificado guardado al emparejar, y no solo si la clave coincide.": "スイッチをオンにすると、今後ペアリングしたサーバーは、鍵が一致するだけでなく、提示されたチェーンがペアリング時に保存した証明書につながっている場合にのみ受け入れられます。",
  "El resumen diario está apagado. Un administrador lo enciende en Configuración > Seguridad (\"Resumen de un día\").": "日次サマリーはオフです。管理者が設定 > セキュリティで有効にします（「1日のサマリー」）。",
  "El mapa de calor está apagado. Un administrador lo enciende en Configuración > Seguridad (\"Mapa de calor de actividad\").": "ヒートマップはオフです。管理者が設定 > セキュリティで有効にします（「アクティビティのヒートマップ」）。",
  "Eso no es un día (usa una fecha real desde el año 2000).": "有効な日付ではありません（2000年以降の実在の日付を使ってください）。",
@@ -9,6 +10,8 @@
  "El resumen diario no está configurado en el servidor (el servicio de resumen y su archivo de ajustes).": "サーバーで日次サマリーが未設定です（サマリーサービスとその設定ファイル）。",
  "El propio servicio de resumen tiene el resumen apagado en su archivo de ajustes.": "サマリーサービスが自身の設定ファイルでサマリーをオフにしています。",
  "El servidor está haciendo otro informe. Inténtalo de nuevo en unos segundos.": "サーバーは別のレポートを作成中です。数秒後にもう一度お試しください。",
+ "Este servidor se emparejó antes de que la app guardara su certificado: sigue funcionando, pero solo se comprueba la clave. Olvida los certificados guardados y vuelve a emparejar para la comprobación completa.": "このサーバーは、アプリが証明書を保存する前にペアリングされました。引き続き動作しますが、確認されるのは鍵だけです。保存済みの証明書を削除して再度ペアリングすると、完全な確認が行われます。",
+ "Exigir la cadena y el certificado emparejado": "チェーンとペアリング済み証明書を必須にする",
  "No se pudo hacer el informe (el servicio falló o respondió algo que no es un informe). No se ha inventado nada.": "レポートを作成できませんでした（サービスが失敗したか、レポートではない応答でした）。何も作り上げていません。",
  "Demasiadas peticiones este minuto. Espera un poco e inténtalo de nuevo.": "この1分間のリクエストが多すぎます。少し待ってからもう一度お試しください。",
  "Solo un administrador o un operador puede pedir los informes.": "レポートを要求できるのは管理者またはオペレーターだけです。",
