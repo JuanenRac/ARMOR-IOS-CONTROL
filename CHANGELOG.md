@@ -4,6 +4,7 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+- **The Architecture picture rounds its coordinates to two decimals:** the legend positions no longer carry floating-point noise such as 399.9999999999999, so `make_architecture.py --check` gives the same answer on every machine; the shared tool is the one of ARMOR-COMMON.
 - **The shared tools of the manifest and the status lights gain an opt-in strict check of the evidence:** `sync_manifests.py` and `status_lights.py` take `--strict-evidence` (off by default; `ARMOR_STRICT_EVIDENCE=1` switches it on for `armor_ci_validate.py`).
 - **Certificate chain check for servers paired from now on (pins.strict_chain):** when a server is paired, the app also keeps its certificate, and later connections are accepted only if the chain they present leads to that certificate, signed link by link, and not just because a key matches. A switch in the server settings, on by default, turns it off; servers paired before keep working with a notice in the app until they are paired again.
 
