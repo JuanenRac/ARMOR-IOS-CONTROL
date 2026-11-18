@@ -204,7 +204,7 @@ Xcode 项目由 XcodeGen 根据 `project.yml` 生成：选择签名团队，把�
 </p>
 
 <details>
-<summary>目录树的文本版</summary>
+<summary>目录树的文本版本</summary>
 
 ```text
 ARMOR-IOS-CONTROL/
