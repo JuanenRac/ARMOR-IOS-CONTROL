@@ -4,18 +4,16 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+## [0.0.7] - Certificate chain pins, a clean Keychain on reinstall, the watch alert contract and generated file trees
+
 - **The structure generator can write a figure read from the code:** `tools/make_structure.py` resolves `{{fact:NAME|LAST}}` in the descriptions of `docs/structure.json` where the documentation tools are next to the repository, and writes LAST (the figure it had when last written) everywhere else, so a repository still builds on its own.
 - **The Security and Updates lights of the Project status table follow the evidence ceiling:** they cannot be above what the Hardware row may show for the evidence of the manifest, and Security is never green; the rows that were higher are now orange in the eight READMEs, and `tools/status_lights.py` is the new shared copy.
-
 - **The file tree of the README is drawn from the structure source:** the text tree in the eight READMEs is generated from `docs/structure.json`, the file that also draws the picture, so the two cannot disagree; it states the current count of 516 tests.
 - **The Architecture picture rounds its coordinates to two decimals:** the legend positions no longer carry floating-point noise such as 399.9999999999999, so `make_architecture.py --check` gives the same answer on every machine; the shared tool is the one of ARMOR-COMMON.
 - **The shared tools of the manifest and the status lights gain an opt-in strict check of the evidence:** `sync_manifests.py` and `status_lights.py` take `--strict-evidence` (off by default; `ARMOR_STRICT_EVIDENCE=1` switches it on for `armor_ci_validate.py`).
 - **Certificate chain check for servers paired from now on (pins.strict_chain):** when a server is paired, the app also keeps its certificate, and later connections are accepted only if the chain they present leads to that certificate, signed link by link, and not just because a key matches. A switch in the server settings, on by default, turns it off; servers paired before keep working with a notice in the app until they are paired again.
-
 - The phone keeps its own copy of the watch alert contract and checks its limits, paths, confirmations and messages against it; the contract also lists the `bindSender` setting of the Wear OS app.
-
 - **A reinstalled app no longer opens with the sessions or the remembered login of the earlier install:** the Keychain survives an uninstall and the preferences do not, so the first start of an app with no saved server forgets what the Keychain kept (an updated app keeps it). A unit test covers both cases.
-
 - **A saved certificate pin now needs a real chain:** when the system does not trust the chain, the pin counts only if the chain is evaluated again with the pinned certificate as the only anchor (signed path from the leaf, in date, made for the host); the authority named by a set-up QR code is paired the same way. Before, a chain that merely held the pinned certificate behind a forged leaf was accepted. Servers already paired keep working. Tests cover the decision with and without the proof.
 
 ## [0.0.6] - Parity with the Android app: QR sign-in, saved servers, push actions and the watch app
