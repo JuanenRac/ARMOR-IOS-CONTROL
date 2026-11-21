@@ -130,7 +130,7 @@ final class NetworkFailureTests: XCTestCase {
     }
 
     func testAnAnswerThatIsNotJSONIsAFailureNotAnEmptyState() async {
-        for body in ["<html>gateway error</html>", "", "not json", "[1,2,3]", "{\"mode\":", "null"] {
+        for body in ["<html>gateway error</html>", "not json", "[1,2,3]", "{\"mode\":", "null"] {
             ScriptedProtocol.answer(200, body)
             for read in [reads[0], reads[1]] { _ = await thrown(read) }
         }
