@@ -77,6 +77,7 @@ final class NetworkFailureTests: XCTestCase {
             call("commandDevice") { c, o in try await c.commandDevice(o, id: "light-1", command: "on", confirm: false) },
             call("scanNetworkNow") { c, o in try await c.scanNetworkNow(o) },
             call("forgetNode") { c, o in try await c.forgetNode(o, id: "node-1") },
+            call("nodePanelTicket") { c, o in _ = try await c.nodePanelTicket(o, nodeId: "node-1") },
             call("panelCommand") { c, o in try await c.sendAlarmCommand(o, node: "panel-1", mode: "armed", force: false, pin: nil, profile: nil) },
             call("silenceSiren") { c, o in try await c.silenceAlarmSiren(o, node: "panel-1", pin: nil) },
         ]

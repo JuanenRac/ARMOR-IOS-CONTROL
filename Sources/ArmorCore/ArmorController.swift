@@ -197,6 +197,20 @@ public final class ArmorController: @unchecked Sendable {
         await refresh()
     }
 
+    /// Where to open the panel of a node through the server: with a ticket on the origin of its own when the server asks for that, under the API otherwise. From outside the house the server may
+    /// ask for the proof of identity first. It only opens a page, so it does not ask for the lock of the phone, as opening it never did.
+    public func nodePanel(_ nodeId: String, asker: ElevationAsker? = nil) async throws -> PanelAddress? {
+        let origin = try origin()
+        guard let under = NodeServerPanel.address(origin: origin, nodeId: nodeId) else { return nil }
+        do {
+            return try await api.nodePanelTicket(origin, nodeId: nodeId) ?? PanelAddress(first: under, address: under)
+        } catch let error as ArmorApiError where error.isElevationRequired {
+            guard let asker, let proof = await asker() else { throw ControllerError.elevationDeclined }
+            try await api.elevate(origin, password: proof.password, code: proof.code)
+            return try await api.nodePanelTicket(origin, nodeId: nodeId) ?? PanelAddress(first: under, address: under)
+        }
+    }
+
     public func arm(asker: ElevationAsker? = nil) async throws {
         try await guarded(reason: translator.tr("Armar el sistema"), needs: CapabilityAction.arm, asker: asker) { [api] origin in try await api.setMode(origin, mode: "armed", pin: nil) }
     }
