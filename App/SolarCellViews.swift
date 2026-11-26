@@ -73,32 +73,13 @@ private struct CellTile: View {
     let stale: Bool
     let settings: SolarViewSettings
 
-    var body: some View {
-        let color = levelColor(cell.level, stale: stale)
-        let calm = cell.level == .ok
-        let mark = cell.highest ? "▲ " + model.tr("máx") : (cell.lowest ? "▼ " + model.tr("mín") : "")
-        VStack(alignment: .leading, spacing: 3) {
-            HStack(spacing: 3) {
-                Text(String(cell.number)).font(.caption2).foregroundColor(Theme.muted)
-                if !calm { Image(systemName: levelIcon(cell.level)).font(.caption2).foregroundColor(color) }
-                Spacer(minLength: 0)
-                Text(mark).font(.caption2).foregroundColor(cell.highest ? Theme.accent : Theme.amber)
-            }
-            Text(SolarText.cell(cell.volts) + " V").font(.system(.footnote, design: .monospaced)).foregroundColor(.white)
-                .lineLimit(1).minimumScaleFactor(0.6)
-            GeometryReader { space in
-                ZStack(alignment: .leading) {
-                    Capsule().fill(Theme.muted.opacity(0.25))
-                    Capsule().fill(color).frame(width: space.size.width * cell.fill)
-                }
-            }.frame(height: 5)
-        }
-        .padding(6)
-        .background(color.opacity(calm ? 0.10 : 0.22), in: RoundedRectangle(cornerRadius: 10))
-        .overlay(RoundedRectangle(cornerRadius: 10).stroke(color.opacity(calm ? 0.35 : 1), lineWidth: calm ? 1 : 2)
-            .modifier(FaultBlink(active: cell.level == .fault && !stale, periodMs: settings.blinkPeriodMs)))
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(model.trf("Celda %s", cell.number) + ": " + SolarText.cell(cell.volts) + " V, " + spokenLevel + (mark.isEmpty ? "" : ", " + mark))
+    private var color: Color { levelColor(cell.level, stale: stale) }
+    private var calm: Bool { cell.level == .ok }
+
+    private var mark: String {
+        if cell.highest { return "▲ " + model.tr("máx") }
+        if cell.lowest { return "▼ " + model.tr("mín") }
+        return ""
     }
 
     private var spokenLevel: String {
@@ -107,6 +88,51 @@ private struct CellTile: View {
         case .warn: return model.tr("Aviso")
         case .ok: return model.tr("Correcto")
         }
+    }
+
+    private var spoken: String {
+        let name: String = model.trf("Celda %s", cell.number)
+        let volts: String = SolarText.cell(cell.volts) + " V"
+        let extra: String = mark.isEmpty ? "" : ", \(mark)"
+        return "\(name): \(volts), \(spokenLevel)\(extra)"
+    }
+
+    private var header: some View {
+        HStack(spacing: 3) {
+            Text(String(cell.number)).font(.caption2).foregroundColor(Theme.muted)
+            if !calm { Image(systemName: levelIcon(cell.level)).font(.caption2).foregroundColor(color) }
+            Spacer(minLength: 0)
+            Text(mark).font(.caption2).foregroundColor(cell.highest ? Theme.accent : Theme.amber)
+        }
+    }
+
+    private var bar: some View {
+        GeometryReader { space in
+            ZStack(alignment: .leading) {
+                Capsule().fill(Theme.muted.opacity(0.25))
+                Capsule().fill(color).frame(width: space.size.width * CGFloat(cell.fill))
+            }
+        }.frame(height: 5)
+    }
+
+    private var border: some View {
+        RoundedRectangle(cornerRadius: 10)
+            .stroke(color.opacity(calm ? 0.35 : 1), lineWidth: calm ? 1 : 2)
+            .modifier(FaultBlink(active: cell.level == .fault && !stale, periodMs: settings.blinkPeriodMs))
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 3) {
+            header
+            Text(SolarText.cell(cell.volts) + " V").font(.system(.footnote, design: .monospaced)).foregroundColor(.white)
+                .lineLimit(1).minimumScaleFactor(0.6)
+            bar
+        }
+        .padding(6)
+        .background(color.opacity(calm ? 0.10 : 0.22), in: RoundedRectangle(cornerRadius: 10))
+        .overlay(border)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(spoken)
     }
 }
 
