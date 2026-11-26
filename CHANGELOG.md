@@ -6,6 +6,7 @@ All notable changes to this project are documented here.
 
 - **The shared project tool is the current one:** the copy follows the shared repository, which now knows the new solar panel node.
 
+- **Node panels on an origin of their own:** opening a panel through the server now asks for a one-use ticket (`POST /api/v1/admin/node-panels/{id}/ticket`) when the server serves the panels from a second origin (`panel.separate_origin`), and asks for the proof of identity when the server wants it from outside. With the option off, or an older server, the panel opens as before. The ticket is neither kept nor shown. Built and tested by the CI only; not run against a node or an iPhone.
 - **The test count of the repository structure is current:** it follows the tests of the solar screen.
 - **The copy of the shared validator is current:** `tools/armor_ci_validate.py` now also checks with `node --check` that the scripts served to a browser parse, in a repository that has them under `panel/` or `public/`.
 - **The cells of a battery no longer depend on four fixed columns:** the grid takes as many columns as fit a whole voltage, also with larger text.

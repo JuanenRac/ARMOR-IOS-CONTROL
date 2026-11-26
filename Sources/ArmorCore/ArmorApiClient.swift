@@ -118,6 +118,21 @@ public final class ArmorApiClient: ArmorApi, @unchecked Sendable {
 
     public func forgetNode(_ origin: String, id: String) async throws { _ = try await send(origin, "/api/v1/node-health/" + Self.part(id), "DELETE", nil, [204, 404]) }
 
+    public func nodePanelTicket(_ origin: String, nodeId: String) async throws -> PanelAddress? {
+        let data: Data
+        do {
+            data = try await send(origin, "/api/v1/admin/node-panels/\(Self.part(nodeId))/ticket", "POST", [:], [201])
+        } catch let error as ArmorApiError where error.status == 404 || (error.status == 409 && error.code == "panel_origin_off") {
+            // a server without this route, or with the option off: the panel is the one under the API
+            return nil
+        }
+        let answer = try Json.object(data)
+        guard let panel = NodeServerPanel.ticketed(origin: Self.trimmed(origin), nodeId: nodeId, url: answer.str("url"), panelOrigin: answer.str("origin")) else {
+            throw ArmorApiError(message: "The server gave no usable address for the panel", status: nil)
+        }
+        return panel
+    }
+
     public func site(_ origin: String) async throws -> SiteDesign? { SiteParser.parse(try await getJson(origin, "/api/v1/site")) }
 
     public func nodeControlOperations(_ origin: String) async throws -> [ControlOperationView] { NodeControlParser.list(try await getJson(origin, "/api/v1/nodes/control/operations")) }

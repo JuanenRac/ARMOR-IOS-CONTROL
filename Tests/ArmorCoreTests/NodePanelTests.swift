@@ -48,6 +48,14 @@ final class NodePanelTests: XCTestCase {
         XCTAssertFalse(NodeServerPanel.isViaServer("http://192.168.0.180:18080/api/v1/nodes/x/panel/", origin: ""))
         XCTAssertTrue(NodeServerPanel.sameHost("http://192.168.0.235/config", as: "http://192.168.0.235/"))
         XCTAssertFalse(NodeServerPanel.sameHost("http://evil.example.org/", as: "http://192.168.0.235/"))
+        // a ticket of the server leads to the panel on its own origin; the address that is kept does not carry the ticket
+        let ticket = "abcdefghijklmnop_-0123456789"
+        XCTAssertEqual(NodeServerPanel.ticketed(origin: "https://casa.example.org", nodeId: "solar-1", url: "https://casa.example.org:8444/enter/\(ticket)", panelOrigin: "https://casa.example.org:8444"),
+                       PanelAddress(first: "https://casa.example.org:8444/enter/\(ticket)", address: "https://casa.example.org:8444/panel/solar-1/"))
+        XCTAssertNil(NodeServerPanel.ticketed(origin: "https://casa.example.org", nodeId: "solar-1", url: "http://casa.example.org:8444/enter/\(ticket)", panelOrigin: "http://casa.example.org:8444"))
+        XCTAssertNil(NodeServerPanel.ticketed(origin: "https://casa.example.org", nodeId: "solar-1", url: "https://other.example.org/enter/\(ticket)", panelOrigin: "https://casa.example.org:8444"))
+        XCTAssertNil(NodeServerPanel.ticketed(origin: "https://casa.example.org", nodeId: "solar-1", url: "https://casa.example.org:8444/enter/\(ticket)?next=x", panelOrigin: "https://casa.example.org:8444"))
+        XCTAssertNil(NodeServerPanel.ticketed(origin: "https://casa.example.org", nodeId: "solar 1", url: "https://casa.example.org:8444/enter/\(ticket)", panelOrigin: "https://casa.example.org:8444"))
     }
 
     func testForgettingANodeCallsTheRouteOfTheNodeHealth() async throws {
