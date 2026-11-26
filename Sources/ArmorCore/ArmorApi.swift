@@ -119,6 +119,9 @@ public protocol ArmorApi: Sendable {
     func site(_ origin: String) async throws -> SiteDesign?
     /// Forgets a node that was taken away, with its health warnings (an administrator only; a node the server no longer knows is not a failure).
     func forgetNode(_ origin: String, id: String) async throws
+    /// The panel of a node on the origin of its own (POST /api/v1/admin/node-panels/{id}/ticket, an administrator): a ticket of one use, good for seconds. Nil when this server serves the
+    /// panels under its own API (the option panel.separate_origin is off, or the server is older), so the app opens them there as before.
+    func nodePanelTicket(_ origin: String, nodeId: String) async throws -> PanelAddress?
     /// Gives one order (restart, pause, resume, standby, identify, diagnostics, maintenance_on, maintenance_off) to one node; an administrator who proved themselves a moment ago. `confirm` is the node's name where it is asked.
     func nodeControl(_ origin: String, nodeId: String, operation: String, confirm: String?, durationS: Int?) async throws -> ControlOperationView
     /// The same order to every node that reports; `mode` is "now" or "rolling" (only a restart can be rolling); `confirm` is the word RESTART, PAUSE or STANDBY where it is asked.
@@ -187,6 +190,7 @@ extension ArmorApi {
     func connections(_ origin: String) async throws -> [ConnectionClient] { throw ArmorApiError(message: "not supported", status: nil) }
     func site(_ origin: String) async throws -> SiteDesign? { throw ArmorApiError(message: "not supported", status: nil) }
     func forgetNode(_ origin: String, id: String) async throws { throw ArmorApiError(message: "not supported", status: nil) }
+    func nodePanelTicket(_ origin: String, nodeId: String) async throws -> PanelAddress? { throw ArmorApiError(message: "not supported", status: nil) }
     func nodeControl(_ origin: String, nodeId: String, operation: String, confirm: String?, durationS: Int?) async throws -> ControlOperationView { throw ArmorApiError(message: "not supported", status: nil) }
     func nodesControl(_ origin: String, operation: String, mode: String, confirm: String?, durationS: Int?) async throws -> ControlOperationView { throw ArmorApiError(message: "not supported", status: nil) }
     func nodeControlOperations(_ origin: String) async throws -> [ControlOperationView] { throw ArmorApiError(message: "not supported", status: nil) }

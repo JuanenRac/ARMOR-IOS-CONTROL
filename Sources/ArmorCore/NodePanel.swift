@@ -38,13 +38,36 @@ public enum NodeAddress {
     public static func remember(_ address: String, among recent: [String]) -> [String] { Array(([address] + recent.filter { $0 != address }).prefix(5)) }
 }
 
-/// The panel of a node through the server (`/api/v1/nodes/<id>/panel/`): the server relays the node's own page to a signed-in session. The address is the server's, with the session the app already has.
+/// A panel to open: `first` is what the page loads (it may carry a one-use ticket), `address` is where it stays, safe to keep and to show.
+public struct PanelAddress: Equatable, Sendable {
+    public let first: String
+    public let address: String
+    public init(first: String, address: String) {
+        self.first = first
+        self.address = address
+    }
+}
+
+/// The panel of a node through the server (`/api/v1/nodes/<id>/panel/`, or an origin of its own when the server asks for that): the server relays the node's own page to a signed-in session. The address is the server's, with the session the app already has.
 public enum NodeServerPanel {
     /// `<origin>/api/v1/nodes/<id>/panel/`, or nil when the origin is not a valid server address or the id is not the plain name of a node.
     public static func address(origin: String, nodeId: String) -> String? {
         guard let endpoint = ServerEndpoint.parse(origin), !nodeId.isEmpty, nodeId.count <= 64,
               nodeId.allSatisfy({ $0.isASCII && ($0.isLetter || $0.isNumber || $0 == "." || $0 == "_" || $0 == "-") }) else { return nil }
         return "\(endpoint.origin)/api/v1/nodes/\(nodeId)/panel/"
+    }
+
+    /// The panel on the origin of its own that a ticket of the server leads to, or nil when the answer is not one: `url` must be `<panelOrigin>/enter/<ticket>` with a plain http(s) origin
+    /// (https when the server is reached over https) and `nodeId` the plain name of a node. The first page to load carries the ticket (one use); the address kept and shown does not.
+    public static func ticketed(origin: String, nodeId: String, url: String, panelOrigin: String) -> PanelAddress? {
+        guard Self.address(origin: origin, nodeId: nodeId) != nil, let parts = URLComponents(string: panelOrigin), let scheme = parts.scheme, scheme == "https" || scheme == "http",
+              let host = parts.host, !host.isEmpty, parts.user == nil, parts.password == nil, parts.path.isEmpty, parts.query == nil, parts.fragment == nil,
+              !(origin.hasPrefix("https://") && scheme != "https") else { return nil }
+        let enter = panelOrigin + "/enter/"
+        guard url.hasPrefix(enter) else { return nil }
+        let ticket = url.dropFirst(enter.count)
+        guard (16...128).contains(ticket.count), ticket.allSatisfy({ $0.isASCII && ($0.isLetter || $0.isNumber || $0 == "_" || $0 == "-") }) else { return nil }
+        return PanelAddress(first: url, address: "\(panelOrigin)/panel/\(nodeId)/")
     }
 
     /// True when `address` is a panel through the server of `origin` (so the page needs the server's session cookie).

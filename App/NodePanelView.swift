@@ -9,6 +9,7 @@ import ArmorCore
 
 private struct OpenedPanel: Identifiable {
     let address: String
+    var first: String? = nil
     var id: String { address }
 }
 
@@ -35,6 +36,13 @@ struct NodesView: View {
         recent = NodeAddress.remember(address, among: recent)
         UserDefaults.standard.set(recent.joined(separator: ","), forKey: Self.recentKey)
         opened = OpenedPanel(address: address)
+    }
+
+    /// Opens the panel of a node through the server.
+    @MainActor private func openViaServer(_ id: String) async {
+        await model.order { asker in
+            if let panel = try await model.controller.nodePanel(id, asker: asker) { opened = OpenedPanel(address: panel.address, first: panel.first) }
+        }
     }
 
     /// Forgets a node of the server, with the lock of the phone and the proof of identity the server may ask for.
@@ -81,7 +89,7 @@ struct NodesView: View {
                 Section(header: Text(model.tr("A través del servidor")), footer: Text(model.tr("El servidor abre el panel del nodo por ti, también desde fuera de casa y con datos móviles. Hace falta tener la sesión iniciada."))) {
                     ForEach(serverNodes, id: \.self) { id in
                         HStack {
-                            Button(id) { if let address = NodeServerPanel.address(origin: origin, nodeId: id) { opened = OpenedPanel(address: address) } }
+                            Button(id) { Task { await openViaServer(id) } }
                             Spacer()
                             if canForget { Button(role: .destructive) { toForget = id } label: { Image(systemName: "trash") }.buttonStyle(.borderless).accessibilityLabel(model.tr("Olvidar nodo")) }
                         }
@@ -109,7 +117,7 @@ struct NodesView: View {
         .task { await network.watch(model: model) }
         .task { await health.watch(model: model) }
         .onAppear { recent = (UserDefaults.standard.string(forKey: Self.recentKey) ?? "").split(separator: ",").compactMap { NodeAddress.parse(String($0)) } }
-        .sheet(item: $opened) { panel in NodePanelSheet(address: panel.address, origin: origin) }
+        .sheet(item: $opened) { panel in NodePanelSheet(address: panel.address, first: panel.first, origin: origin) }
         .confirmationDialog(model.tr("Olvidar nodo"), isPresented: Binding(get: { toForget != nil }, set: { if !$0 { toForget = nil } }), titleVisibility: .visible) {
             Button(model.tr("Olvidar nodo"), role: .destructive) {
                 if let id = toForget { Task { await forget(id) } }
@@ -125,7 +133,10 @@ private struct NodePanelSheet: View {
     @EnvironmentObject var model: AppModel
     @Environment(\.dismiss) private var dismiss
     let address: String
+    let first: String?
     let origin: String
+    /// One store for the life of the sheet, so a retry keeps the cookie the ticket was exchanged for.
+    @State private var store = WKWebsiteDataStore.nonPersistent()
     @State private var failed = false
     @State private var attempt = 0
 
@@ -138,7 +149,7 @@ private struct NodePanelSheet: View {
                         Button(model.tr("Reintentar")) { failed = false; attempt += 1 }
                     }.padding(12).frame(maxWidth: .infinity, alignment: .leading)
                 }
-                NodePanelWeb(address: address, cookie: NodeServerPanel.isViaServer(address, origin: origin) ? model.controller.api.sessionCookie(origin) : nil, onFail: { failed = true })
+                NodePanelWeb(address: address, load: attempt == 0 ? first ?? address : address, store: store, cookie: NodeServerPanel.isViaServer(address, origin: origin) ? model.controller.api.sessionCookie(origin) : nil, onFail: { failed = true })
                     .id(attempt)
             }
             .background(Theme.background)
@@ -151,6 +162,8 @@ private struct NodePanelSheet: View {
 /// The page of the node. It may only go where the node is (a link to anywhere else is not followed), and a panel through the server gets the session cookie of the app for the server only.
 private struct NodePanelWeb: UIViewRepresentable {
     let address: String
+    let load: String
+    let store: WKWebsiteDataStore
     let cookie: SessionCookie?
     let onFail: () -> Void
 
@@ -158,12 +171,12 @@ private struct NodePanelWeb: UIViewRepresentable {
 
     func makeUIView(context: Context) -> WKWebView {
         let configuration = WKWebViewConfiguration()
-        configuration.websiteDataStore = .nonPersistent()   // nothing of the page (or of the session cookie) is kept on the phone after the panel is closed
+        configuration.websiteDataStore = store   // not persistent: nothing of the page (or of the session cookie) is kept on the phone after the panel is closed
         let view = WKWebView(frame: .zero, configuration: configuration)
         view.navigationDelegate = context.coordinator
         view.isOpaque = false
         view.backgroundColor = UIColor(red: 0.04, green: 0.05, blue: 0.07, alpha: 1)
-        guard let url = URL(string: address) else { context.coordinator.onFail(); return view }
+        guard let url = URL(string: load) else { context.coordinator.onFail(); return view }
         if let cookie, let host = url.host {
             var properties: [HTTPCookiePropertyKey: Any] = [.name: cookie.name, .value: cookie.value, .path: "/", .domain: host, .originURL: url]
             if url.scheme == "https" { properties[.secure] = "TRUE" }
