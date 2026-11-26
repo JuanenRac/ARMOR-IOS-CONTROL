@@ -95,6 +95,8 @@ public protocol ArmorApi: Sendable {
     func heatmap(_ origin: String, camera: String?) async throws -> HeatmapView
     /// Every inverter and battery that has reported, the declared ones still waiting, and the sums; an operator session is needed.
     func solar(_ origin: String) async throws -> SolarOverview
+    /// What the server kept of one piece of solar equipment: a stack or an inverter, or with a module one battery and its cells; an operator session is needed.
+    func solarHistory(_ origin: String, request: HistoryRequest) async throws -> SolarHistory
     /// The meters of the electrical nodes and the sums.
     func electrical(_ origin: String) async throws -> ElectricalOverview
     /// The battery operations of the last weeks, newest first, and whether the server lets anything be written at all; an administrator's.
@@ -177,6 +179,7 @@ extension ArmorApi {
     func dailySummary(_ origin: String, date: String, language: String) async throws -> DailySummaryView { throw ArmorApiError(message: "not supported", status: nil) }
     func heatmap(_ origin: String, camera: String?) async throws -> HeatmapView { throw ArmorApiError(message: "not supported", status: nil) }
     func solar(_ origin: String) async throws -> SolarOverview { throw ArmorApiError(message: "not supported", status: nil) }
+    func solarHistory(_ origin: String, request: HistoryRequest) async throws -> SolarHistory { throw ArmorApiError(message: "not supported", status: nil) }
     func electrical(_ origin: String) async throws -> ElectricalOverview { throw ArmorApiError(message: "not supported", status: nil) }
     func batteryOperations(_ origin: String) async throws -> BatteryOverview { throw ArmorApiError(message: "not supported", status: nil) }
     func batteryArm(_ origin: String, node: String, port: Int, op: String, output: String?, state: String?, serial: String) async throws -> BatteryOperationView { throw ArmorApiError(message: "not supported", status: nil) }

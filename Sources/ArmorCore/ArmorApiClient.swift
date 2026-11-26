@@ -72,6 +72,11 @@ public final class ArmorApiClient: ArmorApi, @unchecked Sendable {
     }
 
     public func solar(_ origin: String) async throws -> SolarOverview { SolarParser.overview(try await getJson(origin, "/api/v1/solar")) }
+    public func solarHistory(_ origin: String, request: HistoryRequest) async throws -> SolarHistory {
+        let module = request.module.map { "&module=" + String($0) } ?? ""
+        let query = "node=" + Self.part(request.node) + "&device=" + Self.part(request.device) + "&minutes=" + String(request.minutes) + module
+        return SolarHistoryMath.parse(try await getJson(origin, "/api/v1/solar/history?" + query))
+    }
     public func electrical(_ origin: String) async throws -> ElectricalOverview { ElectricalParser.overview(try await getJson(origin, "/api/v1/electrical/readings")) }
     public func batteryOperations(_ origin: String) async throws -> BatteryOverview { BatteryParser.overview(try await getJson(origin, "/api/v1/solar/battery-ops")) }
 
