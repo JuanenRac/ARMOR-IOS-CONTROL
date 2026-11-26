@@ -50,6 +50,14 @@ private func clock(_ t: Int64, span: Int64) -> String {
     return format.string(from: Date(timeIntervalSince1970: Double(t) / 1000))
 }
 
+/// An end of the time axis: over a day or more the hour alone would read the same at both ends.
+private func edge(_ t: Int64, span: Int64) -> String {
+    if span < 86_400_000 || span > 36 * 3_600_000 { return clock(t, span: span) }
+    let format = DateFormatter()
+    format.dateFormat = "dd/MM HH:mm"
+    return format.string(from: Date(timeIntervalSince1970: Double(t) / 1000))
+}
+
 private func number(_ value: Double, _ decimals: Int) -> String { String(format: "%.\(decimals)f", value) }
 
 /// The lines of one chart on one scale, the alarm levels dashed.
@@ -139,7 +147,7 @@ private struct HistoryChart: View {
         HStack {
             Text(number(scale.low, decimals) + " " + unit)
             Spacer()
-            Text(clock(from, span: to - from) + " – " + clock(to, span: to - from))
+            Text(edge(from, span: to - from) + " – " + edge(to, span: to - from))
         }.font(.caption2).foregroundColor(Theme.muted)
         if drawn.count <= 4 {
             ForEach(drawn) { curve in
