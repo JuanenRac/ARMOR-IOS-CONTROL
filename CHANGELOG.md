@@ -4,6 +4,8 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+## [0.0.8] - A clearer Solar screen and node panels on an origin of their own
+
 - **The shared project tool is the current one:** the copy follows the shared repository, which now knows the new solar panel node.
 
 - **Node panels on an origin of their own:** opening a panel through the server now asks for a one-use ticket (`POST /api/v1/admin/node-panels/{id}/ticket`) when the server serves the panels from a second origin (`panel.separate_origin`), and asks for the proof of identity when the server wants it from outside. With the option off, or an older server, the panel opens as before. The ticket is neither kept nor shown. Built and tested by the CI only; not run against a node or an iPhone.
