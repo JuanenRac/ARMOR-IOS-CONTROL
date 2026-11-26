@@ -4,6 +4,8 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+- **A stack whose batteries have not all said their capacity is totalled whole:** when every battery of a stack that told its full capacity told the same one and no two name different models, the others count as those, and the capacity carries an approximately-equal sign; this also corrects what an older node adds up. With different capacities or models nothing is assumed.
+
 ## [0.0.8] - A clearer Solar screen and node panels on an origin of their own
 
 - **The shared project tool is the current one:** the copy follows the shared repository, which now knows the new solar panel node.

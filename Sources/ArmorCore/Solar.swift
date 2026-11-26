@@ -17,6 +17,8 @@ public struct SolarTotals: Equatable, Sendable {
     public var energyKwh: Double?
     public var gridPresent = false
     public var mode: String?
+    /// Some stack counts a battery that has not said its full capacity as the others: the capacity is approximate.
+    public var fullEstimated = false
     public init() {}
 }
 
@@ -88,6 +90,8 @@ public struct SolarBatteryReading: Equatable, Sendable {
     public let cycles: Int?
     public let stack: [SolarModule]
     public let healthPercent: Int?
+    /// `fullCapacityAh` counts a battery that has not said its own as the others.
+    public let fullEstimated: Bool
     /// Watts at the battery: positive while charging.
     public var powerW: Double? { if let voltageV, let currentA { return voltageV * currentA }; return nil }
 }
@@ -145,7 +149,20 @@ public enum SolarParser {
         out.devices = root.objects("devices").compactMap(device)
         out.waiting = root.objects("waiting").compactMap(waiting)
         if let sums = root.object("totals") { out.totals = totals(sums) }
+        // as the server's sums: a quiet stack is left out, and an example only counts while nothing real is there
+        let stacks = out.devices.filter { $0.battery != nil }
+        let real = stacks.filter { !$0.example }
+        out.totals.fullEstimated = (real.isEmpty ? stacks : real).contains { !$0.stale && $0.battery?.fullEstimated == true }
         return out
+    }
+
+    /// The full capacity to take for a battery that has not said its own: that of the others of the stack, only when every one that said it said the same and no two batteries name
+    /// different models. nil: nothing is assumed. The node and the server count the same way; an older node does not.
+    public static func sharedCapacity(_ present: [SolarModule]) -> Double? {
+        let models = Set(present.map { $0.model }.filter { !$0.isEmpty })
+        let said = present.compactMap { $0.fullCapacityAh }
+        guard models.count <= 1, let first = said.first, said.allSatisfy({ abs($0 - first) <= 0.005 }) else { return nil }
+        return first
     }
 
     public static func totals(_ json: JSON) -> SolarTotals {
@@ -224,10 +241,13 @@ public enum SolarParser {
     }
 
     private static func battery(_ r: JSON) -> SolarBatteryReading {
-        SolarBatteryReading(modules: r.int("modules"), model: r.str("model"), state: r.str("state"), voltageV: r.double("voltage_v"), currentA: r.double("current_a"), temperatureMinC: r.double("temperature_min_c"),
+        let stack = r.objects("stack").map(module).filter { $0.present }
+        let each: Double? = stack.contains { $0.fullCapacityAh == nil } ? sharedCapacity(stack) : nil
+        let full: Double? = each.map { $0 * Double(stack.count) } ?? r.double("full_capacity_ah")
+        return SolarBatteryReading(modules: r.int("modules"), model: r.str("model"), state: r.str("state"), voltageV: r.double("voltage_v"), currentA: r.double("current_a"), temperatureMinC: r.double("temperature_min_c"),
                             temperatureMaxC: r.double("temperature_max_c"), cellMinV: r.double("cell_min_v"), cellMaxV: r.double("cell_max_v"), socPercent: whole(r, "soc_percent"), alarm: r.bool("alarm"),
-                            capacityAh: r.double("capacity_ah"), fullCapacityAh: r.double("full_capacity_ah"), energyKwh: r.double("energy_kwh"), cycles: whole(r, "cycles"),
-                            stack: r.objects("stack").map(module).filter { $0.present }, healthPercent: whole(r, "health_percent"))
+                            capacityAh: r.double("capacity_ah"), fullCapacityAh: full, energyKwh: r.double("energy_kwh"), cycles: whole(r, "cycles"),
+                            stack: stack, healthPercent: whole(r, "health_percent"), fullEstimated: each != nil)
     }
 }
 
