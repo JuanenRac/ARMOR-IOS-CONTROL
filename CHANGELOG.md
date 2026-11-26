@@ -4,6 +4,7 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+- **The test count of the repository structure is current:** it follows the tests of the solar screen.
 - **The copy of the shared validator is current:** `tools/armor_ci_validate.py` now also checks with `node --check` that the scripts served to a browser parse, in a repository that has them under `panel/` or `public/`.
 - **The cells of a battery no longer depend on four fixed columns:** the grid takes as many columns as fit a whole voltage, also with larger text.
 - **A clearer Solar screen:** each module has its state in icon, word and colour, every cell with its voltage and bar, the highest and lowest cell, what is wrong in words, and a summary of all the batteries. A fault pulses softly (once a second, never faster than twice), and stays still when the phone is set to reduce motion. The levels are in a settings file inside the app; the absolute voltage of a cell is only judged for lithium iron phosphate batteries (Pylontech, Pytes).
