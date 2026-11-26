@@ -22,14 +22,14 @@
   <img src="https://img.shields.io/badge/Language-Swift-f05138.svg" alt="Langage">
   <img src="https://img.shields.io/badge/UI-SwiftUI-0a84ff.svg" alt="UI">
   <img src="https://img.shields.io/badge/Languages-8-00E5FF.svg" alt="Langues">
-  <img src="https://img.shields.io/badge/Tests-536%20passing-2ea44f.svg" alt="Tests">
+  <img src="https://img.shields.io/badge/Tests-541%20passing-2ea44f.svg" alt="Tests">
   <img src="https://img.shields.io/badge/Version-0.0.7-0f6cbd.svg" alt="Version">
   <img src="https://img.shields.io/badge/Maturity-scaffolding-FFB020.svg" alt="Maturité">
 </p>
 
 ---
 
-**Vérification d'honnêteté - ce qui fonctionne aujourd'hui :** les règles de l'app (liaison au serveur, lecture des réponses, choix de l'adresse, verrou du téléphone, coffre de la session, confiance dans le certificat, politique d'alarmes, cas d'usage, découpage du MJPEG) forment le paquet Swift `ArmorCore`, couvert par 536 tests unitaires qui s'exécutent avec `swift test` sous macOS ou Linux, et `tools/ios_lint.py` vérifie la structure, les huit tables de langues et le contrat sans Mac. Ce qui n'est **pas** encore prouvé : les écrans SwiftUI et les parties qui exigent un iPhone (Face ID, trousseau, règles de certificat, caméra en direct, push via Firebase) n'ont pas été compilés dans Xcode ni exécutés sur un appareil. L'app fonctionne aussi de bout en bout face à un serveur simulé et une montre simulée, coupures et pannes comprises (preuve : simulateur).
+**Vérification d'honnêteté - ce qui fonctionne aujourd'hui :** les règles de l'app (liaison au serveur, lecture des réponses, choix de l'adresse, verrou du téléphone, coffre de la session, confiance dans le certificat, politique d'alarmes, cas d'usage, découpage du MJPEG) forment le paquet Swift `ArmorCore`, couvert par 541 tests unitaires qui s'exécutent avec `swift test` sous macOS ou Linux, et `tools/ios_lint.py` vérifie la structure, les huit tables de langues et le contrat sans Mac. Ce qui n'est **pas** encore prouvé : les écrans SwiftUI et les parties qui exigent un iPhone (Face ID, trousseau, règles de certificat, caméra en direct, push via Firebase) n'ont pas été compilés dans Xcode ni exécutés sur un appareil. L'app fonctionne aussi de bout en bout face à un serveur simulé et une montre simulée, coupures et pannes comprises (preuve : simulateur).
 
 ---
 
@@ -41,8 +41,8 @@
 | Maturité | Ébauche |
 | Rôle | Client opérateur iPhone pour ARMOR-SERVER (famille : Clients, parent : ARMOR-SERVER) |
 | Technologie | Swift 5.9+ / SwiftUI, iOS 16+ |
-| Tests | 536 (`swift test`) |
-| Langues | 8 (1229 phrases par langue, vérifiées par `ios_lint.py`) |
+| Tests | 541 (`swift test`) |
+| Langues | 8 (1253 phrases par langue, vérifiées par `ios_lint.py`) |
 | Fonctionne sur | Un iPhone avec iOS 16+ ; les tests tournent sous macOS ou Linux |
 | Sur matériel réel | Pas encore exécuté sur un iPhone ni sur une Apple Watch ; les règles sont testées sous Linux et l'app fonctionne face à un serveur et une montre simulés |
 | Simulation | Un serveur simulé (`SimulatedServer`) et une montre simulée (`SimulatedWatch`) font fonctionner l'app de bout en bout sans matériel ; des tests de scénarios pilotent le vrai contrôleur |
@@ -59,7 +59,7 @@ Chaque ligne est une partie de ce dépôt et le feu dit où elle en est aujourd'
 | Domaine | État | Ce que cela veut dire ici |
 |---|---|---|
 | Logiciel | 🟡 | Les règles de l'application forment un paquet Swift (`ArmorCore`) et l'app SwiftUI est compilée pour le simulateur par la CI sous macOS ; elle n'a pas tourné sur un iPhone. |
-| Tests | 🟡 | 536 tests unitaires réussissent avec `swift test` sous macOS ou Linux, et `tools/ios_lint.py` vérifie la structure, les tables des huit langues et le contrat sans Mac ; aucun test ne tourne sur un appareil. |
+| Tests | 🟡 | 541 tests unitaires réussissent avec `swift test` sous macOS ou Linux, et `tools/ios_lint.py` vérifie la structure, les tables des huit langues et le contrat sans Mac ; aucun test ne tourne sur un appareil. |
 | Interface | 🟠 | Les écrans SwiftUI sont compilés pour le simulateur par la CI sous macOS mais n'ont pas été exécutés sur un iPhone. |
 | Matériel | 🟠 | Elle n'a pas tourné sur un iPhone ni sur une Apple Watch ; l'app fonctionne de bout en bout face à un serveur simulé et une montre simulée, coupures et pannes comprises (preuve : simulateur), et l'essai sur un vrai iPhone et une vraie montre reste à faire. |
 | Sécurité | 🟠 | Le verrouillage du téléphone, le coffre de la session et la confiance dans le certificat sont des règles testées sous Linux ; Face ID, le trousseau et les règles du certificat n'ont pas tourné sur un appareil. |
@@ -86,7 +86,7 @@ Chaque ligne est une partie de ce dépôt et le feu dit où elle en est aujourd'
 * **Présence et une photo dans l'avis (les deux désactivés jusqu'à ton choix) :** un interrupteur laisse le téléphone dire au serveur seulement le mot *à la maison* ou *absent* quand il franchit le cercle du rappel à la sortie (le lieu ne quitte jamais le téléphone ; le serveur doit avoir activé son option « Présence par personne ») ; un autre ajoute à l'avis d'une caméra qui ne répond plus sa photo, demandée à ton propre serveur et jamais via un service de push.
 * **Mettre à jour la machine depuis le téléphone (administrateurs) :** Plus > Mettre à jour la machine montre si le serveur et l'assistant l'autorisent (désactivé par défaut : l'interrupteur éteint, rien n'est proposé), liste les programmes qui peuvent être mis à jour, présente un aperçu avec la version installée et la version publiée et un plan à usage unique avec compte à rebours, et l'applique une fois le nom du projet tapé, avec ta preuve d'identité et le code à usage unique de l'administrateur ; les étapes et le journal du travail se suivent en direct et chaque refus du serveur est dit en mots simples.
 * **Modes d'armement du serveur (Absent, À la maison, Nuit) :** quand le serveur a les modes d'armement activés (Studio, Configuration > Sécurité), le bouton d'armement de l'écran d'état ouvre un sélecteur pour armer dans un mode, passer de l'un à l'autre ou désarmer ; un mode sans rien d'attribué demande une confirmation, un passage à un mode qui protège moins demande le PIN comme un désarmement, et l'état montre le mode en vigueur. Armer depuis l'état désarmé exécute d'abord la vérification avant armement, comme un armement simple. Modes éteints, l'application arme et désarme comme avant. Elle suit l'application Android ; le code et ses tests sont écrits et n'ont été ni compilés ni essayés sur un iPhone.
-* **Solaire, batteries et réseau électrique, pour les administrateurs et les opérateurs :** Plus > Solaire montre les totaux (soleil, consommation, état de charge, réseau) et chaque onduleur et batterie avec ses valeurs, cellules, compteurs et journal d'événements ; Plus > Électrique montre l'entrée réseau, les circuits et les bus continu avec les commutateurs ; Plus > Maintenance des batteries (administrateurs seulement) propose les opérations simples sur une batterie Pylontech en deux étapes (le nœud vérifie, l'écran montre exactement ce qui sera fait, et l'écriture n'a lieu qu'après avoir saisi à nouveau le numéro de série). Les écrans interrogent de nouveau toutes les quelques secondes, à un rythme gardé dans un fichier de configuration. Elle suit l'application Android ; le code et ses tests sont écrits et n'ont été ni compilés ni essayés sur un iPhone.
+* **Solaire, batteries et réseau électrique, pour les administrateurs et les opérateurs :** Plus > Solaire montre les totaux (soleil, consommation, état de charge, réseau) et chaque onduleur et batterie avec ses valeurs, cellules, compteurs et journal d'événements ; Plus > Électrique montre l'entrée réseau, les circuits et les bus continu avec les commutateurs ; Plus > Maintenance des batteries (administrateurs seulement) propose les opérations simples sur une batterie Pylontech en deux étapes (le nœud vérifie, l'écran montre exactement ce qui sera fait, et l'écriture n'a lieu qu'après avoir saisi à nouveau le numéro de série). Les écrans interrogent de nouveau toutes les quelques secondes, à un rythme gardé dans un fichier de configuration. Elle suit l'application Android ; le code et ses tests sont écrits et n'ont été ni compilés ni essayés sur un iPhone. Chaque module de batterie montre son état en icône, mot et couleur et toutes ses cellules (tension et barre), avec un clignotement doux en cas de défaut qui reste fixe avec Réduire les animations.
 * **Météo, réseau, recherche de nœuds, services et sécurité :** Plus > Météo montre le temps d'un lieu que vous choisissez (maintenant, la pluie de l'heure suivante, 48 heures, dix jours, air, pollen, soleil et lune) avec un radar de pluie et de nuages en direct ; seules les coordonnées du lieu quittent le téléphone et le serveur n'intervient pas. Plus > Réseau montre internet, les appareils, les coupures et ce qui a changé ; les écrans Solaire et Électrique portent un panneau qui cherche des nœuds sur le réseau. Plus > Services liste les programmes et les nœuds de terrain, actifs ou non. Plus > Sécurité gère le second facteur du compte, les sessions ouvertes et la façon dont le serveur voit le téléphone (pour les administrateurs aussi le VPN de la maison et l'adresse dynamique ; la clé privée d'un appareil est montrée une fois, jamais conservée, et la copier est désactivé sauf si les réglages le permettent). Une alarme solaire, de batterie ou électrique ouvre son écran depuis son détail. Elle suit l'application Android ; le code et ses tests sont écrits et n'ont été ni compilés ni essayés sur un iPhone.
 * **Tout le système sur l'écran d'état, et une fenêtre pour les alarmes :** l'écran d'état compte les nœuds de tous les types (radar, solaire, électrique, centrale d'alarme, panneau mural), pas seulement les nœuds radar du flux en direct, et un appui ouvre leur santé ; tant qu'une alarme attend une personne, une bannière pulse sur tous les écrans sauf les alarmes (rouge et rapide pour une alarme critique, ambre pour les autres, immobile si le téléphone est réglé pour moins de mouvement), dit quelle est la pire alarme et combien attendent, et permet d'ouvrir les alarmes, de confirmer depuis la bannière ou de la fermer jusqu'à l'arrivée d'une autre alarme. Le téléphone indique aussi au serveur la langue de l'application lors de l'enregistrement pour le push, afin que l'avis soit écrit dans cette langue. Elle suit l'application Android ; le code et ses tests sont écrits et n'ont pas été essayés sur un iPhone.
 * **Ouvrir la caméra depuis un avis, et un widget en route :** un avis à propos d'une caméra (une qui ne répond plus, ou une alarme levée par une caméra) porte l'action « Ouvrir la caméra » ; la toucher amène l'application sur l'onglet Caméras avec cette caméra en plein écran. Ce que dit un widget de l'écran d'accueil (armé, désarmé ou pas de données) est prêt dans le noyau dans les huit langues, et son code attend dans `docs/widget` qu'un Mac le construise comme cible ; comme la tuile de l'application Android, il ne fait qu'afficher et ouvrir l'application, il n'arme ni ne désarme jamais. Elle suit l'application Android ; le code et ses tests sont écrits et n'ont pas été essayés sur un iPhone.
@@ -125,7 +125,7 @@ Les textes d'autorisation (Face ID, réseau local) existent dans les huit langue
 
 ## 🔌 Interfaces
 
-C'est un client : il appelle 70 chemins d'ARMOR-SERVER (`tools/ios_lint.py` les compte et vérifie que le client Android les appelle aussi) et découpe le flux MJPEG des caméras avec son propre analyseur (`MjpegParser.swift`).
+C'est un client : il appelle 71 chemins d'ARMOR-SERVER (`tools/ios_lint.py` les compte et vérifie que le client Android les appelle aussi) et découpe le flux MJPEG des caméras avec son propre analyseur (`MjpegParser.swift`).
 
 | Partie | Ce qu'elle règle |
 |---|---|
@@ -150,7 +150,7 @@ Dans l'app : les deux adresses, *Se souvenir de moi*, le verrouillage du télép
 **Prérequis:** un Mac avec Xcode 15+ et iOS 16+ pour compiler l'app ; Swift 5.9+ (macOS ou Linux) pour les tests ; Python 3.11 pour les contrôles.
 
 ```sh
-swift test                  # 536 tests of ArmorCore (macOS or Linux)
+swift test                  # 541 tests of ArmorCore (macOS or Linux)
 python tools/ios_lint.py    # structure, eight languages, contract (any system)
 xcodegen generate           # then open ARMOR-IOS-CONTROL.xcodeproj in Xcode (on a Mac)
 ```
@@ -183,7 +183,7 @@ python -I tools/armor_ci_validate.py
 | `PolicyTests.swift`, `AlarmCodesTests.swift`, `AlarmFactsTests.swift` | 6 + 4 + 7 | La politique d'alarme et les codes d'alarme |
 | `SolarTests.swift`, `BatteryTests.swift`, `ElectricalTests.swift`, `ScreenPollingTests.swift`, `EquipmentClientTests.swift`, `AlarmRouteTests.swift`, `NetworkTests.swift`, `WeatherTests.swift`, `ServicesSecurityTests.swift` | 14 + 10 + 5 + 3 + 10 + 2 + 9 + 11 + 8 | Solaire, batteries, réseau électrique et appels du client |
 
-Les 536 tests utilisent des données d'un vrai serveur. `tools/ios_lint.py` réussit sans Mac : 108 fichiers Swift, 1229 phrases en 8 langues, 70 chemins du serveur. Aucun test ne tourne sur un appareil.
+Les 541 tests utilisent des données d'un vrai serveur. `tools/ios_lint.py` réussit sans Mac : 112 fichiers Swift, 1253 phrases en 8 langues, 71 chemins du serveur. Aucun test ne tourne sur un appareil.
 
 ## 🏗️ Compilation et publication
 
@@ -210,7 +210,7 @@ Le projet Xcode est généré depuis `project.yml` avec XcodeGen : choisis une �
 ARMOR-IOS-CONTROL/
 ├── Sources/ArmorCore/                   les règles de l'app : un paquet Swift
 ├── App/                                 les écrans SwiftUI et les parties qui exigent un iPhone
-├── Tests/                               536 tests et données d'un vrai serveur
+├── Tests/                               541 tests et données d'un vrai serveur
 ├── docs/                                les guides de ce dépôt
 ├── tools/                               les contrôles CI partagés et les outils du projet
 ├── .github/                             workflow CI et modèles d'issues et de pull requests
