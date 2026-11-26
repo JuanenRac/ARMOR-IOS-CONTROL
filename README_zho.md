@@ -22,14 +22,14 @@
   <img src="https://img.shields.io/badge/Language-Swift-f05138.svg" alt="Language">
   <img src="https://img.shields.io/badge/UI-SwiftUI-0a84ff.svg" alt="UI">
   <img src="https://img.shields.io/badge/Languages-8-00E5FF.svg" alt="Languages">
-  <img src="https://img.shields.io/badge/Tests-541%20passing-2ea44f.svg" alt="Tests">
+  <img src="https://img.shields.io/badge/Tests-546%20passing-2ea44f.svg" alt="Tests">
   <img src="https://img.shields.io/badge/Version-0.0.8-0f6cbd.svg" alt="Version">
   <img src="https://img.shields.io/badge/Maturity-scaffolding-FFB020.svg" alt="Maturity">
 </p>
 
 ---
 
-**诚实性检查 - 今天真正能运行的部分：** 应用的规则（服务器连接、响应解析、地址选择、手机锁、会话保险库、证书信任、警报策略、用例、MJPEG 切分）是 Swift 包 `ArmorCore`，由 541 个单元测试覆盖，可在 macOS 或 Linux 上用 `swift test` 运行；`tools/ios_lint.py` 无需 Mac 即可检查结构、八张语言表和接口契约。**尚未**证明的部分：SwiftUI 界面以及需要 iPhone 的部分（Face ID、钥匙串、证书规则、实时摄像头、通过 Firebase 的推送）尚未在 Xcode 中构建，也未在设备上运行。应用还可对模拟服务器和模拟手表端到端运行，包括断线和故障（证据：模拟器）。
+**诚实性检查 - 今天真正能运行的部分：** 应用的规则（服务器连接、响应解析、地址选择、手机锁、会话保险库、证书信任、警报策略、用例、MJPEG 切分）是 Swift 包 `ArmorCore`，由 546 个单元测试覆盖，可在 macOS 或 Linux 上用 `swift test` 运行；`tools/ios_lint.py` 无需 Mac 即可检查结构、八张语言表和接口契约。**尚未**证明的部分：SwiftUI 界面以及需要 iPhone 的部分（Face ID、钥匙串、证书规则、实时摄像头、通过 Firebase 的推送）尚未在 Xcode 中构建，也未在设备上运行。应用还可对模拟服务器和模拟手表端到端运行，包括断线和故障（证据：模拟器）。
 
 ---
 
@@ -41,7 +41,7 @@
 | 成熟度 | 雏形 |
 | 角色 | ARMOR-SERVER 的 iPhone 操作客户端（家族：Clients，上级：ARMOR-SERVER） |
 | 技术栈 | Swift 5.9+ / SwiftUI, iOS 16+ |
-| 测试 | 541 (`swift test`) |
+| 测试 | 546 (`swift test`) |
 | 语言 | 8（每种语言 1253 条短语，由 `ios_lint.py` 检查） |
 | 运行位置 | iOS 16+ 的 iPhone；测试在 macOS 或 Linux 上运行 |
 | 真实硬件 | 尚未在 iPhone 或 Apple Watch 上运行；规则在 Linux 上测试，应用对模拟服务器和模拟手表运行 |
@@ -59,7 +59,7 @@
 | 领域 | 状态 | 在这里的含义 |
 |---|---|---|
 | 软件 | 🟡 | 应用的规则是一个 Swift 包（`ArmorCore`），SwiftUI 应用由 macOS 上的 CI 为模拟器构建；它没有在 iPhone 上运行过。 |
-| 测试 | 🟡 | 541 项单元测试在 macOS 或 Linux 上通过 `swift test` 运行，`tools/ios_lint.py` 无需 Mac 即可检查结构、八种语言表和契约；没有任何测试在设备上运行。 |
+| 测试 | 🟡 | 546 项单元测试在 macOS 或 Linux 上通过 `swift test` 运行，`tools/ios_lint.py` 无需 Mac 即可检查结构、八种语言表和契约；没有任何测试在设备上运行。 |
 | 界面 | 🟠 | SwiftUI 界面由 macOS 上的 CI 为模拟器构建，但没有在 iPhone 上运行过。 |
 | 硬件 | 🟠 | 尚未在 iPhone 或 Apple Watch 上运行过；应用已对模拟服务器和模拟手表端到端运行，包括断线和故障（证据：模拟器），真实 iPhone 和手表上的测试仍待进行。 |
 | 安全 | 🟠 | 手机锁定、会话保险库和对证书的信任是在 Linux 上测试的规则；Face ID、钥匙串和证书规则尚未在设备上运行过。 |
@@ -92,6 +92,7 @@
 * **从通知打开摄像头，以及即将到来的小组件：** 关于摄像头的通知（不再响应的摄像头，或由摄像头触发的警报）带有“打开摄像头”操作；点按后应用会切换到摄像头页面并全屏显示该摄像头。主屏幕小组件所显示的内容（已布防、已撤防或无数据）已在核心库中以八种语言准备好，其源码放在 `docs/widget`，等待有 Mac 将其构建为目标；与 Android 应用的快捷设置磁贴一样，它只显示并打开应用，从不布防或撤防。它与 Android 应用保持一致；代码及其测试已编写，但尚未在 iPhone 上试用。
 * **受信任的手机，开启前默认关闭：** 当管理员在 Studio 中允许时，更多 > 用手机锁定 中的开关会让手机在安全隔区（Secure Enclave）内生成一对密钥（无法导出，且仅在手机解锁时可用），把公钥一半注册到服务器，并通过签署一次性挑战来续期会话，而不必再次询问密码和验证码。服务器不再认识的手机会忘记自己的编号，已锁定的手机稍后重试，关闭开关或退出登录会让服务器忘记该手机。它与 Android 应用保持一致；规则用假的服务器和假的密钥测试，安全隔区本身尚未在 iPhone 上试用。
 * **Apple Watch 上的警报，默认关闭：** 警报语音设置中的开关会把你会看到的通知（只有标题和正文，你选择隐藏的绝不发送）发送到已配对、运行 ARMOR-WATCH 的 Apple Watch 应用的手表，手表可以轻点一下确认警报；iPhone 只对自己刚刚发送的警报处理这一确认，仅一次，并使用自己的会话。消息采用 ARMOR-WATCH 契约，与 Android 应用发送给 Wear OS 手表的相同，并已在 CI 的 Mac 上测试；Apple Watch 应用包含在这个应用内（Xcode 工程将其嵌入，CI 针对模拟器构建两者），尚未在真实手表上运行。
+* **可折叠的光伏图表：** 光伏页面按 1 小时到 30 天绘制 ARMOR-SERVER 保存的整个电池组、每个电池包、每块电池及其单体和每台逆变器的历史记录，各区域的展开状态由手机记住。仅经 CI 构建和测试，尚未在 iPhone 上运行。
 
 ## 🧩 在 A.R.M.O.R. 中的角色
 
@@ -150,7 +151,7 @@ ARMOR-IOS-CONTROL 是 iPhone 通往同一个 [ARMOR-SERVER](https://github.com/J
 **要求:** 构建应用需要装有 Xcode 15+ 和 iOS 16+ 的 Mac；测试需要 Swift 5.9+（macOS 或 Linux）；检查需要 Python 3.11。
 
 ```sh
-swift test                  # 541 tests of ArmorCore (macOS or Linux)
+swift test                  # 546 tests of ArmorCore (macOS or Linux)
 python tools/ios_lint.py    # structure, eight languages, contract (any system)
 xcodegen generate           # then open ARMOR-IOS-CONTROL.xcodeproj in Xcode (on a Mac)
 ```
@@ -183,7 +184,7 @@ python -I tools/armor_ci_validate.py
 | `PolicyTests.swift`, `AlarmCodesTests.swift`, `AlarmFactsTests.swift` | 6 + 4 + 7 | 报警策略和报警代码 |
 | `SolarTests.swift`, `BatteryTests.swift`, `ElectricalTests.swift`, `ScreenPollingTests.swift`, `EquipmentClientTests.swift`, `AlarmRouteTests.swift`, `NetworkTests.swift`, `WeatherTests.swift`, `ServicesSecurityTests.swift` | 14 + 10 + 5 + 3 + 10 + 2 + 9 + 11 + 8 | 太阳能、电池、电网和客户端调用 |
 
-这 541 个测试使用真实服务器的数据。`tools/ios_lint.py` 无需 Mac 即可通过：112 个 Swift 文件、8 种语言的 1253 条短语、71 条服务器路径。没有任何测试在真机上运行。
+这 546 个测试使用真实服务器的数据。`tools/ios_lint.py` 无需 Mac 即可通过：112 个 Swift 文件、8 种语言的 1253 条短语、71 条服务器路径。没有任何测试在真机上运行。
 
 ## 🏗️ 构建与发布
 
@@ -210,7 +211,7 @@ Xcode 项目由 XcodeGen 根据 `project.yml` 生成：选择签名团队，把�
 ARMOR-IOS-CONTROL/
 ├── Sources/ArmorCore/                   应用的规则：一个 Swift 包
 ├── App/                                 SwiftUI 界面和需要 iPhone 的部分
-├── Tests/                               541 个测试和真实服务器的数据
+├── Tests/                               546 个测试和真实服务器的数据
 ├── docs/                                本仓库的指南
 ├── tools/                               共享的 CI 检查和项目工具
 ├── .github/                             CI 工作流以及 Issue 和 Pull Request 模板

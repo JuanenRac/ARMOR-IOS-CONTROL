@@ -72,6 +72,8 @@ struct SolarView: View {
                 }
                 if !data.devices.isEmpty { totalsSection(data.totals) }
                 bankSection(data.devices)
+                let batteries = data.devices.filter { $0.battery != nil && !$0.example }
+                if !batteries.isEmpty { Section { BankCharts(batteries: batteries) }.listRowBackground(Theme.surface) }
                 ForEach(data.devices) { device in
                     if let reading = device.inverter { InverterSection(device: device, reading: reading) }
                     else if let reading = device.battery { SolarBatterySection(device: device, reading: reading) }
@@ -206,6 +208,7 @@ private struct InverterSection: View {
             if !r.warnings.isEmpty {
                 Label(r.warnings.map(SolarText.warning).joined(separator: ", "), systemImage: "exclamationmark.triangle.fill").font(.caption).foregroundColor(Theme.amber)
             }
+            if !device.example { InverterHistoryCharts(device: device) }
         }.listRowBackground(Theme.surface)
     }
 }
@@ -214,9 +217,15 @@ private struct SolarBatterySection: View {
     @EnvironmentObject var model: AppModel
     let device: SolarDevice
     let reading: SolarBatteryReading
-    @State private var showCells = true
+    @AppStorage private var showCells: Bool
     @State private var showEvents = false
     private let settings = SolarViewSettings.bundled()
+
+    init(device: SolarDevice, reading: SolarBatteryReading) {
+        self.device = device
+        self.reading = reading
+        _showCells = AppStorage(wrappedValue: true, "solar.cells." + device.id)
+    }
 
     var body: some View {
         let r = reading
@@ -264,6 +273,7 @@ private struct SolarBatterySection: View {
                 Button(showCells ? model.tr("Ocultar celdas") : model.tr("Ver celdas")) { showCells.toggle() }
                 if showCells { ForEach(bank.modules) { view in ModuleSection(device: device, view: view, settings: settings) } }
             }
+            if !device.example { BatteryHistoryCharts(device: device, reading: reading) }
             if !device.events.isEmpty {
                 Button(showEvents ? model.tr("Ocultar registro de eventos") : model.tr("Ver registro de eventos")) { showEvents.toggle() }
                 if showEvents {

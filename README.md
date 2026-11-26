@@ -22,14 +22,14 @@
   <img src="https://img.shields.io/badge/Language-Swift-f05138.svg" alt="Language">
   <img src="https://img.shields.io/badge/UI-SwiftUI-0a84ff.svg" alt="UI">
   <img src="https://img.shields.io/badge/Languages-8-00E5FF.svg" alt="Languages">
-  <img src="https://img.shields.io/badge/Tests-541%20passing-2ea44f.svg" alt="Tests">
+  <img src="https://img.shields.io/badge/Tests-546%20passing-2ea44f.svg" alt="Tests">
   <img src="https://img.shields.io/badge/Version-0.0.8-0f6cbd.svg" alt="Version">
   <img src="https://img.shields.io/badge/Maturity-scaffolding-FFB020.svg" alt="Maturity">
 </p>
 
 ---
 
-**Honesty check - what runs today:** the rules of the app (server link, parsing, choice of address, lock of the phone, vault of the session, trust in the certificate, alarm policy, use cases, MJPEG cutting) are the Swift package `ArmorCore`, covered by 541 unit tests that run with `swift test` on macOS or Linux, and `tools/ios_lint.py` checks the structure, the eight language tables and the contract without a Mac. What is **not** proven yet: the SwiftUI screens and the parts that need an iPhone (Face ID, Keychain, certificate rules, live camera, push through Firebase) have not been built in Xcode or run on a device. The app also runs from end to end against a simulated server and a simulated watch, cuts and failures included (evidence: simulator).
+**Honesty check - what runs today:** the rules of the app (server link, parsing, choice of address, lock of the phone, vault of the session, trust in the certificate, alarm policy, use cases, MJPEG cutting) are the Swift package `ArmorCore`, covered by 546 unit tests that run with `swift test` on macOS or Linux, and `tools/ios_lint.py` checks the structure, the eight language tables and the contract without a Mac. What is **not** proven yet: the SwiftUI screens and the parts that need an iPhone (Face ID, Keychain, certificate rules, live camera, push through Firebase) have not been built in Xcode or run on a device. The app also runs from end to end against a simulated server and a simulated watch, cuts and failures included (evidence: simulator).
 
 ---
 
@@ -41,7 +41,7 @@
 | Maturity | Scaffolding |
 | Role | iPhone operator client for ARMOR-SERVER (family: Clients, parent: ARMOR-SERVER) |
 | Stack | Swift 5.9+ / SwiftUI, iOS 16+ |
-| Tests | 541 (`swift test`) |
+| Tests | 546 (`swift test`) |
 | Languages | 8 (1253 phrases per language, checked by `ios_lint.py`) |
 | Runs on | An iPhone with iOS 16+; the tests run on macOS or Linux |
 | On real hardware | Not run on an iPhone or an Apple Watch yet; the rules are tested on Linux and the app runs against a simulated server and watch |
@@ -59,7 +59,7 @@ Each line is one part of this repository and the light says how far it is today.
 | Area | State | What it means here |
 |---|---|---|
 | Software | 🟡 | The rules of the app are a Swift package (`ArmorCore`) and the SwiftUI app is built for the simulator by the CI on macOS; it has not run on an iPhone. |
-| Tests | 🟡 | 541 unit tests pass with `swift test` on macOS or Linux, and `tools/ios_lint.py` checks the structure, the eight language tables and the contract without a Mac; no test runs on a device. |
+| Tests | 🟡 | 546 unit tests pass with `swift test` on macOS or Linux, and `tools/ios_lint.py` checks the structure, the eight language tables and the contract without a Mac; no test runs on a device. |
 | Interface | 🟠 | The SwiftUI screens are built for the simulator by the CI on macOS but have not been run on an iPhone. |
 | Hardware | 🟠 | It has not run on an iPhone or an Apple Watch; the app runs end to end against a simulated server and a simulated watch, cuts and failures included (evidence: simulator), and the test on a real iPhone and watch is still pending. |
 | Security | 🟠 | The lock of the phone, the session vault and the trust in the certificate are rules tested on Linux; Face ID, the Keychain and the certificate rules have not run on a device. |
@@ -92,6 +92,7 @@ Each line is one part of this repository and the light says how far it is today.
 * **Open the camera from a notice, and a widget on its way:** a notice about a camera (one that stopped answering, or an alarm a camera raised) carries the action "Open camera"; touching it brings the app to the Cameras place with that camera in full screen. What a home-screen widget says (armed, disarmed or no data) is ready in the core in the eight languages, and its source waits in `docs/widget` until a Mac builds it as a target; like the tile of the Android app it only shows and opens the app, it never arms or disarms. It follows the Android app; the code and its tests are written and were not tried on an iPhone.
 * **A trusted phone, off until you turn it on:** when the administrator allows it in Studio, a switch in More > Lock with the phone makes the phone create a key pair inside the Secure Enclave (it cannot be exported and works only while the phone is unlocked), register the public half with the server and renew the session by signing a one-time challenge instead of asking for the password and the code again. A phone the server no longer knows forgets its id, a locked phone tries again later, and turning the switch off or signing out makes the server forget the phone. It follows the Android app; the rules are tested with a fake server and a fake key, and the Secure Enclave itself was not tried on an iPhone.
 * **The alarms on an Apple Watch, off by default:** a switch in the settings of the voice of the alarms sends the notices you would see (only the title and the text, never one you chose to hide) to a paired watch that runs the Apple Watch app of ARMOR-WATCH, which can confirm an alarm with one tap; the phone acts on that confirmation only for an alert it sent a moment ago, once, with its own session. The messages are the ones of the contract of ARMOR-WATCH, the same the Android app sends to a Wear OS watch, and are tested on a Mac in CI; the Apple Watch app travels inside this app (the Xcode project embeds it and CI builds both for the simulator), and none of it has run with a real watch.
+* **Solar charts that fold away:** the Solar screen draws the history ARMOR-SERVER keeps of the whole bank, each pack, each battery and its cells, and each inverter, from 1 hour to 30 days, in sections the phone remembers. Built and tested by the CI only; not run on an iPhone.
 
 ## 🧩 Role in A.R.M.O.R.
 
@@ -150,7 +151,7 @@ In the app: the two addresses, *Remember me*, the lock of the phone and the lang
 **Requirements:** a Mac with Xcode 15+ and iOS 16+ to build the app; Swift 5.9+ (macOS or Linux) for the tests; Python 3.11 for the checks.
 
 ```sh
-swift test                  # 541 tests of ArmorCore (macOS or Linux)
+swift test                  # 546 tests of ArmorCore (macOS or Linux)
 python tools/ios_lint.py    # structure, eight languages, contract (any system)
 xcodegen generate           # then open ARMOR-IOS-CONTROL.xcodeproj in Xcode (on a Mac)
 ```
@@ -183,7 +184,7 @@ python -I tools/armor_ci_validate.py
 | `PolicyTests.swift`, `AlarmCodesTests.swift`, `AlarmFactsTests.swift` | 6 + 4 + 7 | The alarm policy and the alarm codes |
 | `SolarTests.swift`, `BatteryTests.swift`, `ElectricalTests.swift`, `ScreenPollingTests.swift`, `EquipmentClientTests.swift`, `AlarmRouteTests.swift`, `NetworkTests.swift`, `WeatherTests.swift`, `ServicesSecurityTests.swift` | 14 + 10 + 5 + 3 + 10 + 2 + 9 + 11 + 8 | Solar, batteries, electrical network and the client calls |
 
-The 541 tests run with fixtures of a real server. `tools/ios_lint.py` passes without a Mac: 112 Swift files, 1253 phrases in 8 languages, 71 server paths. No test runs on a device.
+The 546 tests run with fixtures of a real server. `tools/ios_lint.py` passes without a Mac: 112 Swift files, 1253 phrases in 8 languages, 71 server paths. No test runs on a device.
 
 ## 🏗️ Build & Release
 
@@ -210,7 +211,7 @@ The Xcode project is generated from `project.yml` with XcodeGen: choose a signin
 ARMOR-IOS-CONTROL/
 ├── Sources/ArmorCore/                   the rules of the app: a Swift package
 ├── App/                                 the SwiftUI screens and the parts that need an iPhone
-├── Tests/                               541 tests and fixtures of a real server
+├── Tests/                               546 tests and fixtures of a real server
 ├── docs/                                the guides of this repository
 ├── tools/                               the shared CI checks and project tooling
 ├── .github/                             CI workflow, issue and pull-request templates
