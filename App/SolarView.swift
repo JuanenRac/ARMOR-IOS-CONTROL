@@ -153,7 +153,8 @@ struct SolarView: View {
     private func totalsLine(_ totals: SolarTotals) -> String {
         var parts: [String] = []
         if let capacity = totals.capacityAh {
-            parts.append(totals.fullCapacityAh.map { model.trf("%s de %s", SolarText.ah(capacity), SolarText.ah($0)) } ?? SolarText.ah(capacity))
+            let figures = totals.fullCapacityAh.map { model.trf("%s de %s", SolarText.ah(capacity), SolarText.ah($0)) } ?? SolarText.ah(capacity)
+            parts.append((totals.fullEstimated ? "≈ " : "") + figures)
         }
         if let energy = totals.energyKwh { parts.append(model.trf("%s kWh guardados", String(format: "%.2f", energy))) }
         return parts.joined(separator: " · ")
@@ -289,7 +290,7 @@ private struct SolarBatterySection: View {
 
     private func capacityLine(_ r: SolarBatteryReading) -> String {
         guard let full = r.fullCapacityAh else { return SolarText.ah(r.capacityAh) }
-        return model.trf("%s de %s", SolarText.ah(r.capacityAh), SolarText.ah(full))
+        return (r.fullEstimated ? "≈ " : "") + model.trf("%s de %s", SolarText.ah(r.capacityAh), SolarText.ah(full))
     }
 
     private func compositionLine(_ code: String, _ modules: [Int], _ stack: [SolarModule]) -> String {

@@ -21,6 +21,25 @@ final class SolarTests: XCTestCase {
     "totals":{"inverters":1,"batteries":1,"stale":0,"pv_w":1200,"load_w":420,"battery_w":-512.5,"soc_percent":79.6,"grid_present":true,"mode":"line","energy_kwh":4.25}}
     """
 
+    func testABatteryThatHasNotSaidItsCapacityCountsAsTheOthersWhenTheyAreAllAlike() throws {
+        func overview(_ withSheet: Set<Int>, _ other: String = "") -> SolarOverview {
+            let stack = (1...8).map { n -> String in
+                let sheet = withSheet.contains(n) ? ",\"model\":\"US2000C\",\"full_capacity_ah\":50" : n == 8 ? other : ""
+                return "{\"n\":\(n),\"present\":true,\"capacity_ah\":50\(sheet)}"
+            }.joined(separator: ",")
+            return SolarParser.overview(json("{\"devices\":[{\"node_id\":\"a\",\"device\":\"b\",\"kind\":\"battery\",\"reading\":{\"modules\":8,\"capacity_ah\":400,\"full_capacity_ah\":\(50 * withSheet.count),\"stack\":[\(stack)]}}],\"waiting\":[],\"totals\":{\"batteries\":1}}"))
+        }
+        for sheets in [Set([1, 2]), Set([1, 2, 3, 4, 5, 6, 8])] {
+            let seen = overview(sheets)
+            XCTAssertEqual(seen.devices[0].battery?.fullCapacityAh, 400)
+            XCTAssertEqual(seen.devices[0].battery?.fullEstimated, true)
+            XCTAssertTrue(seen.totals.fullEstimated)
+        }
+        let mixed = overview([1, 2], ",\"full_capacity_ah\":74")
+        XCTAssertEqual(mixed.devices[0].battery?.fullCapacityAh, 100)   // two capacities: the node's figure is left as it is
+        XCTAssertFalse(mixed.totals.fullEstimated)
+    }
+
     func testAnInverterIsReadWithItsSecondInputItsUnitsAndItsWarnings() throws {
         let overview = SolarParser.overview(json(sample))
         XCTAssertEqual(overview.devices.count, 2)
