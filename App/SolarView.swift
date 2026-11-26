@@ -1,4 +1,4 @@
-// ARMOR-IOS-CONTROL - the Solar screen: the sums, then every inverter and battery with its numbers; cells and the event log of a battery on demand. Reading only.
+// ARMOR-IOS-CONTROL - the Solar screen: the sums, then every inverter and battery with its numbers; every cell of every battery with its state in words and colour, and the event log on demand. Reading only.
 // It needs an operator session, and asks the server again every few seconds (the pace is in Resources/polling.json) while it is open.
 // Copyright (C) 2026 JuanenRac (Electro Hobby 3D). GPL-3.0-or-later.
 import SwiftUI
@@ -71,6 +71,7 @@ struct SolarView: View {
                     }.listRowBackground(Theme.surface)
                 }
                 if !data.devices.isEmpty { totalsSection(data.totals) }
+                bankSection(data.devices)
                 ForEach(data.devices) { device in
                     if let reading = device.inverter { InverterSection(device: device, reading: reading) }
                     else if let reading = device.battery { SolarBatterySection(device: device, reading: reading) }
@@ -97,6 +98,28 @@ struct SolarView: View {
         .navigationTitle(model.tr("Solar"))
         .task { await solar.watch(model: model) }
         .refreshable { await solar.load(model: model) }
+    }
+
+    /// The state of all the batteries that are reporting at a glance.
+    @ViewBuilder private func bankSection(_ devices: [SolarDevice]) -> some View {
+        let settings = SolarViewSettings.bundled()
+        let banks: [BankView] = devices.filter { !$0.stale }.compactMap { device in
+            device.battery.map { SolarCells.bank(deviceModel: device.model, reading: $0, settings: settings) }
+        }
+        if let level = banks.map(\.level).max() {
+            let faults = banks.reduce(0) { $0 + $1.faultModules }
+            let warnings = banks.reduce(0) { $0 + $1.warnModules }
+            Section {
+                HStack {
+                    Text(model.tr("Estado de las baterías")).font(.subheadline.weight(.semibold))
+                    Spacer()
+                    LevelChip(level: level, stale: false, settings: settings)
+                }
+                ValueLine(label: model.tr("Módulos"), value: String(banks.reduce(0) { $0 + $1.modules.count }))
+                ValueLine(label: model.tr("Con fallo"), value: String(faults), color: faults > 0 ? Theme.danger : .white)
+                ValueLine(label: model.tr("Con aviso"), value: String(warnings), color: warnings > 0 ? Theme.amber : .white)
+            }.listRowBackground(Theme.surface)
+        }
     }
 
     @ViewBuilder private func totalsSection(_ totals: SolarTotals) -> some View {
@@ -190,12 +213,13 @@ private struct SolarBatterySection: View {
     @EnvironmentObject var model: AppModel
     let device: SolarDevice
     let reading: SolarBatteryReading
-    @State private var showCells = false
+    @State private var showCells = true
     @State private var showEvents = false
+    private let settings = SolarViewSettings.bundled()
 
     var body: some View {
         let r = reading
-        let hasCells = r.stack.contains { !$0.cellsV.isEmpty }
+        let bank = SolarCells.bank(deviceModel: device.model, reading: r, settings: settings)
         Section {
             HStack {
                 VStack(alignment: .leading) {
@@ -213,12 +237,12 @@ private struct SolarBatterySection: View {
             if r.modules == 0 {
                 Text(model.tr("La batería no responde a los módulos.")).font(.footnote).foregroundColor(Theme.amber)
             } else {
+                LevelChip(level: bank.level, stale: device.stale, settings: settings)
                 ValueLine(label: model.tr("Tensión y corriente"), value: SolarText.volts(r.voltageV, 2) + " · " + SolarText.amps(r.currentA, 2))
                 ValueLine(label: model.tr("Potencia"), value: SolarText.batteryFlow(r.powerW, model.translator))
                 if r.temperatureMinC != nil { ValueLine(label: model.tr("Temperatura"), value: temperatureLine(r)) }
-                if r.cellMinV != nil && r.cellMaxV != nil {
-                    let spread = r.stack.first(where: { $0.cellsV.count > 1 }).flatMap { SolarText.cellSpreadMv($0.cellsV) }
-                    ValueLine(label: model.tr("Celdas"), value: cellsLine(r, spread: spread), color: (spread ?? 0) > 100 ? Theme.amber : Color.white)
+                if bank.minV != nil && bank.maxV != nil {
+                    ValueLine(label: model.tr("Celdas"), value: cellsLine(bank), color: (bank.spreadMv ?? 0) >= settings.spreadWarnMv ? Theme.amber : Color.white)
                 }
                 if r.capacityAh != nil { ValueLine(label: model.tr("Capacidad"), value: capacityLine(r)) }
                 if let cycles = r.cycles { ValueLine(label: model.tr("Ciclos"), value: String(cycles)) }
@@ -235,9 +259,9 @@ private struct SolarBatterySection: View {
             if r.alarm {
                 Label(model.tr("La batería avisa de un problema (una protección está actuando)."), systemImage: "exclamationmark.triangle.fill").font(.caption).foregroundColor(Theme.danger)
             }
-            if hasCells {
+            if bank.modules.contains(where: { !$0.cells.isEmpty }) {
                 Button(showCells ? model.tr("Ocultar celdas") : model.tr("Ver celdas")) { showCells.toggle() }
-                if showCells { ForEach(r.stack.filter { !$0.cellsV.isEmpty }, id: \.number) { module in moduleDetail(module, count: r.stack.count) } }
+                if showCells { ForEach(bank.modules) { view in ModuleSection(device: device, view: view, settings: settings) } }
             }
             if !device.events.isEmpty {
                 Button(showEvents ? model.tr("Ocultar registro de eventos") : model.tr("Ver registro de eventos")) { showEvents.toggle() }
@@ -256,10 +280,10 @@ private struct SolarBatterySection: View {
         return low + " – " + SolarText.celsius(high)
     }
 
-    private func cellsLine(_ r: SolarBatteryReading, spread: Int?) -> String {
-        let low = r.cellMinV.map { SolarText.cell($0) } ?? "—"
-        let high = r.cellMaxV.map { SolarText.cell($0) } ?? "—"
-        let gap: String = spread.map { " (" + String($0) + " mV)" } ?? ""
+    private func cellsLine(_ bank: BankView) -> String {
+        let low = bank.minV.map { SolarText.cell($0) } ?? "—"
+        let high = bank.maxV.map { SolarText.cell($0) } ?? "—"
+        let gap: String = bank.spreadMv.map { " (" + String($0) + " mV)" } ?? ""
         return low + " – " + high + " V" + gap
     }
 
@@ -276,70 +300,6 @@ private struct SolarBatterySection: View {
         return SolarText.compositionText(code, model.translator) + " " + names.joined(separator: ", ")
     }
 
-    private func allowedCurrent(_ module: SolarModule) -> String {
-        let charge: String = module.maxChargeA.map { String(Int($0.rounded())) } ?? "–"
-        let discharge: String = module.maxDischargeA.map { String(Int($0.rounded())) } ?? "–"
-        return charge + " / " + discharge + " A"
-    }
-
-    private func todayLine(_ today: ModuleDayCells) -> String {
-        let word = model.tr("celda")
-        let low = SolarText.reach(volts: today.minV, cell: today.minCell, atMs: today.minAt, cellWord: word)
-        let high = SolarText.reach(volts: today.maxV, cell: today.maxCell, atMs: today.maxAt, cellWord: word)
-        let gap = String(Int((today.deltaV * 1000).rounded()))
-        return model.tr("Celdas hoy") + ": " + low + " – " + high + " · Δ " + gap + " mV"
-    }
-
-    private func cellColor(_ volts: Double, in cells: [Double]) -> Color {
-        guard cells.count > 1 else { return Theme.muted }
-        if volts == cells.min() { return Theme.amber }
-        if volts == cells.max() { return Theme.accent }
-        return Theme.muted
-    }
-
-    @ViewBuilder private func moduleDetail(_ module: SolarModule, count: Int) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            if count > 1 { Text(model.trf("Módulo %s", module.number)).font(.caption.weight(.semibold)).foregroundColor(Theme.muted) }
-            if !module.model.isEmpty { ValueLine(label: model.tr("Modelo"), value: module.model) }
-            let versions = [module.boardVersion, module.mainSoftVersion, module.softVersion].filter { !$0.isEmpty }
-            if !versions.isEmpty { ValueLine(label: model.tr("Firmware"), value: versions.joined(separator: " · ")) }
-            if let cells = module.cellCount { ValueLine(label: model.tr("Celdas"), value: String(cells)) }
-            if module.maxChargeA != nil || module.maxDischargeA != nil {
-                ValueLine(label: model.tr("Corriente admitida (carga / descarga)"), value: allowedCurrent(module))
-            }
-            if let baud = module.consoleBaud { ValueLine(label: model.tr("Velocidad de la consola"), value: String(baud)) }
-            if !module.sohCounts.isEmpty {
-                let weak = SolarText.abnormalCells(module)
-                let counts = module.sohCounts.enumerated().map { "\($0.offset + 1):\($0.element)" }.joined(separator: " · ")
-                Text(model.tr("Estado de salud de las celdas") + ": " + counts).font(.caption2).foregroundColor(weak.isEmpty ? Theme.muted : Theme.amber)
-                if !weak.isEmpty { Text(model.tr("Celda anormal") + ": " + weak.map(String.init).joined(separator: ", ")).font(.caption2).foregroundColor(Theme.danger) }
-                Text(model.tr("El recuento de cada celda tal como lo informa la consola de la batería; Abnormal es la palabra de la propia consola para la celda débil. Solo lectura.")).font(.caption2).foregroundColor(Theme.muted)
-            }
-            let raised = SolarText.raisedCounters(module.counters)
-            if !raised.isEmpty {
-                Text(model.tr("Contadores de protección") + ": " + raised).font(.caption2).foregroundColor(Theme.amber)
-                Text(model.tr("Nombres de la consola de la batería; su significado no es oficial.")).font(.caption2).foregroundColor(Theme.muted)
-            }
-            if let today = device.dayCells?.modules.first(where: { $0.number == module.number }) {
-                Text(todayLine(today)).font(.caption2).foregroundColor(Theme.muted)
-            }
-            let low = module.cellsV.min(), high = module.cellsV.max()
-            ForEach(Array(Array(module.cellsV.enumerated()).chunked(4).enumerated()), id: \.offset) { _, row in
-                HStack {
-                    ForEach(row, id: \.offset) { cell in
-                        Text("\(cell.offset + 1): \(SolarText.cell(cell.element))").font(.system(size: 12, design: .monospaced)).lineLimit(1)
-                            .foregroundColor(cellColor(cell.element, in: module.cellsV))
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                    ForEach(0..<(4 - row.count), id: \.self) { _ in Spacer().frame(maxWidth: .infinity) }
-                }
-            }
-            if !module.temperaturesC.isEmpty {
-                Text(model.tr("Sensores: ") + module.temperaturesC.map { SolarText.celsius($0) }.joined(separator: " · ")).font(.caption2).foregroundColor(Theme.muted)
-            }
-        }
-    }
-
     private func eventRow(_ item: LoggedEvent) -> some View {
         let e = item.event
         var words: [String] = [e.voltageState]
@@ -350,12 +310,5 @@ private struct SolarBatterySection: View {
             Text(model.trf("Módulo %s", item.module) + " · #\(e.index) · " + e.time).font(.system(size: 11, design: .monospaced))
             Text(words.filter { !$0.isEmpty }.joined(separator: " · ")).font(.system(size: 11, design: .monospaced)).foregroundColor(Theme.muted)
         }
-    }
-}
-
-private extension Array {
-    /// The array cut in rows of `size` (the last one may be shorter).
-    func chunked(_ size: Int) -> [[Element]] {
-        stride(from: 0, to: count, by: size).map { Array(self[$0..<Swift.min($0 + size, count)]) }
     }
 }

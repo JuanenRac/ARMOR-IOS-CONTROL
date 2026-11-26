@@ -5,6 +5,9 @@ All notable changes to this project are documented here.
 ## [Unreleased]
 
 - **The copy of the shared validator is current:** `tools/armor_ci_validate.py` now also checks with `node --check` that the scripts served to a browser parse, in a repository that has them under `panel/` or `public/`.
+- **The cells of a battery no longer depend on four fixed columns:** the grid takes as many columns as fit a whole voltage, also with larger text.
+- **A clearer Solar screen:** each module has its state in icon, word and colour, every cell with its voltage and bar, the highest and lowest cell, what is wrong in words, and a summary of all the batteries. A fault pulses softly (once a second, never faster than twice), and stays still when the phone is set to reduce motion. The levels are in a settings file inside the app; the absolute voltage of a cell is only judged for lithium iron phosphate batteries (Pylontech, Pytes).
+
 ## [0.0.7] - Certificate chain pins, a clean Keychain on reinstall, the watch alert contract and generated file trees
 
 - **The structure generator can write a figure read from the code:** `tools/make_structure.py` resolves `{{fact:NAME|LAST}}` in the descriptions of `docs/structure.json` where the documentation tools are next to the repository, and writes LAST (the figure it had when last written) everywhere else, so a repository still builds on its own.

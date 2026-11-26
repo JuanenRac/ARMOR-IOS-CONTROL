@@ -1,0 +1,8 @@
+{
+  "lfp_cell": {"bar_empty_v": 2.8, "bar_full_v": 3.65, "low_v": 2.9, "high_v": 3.6, "fault_low_v": 2.7, "fault_high_v": 3.7},
+  "spread_warn_mv": 100,
+  "hot_c": 55,
+  "cold_charge_c": 0,
+  "blink_period_ms": 1000,
+  "min_cell_tile_dp": 76
+}
