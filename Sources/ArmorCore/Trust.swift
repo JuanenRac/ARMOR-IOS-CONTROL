@@ -28,6 +28,45 @@ public enum PinDecision: Equatable, Sendable {
     case unknownAuthority(pin: String)
 }
 
+/// Once a server has been reached over https, plain http to the same host is refused: a downgrade would send the password in the clear to whoever answers at that address. Forgotten when the
+/// person changes the address in the settings or forgets the kept certificates. The same key and rule as the Android app (`https_seen_<host>`); on unless the person turns it off.
+public final class SchemeMemory {
+    public static let switchKey = "scheme_memory"
+    private let store: KeyValueStore
+    public init(_ store: KeyValueStore) { self.store = store }
+
+    public var enabled: Bool {
+        get { store.get(SchemeMemory.switchKey) != "0" }
+        set { store.put(SchemeMemory.switchKey, newValue ? "1" : "0") }
+    }
+
+    private func key(_ host: String) -> String { "https_seen_" + host.lowercased() }
+
+    /// Remembers that the host of `url` answered over https; anything else is ignored.
+    public func reached(_ url: URL) {
+        guard url.scheme?.lowercased() == "https", let host = url.host, !host.isEmpty else { return }
+        store.put(key(host), "1")
+    }
+
+    public func forget(host: String) { store.remove(key(host)) }
+
+    /// False when `url` is plain http to a host that has been seen over https (and the switch is on).
+    public func allows(_ url: URL) -> Bool {
+        guard enabled, url.scheme?.lowercased() == "http", let host = url.host else { return true }
+        return store.get(key(host)) != "1"
+    }
+
+    public func allows(origin: String) -> Bool { URL(string: origin).map(allows) ?? true }
+
+    /// The person typed another address: what was remembered about the hosts of the addresses that changed is forgotten. An address that stayed the same keeps its memory.
+    public func forgetChanged(from old: SavedInstallation, to new: SavedInstallation) {
+        let pairs = [(old.endpoints.home, new.endpoints.home), (old.endpoints.away, new.endpoints.away)]
+        for (before, after) in pairs where before != after {
+            if let after, let host = URL(string: after.origin)?.host { forget(host: host) }
+        }
+    }
+}
+
 /// The pins kept for each server, as the base64 SHA-256 of the public key (SPKI) of a certificate. More than one pin may be kept (a renewed certificate, a backup key).
 public final class PinStore {
     private let store: KeyValueStore

@@ -4,6 +4,8 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+- **Plain http is refused after https, as in the Android app:** once a server has answered over https the app does not send anything to that host over plain http, and says why. It is forgotten when the address is changed in the settings or the kept certificates are forgotten, and a switch next to the certificate settings turns it off. Tested without a device.
+
 ## [0.0.9] - Battery states and makers, one notice per battery problem
 
 - **A refused pause of an armed panel says why:** a node that guards answers `busy_guarding`, shown in words.

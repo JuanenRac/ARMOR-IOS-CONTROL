@@ -1291,5 +1291,7 @@
  "Fallo del BMS: celdas sin lectura (0 V): %s": "Falha do BMS: células sem leitura (0 V): %s",
  "Protección o alarma": "Proteção ou alarme",
  "Aviso de la batería": "Aviso da bateria",
- "Una batería solar tiene un fallo de su electrónica (BMS)": "Uma bateria solar comunica uma falha da sua eletrónica (BMS)"
+ "Una batería solar tiene un fallo de su electrónica (BMS)": "Uma bateria solar comunica uma falha da sua eletrónica (BMS)",
+ "Este servidor ya respondió por https: no se usa http sin cifrar con él. Escribe la dirección con https://, o cambia la dirección en los ajustes para olvidarlo.": "Este servidor já respondeu por https: não se usa http sem cifra com ele. Escreva o endereço com https://, ou altere o endereço nas definições para o esquecer.",
+ "No usar http sin cifrar con un servidor que ya respondió por https": "Não usar http sem cifra com um servidor que já respondeu por https"
 }

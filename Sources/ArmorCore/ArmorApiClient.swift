@@ -13,9 +13,13 @@ public final class ArmorApiClient: ArmorApi, @unchecked Sendable {
     private let clientTag: String
 
     /// `clientTag` is what the app says it is, so the history of connections of the server can tell it from Studio and from the other clients ("ios/0.1.0"; only informative).
-    public init(session: URLSession, clientTag: String) {
+    private let schemes: SchemeMemory?
+
+    /// `schemes`, when given, refuses plain http to a host that has answered over https and remembers the hosts that do.
+    public init(session: URLSession, clientTag: String, schemes: SchemeMemory? = nil) {
         self.session = session
         self.clientTag = clientTag
+        self.schemes = schemes
     }
 
     /// A session with its own (ephemeral, in memory) cookie jar, no cache, and timeouts like the other clients'.
@@ -429,10 +433,15 @@ public final class ArmorApiClient: ArmorApi, @unchecked Sendable {
 
     private func perform(_ request: URLRequest, _ path: String, _ expected: Set<Int>) async throws -> Data {
         let method = request.httpMethod ?? "GET"
+        if let url = request.url, let schemes, !schemes.allows(url) {
+            DiagnosticLog.shared.record(method: method, path: path, status: 0)
+            throw ArmorApiError(message: "This server was reached over https before: plain http to it is refused", status: nil)
+        }
         let data: Data, response: URLResponse
         do { (data, response) = try await session.data(for: request) } catch { DiagnosticLog.shared.record(method: method, path: path, status: 0); throw ArmorApiError(message: error.localizedDescription, status: nil) }
         let status = (response as? HTTPURLResponse)?.statusCode ?? 0
         DiagnosticLog.shared.record(method: method, path: path, status: status)
+        if let url = request.url { schemes?.reached(url) }
         try ResponseLimit.check(data, limit: ResponseLimit.picture)
         if !expected.contains(status) {
             let text = String(decoding: data.prefix(2000), as: UTF8.self)

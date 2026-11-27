@@ -17,6 +17,7 @@ final class AppModel: ObservableObject {
     let translator: Translator
     let trust: TrustDelegate
     let pins: PinStore
+    let schemes: SchemeMemory
     let vault: SessionVault
     let enrolmentReader: EnrolmentReader
     let lockSettings: LockSettings
@@ -75,7 +76,8 @@ final class AppModel: ObservableObject {
         let trust = TrustDelegate(pins: pins)
         let session = ArmorApiClient.makeSession(delegate: trust)
         let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0"
-        let api = ArmorApiClient(session: session, clientTag: version)
+        let schemes = SchemeMemory(prefs)
+        let api = ArmorApiClient(session: session, clientTag: version, schemes: schemes)
         let saved = prefs.get("language")
         let code = Translator.pick(saved: saved, phone: Locale.current.language.languageCode?.identifier ?? "en")
         let translator = Translator(language: code)
@@ -88,6 +90,7 @@ final class AppModel: ObservableObject {
         vault.forgetIfReinstalled(hasOtherSettings: earlier.endpoints.home != nil || earlier.endpoints.away != nil)   // a reinstalled app does not inherit what the Keychain kept
         self.spokenTurn = SpokenTurnModel(prefs: prefs)
         self.enrolmentReader = EnrolmentReader(session: session)
+        self.schemes = schemes
         self.pins = pins; self.trust = trust; self.translator = translator; self.lockSettings = settings; self.policy = policy; self.gate = gate; self.vault = vault
         let trustedSettings = TrustedPhoneSettings(prefs)
         let phoneName = UIDevice.current.userInterfaceIdiom == .pad ? "iPad" : "iPhone"
@@ -236,7 +239,7 @@ final class AppModel: ObservableObject {
     /// Chooses the address (private at home, the other away, the other one if the chosen does not answer).
     @discardableResult
     func connect() async -> Bool {
-        let selection = await Connector.select(api: controller.api, installation: installation, place: place, networkAvailable: networkAvailable, pinMismatch: { [trust] in trust.takeMismatch() })
+        let selection = await Connector.select(api: controller.api, installation: installation, place: place, networkAvailable: networkAvailable, pinMismatch: { [trust] in trust.takeMismatch() }, schemes: schemes)
         switch selection {
         case .reached(let endpoint): activeOrigin = endpoint.origin; problem = nil; return true
         case .failed(let reason): activeOrigin = nil; problem = reason; return false
@@ -244,6 +247,7 @@ final class AppModel: ObservableObject {
     }
 
     func saveInstallation(_ new: SavedInstallation) {
+        schemes.forgetChanged(from: installation, to: new)
         installation = new
         new.save(to: prefs)
     }
@@ -269,7 +273,8 @@ final class AppModel: ObservableObject {
     /// Goes back to a server the person signed in to before: its address is set (the away address of the previous one is dropped) and its kept session is tried, so the password is not asked again.
     func pickServer(_ origin: String) async {
         guard let picked = ServerChoice.installation(for: origin) else { return }
-        saveInstallation(picked)
+        installation = picked
+        picked.save(to: prefs)
         await openKept()
     }
 
@@ -651,7 +656,7 @@ final class AppModel: ObservableObject {
 
     func forgetPins() {
         for endpoint in [installation.endpoints.home, installation.endpoints.away] {
-            if let endpoint, let host = URL(string: endpoint.origin)?.host { pins.clear(for: host) }
+            if let endpoint, let host = URL(string: endpoint.origin)?.host { pins.clear(for: host); schemes.forget(host: host) }
         }
     }
 }

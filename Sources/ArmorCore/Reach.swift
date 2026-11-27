@@ -41,6 +41,8 @@ public enum ReachProblem: Equatable, Sendable {
     case bothUnreachable
     /// The server answered but refused the certificate pin.
     case certificateChanged
+    /// The address asks for plain http, and the host has already answered over https.
+    case plainAfterSecure
 
     public func message(_ t: Translator) -> String {
         switch self {
@@ -50,6 +52,7 @@ public enum ReachProblem: Equatable, Sendable {
         case .remoteUnreachable: return t.tr("No se puede llegar a casa desde fuera. Comprueba que el servidor tiene el acceso remoto activo y que la dirección de fuera de casa es correcta.")
         case .bothUnreachable: return t.tr("No se puede llegar a casa ni por la red de casa ni desde fuera. Comprueba la wifi o los datos del teléfono, y que el servidor está encendido.")
         case .certificateChanged: return t.tr("El certificado del servidor ha cambiado y no coincide con el que se guardó. Si lo has renovado, vuelve a emparejar el servidor desde los ajustes; si no, alguien podría estar interceptando la conexión.")
+        case .plainAfterSecure: return t.tr("Este servidor ya respondió por https: no se usa http sin cifrar con él. Escribe la dirección con https://, o cambia la dirección en los ajustes para olvidarlo.")
         }
     }
 }
