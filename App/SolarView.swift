@@ -191,6 +191,7 @@ private struct InverterSection: View {
                 Spacer()
                 SolarMarks(device: device)
             }
+            if !r.manufacturer.isEmpty { ValueLine(label: model.tr("Fabricante"), value: r.manufacturer + (r.manufacturerDeduced ? " (" + model.tr("deducido") + ")" : "")) }
             ValueLine(label: model.tr("Red"), value: SolarText.volts(r.gridV) + " · " + SolarText.hertz(r.gridHz))
             ValueLine(label: model.tr("Consumo"), value: SolarText.watts(r.outW) + " · " + SolarText.percent(r.loadPercent))
             ValueLine(label: model.tr("Paneles"), value: SolarText.watts(r.pvW) + " · " + SolarText.volts(r.pvV, 0))
@@ -235,7 +236,8 @@ private struct SolarBatterySection: View {
                 VStack(alignment: .leading) {
                     Text(device.name).font(.headline).foregroundColor(device.stale ? Theme.muted : .white)
                     let modelName = SolarText.model(device.model)
-                    Text([SolarText.batteryState(r.state, model.translator), modelName.isEmpty ? r.model : modelName].filter { !$0.isEmpty }.joined(separator: " · ")).font(.caption).foregroundColor(Theme.muted)
+                    Text([SolarText.batteryState(r.state, model.translator), modelName.isEmpty ? r.model : modelName,
+                          r.manufacturer.isEmpty ? "" : r.manufacturer + (r.manufacturerDeduced ? " (" + model.tr("deducido") + ")" : "")].filter { !$0.isEmpty }.joined(separator: " · ")).font(.caption).foregroundColor(Theme.muted)
                 }
                 Spacer()
                 VStack(alignment: .trailing) {

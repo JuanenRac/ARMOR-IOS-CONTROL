@@ -204,6 +204,11 @@ struct ModuleSection: View {
         let t = view.trouble
         var lines: [String] = []
         if !t.state.isEmpty { lines.append(model.trf("El módulo informa el estado %s", t.state)) }
+        if t.bmsError { lines.append(model.tr("Fallo del BMS") + ": SysError") }
+        if !t.unreadCells.isEmpty { lines.append(model.trf("Fallo del BMS: celdas sin lectura (0 V): %s", t.unreadCells.map(String.init).joined(separator: ", "))) }
+        let said: (BatteryState) -> String = { state in (state.cell.map { model.tr("celda") + " " + String($0 + 1) + " · " } ?? "") + state.column + " " + state.word }
+        if !t.protections.isEmpty { lines.append(model.tr("Protección o alarma") + ": " + t.protections.map(said).joined(separator: "; ")) }
+        if !t.notices.isEmpty { lines.append(model.tr("Aviso de la batería") + ": " + t.notices.map(said).joined(separator: "; ")) }
         if !t.abnormalCells.isEmpty { lines.append(model.tr("Celda anormal") + ": " + t.abnormalCells.map(String.init).joined(separator: ", ")) }
         if !t.outOfRangeCells.isEmpty { lines.append(model.trf("Tensión fuera de rango en las celdas %s", t.outOfRangeCells.map(String.init).joined(separator: ", "))) }
         if let spread = t.spreadMv { lines.append(model.trf("Diferencia alta entre celdas: %s mV", spread)) }
@@ -241,6 +246,7 @@ struct ModuleSection: View {
 
     @ViewBuilder private func detailLines(_ module: SolarModule) -> some View {
         if !module.model.isEmpty { ValueLine(label: model.tr("Modelo"), value: module.model) }
+        if !module.manufacturer.isEmpty { ValueLine(label: model.tr("Fabricante"), value: module.manufacturer + (module.manufacturerDeduced ? " (" + model.tr("deducido") + ")" : "")) }
         identityLines(module)
         let versions = [module.boardVersion, module.mainSoftVersion, module.softVersion].filter { !$0.isEmpty }
         if !versions.isEmpty { ValueLine(label: model.tr("Firmware"), value: versions.joined(separator: " · ")) }

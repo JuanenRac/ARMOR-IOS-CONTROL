@@ -1282,5 +1282,12 @@
  "Especificación": "Especificação",
  "Versión de arranque": "Versão de arranque",
  "Versión de comunicación": "Versão de comunicação",
- "Fecha del firmware": "Data do firmware"
+ "Fecha del firmware": "Data do firmware",
+ "Fabricante": "Fabricante",
+ "deducido": "deduzido",
+ "Fallo del BMS": "Falha do BMS",
+ "Fallo del BMS: celdas sin lectura (0 V): %s": "Falha do BMS: células sem leitura (0 V): %s",
+ "Protección o alarma": "Proteção ou alarme",
+ "Aviso de la batería": "Aviso da bateria",
+ "Una batería solar tiene un fallo de su electrónica (BMS)": "Uma bateria solar comunica uma falha da sua eletrónica (BMS)"
 }

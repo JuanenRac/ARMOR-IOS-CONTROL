@@ -1282,5 +1282,12 @@
  "Especificación": "仕様",
  "Versión de arranque": "ブートバージョン",
  "Versión de comunicación": "通信バージョン",
- "Fecha del firmware": "ファームウェアの日付"
+ "Fecha del firmware": "ファームウェアの日付",
+ "Fabricante": "メーカー",
+ "deducido": "推定",
+ "Fallo del BMS": "BMS故障",
+ "Fallo del BMS: celdas sin lectura (0 V): %s": "BMS故障：読み取れないセル（0 V）：%s",
+ "Protección o alarma": "保護または警報",
+ "Aviso de la batería": "バッテリーの注意",
+ "Una batería solar tiene un fallo de su electrónica (BMS)": "ソーラーバッテリーが内部回路（BMS）の故障を報告しています"
 }

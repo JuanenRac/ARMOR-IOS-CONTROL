@@ -67,6 +67,11 @@ public struct ModuleTrouble: Equatable, Sendable {
     public let hot: Bool, cold: Bool
     public let state: String
     public let missingCells: Int
+    /// A fault of the battery's electronics (SysError, or the cells from 1 that it does not read), its protections or alarms and its notices, each with the battery's own word.
+    public var bmsError: Bool = false
+    public var unreadCells: [Int] = []
+    public var protections: [BatteryState] = [], notices: [BatteryState] = []
+    public var bmsFault: Bool { bmsError || !unreadCells.isEmpty }
 }
 
 public struct ModuleView: Equatable, Sendable, Identifiable {
@@ -99,14 +104,15 @@ public enum SolarCells {
     }
 
     public static func module(_ m: SolarModule, lfp: Bool, settings: SolarViewSettings) -> ModuleView {
-        let low = m.cellsV.min(), high = m.cellsV.max()
-        let spread = SolarText.cellSpreadMv(m.cellsV)
+        let read = m.cellsV.enumerated().filter { !m.cellsUnread.contains($0.offset) }.map(\.element)
+        let low = read.min(), high = read.max()
+        let spread = SolarText.cellSpreadMv(read)
         let limits = settings.cell
         let cells: [CellView] = m.cellsV.enumerated().map { index, volts in
             let abnormal = m.sohAbnormal.contains(index)
             let differs = (spread ?? 0) > 0
             var level = CellLevel.ok
-            if abnormal || (lfp && (volts < limits.faultLowV || volts > limits.faultHighV)) { level = .fault }
+            if m.cellsUnread.contains(index) || abnormal || (lfp && (volts < limits.faultLowV || volts > limits.faultHighV)) { level = .fault }
             else if lfp && (volts < limits.lowV || volts > limits.highV) { level = .warn }
             let fill = min(1, max(0, (volts - limits.barEmptyV) / (limits.barFullV - limits.barEmptyV)))
             return CellView(number: index + 1, volts: volts, level: level, lowest: differs && volts == low, highest: differs && volts == high, abnormal: abnormal, fill: fill)
@@ -114,7 +120,7 @@ public enum SolarCells {
         let temperatures = m.temperaturesC + [m.temperatureC].compactMap { $0 }
         let charging = m.state.lowercased().hasPrefix("charg")
         let lowered = m.state.lowercased()
-        let trouble = ModuleTrouble(
+        var trouble = ModuleTrouble(
             abnormalCells: m.sohAbnormal.map { $0 + 1 },
             outOfRangeCells: cells.filter { !$0.abnormal && $0.level != .ok }.map(\.number),
             spreadMv: spread.flatMap { $0 >= settings.spreadWarnMv ? $0 : nil },
@@ -122,10 +128,14 @@ public enum SolarCells {
             cold: charging && temperatures.contains { $0 < settings.coldChargeC },
             state: faultWords.contains { lowered.contains($0) } ? m.state : "",
             missingCells: m.cellsV.isEmpty ? 0 : max(0, (m.cellCount ?? 0) - m.cellsV.count))
+        trouble.bmsError = m.state == "SysError" || m.states.contains { $0.level == 3 }
+        trouble.unreadCells = m.cellsUnread.map { $0 + 1 }
+        trouble.protections = m.states.filter { $0.level == 2 }
+        trouble.notices = m.states.filter { $0.level == 1 }
         let fromCells = cells.map(\.level).max() ?? .ok
         var level = CellLevel.ok
-        if fromCells == .fault || !trouble.abnormalCells.isEmpty || !trouble.state.isEmpty { level = .fault }
-        else if fromCells == .warn || trouble.spreadMv != nil || trouble.hot || trouble.cold || trouble.missingCells > 0 { level = .warn }
+        if fromCells == .fault || !trouble.abnormalCells.isEmpty || !trouble.state.isEmpty || trouble.bmsFault || !trouble.protections.isEmpty { level = .fault }
+        else if fromCells == .warn || !trouble.notices.isEmpty || trouble.spreadMv != nil || trouble.hot || trouble.cold || trouble.missingCells > 0 { level = .warn }
         return ModuleView(module: m, cells: cells, level: level, spreadMv: spread, trouble: trouble)
     }
 
@@ -135,7 +145,7 @@ public enum SolarCells {
             module(item, lfp: isLfp(deviceModel: deviceModel, readingModel: item.model.isEmpty ? reading.model : item.model), settings: settings)
         }
         let level: CellLevel = reading.alarm ? .fault : (modules.map(\.level).max() ?? .ok)
-        let all = reading.stack.flatMap(\.cellsV)
+        let all = reading.stack.flatMap { module in module.cellsV.enumerated().filter { !module.cellsUnread.contains($0.offset) }.map(\.element) }
         let minV = all.min() ?? reading.cellMinV
         let maxV = all.max() ?? reading.cellMaxV
         var spread: Int?

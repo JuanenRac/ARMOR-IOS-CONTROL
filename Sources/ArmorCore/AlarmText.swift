@@ -28,6 +28,7 @@ public enum AlarmText {
         "solar_fault": "Avería en un inversor solar",
         "solar_battery_low": "Batería solar baja",
         "solar_battery_alarm": "Una batería solar avisa de un problema",
+        "solar_battery_fault": "Una batería solar tiene un fallo de su electrónica (BMS)",
         "solar_offline": "Un equipo solar ha dejado de responder",
         "solar_cells_unbalanced": "Las celdas de una batería están desequilibradas",
         "solar_battery_hot": "Una batería está demasiado caliente",

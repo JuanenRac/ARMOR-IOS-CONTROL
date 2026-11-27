@@ -43,6 +43,20 @@ public struct SolarInverterReading: Equatable, Sendable {
     public let pv2V: Double?, pv2A: Double?, pv2W: Double?
     public let units: [SolarUnit]
     public let totalOutW: Double?
+    /// Who made it ("" when not known) and whether its protocol or model tells it instead of the equipment.
+    public var manufacturer: String = "", manufacturerDeduced: Bool = false
+}
+
+/// A state of a battery module or of one of its cells (from 0) that is not the normal one, with the battery's own word.
+public struct BatteryState: Equatable, Sendable {
+    public let column: String, word: String
+    public let cell: Int?
+    public init(column: String, word: String, cell: Int? = nil) { self.column = column; self.word = word; self.cell = cell }
+    /// 1 a notice (High, Low and the like: not an alarm), 2 a protection or an alarm (a word never seen included), 3 a fault of the battery's electronics.
+    public var level: Int {
+        if word == "SysError" { return 3 }
+        return column != "system" && ["High", "Low", "COCAlm", "DOCAlm"].contains(word) ? 1 : 2
+    }
 }
 
 /// One battery module of a stack; a BMS is one module.
@@ -67,6 +81,10 @@ public struct SolarModule: Equatable, Sendable {
     public let sohCounts: [Int], sohAbnormal: [Int]
     /// From the console's info: the serial number (private data, never written to a log), the Board, the chip the node tells from them ("older", "newer" or "unknown") and the other lines.
     public let serial: String, board: String, chip: String, specification: String, bootVersion: String, commVersion: String, releaseDate: String
+    public var manufacturer: String = "", manufacturerDeduced: Bool = false
+    /// What the battery says is not normal, and the cells (0-based) it does not read: they come as 0 V and are a fault, not a voltage.
+    public var states: [BatteryState] = []
+    public var cellsUnread: [Int] = []
 }
 
 /// An entry of a battery's event log: the protection fields are the console's own words (a number and a mnemonic), never decoded.
@@ -94,6 +112,7 @@ public struct SolarBatteryReading: Equatable, Sendable {
     public let healthPercent: Int?
     /// `fullCapacityAh` counts a battery that has not said its own as the others.
     public let fullEstimated: Bool
+    public var manufacturer: String = "", manufacturerDeduced: Bool = false
     /// Watts at the battery: positive while charging.
     public var powerW: Double? { if let voltageV, let currentA { return voltageV * currentA }; return nil }
 }
@@ -227,7 +246,8 @@ public enum SolarParser {
         return SolarInverterReading(mode: mode, gridV: r.double("grid_v"), gridHz: r.double("grid_hz"), outV: r.double("out_v"), outHz: r.double("out_hz"), outVa: r.double("out_va"), outW: r.double("out_w"), loadPercent: r.double("load_percent"),
                                     batteryV: r.double("battery_v"), batteryA: r.double("battery_a"), batteryPercent: r.double("battery_percent"), pvV: r.double("pv_v"), pvA: r.double("pv_a"), pvW: r.double("pv_w"), heatsinkC: r.double("heatsink_c"),
                                     acCharging: r.bool("ac_charging"), pvCharging: r.bool("pv_charging"), loadOn: r.bool("load_on"), warnings: strings(r["warnings"]),
-                                    pv2V: r.double("pv2_v"), pv2A: r.double("pv2_a"), pv2W: r.double("pv2_w"), units: units, totalOutW: r.double("total_out_w"))
+                                    pv2V: r.double("pv2_v"), pv2A: r.double("pv2_a"), pv2W: r.double("pv2_w"), units: units, totalOutW: r.double("total_out_w"),
+                                    manufacturer: r.str("manufacturer"), manufacturerDeduced: r.str("manufacturer_source") == "deduced")
     }
 
     private static func module(_ m: JSON) -> SolarModule {
@@ -240,7 +260,13 @@ public enum SolarParser {
                            healthPercent: whole(m, "health_percent"), counters: counters, model: m.str("model"), boardVersion: m.str("board_version"), mainSoftVersion: m.str("main_soft_version"), softVersion: m.str("soft_version"),
                            cellCount: whole(m, "cell_count"), maxChargeA: m.double("max_charge_a"), maxDischargeA: m.double("max_discharge_a"), consoleBaud: whole(m, "console_baud"),
                            sohCounts: ints(m["soh_counts"]), sohAbnormal: ints(m["soh_abnormal"]),
-                           serial: m.str("serial"), board: m.str("board"), chip: m.str("chip"), specification: m.str("specification"), bootVersion: m.str("boot_version"), commVersion: m.str("comm_version"), releaseDate: m.str("release_date"))
+                           serial: m.str("serial"), board: m.str("board"), chip: m.str("chip"), specification: m.str("specification"), bootVersion: m.str("boot_version"), commVersion: m.str("comm_version"), releaseDate: m.str("release_date"),
+                           manufacturer: m.str("manufacturer"), manufacturerDeduced: m.str("manufacturer_source") == "deduced",
+                           states: m.objects("flags").compactMap { flag in
+                               let word = flag.str("word")
+                               return word.isEmpty ? nil : BatteryState(column: flag.str("column"), word: word, cell: whole(flag, "cell"))
+                           },
+                           cellsUnread: ints(m["cells_unread"]))
     }
 
     private static func battery(_ r: JSON) -> SolarBatteryReading {
@@ -250,7 +276,8 @@ public enum SolarParser {
         return SolarBatteryReading(modules: r.int("modules"), model: r.str("model"), state: r.str("state"), voltageV: r.double("voltage_v"), currentA: r.double("current_a"), temperatureMinC: r.double("temperature_min_c"),
                             temperatureMaxC: r.double("temperature_max_c"), cellMinV: r.double("cell_min_v"), cellMaxV: r.double("cell_max_v"), socPercent: whole(r, "soc_percent"), alarm: r.bool("alarm"),
                             capacityAh: r.double("capacity_ah"), fullCapacityAh: full, energyKwh: r.double("energy_kwh"), cycles: whole(r, "cycles"),
-                            stack: stack, healthPercent: whole(r, "health_percent"), fullEstimated: each != nil)
+                            stack: stack, healthPercent: whole(r, "health_percent"), fullEstimated: each != nil,
+                            manufacturer: r.str("manufacturer"), manufacturerDeduced: r.str("manufacturer_source") == "deduced")
     }
 }
 

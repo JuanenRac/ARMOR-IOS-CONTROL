@@ -1282,5 +1282,12 @@
  "Especificación": "规格",
  "Versión de arranque": "引导版本",
  "Versión de comunicación": "通信版本",
- "Fecha del firmware": "固件日期"
+ "Fecha del firmware": "固件日期",
+ "Fabricante": "制造商",
+ "deducido": "推断",
+ "Fallo del BMS": "BMS故障",
+ "Fallo del BMS: celdas sin lectura (0 V): %s": "BMS故障：读不到的电芯（0 V）：%s",
+ "Protección o alarma": "保护或报警",
+ "Aviso de la batería": "电池提示",
+ "Una batería solar tiene un fallo de su electrónica (BMS)": "太阳能电池报告其电路（BMS）故障"
 }
