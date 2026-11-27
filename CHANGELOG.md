@@ -4,6 +4,8 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+## [0.0.9] - Battery states and makers, one notice per battery problem
+
 - **A refused pause of an armed panel says why:** a node that guards answers `busy_guarding`, shown in words.
 - **A battery problem is not notified twice:** alarms the server marks as told before (or silenced) give no notification; a fault of the battery management system always does.
 - **Impossible battery figures are told:** the battery view says which figures were left out of the reading.
@@ -13,7 +15,6 @@ All notable changes to this project are documented here.
 - **Serial number and chip of each battery, as in the Android app:** the details of a battery module show its serial number, its chip (new, old or cannot be told, as the node tells it), its Board, specification and versions. It needs a server and a solar node that carry them. Tested only with invented data; no test runs on a device.
 - **Charts of the solar equipment, as in Studio and the Android app:** the Solar screen draws the history the server keeps of the whole bank, of each pack, of each battery and of its cells (voltage, current, power, state of charge, temperature, highest and lowest cell and their difference) and of each inverter, over 1 hour to 30 days; touching a chart reads that moment. One small chart per cell can be asked for. Built and tested by the CI only; not run on an iPhone.
 - **Sections that fold away and stay that way:** every group of charts and every chart can be hidden and the phone remembers it, as it now does for the list of cells.
-
 - **A stack whose batteries have not all said their capacity is totalled whole:** when every battery of a stack that told its full capacity told the same one and no two name different models, the others count as those, and the capacity carries an approximately-equal sign; this also corrects what an older node adds up. With different capacities or models nothing is assumed.
 
 ## [0.0.8] - A clearer Solar screen and node panels on an origin of their own
