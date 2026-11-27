@@ -32,6 +32,26 @@
    "zh": "选择者",
    "pt": "Escolhido por"
   },
+  "bms_word": {
+   "en": "The battery's own word",
+   "es": "Palabra de la batería",
+   "de": "Wort der Batterie",
+   "fr": "Mot de la batterie",
+   "it": "Parola della batteria",
+   "ja": "バッテリーの表示語",
+   "zh": "电池原文",
+   "pt": "Palavra da bateria"
+  },
+  "column": {
+   "en": "Column",
+   "es": "Columna",
+   "de": "Spalte",
+   "fr": "Colonne",
+   "it": "Colonna",
+   "ja": "項目",
+   "zh": "项目",
+   "pt": "Coluna"
+  },
   "cell": {
    "en": "Cell",
    "es": "Celda",
@@ -584,6 +604,16 @@
   }
  },
  "help": {
+  "solar_battery_fault": {
+   "en": "Means: The battery's own electronics (BMS) fail: a system error, or cells it does not read (0 V).\nCheck: The red ALM light, the module, cells and words shown in Batteries and the module's event log. Do not rely on its figures; have it checked by the distributor.",
+   "es": "Significa: Falla la electrónica de la propia batería (BMS): error de sistema o celdas que no lee (0 V).\nRevisa: La luz roja ALM, el módulo, las celdas y las palabras en Baterías y el registro de eventos del módulo. No te fíes de sus cifras; que la revise el distribuidor.",
+   "de": "Bedeutung: Die Elektronik der Batterie (BMS) fällt aus: ein Systemfehler oder Zellen, die sie nicht liest (0 V).\nPrüfen: Die rote ALM-Lampe, Modul, Zellen und Wörter unter Batterien und das Ereignisprotokoll des Moduls. Den Werten nicht trauen; vom Händler prüfen lassen.",
+   "fr": "Signification: L'électronique de la batterie (BMS) est en panne : erreur système ou cellules non lues (0 V).\nÀ vérifier: Le voyant rouge ALM, le module, les cellules et les mots dans Batteries et le journal du module. Ne vous fiez pas à ses valeurs ; faites-la contrôler par le distributeur.",
+   "it": "Significato: Guasto dell'elettronica della batteria (BMS): errore di sistema o celle non lette (0 V).\nControlla: La luce rossa ALM, il modulo, le celle e le parole in Batterie e il registro eventi del modulo. Non fidarti dei suoi valori; falla controllare dal distributore.",
+   "ja": "意味: バッテリー内部の回路（BMS）の故障です。システムエラー、または読み取れないセル（0 V）があります。\n確認: 赤い ALM ランプ、バッテリー画面のモジュール・セル・表示された語、モジュールのイベントログ。数値を信用せず、販売店に点検を依頼してください。",
+   "zh": "含义: 电池自身的电路（BMS）故障：系统错误，或有读不到的电芯（0 V）。\n检查: 查看红色 ALM 灯、电池页面中的模块、电芯和文字，以及模块事件日志。不要相信其数值；请经销商检查。",
+   "pt": "Significa: Falha a eletrónica da própria bateria (BMS): erro de sistema ou células que não lê (0 V).\nVerifique: A luz vermelha ALM, o módulo, as células e as palavras em Baterias e o registo de eventos do módulo. Não confie nos valores; peça a verificação ao distribuidor."
+  },
   "solar_battery_alarm": {
    "en": "Means: A module reports an alarm or a protection (red Alarm light blinking = alarm, steady = protection).\nCheck: The red light, the event log of the module here, and its temperature (charge only between 0 and 50 °C), current and voltage against the manual. If the red light stays on and nothing explains it, contact the distributor.",
    "es": "Significa: Un módulo informa de una alarma o de una protección (luz roja Alarm parpadeando = alarma, fija = protección).\nRevisa: La luz roja, el registro de eventos del módulo aquí y su temperatura (carga solo entre 0 y 50 °C), corriente y tensión frente al manual. Si la luz roja sigue y nada lo explica, contacta con el distribuidor.",
