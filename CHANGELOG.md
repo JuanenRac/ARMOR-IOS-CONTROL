@@ -4,6 +4,7 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+- **A refused pause of an armed panel says why:** a node that guards answers `busy_guarding`, shown in words.
 - **A battery problem is not notified twice:** alarms the server marks as told before (or silenced) give no notification; a fault of the battery management system always does.
 - **Impossible battery figures are told:** the battery view says which figures were left out of the reading.
 - **Batteries say what is wrong and with which one:** a fault of the battery's electronics (SysError, cells it does not read), its protections or alarms and its notices, with the cell and the battery's own word; cells that are not read no longer count as the lowest of the pack.

@@ -1042,6 +1042,7 @@
  "El nodo está recibiendo una subida de ficheros.": "Le nœud reçoit un envoi de fichiers.",
  "El nodo está copiando una versión de su firmware.": "Le nœud copie une version de son firmware.",
  "El nodo está haciendo una operación en una batería.": "Le nœud effectue une opération sur une batterie.",
+ "El panel está armado o sonando: desármalo antes.": "La centrale est armée ou sonne : désarmez-la d'abord.",
  "El nodo ya se está reiniciando.": "Le nœud redémarre déjà.",
  "El nodo no aceptó la orden a tiempo. Inténtalo de nuevo.": "Le nœud n'a pas accepté l'ordre à temps. Réessaie.",
  "El nodo no puede hacerlo ahora.": "Le nœud ne peut pas le faire maintenant.",
