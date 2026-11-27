@@ -227,8 +227,21 @@ struct ModuleSection: View {
         return charge + " / " + discharge + " A"
     }
 
+    @ViewBuilder private func identityLines(_ module: SolarModule) -> some View {
+        if !module.serial.isEmpty { ValueLine(label: model.tr("Número de serie"), value: module.serial) }
+        if module.chip == "newer" { ValueLine(label: model.tr("Chip"), value: model.tr("Chip nuevo")) }
+        if module.chip == "older" { ValueLine(label: model.tr("Chip"), value: model.tr("Chip antiguo")) }
+        if module.chip == "unknown" { ValueLine(label: model.tr("Chip"), value: model.tr("No se puede saber")) }
+        if !module.board.isEmpty { ValueLine(label: model.tr("Placa (Board)"), value: module.board) }
+        if !module.specification.isEmpty { ValueLine(label: model.tr("Especificación"), value: module.specification) }
+        if !module.bootVersion.isEmpty { ValueLine(label: model.tr("Versión de arranque"), value: module.bootVersion) }
+        if !module.commVersion.isEmpty { ValueLine(label: model.tr("Versión de comunicación"), value: module.commVersion) }
+        if !module.releaseDate.isEmpty { ValueLine(label: model.tr("Fecha del firmware"), value: module.releaseDate) }
+    }
+
     @ViewBuilder private func detailLines(_ module: SolarModule) -> some View {
         if !module.model.isEmpty { ValueLine(label: model.tr("Modelo"), value: module.model) }
+        identityLines(module)
         let versions = [module.boardVersion, module.mainSoftVersion, module.softVersion].filter { !$0.isEmpty }
         if !versions.isEmpty { ValueLine(label: model.tr("Firmware"), value: versions.joined(separator: " · ")) }
         if let cells = module.cellCount { ValueLine(label: model.tr("Celdas"), value: String(cells)) }

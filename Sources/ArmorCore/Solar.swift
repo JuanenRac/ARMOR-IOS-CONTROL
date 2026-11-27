@@ -65,6 +65,8 @@ public struct SolarModule: Equatable, Sendable {
     public let consoleBaud: Int?
     /// The state of health of each cell, in cell order, and the cells (0-based) the battery's console does not call Normal.
     public let sohCounts: [Int], sohAbnormal: [Int]
+    /// From the console's info: the serial number (private data, never written to a log), the Board, the chip the node tells from them ("older", "newer" or "unknown") and the other lines.
+    public let serial: String, board: String, chip: String, specification: String, bootVersion: String, commVersion: String, releaseDate: String
 }
 
 /// An entry of a battery's event log: the protection fields are the console's own words (a number and a mnemonic), never decoded.
@@ -237,7 +239,8 @@ public enum SolarParser {
                            cellsV: numbers(m["cells_v"]), temperaturesC: numbers(m["temperatures_c"]), capacityAh: m.double("capacity_ah"), fullCapacityAh: m.double("full_capacity_ah"), cycles: whole(m, "cycles"),
                            healthPercent: whole(m, "health_percent"), counters: counters, model: m.str("model"), boardVersion: m.str("board_version"), mainSoftVersion: m.str("main_soft_version"), softVersion: m.str("soft_version"),
                            cellCount: whole(m, "cell_count"), maxChargeA: m.double("max_charge_a"), maxDischargeA: m.double("max_discharge_a"), consoleBaud: whole(m, "console_baud"),
-                           sohCounts: ints(m["soh_counts"]), sohAbnormal: ints(m["soh_abnormal"]))
+                           sohCounts: ints(m["soh_counts"]), sohAbnormal: ints(m["soh_abnormal"]),
+                           serial: m.str("serial"), board: m.str("board"), chip: m.str("chip"), specification: m.str("specification"), bootVersion: m.str("boot_version"), commVersion: m.str("comm_version"), releaseDate: m.str("release_date"))
     }
 
     private static func battery(_ r: JSON) -> SolarBatteryReading {

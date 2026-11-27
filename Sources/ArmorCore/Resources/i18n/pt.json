@@ -1272,5 +1272,15 @@
  "Ocultar": "Ocultar",
  "Tensión": "Tensão",
  "Corriente": "Corrente",
- "Diferencia": "Diferença"
+ "Diferencia": "Diferença",
+ "Número de serie": "Número de série",
+ "Chip": "Chip",
+ "Chip nuevo": "novo",
+ "Chip antiguo": "antigo",
+ "No se puede saber": "não é possível saber",
+ "Placa (Board)": "Placa (Board)",
+ "Especificación": "Especificação",
+ "Versión de arranque": "Versão de arranque",
+ "Versión de comunicación": "Versão de comunicação",
+ "Fecha del firmware": "Data do firmware"
 }

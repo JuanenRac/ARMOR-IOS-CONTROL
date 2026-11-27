@@ -1272,5 +1272,15 @@
  "Ocultar": "Masquer",
  "Tensión": "Tension",
  "Corriente": "Courant",
- "Diferencia": "Écart"
+ "Diferencia": "Écart",
+ "Número de serie": "Numéro de série",
+ "Chip": "Puce",
+ "Chip nuevo": "nouvelle",
+ "Chip antiguo": "ancienne",
+ "No se puede saber": "impossible à dire",
+ "Placa (Board)": "Carte (Board)",
+ "Especificación": "Spécification",
+ "Versión de arranque": "Version d'amorçage",
+ "Versión de comunicación": "Version de communication",
+ "Fecha del firmware": "Date du firmware"
 }

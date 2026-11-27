@@ -1272,5 +1272,15 @@
  "Ocultar": "隠す",
  "Tensión": "電圧",
  "Corriente": "電流",
- "Diferencia": "電圧差"
+ "Diferencia": "電圧差",
+ "Número de serie": "シリアル番号",
+ "Chip": "チップ",
+ "Chip nuevo": "新型",
+ "Chip antiguo": "旧型",
+ "No se puede saber": "判別できません",
+ "Placa (Board)": "基板（Board）",
+ "Especificación": "仕様",
+ "Versión de arranque": "ブートバージョン",
+ "Versión de comunicación": "通信バージョン",
+ "Fecha del firmware": "ファームウェアの日付"
 }
