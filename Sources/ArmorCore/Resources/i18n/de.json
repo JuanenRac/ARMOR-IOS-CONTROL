@@ -1272,5 +1272,15 @@
  "Ocultar": "Ausblenden",
  "Tensión": "Spannung",
  "Corriente": "Strom",
- "Diferencia": "Differenz"
+ "Diferencia": "Differenz",
+ "Número de serie": "Seriennummer",
+ "Chip": "Chip",
+ "Chip nuevo": "neu",
+ "Chip antiguo": "alt",
+ "No se puede saber": "nicht feststellbar",
+ "Placa (Board)": "Platine (Board)",
+ "Especificación": "Spezifikation",
+ "Versión de arranque": "Bootversion",
+ "Versión de comunicación": "Kommunikationsversion",
+ "Fecha del firmware": "Datum der Firmware"
 }

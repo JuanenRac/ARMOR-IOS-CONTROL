@@ -199,3 +199,26 @@ final class SolarTests: XCTestCase {
         XCTAssertEqual(SolarText.summary(totals, t), "2.40 kW de sol · 1.18 kW de consumo")
     }
 }
+
+final class BatteryIdentityTests: XCTestCase {
+    func testTheSerialNumberAndChipOfAModuleAreRead() throws {
+        // invented serial number
+        let json = """
+        {"devices":[{"node_id":"casa","device":"us3000-1","kind":"battery","received_at":"x","stale":false,"example":false,
+          "reading":{"kind":"battery","node_id":"casa","device":"us3000-1","timestamp_ms":2,"modules":2,"stack":[
+            {"n":1,"present":true,"serial":"TEST00AE20000001","board":"NF4.E2","chip":"newer","specification":"48V/74AH","boot_version":"V2.1","comm_version":"V2.0","release_date":"00-01-01"},
+            {"n":2,"present":true}]}}],"waiting":[],"totals":{},"catalog":{}}
+        """
+        let object = try XCTUnwrap(try JSONSerialization.jsonObject(with: Data(json.utf8)) as? JSON)
+        let device = try XCTUnwrap(SolarParser.overview(object).devices.first)
+        let reading = try XCTUnwrap(device.battery)
+        XCTAssertEqual(reading.stack[0].serial, "TEST00AE20000001")
+        XCTAssertEqual(reading.stack[0].board, "NF4.E2")
+        XCTAssertEqual(reading.stack[0].chip, "newer")
+        XCTAssertEqual(reading.stack[0].specification, "48V/74AH")
+        XCTAssertEqual([reading.stack[0].bootVersion, reading.stack[0].commVersion, reading.stack[0].releaseDate], ["V2.1", "V2.0", "00-01-01"])
+        XCTAssertEqual(reading.stack[1].serial, "")
+        XCTAssertEqual(reading.stack[1].chip, "")
+    }
+}
+

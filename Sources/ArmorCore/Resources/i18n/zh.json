@@ -1272,5 +1272,15 @@
  "Ocultar": "隐藏",
  "Tensión": "电压",
  "Corriente": "电流",
- "Diferencia": "压差"
+ "Diferencia": "压差",
+ "Número de serie": "序列号",
+ "Chip": "芯片",
+ "Chip nuevo": "新款",
+ "Chip antiguo": "旧款",
+ "No se puede saber": "无法判断",
+ "Placa (Board)": "主板（Board）",
+ "Especificación": "规格",
+ "Versión de arranque": "引导版本",
+ "Versión de comunicación": "通信版本",
+ "Fecha del firmware": "固件日期"
 }

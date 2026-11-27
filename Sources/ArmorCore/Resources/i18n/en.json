@@ -1272,5 +1272,15 @@
  "Ocultar": "Hide",
  "Tensión": "Voltage",
  "Corriente": "Current",
- "Diferencia": "Difference"
+ "Diferencia": "Difference",
+ "Número de serie": "Serial number",
+ "Chip": "Chip",
+ "Chip nuevo": "new",
+ "Chip antiguo": "old",
+ "No se puede saber": "cannot be told",
+ "Placa (Board)": "Board",
+ "Especificación": "Specification",
+ "Versión de arranque": "Boot version",
+ "Versión de comunicación": "Communication version",
+ "Fecha del firmware": "Firmware date"
 }
