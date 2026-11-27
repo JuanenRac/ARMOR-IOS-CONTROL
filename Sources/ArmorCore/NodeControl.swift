@@ -142,6 +142,7 @@ public enum NodeControlText {
         case "busy_slot_copy": return t.tr("El nodo está copiando una versión de su firmware.")
         case "busy_battery": return t.tr("El nodo está haciendo una operación en una batería.")
         case "already_restarting": return t.tr("El nodo ya se está reiniciando.")
+        case "busy_guarding": return t.tr("El panel está armado o sonando: desármalo antes.")
         case "not_armed", "invalid_token", "token_expired": return t.tr("El nodo no aceptó la orden a tiempo. Inténtalo de nuevo.")
         case "unavailable": return t.tr("El nodo no puede hacerlo ahora.")
         default: return t.tr("El nodo rechazó la orden.")

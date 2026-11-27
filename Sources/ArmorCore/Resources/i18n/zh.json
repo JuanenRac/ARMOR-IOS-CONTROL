@@ -1042,6 +1042,7 @@
  "El nodo está recibiendo una subida de ficheros.": "该节点正在接收文件上传。",
  "El nodo está copiando una versión de su firmware.": "该节点正在复制一个固件版本。",
  "El nodo está haciendo una operación en una batería.": "该节点正在对电池执行操作。",
+ "El panel está armado o sonando: desármalo antes.": "面板已布防或正在鸣响：请先撤防。",
  "El nodo ya se está reiniciando.": "该节点已在重启。",
  "El nodo no aceptó la orden a tiempo. Inténtalo de nuevo.": "节点未能及时接受命令。请重试。",
  "El nodo no puede hacerlo ahora.": "该节点现在无法执行。",

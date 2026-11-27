@@ -1042,6 +1042,7 @@
  "El nodo está recibiendo una subida de ficheros.": "ノードはファイルのアップロードを受信中です。",
  "El nodo está copiando una versión de su firmware.": "ノードはファームウェアのバージョンをコピー中です。",
  "El nodo está haciendo una operación en una batería.": "ノードはバッテリーの操作を実行中です。",
+ "El panel está armado o sonando: desármalo antes.": "パネルは警戒中または鳴動中です。先に解除してください。",
  "El nodo ya se está reiniciando.": "ノードは既に再起動中です。",
  "El nodo no aceptó la orden a tiempo. Inténtalo de nuevo.": "ノードが時間内に命令を受け付けませんでした。もう一度試してください。",
  "El nodo no puede hacerlo ahora.": "ノードは今はそれを実行できません。",

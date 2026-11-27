@@ -1042,6 +1042,7 @@
  "El nodo está recibiendo una subida de ficheros.": "The node is receiving a file upload.",
  "El nodo está copiando una versión de su firmware.": "The node is copying a version of its firmware.",
  "El nodo está haciendo una operación en una batería.": "The node is running an operation on a battery.",
+ "El panel está armado o sonando: desármalo antes.": "The panel is armed or ringing: disarm it first.",
  "El nodo ya se está reiniciando.": "The node is already restarting.",
  "El nodo no aceptó la orden a tiempo. Inténtalo de nuevo.": "The node did not accept the order in time. Try again.",
  "El nodo no puede hacerlo ahora.": "The node cannot do it now.",

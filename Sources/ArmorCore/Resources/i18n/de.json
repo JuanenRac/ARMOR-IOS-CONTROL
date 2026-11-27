@@ -1042,6 +1042,7 @@
  "El nodo está recibiendo una subida de ficheros.": "Der Knoten empfängt gerade einen Datei-Upload.",
  "El nodo está copiando una versión de su firmware.": "Der Knoten kopiert gerade eine Version seiner Firmware.",
  "El nodo está haciendo una operación en una batería.": "Der Knoten führt gerade einen Vorgang an einer Batterie aus.",
+ "El panel está armado o sonando: desármalo antes.": "Die Anlage ist scharf oder läutet: zuerst unscharf schalten.",
  "El nodo ya se está reiniciando.": "Der Knoten startet bereits neu.",
  "El nodo no aceptó la orden a tiempo. Inténtalo de nuevo.": "Der Knoten hat den Befehl nicht rechtzeitig angenommen. Versuche es erneut.",
  "El nodo no puede hacerlo ahora.": "Der Knoten kann das jetzt nicht ausführen.",
