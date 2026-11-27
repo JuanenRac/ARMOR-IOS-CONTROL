@@ -85,6 +85,8 @@ public struct SolarModule: Equatable, Sendable {
     /// What the battery says is not normal, and the cells (0-based) it does not read: they come as 0 V and are a fault, not a voltage.
     public var states: [BatteryState] = []
     public var cellsUnread: [Int] = []
+    /// The figures the node read as impossible and left out of this reading.
+    public var leftOut: [String] = []
 }
 
 /// An entry of a battery's event log: the protection fields are the console's own words (a number and a mnemonic), never decoded.
@@ -266,7 +268,8 @@ public enum SolarParser {
                                let word = flag.str("word")
                                return word.isEmpty ? nil : BatteryState(column: flag.str("column"), word: word, cell: whole(flag, "cell"))
                            },
-                           cellsUnread: ints(m["cells_unread"]))
+                           cellsUnread: ints(m["cells_unread"]),
+                           leftOut: (m["left_out"] as? [Any] ?? []).compactMap { $0 as? String })
     }
 
     private static func battery(_ r: JSON) -> SolarBatteryReading {

@@ -29,6 +29,7 @@ public enum AlarmPolicy {
         let sources: Set<String> = ["device", "solar", "electrical", "network", "alarm"]
         return events.sorted { $0.id < $1.id }.compactMap { event in
             if isSilent(event.code) { return nil }
+            if event.quiet != nil { return nil }   // a battery problem told before, or silenced: in the history and on the screens, not announced again
             switch true {
             case event.type == "alert" && event.to == "high":
                 return AlarmNotice(id: event.id, title: t.tr("ALERTA ALTA"), text: t.trf("%s: %s objetivos", event.subject, event.targets ?? 0), severity: "high", kind: "alert")

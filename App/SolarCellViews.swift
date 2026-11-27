@@ -204,6 +204,7 @@ struct ModuleSection: View {
         let t = view.trouble
         var lines: [String] = []
         if !t.state.isEmpty { lines.append(model.trf("El módulo informa el estado %s", t.state)) }
+        if !t.leftOut.isEmpty { lines.append(model.trf("Cifra imposible descartada: %s", t.leftOut.joined(separator: ", "))) }
         if t.bmsError { lines.append(model.tr("Fallo del BMS") + ": SysError") }
         if !t.unreadCells.isEmpty { lines.append(model.trf("Fallo del BMS: celdas sin lectura (0 V): %s", t.unreadCells.map(String.init).joined(separator: ", "))) }
         let said: (BatteryState) -> String = { state in (state.cell.map { model.tr("celda") + " " + String($0 + 1) + " · " } ?? "") + state.column + " " + state.word }
