@@ -4,6 +4,7 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+- **The shared tools read the output of processes as UTF-8:** `tools/status_lights.py`, `tools/sync_manifests.py` and `tools/universal_readme_check.py` are the current copies; on Windows a character outside the code page no longer breaks a check.
 - **Serial number and chip of each battery, as in the Android app:** the details of a battery module show its serial number, its chip (new, old or cannot be told, as the node tells it), its Board, specification and versions. It needs a server and a solar node that carry them. Tested only with invented data; no test runs on a device.
 - **Charts of the solar equipment, as in Studio and the Android app:** the Solar screen draws the history the server keeps of the whole bank, of each pack, of each battery and of its cells (voltage, current, power, state of charge, temperature, highest and lowest cell and their difference) and of each inverter, over 1 hour to 30 days; touching a chart reads that moment. One small chart per cell can be asked for. Built and tested by the CI only; not run on an iPhone.
 - **Sections that fold away and stay that way:** every group of charts and every chart can be hidden and the phone remembers it, as it now does for the list of cells.
