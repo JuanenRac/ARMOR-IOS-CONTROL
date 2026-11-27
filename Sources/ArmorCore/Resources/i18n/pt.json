@@ -1245,6 +1245,7 @@
  "Ver detalles": "Ver detalhes",
  "El módulo informa el estado %s": "O módulo indica o estado %s",
  "Tensión fuera de rango en las celdas %s": "Tensão fora do intervalo nas células %s",
+ "Cifra imposible descartada: %s": "Valor impossível ignorado: %s",
  "Diferencia alta entre celdas: %s mV": "Diferença elevada entre células: %s mV",
  "Temperatura alta": "Temperatura alta",
  "Demasiado frío para cargar": "Demasiado frio para carregar",

@@ -71,6 +71,7 @@ public struct ModuleTrouble: Equatable, Sendable {
     public var bmsError: Bool = false
     public var unreadCells: [Int] = []
     public var protections: [BatteryState] = [], notices: [BatteryState] = []
+    public var leftOut: [String] = []
     public var bmsFault: Bool { bmsError || !unreadCells.isEmpty }
 }
 
@@ -132,10 +133,11 @@ public enum SolarCells {
         trouble.unreadCells = m.cellsUnread.map { $0 + 1 }
         trouble.protections = m.states.filter { $0.level == 2 }
         trouble.notices = m.states.filter { $0.level == 1 }
+        trouble.leftOut = m.leftOut
         let fromCells = cells.map(\.level).max() ?? .ok
         var level = CellLevel.ok
         if fromCells == .fault || !trouble.abnormalCells.isEmpty || !trouble.state.isEmpty || trouble.bmsFault || !trouble.protections.isEmpty { level = .fault }
-        else if fromCells == .warn || !trouble.notices.isEmpty || trouble.spreadMv != nil || trouble.hot || trouble.cold || trouble.missingCells > 0 { level = .warn }
+        else if fromCells == .warn || !trouble.notices.isEmpty || !trouble.leftOut.isEmpty || trouble.spreadMv != nil || trouble.hot || trouble.cold || trouble.missingCells > 0 { level = .warn }
         return ModuleView(module: m, cells: cells, level: level, spreadMv: spread, trouble: trouble)
     }
 
