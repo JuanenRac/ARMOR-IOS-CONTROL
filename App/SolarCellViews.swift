@@ -216,6 +216,7 @@ struct ModuleSection: View {
         if t.hot { lines.append(model.tr("Temperatura alta")) }
         if t.cold { lines.append(model.tr("Demasiado frío para cargar")) }
         if t.missingCells > 0 { lines.append(model.trf("Leídas %s de %s celdas", view.cells.count, view.cells.count + t.missingCells)) }
+        if t.noSheet { lines.append(model.tr("Esta batería no responde a su ficha (modelo, capacidad nominal, historial). Sus celdas y su carga sí se leen; el nodo vuelve a pedirla cada pocos minutos.")) }
         return lines
     }
 

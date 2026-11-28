@@ -1293,5 +1293,6 @@
  "Aviso de la batería": "电池提示",
  "Una batería solar tiene un fallo de su electrónica (BMS)": "太阳能电池报告其电路（BMS）故障",
  "Este servidor ya respondió por https: no se usa http sin cifrar con él. Escribe la dirección con https://, o cambia la dirección en los ajustes para olvidarlo.": "该服务器已经通过 https 应答过：不再对其使用未加密的 http。请用 https:// 填写地址，或在设置中更改地址以清除此记忆。",
- "No usar http sin cifrar con un servidor que ya respondió por https": "对已通过 https 应答过的服务器不使用未加密的 http"
+ "No usar http sin cifrar con un servidor que ya respondió por https": "对已通过 https 应答过的服务器不使用未加密的 http",
+ "Esta batería no responde a su ficha (modelo, capacidad nominal, historial). Sus celdas y su carga sí se leen; el nodo vuelve a pedirla cada pocos minutos.": "该电池不应答其资料卡（型号、额定容量、历史）。电芯和电量可正常读取；节点每隔几分钟会再次询问。"
 }
