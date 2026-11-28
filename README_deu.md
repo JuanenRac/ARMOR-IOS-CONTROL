@@ -22,14 +22,14 @@
   <img src="https://img.shields.io/badge/Language-Swift-f05138.svg" alt="Sprache">
   <img src="https://img.shields.io/badge/UI-SwiftUI-0a84ff.svg" alt="UI">
   <img src="https://img.shields.io/badge/Languages-8-00E5FF.svg" alt="Sprachen">
-  <img src="https://img.shields.io/badge/Tests-556%20passing-2ea44f.svg" alt="Tests">
+  <img src="https://img.shields.io/badge/Tests-557%20passing-2ea44f.svg" alt="Tests">
   <img src="https://img.shields.io/badge/Version-0.1.0-0f6cbd.svg" alt="Version">
   <img src="https://img.shields.io/badge/Maturity-scaffolding-FFB020.svg" alt="Reifegrad">
 </p>
 
 ---
 
-**Ehrlichkeitsprüfung - was heute läuft:** Die Regeln der App (Serververbindung, Auswertung der Antworten, Adressauswahl, Telefonsperre, Tresor der Sitzung, Vertrauen in das Zertifikat, Alarmrichtlinie, Anwendungsfälle, MJPEG-Zerlegung) sind das Swift-Paket `ArmorCore`, abgedeckt durch 556 Unit-Tests, die mit `swift test` unter macOS oder Linux laufen; `tools/ios_lint.py` prüft Struktur, die acht Sprachtabellen und den Vertrag ohne Mac. **Noch nicht** belegt: Die SwiftUI-Bildschirme und die Teile, die ein iPhone brauchen (Face ID, Schlüsselbund, Zertifikatsregeln, Live-Kamera, Push über Firebase), wurden weder in Xcode gebaut noch auf einem Gerät ausgeführt. Die App läuft außerdem von Anfang bis Ende gegen einen simulierten Server und eine simulierte Uhr, einschließlich Unterbrechungen und Fehlern (Nachweis: Simulator).
+**Ehrlichkeitsprüfung - was heute läuft:** Die Regeln der App (Serververbindung, Auswertung der Antworten, Adressauswahl, Telefonsperre, Tresor der Sitzung, Vertrauen in das Zertifikat, Alarmrichtlinie, Anwendungsfälle, MJPEG-Zerlegung) sind das Swift-Paket `ArmorCore`, abgedeckt durch 557 Unit-Tests, die mit `swift test` unter macOS oder Linux laufen; `tools/ios_lint.py` prüft Struktur, die acht Sprachtabellen und den Vertrag ohne Mac. **Noch nicht** belegt: Die SwiftUI-Bildschirme und die Teile, die ein iPhone brauchen (Face ID, Schlüsselbund, Zertifikatsregeln, Live-Kamera, Push über Firebase), wurden weder in Xcode gebaut noch auf einem Gerät ausgeführt. Die App läuft außerdem von Anfang bis Ende gegen einen simulierten Server und eine simulierte Uhr, einschließlich Unterbrechungen und Fehlern (Nachweis: Simulator).
 
 ---
 
@@ -41,7 +41,7 @@
 | Reifegrad | Gerüst |
 | Rolle | iPhone-Bedienclient für ARMOR-SERVER (Familie: Clients, übergeordnet: ARMOR-SERVER) |
 | Technik | Swift 5.9+ / SwiftUI, iOS 16+ |
-| Tests | 556 (`swift test`) |
+| Tests | 557 (`swift test`) |
 | Sprachen | 8 (1253 Sätze je Sprache, von `ios_lint.py` geprüft) |
 | Läuft auf | Ein iPhone mit iOS 16+; die Tests laufen auf macOS oder Linux |
 | Auf echter Hardware | Noch nicht auf einem iPhone oder einer Apple Watch ausgeführt; die Regeln werden unter Linux getestet und die App läuft gegen einen simulierten Server und eine simulierte Uhr |
@@ -59,7 +59,7 @@ Jede Zeile ist ein Teil dieses Repositorys, und die Ampel sagt, wie weit er heut
 | Bereich | Stand | Was das hier bedeutet |
 |---|---|---|
 | Software | 🟡 | Die Regeln der App sind ein Swift-Paket (`ArmorCore`), und die SwiftUI-App wird von der CI unter macOS für den Simulator gebaut; sie lief nicht auf einem iPhone. |
-| Tests | 🟡 | 556 Unit-Tests bestehen mit `swift test` unter macOS oder Linux, und `tools/ios_lint.py` prüft Struktur, die Tabellen der acht Sprachen und den Vertrag ohne Mac; auf einem Gerät läuft kein Test. |
+| Tests | 🟡 | 557 Unit-Tests bestehen mit `swift test` unter macOS oder Linux, und `tools/ios_lint.py` prüft Struktur, die Tabellen der acht Sprachen und den Vertrag ohne Mac; auf einem Gerät läuft kein Test. |
 | Oberfläche | 🟠 | Die SwiftUI-Bildschirme werden von der CI unter macOS für den Simulator gebaut, wurden aber nicht auf einem iPhone ausgeführt. |
 | Hardware | 🟠 | Sie lief nicht auf einem iPhone oder einer Apple Watch; die App läuft von Anfang bis Ende gegen einen simulierten Server und eine simulierte Uhr, einschließlich Unterbrechungen und Fehlern (Nachweis: Simulator), die Prüfung auf einem echten iPhone und einer echten Uhr steht noch aus. |
 | Sicherheit | 🟠 | Die Sperre des Telefons, der Tresor der Sitzung und das Vertrauen ins Zertifikat sind unter Linux getestete Regeln; Face ID, der Schlüsselbund und die Zertifikatsregeln liefen nicht auf einem Gerät. |
@@ -152,7 +152,7 @@ In der App: die zwei Adressen, *Angemeldet bleiben*, die Telefonsperre und die S
 **Voraussetzungen:** ein Mac mit Xcode 15+ und iOS 16+ zum Bauen der App; Swift 5.9+ (macOS oder Linux) für die Tests; Python 3.11 für die Prüfungen.
 
 ```sh
-swift test                  # 556 tests of ArmorCore (macOS or Linux)
+swift test                  # 557 tests of ArmorCore (macOS or Linux)
 python tools/ios_lint.py    # structure, eight languages, contract (any system)
 xcodegen generate           # then open ARMOR-IOS-CONTROL.xcodeproj in Xcode (on a Mac)
 ```
@@ -185,7 +185,7 @@ python -I tools/armor_ci_validate.py
 | `PolicyTests.swift`, `AlarmCodesTests.swift`, `AlarmFactsTests.swift` | 6 + 4 + 7 | Die Alarmrichtlinie und die Alarmcodes |
 | `SolarTests.swift`, `BatteryTests.swift`, `ElectricalTests.swift`, `ScreenPollingTests.swift`, `EquipmentClientTests.swift`, `AlarmRouteTests.swift`, `NetworkTests.swift`, `WeatherTests.swift`, `ServicesSecurityTests.swift` | 14 + 10 + 5 + 3 + 10 + 2 + 9 + 11 + 8 | Solar, Batterien, Stromnetz und die Aufrufe des Clients |
 
-Die 556 Tests laufen mit Daten eines echten Servers. `tools/ios_lint.py` besteht ohne Mac: 112 Swift-Dateien, 1253 Sätze in 8 Sprachen, 71 Serverpfade. Kein Test läuft auf einem Gerät.
+Die 557 Tests laufen mit Daten eines echten Servers. `tools/ios_lint.py` besteht ohne Mac: 112 Swift-Dateien, 1253 Sätze in 8 Sprachen, 71 Serverpfade. Kein Test läuft auf einem Gerät.
 
 ## 🏗️ Build und Veröffentlichung
 
@@ -212,7 +212,7 @@ Das Xcode-Projekt wird aus `project.yml` mit XcodeGen erzeugt: Wähle ein Signin
 ARMOR-IOS-CONTROL/
 ├── Sources/ArmorCore/                   die Regeln der App: ein Swift-Paket
 ├── App/                                 die SwiftUI-Bildschirme und die Teile, die ein iPhone brauchen
-├── Tests/                               556 Tests und Daten eines echten Servers
+├── Tests/                               557 Tests und Daten eines echten Servers
 ├── docs/                                die Anleitungen dieses Repositorys
 ├── tools/                               die gemeinsamen CI-Prüfungen und Projektwerkzeuge
 ├── .github/                             CI-Workflow sowie Vorlagen für Issues und Pull Requests
