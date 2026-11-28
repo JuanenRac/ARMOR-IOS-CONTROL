@@ -1291,5 +1291,8 @@
  "Fallo del BMS: celdas sin lectura (0 V): %s": "BMS故障：読み取れないセル（0 V）：%s",
  "Protección o alarma": "保護または警報",
  "Aviso de la batería": "バッテリーの注意",
- "Una batería solar tiene un fallo de su electrónica (BMS)": "ソーラーバッテリーが内部回路（BMS）の故障を報告しています"
+ "Una batería solar tiene un fallo de su electrónica (BMS)": "ソーラーバッテリーが内部回路（BMS）の故障を報告しています",
+ "Este servidor ya respondió por https: no se usa http sin cifrar con él. Escribe la dirección con https://, o cambia la dirección en los ajustes para olvidarlo.": "このサーバーは以前 https で応答しました。暗号化されていない http は使いません。https:// を付けてアドレスを入力するか、設定でアドレスを変更すると記憶を消去します。",
+ "No usar http sin cifrar con un servidor que ya respondió por https": "https で応答したことのあるサーバーには暗号化されていない http を使わない",
+ "Esta batería no responde a su ficha (modelo, capacidad nominal, historial). Sus celdas y su carga sí se leen; el nodo vuelve a pedirla cada pocos minutos.": "このバッテリーは仕様情報（型式、定格容量、履歴）の問い合わせに応答しません。セルと残量は読み取れます。ノードは数分ごとに再度問い合わせます。"
 }

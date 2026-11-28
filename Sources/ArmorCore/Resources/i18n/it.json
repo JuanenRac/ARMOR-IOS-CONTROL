@@ -1291,5 +1291,8 @@
  "Fallo del BMS: celdas sin lectura (0 V): %s": "Guasto del BMS: celle non lette (0 V): %s",
  "Protección o alarma": "Protezione o allarme",
  "Aviso de la batería": "Avviso della batteria",
- "Una batería solar tiene un fallo de su electrónica (BMS)": "Una batteria solare segnala un guasto della sua elettronica (BMS)"
+ "Una batería solar tiene un fallo de su electrónica (BMS)": "Una batteria solare segnala un guasto della sua elettronica (BMS)",
+ "Este servidor ya respondió por https: no se usa http sin cifrar con él. Escribe la dirección con https://, o cambia la dirección en los ajustes para olvidarlo.": "Questo server ha già risposto in https: con lui non si usa l'http non cifrato. Scrivi l'indirizzo con https://, oppure cambia l'indirizzo nelle impostazioni per dimenticarlo.",
+ "No usar http sin cifrar con un servidor que ya respondió por https": "Non usare l'http non cifrato con un server che ha già risposto in https",
+ "Esta batería no responde a su ficha (modelo, capacidad nominal, historial). Sus celdas y su carga sí se leen; el nodo vuelve a pedirla cada pocos minutos.": "Questa batteria non risponde alla sua scheda (modello, capacità nominale, storico). Celle e carica vengono lette; il nodo la richiede ogni pochi minuti."
 }

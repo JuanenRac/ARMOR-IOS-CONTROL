@@ -72,6 +72,8 @@ public struct ModuleTrouble: Equatable, Sendable {
     public var unreadCells: [Int] = []
     public var protections: [BatteryState] = [], notices: [BatteryState] = []
     public var leftOut: [String] = []
+    /// The module's cells are read but it does not answer its data sheet, in a stack where another does.
+    public var noSheet: Bool = false
     public var bmsFault: Bool { bmsError || !unreadCells.isEmpty }
 }
 
@@ -141,10 +143,20 @@ public enum SolarCells {
         return ModuleView(module: m, cells: cells, level: level, spreadMv: spread, trouble: trouble)
     }
 
+    /// A module whose cells are read but that says nothing of its data sheet (model, rated capacity, history), in a stack where another module does: the same rule as Studio.
+    public static func sheetUnanswered(_ module: SolarModule, in stack: [SolarModule]) -> Bool {
+        let silent = module.model.isEmpty && module.fullCapacityAh == nil && module.cycles == nil && module.counters.isEmpty && module.softVersion.isEmpty
+        return module.present && !module.cellsV.isEmpty && silent && stack.contains { $0.present && (!$0.boardVersion.isEmpty || !$0.softVersion.isEmpty || $0.consoleBaud != nil) }
+    }
+
     /// The whole bank: its worst module, a fault when the battery itself says a protection is acting, and the extremes of all its cells.
     public static func bank(deviceModel: String, reading: SolarBatteryReading, settings: SolarViewSettings) -> BankView {
-        let modules = reading.stack.map { item in
-            module(item, lfp: isLfp(deviceModel: deviceModel, readingModel: item.model.isEmpty ? reading.model : item.model), settings: settings)
+        let modules: [ModuleView] = reading.stack.map { item in
+            let view = module(item, lfp: isLfp(deviceModel: deviceModel, readingModel: item.model.isEmpty ? reading.model : item.model), settings: settings)
+            guard sheetUnanswered(item, in: reading.stack) else { return view }
+            var trouble = view.trouble
+            trouble.noSheet = true
+            return ModuleView(module: view.module, cells: view.cells, level: view.level, spreadMv: view.spreadMv, trouble: trouble)
         }
         let level: CellLevel = reading.alarm ? .fault : (modules.map(\.level).max() ?? .ok)
         let all = reading.stack.flatMap { module in module.cellsV.enumerated().filter { !module.cellsUnread.contains($0.offset) }.map(\.element) }

@@ -1291,5 +1291,8 @@
  "Fallo del BMS: celdas sin lectura (0 V): %s": "BMS-Fehler: Zellen nicht gelesen (0 V): %s",
  "Protección o alarma": "Schutz oder Alarm",
  "Aviso de la batería": "Hinweis der Batterie",
- "Una batería solar tiene un fallo de su electrónica (BMS)": "Eine Solarbatterie meldet einen Fehler ihrer Elektronik (BMS)"
+ "Una batería solar tiene un fallo de su electrónica (BMS)": "Eine Solarbatterie meldet einen Fehler ihrer Elektronik (BMS)",
+ "Este servidor ya respondió por https: no se usa http sin cifrar con él. Escribe la dirección con https://, o cambia la dirección en los ajustes para olvidarlo.": "Dieser Server hat bereits über https geantwortet: Unverschlüsseltes http wird mit ihm nicht verwendet. Schreiben Sie die Adresse mit https:// oder ändern Sie die Adresse in den Einstellungen, um das zu vergessen.",
+ "No usar http sin cifrar con un servidor que ya respondió por https": "Kein unverschlüsseltes http bei einem Server, der schon über https geantwortet hat",
+ "Esta batería no responde a su ficha (modelo, capacidad nominal, historial). Sus celdas y su carga sí se leen; el nodo vuelve a pedirla cada pocos minutos.": "Diese Batterie beantwortet ihr Datenblatt nicht (Modell, Nennkapazität, Verlauf). Zellen und Ladung werden gelesen; der Knoten fragt alle paar Minuten erneut."
 }

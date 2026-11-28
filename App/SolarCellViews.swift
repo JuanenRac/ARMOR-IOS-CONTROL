@@ -207,7 +207,7 @@ struct ModuleSection: View {
         if !t.leftOut.isEmpty { lines.append(model.trf("Cifra imposible descartada: %s", t.leftOut.joined(separator: ", "))) }
         if t.bmsError { lines.append(model.tr("Fallo del BMS") + ": SysError") }
         if !t.unreadCells.isEmpty { lines.append(model.trf("Fallo del BMS: celdas sin lectura (0 V): %s", t.unreadCells.map(String.init).joined(separator: ", "))) }
-        let said: (BatteryState) -> String = { state in (state.cell.map { model.tr("celda") + " " + String($0 + 1) + " · " } ?? "") + state.column + " " + state.word }
+        let said: (ArmorCore.BatteryState) -> String = { state in (state.cell.map { model.tr("celda") + " " + String($0 + 1) + " · " } ?? "") + state.column + " " + state.word }
         if !t.protections.isEmpty { lines.append(model.tr("Protección o alarma") + ": " + t.protections.map(said).joined(separator: "; ")) }
         if !t.notices.isEmpty { lines.append(model.tr("Aviso de la batería") + ": " + t.notices.map(said).joined(separator: "; ")) }
         if !t.abnormalCells.isEmpty { lines.append(model.tr("Celda anormal") + ": " + t.abnormalCells.map(String.init).joined(separator: ", ")) }
@@ -216,6 +216,7 @@ struct ModuleSection: View {
         if t.hot { lines.append(model.tr("Temperatura alta")) }
         if t.cold { lines.append(model.tr("Demasiado frío para cargar")) }
         if t.missingCells > 0 { lines.append(model.trf("Leídas %s de %s celdas", view.cells.count, view.cells.count + t.missingCells)) }
+        if t.noSheet { lines.append(model.tr("Esta batería no responde a su ficha (modelo, capacidad nominal, historial). Sus celdas y su carga sí se leen; el nodo vuelve a pedirla cada pocos minutos.")) }
         return lines
     }
 

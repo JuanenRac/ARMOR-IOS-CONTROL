@@ -61,12 +61,64 @@ final class ReachTests: XCTestCase {
         let selection = await Connector.select(api: api, installation: both, place: .home, networkAvailable: true, pinMismatch: { true })
         XCTAssertEqual(selection, .failed(.certificateChanged))
     }
+    func testPlainHttpAfterHttpsIsNotEvenAsked() async throws {
+        let memory = SchemeMemory(MemoryStore())
+        let only = SavedInstallation(homeHost: "192.168.0.180", homePort: "8080")
+        memory.reached(try XCTUnwrap(URL(string: "https://192.168.0.180:8443/api")))
+        let selection = await Connector.select(api: FakeApi(), installation: only, place: .home, networkAvailable: true, schemes: memory)
+        XCTAssertEqual(selection, .failed(.plainAfterSecure))
+    }
+    func testAnotherAddressThatIsAllowedIsStillUsed() async throws {
+        let memory = SchemeMemory(MemoryStore())
+        memory.reached(try XCTUnwrap(URL(string: "https://192.168.0.180/")))
+        let selection = await Connector.select(api: FakeApi(), installation: both, place: .home, networkAvailable: true, schemes: memory)
+        XCTAssertEqual(selection, .reached(try XCTUnwrap(both.endpoints.away)))
+    }
+    func testTheMemoryOfTheScheme() throws {
+        let store = MemoryStore()
+        let memory = SchemeMemory(store)
+        let plain = try XCTUnwrap(URL(string: "http://192.168.0.180:8080/x"))
+        XCTAssertTrue(memory.allows(plain))
+        memory.reached(plain)
+        XCTAssertTrue(memory.allows(plain), "plain http teaches nothing")
+        memory.reached(try XCTUnwrap(URL(string: "https://192.168.0.180/")))
+        XCTAssertFalse(memory.allows(plain))
+        XCTAssertEqual(store.get("https_seen_192.168.0.180"), "1")
+        XCTAssertTrue(memory.allows(origin: "http://192.168.0.181:8080"))
+        memory.enabled = false
+        XCTAssertTrue(memory.allows(plain))
+        memory.enabled = true
+        memory.forget(host: "192.168.0.180")
+        XCTAssertTrue(memory.allows(plain))
+    }
+    func testOnlyAChangedAddressForgetsTheScheme() throws {
+        let memory = SchemeMemory(MemoryStore())
+        let secure = try XCTUnwrap(URL(string: "https://192.168.0.180/"))
+        let old = SavedInstallation(homeHost: "192.168.0.180", homePort: "8080")
+        memory.reached(secure)
+        memory.forgetChanged(from: old, to: old)
+        XCTAssertFalse(memory.allows(origin: "http://192.168.0.180:8080"))
+        memory.forgetChanged(from: old, to: SavedInstallation(homeHost: "192.168.0.180", homePort: "8081"))
+        XCTAssertTrue(memory.allows(origin: "http://192.168.0.180:8081"))
+    }
+    func testTheClientRefusesPlainHttpAfterHttps() async throws {
+        let memory = SchemeMemory(MemoryStore())
+        memory.reached(try XCTUnwrap(URL(string: "https://192.168.0.180/")))
+        let client = ArmorApiClient(session: ArmorApiClient.makeSession(), clientTag: "test", schemes: memory)
+        do {
+            _ = try await client.sessionFacts("http://192.168.0.180:8080")
+            XCTFail("it was asked")
+        } catch let error as ArmorApiError {
+            XCTAssertNil(error.status)
+            XCTAssertTrue(error.message.contains("refused"))
+        }
+    }
     func testIsAway() throws {
         XCTAssertTrue(Reach.isAway(try XCTUnwrap(both.endpoints.away), installation: both))
         XCTAssertFalse(Reach.isAway(try XCTUnwrap(both.endpoints.home), installation: both))
     }
     func testEveryProblemHasWords() {
-        for problem in [ReachProblem.noAddress, .offline, .homeUnreachableNoRemote, .remoteUnreachable, .bothUnreachable, .certificateChanged] {
+        for problem in [ReachProblem.noAddress, .offline, .homeUnreachableNoRemote, .remoteUnreachable, .bothUnreachable, .certificateChanged, .plainAfterSecure] {
             XCTAssertFalse(problem.message(t).isEmpty)
         }
     }
