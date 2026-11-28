@@ -6,7 +6,7 @@
 # The baseline workflow (ci.yml) checks the manifest, the documents, the eight language tables and
 # the structure of the project on Linux. This one runs the unit tests of the Swift package, which
 # need a Swift toolchain, on macOS. Building the app itself needs Xcode and a project made by
-# XcodeGen; that job runs only when asked for (Run workflow), so it costs nothing on every push.
+# XcodeGen; that job runs on every pull request and when asked for (Run workflow), so an app that does not compile is seen before it reaches main.
 name: Swift tests
 
 on:
@@ -52,7 +52,7 @@ jobs:
 
   app-build:
     name: Build the app for the simulator
-    if: ${{ github.event_name == 'workflow_dispatch' && inputs.build_app }}
+    if: ${{ github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && inputs.build_app) }}
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
