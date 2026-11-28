@@ -1294,5 +1294,18 @@
  "Una batería solar tiene un fallo de su electrónica (BMS)": "A solar battery reports a fault of its electronics (BMS)",
  "Este servidor ya respondió por https: no se usa http sin cifrar con él. Escribe la dirección con https://, o cambia la dirección en los ajustes para olvidarlo.": "This server has already answered over https: plain http is not used with it. Write the address with https://, or change the address in the settings to forget it.",
  "No usar http sin cifrar con un servidor que ya respondió por https": "Do not use plain http with a server that has already answered over https",
- "Esta batería no responde a su ficha (modelo, capacidad nominal, historial). Sus celdas y su carga sí se leen; el nodo vuelve a pedirla cada pocos minutos.": "This battery does not answer its data sheet (model, rated capacity, history). Its cells and charge are read; the node asks again every few minutes."
+ "Esta batería no responde a su ficha (modelo, capacidad nominal, historial). Sus celdas y su carga sí se leen; el nodo vuelve a pedirla cada pocos minutos.": "This battery does not answer its data sheet (model, rated capacity, history). Its cells and charge are read; the node asks again every few minutes.",
+ "Energía de los paneles": "Energy of the panels",
+ "Energía consumida": "Energy used",
+ "hoy %s": "today %s",
+ "este mes %s": "this month %s",
+ "este año %s": "this year %s",
+ "en total %s": "in all %s",
+ "Según la pila": "As the stack says",
+ "estado de carga %s": "state of charge %s",
+ "salud %s": "health %s",
+ "Límites recomendados": "Recommended limits",
+ "al cargar %s": "charging %s",
+ "al descargar %s": "discharging %s",
+ "Módulos dormidos": "Modules asleep"
 }

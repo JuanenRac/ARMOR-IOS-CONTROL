@@ -199,6 +199,10 @@ private struct InverterSection: View {
             ValueLine(label: model.tr("Batería"), value: SolarText.percent(r.batteryPercent) + " · " + SolarText.volts(r.batteryV, 2) + " · " + SolarText.amps(r.batteryA),
                       color: socColor(r.batteryPercent.map { Int($0.rounded()) }))
             ValueLine(label: model.tr("Temperatura"), value: SolarText.celsius(r.heatsinkC))
+            if let e = r.energy {
+                if let panels = SolarText.periods(e.pvTodayWh, e.pvMonthWh, e.pvYearWh, e.pvTotalWh, model.translator) { ValueLine(label: model.tr("Energía de los paneles"), value: panels) }
+                if let used = SolarText.periods(e.loadTodayWh, e.loadMonthWh, e.loadYearWh, e.loadTotalWh, model.translator) { ValueLine(label: model.tr("Energía consumida"), value: used) }
+            }
             if !r.units.isEmpty {
                 ValueLine(label: model.tr("Sistema en paralelo"), value: model.trf("%s unidades", r.units.count) + (r.totalOutW.map { " · " + SolarText.watts($0) } ?? ""))
                 ForEach(r.units, id: \.unit) { unit in
@@ -259,6 +263,11 @@ private struct SolarBatterySection: View {
                 if r.capacityAh != nil { ValueLine(label: model.tr("Capacidad"), value: capacityLine(r)) }
                 if let cycles = r.cycles { ValueLine(label: model.tr("Ciclos"), value: String(cycles)) }
                 if let health = r.healthPercent { ValueLine(label: model.tr("Salud (capacidad frente a nueva)"), value: "\(health) %") }
+                if let says = r.stackSays {
+                    if let figures = SolarText.stackFigures(says, model.translator) { ValueLine(label: model.tr("Según la pila"), value: figures) }
+                    if let limits = SolarText.stackLimits(says, model.translator) { ValueLine(label: model.tr("Límites recomendados"), value: limits) }
+                    if let asleep = says.modulesAsleep, asleep > 0 { ValueLine(label: model.tr("Módulos dormidos"), value: String(asleep)) }
+                }
                 if let bank = device.dayCells?.bankDeltaV, bank > 0 {
                     let mv = Int((bank * 1000).rounded())
                     ValueLine(label: model.tr("Mayor diferencia hoy (banco)"), value: "\(mv) mV", color: mv > 100 ? Theme.amber : Color.white)
