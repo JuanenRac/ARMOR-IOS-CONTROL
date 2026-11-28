@@ -28,11 +28,11 @@ final class BatteryStatesTests: XCTestCase {
     func testAModuleThatDoesNotAnswerItsDataSheetIsSaidSo() throws {
         let told = "{\"n\":1,\"present\":true,\"cells_v\":[3.31,3.32],\"cycles\":12,\"soft_version\":\"V2.4\"}"
         let mute = "{\"n\":2,\"present\":true,\"cells_v\":[3.31,3.32]}"
-        let text = "{\"devices\":[{\"node_id\":\"n\",\"device\":\"b\",\"kind\":\"battery\",\"reading\":{\"modules\":2,\"stack\":[(told),(mute)]}}]}"
+        let text = "{\"devices\":[{\"node_id\":\"n\",\"device\":\"b\",\"kind\":\"battery\",\"reading\":{\"modules\":2,\"stack\":[\(told),\(mute)]}}]}"
         let json = try XCTUnwrap(try JSONSerialization.jsonObject(with: Data(text.utf8)) as? [String: Any])
         let reading = try XCTUnwrap(SolarParser.overview(json).devices.first?.battery)
         let bank = SolarCells.bank(deviceModel: "pylontech-us2000", reading: reading, settings: SolarViewSettings())
-        XCTAssertEqual(bank.modules.map(.trouble.noSheet), [false, true])
+        XCTAssertEqual(bank.modules.map(\.trouble.noSheet), [false, true])
         XCTAssertFalse(SolarCells.sheetUnanswered(reading.stack[1], in: [reading.stack[1]]))
     }
 }
