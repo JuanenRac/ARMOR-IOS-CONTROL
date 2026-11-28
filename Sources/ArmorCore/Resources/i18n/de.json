@@ -1307,5 +1307,6 @@
  "Límites recomendados": "Empfohlene Grenzwerte",
  "al cargar %s": "beim Laden %s",
  "al descargar %s": "beim Entladen %s",
- "Módulos dormidos": "Schlafende Module"
+ "Módulos dormidos": "Schlafende Module",
+ "El servidor rechaza las lecturas que envía %s, así que lo que se ve de él está atrasado o falta. Motivo: %s. Comprueba que el servidor está al día.": "Der Server weist die Messwerte ab, die %s sendet; was dafür angezeigt wird, ist deshalb alt oder fehlt. Grund: %s. Prüfen Sie, ob der Server aktuell ist."
 }

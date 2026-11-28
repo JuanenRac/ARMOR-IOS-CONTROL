@@ -1307,5 +1307,6 @@
  "Límites recomendados": "推奨制限値",
  "al cargar %s": "充電時 %s",
  "al descargar %s": "放電時 %s",
- "Módulos dormidos": "スリープ中のモジュール"
+ "Módulos dormidos": "スリープ中のモジュール",
+ "El servidor rechaza las lecturas que envía %s, así que lo que se ve de él está atrasado o falta. Motivo: %s. Comprueba que el servidor está al día.": "サーバーが %s の送る測定値を拒否しているため、表示は古いか欠けています。理由：%s。サーバーが最新か確認してください。"
 }

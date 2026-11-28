@@ -1307,5 +1307,6 @@
  "Límites recomendados": "Recommended limits",
  "al cargar %s": "charging %s",
  "al descargar %s": "discharging %s",
- "Módulos dormidos": "Modules asleep"
+ "Módulos dormidos": "Modules asleep",
+ "El servidor rechaza las lecturas que envía %s, así que lo que se ve de él está atrasado o falta. Motivo: %s. Comprueba que el servidor está al día.": "The server refuses the readings that %s sends, so what is shown for it is old or missing. Reason: %s. Check that the server is up to date."
 }

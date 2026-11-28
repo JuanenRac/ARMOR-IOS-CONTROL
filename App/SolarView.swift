@@ -7,10 +7,12 @@ import ArmorCore
 @MainActor
 final class SolarState: ObservableObject {
     @Published var overview: SolarOverview?
+    @Published var refused: [RefusedBattery] = []
 
     func load(model: AppModel) async {
         guard let origin = model.activeOrigin else { return }
         if let value = try? await model.controller.api.solar(origin) { overview = value }
+        if let value = try? await model.controller.api.refusedBatteries(origin) { refused = value }
     }
 
     /// Asks again until the screen goes away (the task is cancelled with it).
@@ -61,6 +63,14 @@ struct SolarView: View {
         List {
             NodeFinderPanel(knownIds: (solar.overview?.devices.map(\.nodeId) ?? []) + (solar.overview?.waiting.map(\.nodeId) ?? []))
             Section { Text(headline).font(.footnote).foregroundColor(Theme.muted) }.listRowBackground(Theme.surface)
+            if !solar.refused.isEmpty {
+                Section {
+                    ForEach(solar.refused, id: \.name) { stack in
+                        Text(model.trf("El servidor rechaza las lecturas que envía %s, así que lo que se ve de él está atrasado o falta. Motivo: %s. Comprueba que el servidor está al día.", stack.name, stack.reason))
+                            .font(.footnote).foregroundColor(Theme.danger)
+                    }
+                }.listRowBackground(Theme.surface)
+            }
             if let data = solar.overview {
                 if data.isEmpty {
                     Section {
