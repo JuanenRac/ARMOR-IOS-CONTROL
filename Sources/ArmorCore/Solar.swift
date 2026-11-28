@@ -45,6 +45,20 @@ public struct SolarInverterReading: Equatable, Sendable {
     public let totalOutW: Double?
     /// Who made it ("" when not known) and whether its protocol or model tells it instead of the equipment.
     public var manufacturer: String = "", manufacturerDeduced: Bool = false
+    /// The energy the inverter counts itself; nil when it said none.
+    public var energy: EnergyCounters? = nil
+}
+
+/// The energy an inverter counts, in watt-hours: of its panels and of its load, today, this month, this year and in all.
+public struct EnergyCounters: Equatable, Sendable {
+    public var pvTodayWh: Double? = nil, pvMonthWh: Double? = nil, pvYearWh: Double? = nil, pvTotalWh: Double? = nil
+    public var loadTodayWh: Double? = nil, loadMonthWh: Double? = nil, loadYearWh: Double? = nil, loadTotalWh: Double? = nil
+}
+
+/// What the first battery of a Pylontech stack says of the whole stack, with the limits it recommends.
+public struct StackSays: Equatable, Sendable {
+    public var socPercent: Int? = nil, healthPercent: Int? = nil, modulesAsleep: Int? = nil
+    public var chargeVoltageV: Double? = nil, chargeCurrentA: Double? = nil, dischargeVoltageV: Double? = nil, dischargeCurrentA: Double? = nil
 }
 
 /// A state of a battery module or of one of its cells (from 0) that is not the normal one, with the battery's own word.
@@ -115,6 +129,7 @@ public struct SolarBatteryReading: Equatable, Sendable {
     /// `fullCapacityAh` counts a battery that has not said its own as the others.
     public let fullEstimated: Bool
     public var manufacturer: String = "", manufacturerDeduced: Bool = false
+    public var stackSays: StackSays? = nil
     /// Watts at the battery: positive while charging.
     public var powerW: Double? { if let voltageV, let currentA { return voltageV * currentA }; return nil }
 }
@@ -249,7 +264,22 @@ public enum SolarParser {
                                     batteryV: r.double("battery_v"), batteryA: r.double("battery_a"), batteryPercent: r.double("battery_percent"), pvV: r.double("pv_v"), pvA: r.double("pv_a"), pvW: r.double("pv_w"), heatsinkC: r.double("heatsink_c"),
                                     acCharging: r.bool("ac_charging"), pvCharging: r.bool("pv_charging"), loadOn: r.bool("load_on"), warnings: strings(r["warnings"]),
                                     pv2V: r.double("pv2_v"), pv2A: r.double("pv2_a"), pv2W: r.double("pv2_w"), units: units, totalOutW: r.double("total_out_w"),
-                                    manufacturer: r.str("manufacturer"), manufacturerDeduced: r.str("manufacturer_source") == "deduced")
+                                    manufacturer: r.str("manufacturer"), manufacturerDeduced: r.str("manufacturer_source") == "deduced", energy: energy(r))
+    }
+
+    private static func energy(_ r: JSON) -> EnergyCounters? {
+        let e = r.object("energy")
+        let counters = EnergyCounters(pvTodayWh: e?.double("pv_today_wh"), pvMonthWh: e?.double("pv_month_wh"), pvYearWh: e?.double("pv_year_wh"), pvTotalWh: r.double("pv_energy_total_wh"),
+                                      loadTodayWh: e?.double("load_today_wh"), loadMonthWh: e?.double("load_month_wh"), loadYearWh: e?.double("load_year_wh"), loadTotalWh: e?.double("load_total_wh"))
+        return counters == EnergyCounters() ? nil : counters
+    }
+
+    private static func stackSays(_ s: JSON?) -> StackSays? {
+        guard let s else { return nil }
+        let says = StackSays(socPercent: whole(s, "soc_percent"), healthPercent: whole(s, "health_percent"), modulesAsleep: whole(s, "modules_sleep"),
+                             chargeVoltageV: s.double("charge_voltage_v"), chargeCurrentA: s.double("charge_current_a"),
+                             dischargeVoltageV: s.double("discharge_voltage_v"), dischargeCurrentA: s.double("discharge_current_a"))
+        return says == StackSays() ? nil : says
     }
 
     private static func module(_ m: JSON) -> SolarModule {
@@ -280,7 +310,7 @@ public enum SolarParser {
                             temperatureMaxC: r.double("temperature_max_c"), cellMinV: r.double("cell_min_v"), cellMaxV: r.double("cell_max_v"), socPercent: whole(r, "soc_percent"), alarm: r.bool("alarm"),
                             capacityAh: r.double("capacity_ah"), fullCapacityAh: full, energyKwh: r.double("energy_kwh"), cycles: whole(r, "cycles"),
                             stack: stack, healthPercent: whole(r, "health_percent"), fullEstimated: each != nil,
-                            manufacturer: r.str("manufacturer"), manufacturerDeduced: r.str("manufacturer_source") == "deduced")
+                            manufacturer: r.str("manufacturer"), manufacturerDeduced: r.str("manufacturer_source") == "deduced", stackSays: stackSays(r.object("bms_system")))
     }
 }
 
@@ -415,6 +445,29 @@ public enum SolarText {
     public static func celsius(_ value: Double?) -> String { value.map { String(format: "%.0f °C", $0) } ?? "—" }
     public static func ah(_ value: Double?) -> String { value.map { String(format: "%.1f Ah", $0) } ?? "—" }
     public static func cell(_ value: Double) -> String { String(format: "%.3f", value) }
+
+    public static func kwh(_ wattHours: Double) -> String { String(format: "%.1f kWh", wattHours / 1000) }
+
+    /// "hoy 1.2 kWh · este mes 30.0 kWh": only the periods that were said; nil when none was.
+    public static func periods(_ today: Double?, _ month: Double?, _ year: Double?, _ total: Double?, _ t: Translator) -> String? {
+        let said = [today.map { t.trf("hoy %s", kwh($0)) }, month.map { t.trf("este mes %s", kwh($0)) }, year.map { t.trf("este año %s", kwh($0)) }, total.map { t.trf("en total %s", kwh($0)) }].compactMap { $0 }
+        return said.isEmpty ? nil : said.joined(separator: " · ")
+    }
+
+    public static func stackFigures(_ says: StackSays, _ t: Translator) -> String? {
+        let said = [says.socPercent.map { t.trf("estado de carga %s", percent($0)) }, says.healthPercent.map { t.trf("salud %s", percent($0)) }].compactMap { $0 }
+        return said.isEmpty ? nil : said.joined(separator: " · ")
+    }
+
+    public static func stackLimits(_ says: StackSays, _ t: Translator) -> String? {
+        func limit(_ v: Double?, _ a: Double?) -> String? {
+            let parts = [v.map { Self.volts($0) }, a.map { Self.amps($0) }].compactMap { $0 }
+            return parts.isEmpty ? nil : parts.joined(separator: ", ")
+        }
+        let said = [limit(says.chargeVoltageV, says.chargeCurrentA).map { t.trf("al cargar %s", $0) },
+                    limit(says.dischargeVoltageV, says.dischargeCurrentA).map { t.trf("al descargar %s", $0) }].compactMap { $0 }
+        return said.isEmpty ? nil : said.joined(separator: " · ")
+    }
 
     /// What the batteries do as one short phrase: "Cargando · 340 W".
     public static func batteryFlow(_ watts: Double?, _ t: Translator) -> String {

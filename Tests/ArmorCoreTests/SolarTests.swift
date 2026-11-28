@@ -21,6 +21,19 @@ final class SolarTests: XCTestCase {
     "totals":{"inverters":1,"batteries":1,"stale":0,"pv_w":1200,"load_w":420,"battery_w":-512.5,"soc_percent":79.6,"grid_present":true,"mode":"line","energy_kwh":4.25}}
     """
 
+    func testTheCountersOfTheEquipmentAreReadAndWordedOnlyWhenSaid() throws {
+        let t = Translator(language: "es", loader: { _ in [:] })
+        let inverter = try XCTUnwrap(SolarParser.device(json("{\"node_id\":\"a\",\"device\":\"b\",\"kind\":\"inverter\",\"reading\":{\"mode\":\"line\",\"pv_energy_total_wh\":1234567,\"energy\":{\"pv_today_wh\":1200}}}"))?.inverter)
+        let energy = try XCTUnwrap(inverter.energy)
+        XCTAssertEqual(SolarText.periods(energy.pvTodayWh, nil, nil, energy.pvTotalWh, t), "hoy 1.2 kWh · en total 1234.6 kWh")
+        XCTAssertNil(SolarText.periods(nil, nil, nil, nil, t))
+        XCTAssertNil(SolarParser.device(json("{\"node_id\":\"a\",\"device\":\"b\",\"kind\":\"inverter\",\"reading\":{\"mode\":\"line\"}}"))?.inverter?.energy)
+        let battery = try XCTUnwrap(SolarParser.device(json("{\"node_id\":\"a\",\"device\":\"c\",\"kind\":\"battery\",\"reading\":{\"modules\":1,\"stack\":[],\"bms_system\":{\"soc_percent\":80,\"health_percent\":97,\"charge_voltage_v\":53.2,\"charge_current_a\":50}}}"))?.battery)
+        let says = try XCTUnwrap(battery.stackSays)
+        XCTAssertEqual(SolarText.stackFigures(says, t), "estado de carga 80 % · salud 97 %")
+        XCTAssertEqual(SolarText.stackLimits(says, t), "al cargar 53.2 V, 50.0 A")
+    }
+
     func testABatteryThatHasNotSaidItsCapacityCountsAsTheOthersWhenTheyAreAllAlike() throws {
         func overview(_ withSheet: Set<Int>, _ other: String = "") -> SolarOverview {
             let stack = (1...8).map { n -> String in

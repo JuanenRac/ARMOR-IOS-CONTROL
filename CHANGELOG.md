@@ -4,6 +4,8 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+- **The solar screen shows what the equipment counts:** the energy of the panels and of the load (today, month, year and total) that an inverter counts, and what a battery stack says of itself with its recommended limits and modules asleep, each only when said.
+
 ## [0.1.0] - The iPhone app compiles again and refuses plain http after https
 
 - **The copy of the shared contract follows the new solar messages:** `ArmorContract.swift` is again what ARMOR-COMMON generates, with the stack totals of a battery and the counters and settings of an inverter; the screens do not show them yet.

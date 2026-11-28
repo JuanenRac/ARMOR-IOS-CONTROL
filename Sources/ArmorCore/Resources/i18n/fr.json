@@ -1294,5 +1294,18 @@
  "Una batería solar tiene un fallo de su electrónica (BMS)": "Une batterie solaire signale une panne de son électronique (BMS)",
  "Este servidor ya respondió por https: no se usa http sin cifrar con él. Escribe la dirección con https://, o cambia la dirección en los ajustes para olvidarlo.": "Ce serveur a déjà répondu en https : le http non chiffré n'est pas utilisé avec lui. Écrivez l'adresse avec https://, ou changez l'adresse dans les réglages pour l'oublier.",
  "No usar http sin cifrar con un servidor que ya respondió por https": "Ne pas utiliser le http non chiffré avec un serveur qui a déjà répondu en https",
- "Esta batería no responde a su ficha (modelo, capacidad nominal, historial). Sus celdas y su carga sí se leen; el nodo vuelve a pedirla cada pocos minutos.": "Cette batterie ne répond pas à sa fiche (modèle, capacité nominale, historique). Ses cellules et sa charge sont lues ; le nœud la redemande toutes les quelques minutes."
+ "Esta batería no responde a su ficha (modelo, capacidad nominal, historial). Sus celdas y su carga sí se leen; el nodo vuelve a pedirla cada pocos minutos.": "Cette batterie ne répond pas à sa fiche (modèle, capacité nominale, historique). Ses cellules et sa charge sont lues ; le nœud la redemande toutes les quelques minutes.",
+ "Energía de los paneles": "Énergie des panneaux",
+ "Energía consumida": "Énergie consommée",
+ "hoy %s": "aujourd'hui %s",
+ "este mes %s": "ce mois %s",
+ "este año %s": "cette année %s",
+ "en total %s": "au total %s",
+ "Según la pila": "Selon la pile",
+ "estado de carga %s": "état de charge %s",
+ "salud %s": "santé %s",
+ "Límites recomendados": "Limites recommandées",
+ "al cargar %s": "en charge %s",
+ "al descargar %s": "en décharge %s",
+ "Módulos dormidos": "Modules en veille"
 }

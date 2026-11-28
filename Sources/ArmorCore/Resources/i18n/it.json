@@ -1294,5 +1294,18 @@
  "Una batería solar tiene un fallo de su electrónica (BMS)": "Una batteria solare segnala un guasto della sua elettronica (BMS)",
  "Este servidor ya respondió por https: no se usa http sin cifrar con él. Escribe la dirección con https://, o cambia la dirección en los ajustes para olvidarlo.": "Questo server ha già risposto in https: con lui non si usa l'http non cifrato. Scrivi l'indirizzo con https://, oppure cambia l'indirizzo nelle impostazioni per dimenticarlo.",
  "No usar http sin cifrar con un servidor que ya respondió por https": "Non usare l'http non cifrato con un server che ha già risposto in https",
- "Esta batería no responde a su ficha (modelo, capacidad nominal, historial). Sus celdas y su carga sí se leen; el nodo vuelve a pedirla cada pocos minutos.": "Questa batteria non risponde alla sua scheda (modello, capacità nominale, storico). Celle e carica vengono lette; il nodo la richiede ogni pochi minuti."
+ "Esta batería no responde a su ficha (modelo, capacidad nominal, historial). Sus celdas y su carga sí se leen; el nodo vuelve a pedirla cada pocos minutos.": "Questa batteria non risponde alla sua scheda (modello, capacità nominale, storico). Celle e carica vengono lette; il nodo la richiede ogni pochi minuti.",
+ "Energía de los paneles": "Energia dei pannelli",
+ "Energía consumida": "Energia consumata",
+ "hoy %s": "oggi %s",
+ "este mes %s": "questo mese %s",
+ "este año %s": "quest'anno %s",
+ "en total %s": "in totale %s",
+ "Según la pila": "Secondo il pacco",
+ "estado de carga %s": "stato di carica %s",
+ "salud %s": "salute %s",
+ "Límites recomendados": "Limiti consigliati",
+ "al cargar %s": "in carica %s",
+ "al descargar %s": "in scarica %s",
+ "Módulos dormidos": "Moduli in riposo"
 }
