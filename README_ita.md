@@ -23,7 +23,7 @@
   <img src="https://img.shields.io/badge/UI-SwiftUI-0a84ff.svg" alt="UI">
   <img src="https://img.shields.io/badge/Languages-8-00E5FF.svg" alt="Lingue">
   <img src="https://img.shields.io/badge/Tests-555%20passing-2ea44f.svg" alt="Test">
-  <img src="https://img.shields.io/badge/Version-0.0.9-0f6cbd.svg" alt="Versione">
+  <img src="https://img.shields.io/badge/Version-0.1.0-0f6cbd.svg" alt="Versione">
   <img src="https://img.shields.io/badge/Maturity-scaffolding-FFB020.svg" alt="Maturità">
 </p>
 
@@ -37,7 +37,7 @@
 
 | | |
 |---|---|
-| Versione | `0.0.9` |
+| Versione | `0.1.0` |
 | Maturità | Impalcatura |
 | Ruolo | Client operatore per iPhone di ARMOR-SERVER (famiglia: Clients, padre: ARMOR-SERVER) |
 | Tecnologia | Swift 5.9+ / SwiftUI, iOS 16+ |
@@ -256,7 +256,7 @@ Il README e i testi esistono in inglese, spagnolo, francese, italiano, tedesco, 
 * **[ARMOR-NODE-ELECTRICAL](https://github.com/JuanenRac/ARMOR-NODE-ELECTRICAL)** - Nodo elettrico: contatori, il messaggio delle letture della rete e le regole di manovra
 * **[ARMOR-NODE-ALARM](https://github.com/JuanenRac/ARMOR-NODE-ALARM)** - Nodo e centrale d'allarme: zone, inserimento, ritardi, sirena e PIN, con il server o senza
 * **[ARMOR-NODE-HMI](https://github.com/JuanenRac/ARMOR-NODE-HMI)** - Pannello touch: lo stato del sistema su uno schermo a parete, attivare e riconoscere gli allarmi, e la casa dell'assistente vocale
-* **[ARMOR-NODE-SOLAR-HMI](https://github.com/JuanenRac/ARMOR-NODE-SOLAR-HMI)** - Schermo touch solare: batterie e inverter come li conosce ARMOR-SERVER (fase iniziale: ancora senza firmware)
+* **[ARMOR-NODE-SOLAR-HMI](https://github.com/JuanenRac/ARMOR-NODE-SOLAR-HMI)** - Schermo touch solare: batterie e inverter come li conosce ARMOR-SERVER (fase iniziale: un firmware compila, mai eseguito su una scheda)
 * **[ARMOR-NETWORK](https://github.com/JuanenRac/ARMOR-NETWORK)** - La rete locale: i suoi dispositivi, internet e ciò che cambia
 * **[ARMOR-SERVER](https://github.com/JuanenRac/ARMOR-SERVER)** - Coordinatore centrale: telemetria, allarmi, dispositivi, letture solari e telecamere
 * **[ARMOR-STUDIO](https://github.com/JuanenRac/ARMOR-STUDIO)** - Console web: telecamere, radar, allarmi, energia solare e progettista del sito 2D/3D

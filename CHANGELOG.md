@@ -4,10 +4,11 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+## [0.1.0] - The iPhone app compiles again and refuses plain http after https
+
+- **The copy of the shared contract follows the new solar messages:** `ArmorContract.swift` is again what ARMOR-COMMON generates, with the stack totals of a battery and the counters and settings of an inverter; the screens do not show them yet.
 - **A battery that does not answer its data sheet is said so:** as in Studio and on the node's panel, a module whose cells are read but that says no model, capacity or history, in a stack where another does, carries a line about it.
-
 - **The iPhone app compiles again:** the battery card used the name of a state of the app where the one of the core was meant, since the three levels of battery states were added; the app is now also built on every pull request.
-
 - **Plain http is refused after https, as in the Android app:** once a server has answered over https the app does not send anything to that host over plain http, and says why. It is forgotten when the address is changed in the settings or the kept certificates are forgotten, and a switch next to the certificate settings turns it off. Tested without a device.
 
 ## [0.0.9] - Battery states and makers, one notice per battery problem

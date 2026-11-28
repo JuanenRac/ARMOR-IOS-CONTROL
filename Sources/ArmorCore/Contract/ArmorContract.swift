@@ -188,10 +188,10 @@ public enum Contract {
         "node_maintenance": #"{"type":"object","additionalProperties":false,"required":["kind","node_id","timestamp_ms","active","reason","firmware"],"properties":{"kind":{"type":"string","const":"node_maintenance"},"node_id":{"type":"string","pattern":"^[a-z0-9][a-z0-9_-]{0,63}(?![\\s\\S])"},"timestamp_ms":{"type":"integer","minimum":0},"active":{"type":"boolean"},"reason":{"type":"string","enum":["restart","pause","standby","update","upload","operator"]},"expected_s":{"type":"integer","minimum":1,"maximum":3600},"firmware":{"type":"string","pattern":"^[0-9]+[.][0-9]+[.][0-9]+([.][0-9]+)?(?![\\s\\S])"},"requested_by":{"type":"string","pattern":"^[A-Za-z0-9._@ -]{1,64}(?![\\s\\S])"}}}"#,
         "radar_event": #"{"type":"object","additionalProperties":false,"required":["kind","node_id","timestamp_ms","boot","seq","event"],"properties":{"kind":{"type":"string","const":"radar_event"},"node_id":{"type":"string","pattern":"^[a-z0-9][a-z0-9_-]{0,63}(?![\\s\\S])"},"timestamp_ms":{"type":"integer","minimum":0},"boot":{"type":"integer","minimum":0,"maximum":4294967295},"seq":{"type":"integer","minimum":1,"maximum":4294967295},"event":{"type":"string","enum":["zone_occupied","zone_clear","loiter","tripwire","path_violation","masking","masking_end","sensor_bluetooth_open","sensor_bluetooth_closed","wifi_jam","wifi_jam_end","bridge_opened","bridge_closed"]},"name":{"type":"string","minLength":1,"maxLength":24},"sensor_id":{"type":"integer","minimum":1,"maximum":3},"track_id":{"type":"integer","minimum":1,"maximum":255},"movement":{"type":"string","enum":["still","walking","running"]},"value":{"type":"integer","minimum":0},"count":{"type":"integer","minimum":0},"direction":{"type":"string","enum":["in","out"]},"from":{"type":"string","minLength":1,"maxLength":24},"by":{"type":"string","pattern":"^[A-Za-z0-9._-]{1,32}(?![\\s\\S])"}}}"#,
         "server_alert": #"{"type":"object","additionalProperties":false,"required":["service","event","at","mode"],"properties":{"service":{"type":"string","const":"armor-server"},"event":{"type":"string","enum":["alert.raised","alert.cleared","node.offline","node.stale","camera.offline","alarm.raised","alarm.escalated","automation.notify","login.remote","alert.test"]},"at":{"type":"string","minLength":1,"maxLength":40},"mode":{"type":"string","enum":["armed","disarmed"]},"node_id":{"type":"string","pattern":"^[a-z0-9][a-z0-9_-]{0,63}(?![\\s\\S])"},"camera_id":{"type":"string","minLength":1,"maxLength":80},"targets":{"type":"integer","minimum":0},"minutes":{"type":"integer","minimum":0},"alarm_id":{"type":"string","minLength":1,"maxLength":80},"severity":{"type":"string","enum":["critical","high","warning"]},"code":{"type":"string","pattern":"^[a-z][a-z0-9_]{0,63}(?![\\s\\S])"},"device_id":{"type":"string","minLength":1,"maxLength":80},"solar_id":{"type":"string","minLength":1,"maxLength":80},"electrical_id":{"type":"string","minLength":1,"maxLength":80},"alarm_node_id":{"type":"string","pattern":"^[a-z0-9][a-z0-9_-]{0,63}(?![\\s\\S])"},"network_id":{"type":"string","minLength":1,"maxLength":80},"silent":{"type":"boolean","const":true},"automation":{"type":"string","minLength":1,"maxLength":80},"login_user":{"type":"string","minLength":1,"maxLength":80},"login_from":{"type":"string","minLength":1,"maxLength":64},"login_country":{"type":"string","pattern":"^[A-Z]{2}(?![\\s\\S])"},"login_country_new":{"type":"boolean","const":true}}}"#,
-        "solar_battery": #"{"type":"object","additionalProperties":false,"required":["kind","node_id","device","timestamp_ms","modules","stack"],"properties":{"kind":{"type":"string","const":"battery"},"node_id":{"type":"string","pattern":"^[a-z0-9][a-z0-9_-]{0,63}(?![\\s\\S])"},"device":{"type":"string","pattern":"^[a-z0-9][a-z0-9_-]{0,31}(?![\\s\\S])"},"timestamp_ms":{"type":"integer","minimum":0},"modules":{"type":"integer","minimum":0,"maximum":16},"state":{"type":"string","enum":["charging","discharging","idle"]},"voltage_v":{"type":"number","minimum":0,"maximum":1000},"current_a":{"type":"number","minimum":-16000,"maximum":16000},"temperature_min_c":{"type":"number","minimum":-50,"maximum":200},"temperature_max_c":{"type":"number","minimum":-50,"maximum":200},"cell_min_v":{"type":"number","minimum":0,"maximum":10},"cell_max_v":{"type":"number","minimum":0,"maximum":10},"soc_percent":{"type":"integer","minimum":0,"maximum":100},"alarm":{"type":"boolean"},"stack":{"type":"array","maxItems":16,"items":{"type":"object","additionalProperties":false,"required":["n","present"],"properties":{"n":{"type":"integer","minimum":1,"maximum":16},"present":{"type":"boolean"},"voltage_v":{"type":"number","minimum":0,"maximum":1000},"current_a":{"type":"number","minimum":-1000,"maximum":1000},"temperature_c":{"type":"number","minimum":-50,"maximum":200},"soc_percent":{"type":"integer","minimum":0,"maximum":100},"state":{"type":"string","minLength":1,"maxLength":16},"cells_v":{"type":"array","maxItems":32,"items":{"type":"number","minimum":0,"maximum":10}},"counters":{"type":"object","maxProperties":48,"propertyNames":{"pattern":"^[a-z][a-z0-9_]{0,31}(?![\\s\\S])"},"additionalProperties":{"type":"integer","minimum":0,"maximum":9999999999}},"temperatures_c":{"type":"array","maxItems":8,"items":{"type":"number","minimum":-50,"maximum":200}},"capacity_ah":{"type":"number","minimum":0,"maximum":100000},"full_capacity_ah":{"type":"number","minimum":0,"maximum":100000},"cycles":{"type":"integer","minimum":0,"maximum":1000000},"health_percent":{"type":"integer","minimum":0,"maximum":100},"model":{"type":"string","minLength":1,"maxLength":24},"cell_count":{"type":"integer","minimum":1,"maximum":32},"max_charge_a":{"type":"number","minimum":0,"maximum":1000},"max_discharge_a":{"type":"number","minimum":0,"maximum":1000},"console_baud":{"type":"integer","minimum":300,"maximum":1000000},"soh_counts":{"type":"array","maxItems":32,"items":{"type":"integer","minimum":0,"maximum":1000000}},"soh_abnormal":{"type":"array","maxItems":32,"items":{"type":"integer","minimum":0,"maximum":31}},"last_event":{"type":"object","additionalProperties":false,"required":["index","time"],"properties":{"index":{"type":"integer","minimum":0,"maximum":1000000},"time":{"type":"string","minLength":1,"maxLength":40},"voltage_v":{"type":"number","minimum":0,"maximum":1000},"current_a":{"type":"number","minimum":-1000,"maximum":1000},"temperature_c":{"type":"number","minimum":-50,"maximum":200},"percent":{"type":"integer","minimum":0,"maximum":100},"base_state":{"type":"string","minLength":1,"maxLength":40},"voltage_state":{"type":"string","minLength":1,"maxLength":40},"current_state":{"type":"string","minLength":1,"maxLength":40},"temperature_state":{"type":"string","minLength":1,"maxLength":40},"coulomb_state":{"type":"string","minLength":1,"maxLength":40},"power_events":{"type":"string","minLength":1,"maxLength":40},"battery_events":{"type":"string","minLength":1,"maxLength":40},"system_fault":{"type":"string","minLength":1,"maxLength":40}}},"flags":{"type":"array","maxItems":48,"items":{"type":"object","additionalProperties":false,"required":["column","word"],"properties":{"column":{"type":"string","enum":["base","voltage","current","temperature","cell_voltage","cell_temperature","mosfet_temperature","system"]},"word":{"type":"string","minLength":1,"maxLength":16},"cell":{"type":"integer","minimum":0,"maximum":31}}}},"left_out":{"type":"array","maxItems":12,"items":{"type":"string","enum":["voltage","current","temperature","temperatures","cells","soc","capacity","cycles","health","limits","cell_count"]}},"cells_unread":{"type":"array","maxItems":32,"items":{"type":"integer","minimum":0,"maximum":31}},"manufacturer":{"type":"string","minLength":1,"maxLength":32},"manufacturer_source":{"type":"string","enum":["reported","deduced"]},"serial":{"type":"string","pattern":"^[A-Za-z0-9_-]{1,24}(?![\\s\\S])"},"board":{"type":"string","pattern":"^[A-Za-z0-9._-]{1,16}(?![\\s\\S])"},"chip":{"type":"string","enum":["older","newer","unknown"]},"specification":{"type":"string","minLength":1,"maxLength":24},"boot_version":{"type":"string","minLength":1,"maxLength":24},"comm_version":{"type":"string","minLength":1,"maxLength":24},"release_date":{"type":"string","minLength":1,"maxLength":24},"board_version":{"type":"string","minLength":1,"maxLength":24},"main_soft_version":{"type":"string","minLength":1,"maxLength":24},"soft_version":{"type":"string","minLength":1,"maxLength":24}}}},"manufacturer":{"type":"string","minLength":1,"maxLength":32},"manufacturer_source":{"type":"string","enum":["reported","deduced"]},"model":{"type":"string","minLength":1,"maxLength":24},"capacity_ah":{"type":"number","minimum":0,"maximum":100000},"full_capacity_ah":{"type":"number","minimum":0,"maximum":100000},"energy_kwh":{"type":"number","minimum":0,"maximum":10000},"cycles":{"type":"integer","minimum":0,"maximum":1000000},"health_percent":{"type":"integer","minimum":0,"maximum":100},"power_w":{"type":"number","minimum":-1000000,"maximum":1000000},"balancing":{"type":"integer","minimum":0,"maximum":512},"protecting":{"type":"boolean"},"charge_mos":{"type":"integer","minimum":0,"maximum":255},"discharge_mos":{"type":"integer","minimum":0,"maximum":255}}}"#,
+        "solar_battery": #"{"type":"object","additionalProperties":false,"required":["kind","node_id","device","timestamp_ms","modules","stack"],"properties":{"kind":{"type":"string","const":"battery"},"node_id":{"type":"string","pattern":"^[a-z0-9][a-z0-9_-]{0,63}(?![\\s\\S])"},"device":{"type":"string","pattern":"^[a-z0-9][a-z0-9_-]{0,31}(?![\\s\\S])"},"timestamp_ms":{"type":"integer","minimum":0},"modules":{"type":"integer","minimum":0,"maximum":16},"state":{"type":"string","enum":["charging","discharging","idle"]},"voltage_v":{"type":"number","minimum":0,"maximum":1000},"current_a":{"type":"number","minimum":-16000,"maximum":16000},"temperature_min_c":{"type":"number","minimum":-50,"maximum":200},"temperature_max_c":{"type":"number","minimum":-50,"maximum":200},"cell_min_v":{"type":"number","minimum":0,"maximum":10},"cell_max_v":{"type":"number","minimum":0,"maximum":10},"soc_percent":{"type":"integer","minimum":0,"maximum":100},"alarm":{"type":"boolean"},"stack":{"type":"array","maxItems":16,"items":{"type":"object","additionalProperties":false,"required":["n","present"],"properties":{"n":{"type":"integer","minimum":1,"maximum":16},"present":{"type":"boolean"},"voltage_v":{"type":"number","minimum":0,"maximum":1000},"current_a":{"type":"number","minimum":-1000,"maximum":1000},"temperature_c":{"type":"number","minimum":-50,"maximum":200},"soc_percent":{"type":"integer","minimum":0,"maximum":100},"state":{"type":"string","minLength":1,"maxLength":16},"cells_v":{"type":"array","maxItems":32,"items":{"type":"number","minimum":0,"maximum":10}},"counters":{"type":"object","maxProperties":48,"propertyNames":{"pattern":"^[a-z][a-z0-9_]{0,31}(?![\\s\\S])"},"additionalProperties":{"type":"integer","minimum":0,"maximum":9999999999}},"temperatures_c":{"type":"array","maxItems":8,"items":{"type":"number","minimum":-50,"maximum":200}},"capacity_ah":{"type":"number","minimum":0,"maximum":100000},"full_capacity_ah":{"type":"number","minimum":0,"maximum":100000},"cycles":{"type":"integer","minimum":0,"maximum":1000000},"health_percent":{"type":"integer","minimum":0,"maximum":100},"model":{"type":"string","minLength":1,"maxLength":24},"cell_count":{"type":"integer","minimum":1,"maximum":32},"max_charge_a":{"type":"number","minimum":0,"maximum":1000},"max_discharge_a":{"type":"number","minimum":0,"maximum":1000},"console_baud":{"type":"integer","minimum":300,"maximum":1000000},"soh_counts":{"type":"array","maxItems":32,"items":{"type":"integer","minimum":0,"maximum":1000000}},"soh_abnormal":{"type":"array","maxItems":32,"items":{"type":"integer","minimum":0,"maximum":31}},"last_event":{"type":"object","additionalProperties":false,"required":["index","time"],"properties":{"index":{"type":"integer","minimum":0,"maximum":1000000},"time":{"type":"string","minLength":1,"maxLength":40},"voltage_v":{"type":"number","minimum":0,"maximum":1000},"current_a":{"type":"number","minimum":-1000,"maximum":1000},"temperature_c":{"type":"number","minimum":-50,"maximum":200},"percent":{"type":"integer","minimum":0,"maximum":100},"base_state":{"type":"string","minLength":1,"maxLength":40},"voltage_state":{"type":"string","minLength":1,"maxLength":40},"current_state":{"type":"string","minLength":1,"maxLength":40},"temperature_state":{"type":"string","minLength":1,"maxLength":40},"coulomb_state":{"type":"string","minLength":1,"maxLength":40},"power_events":{"type":"string","minLength":1,"maxLength":40},"battery_events":{"type":"string","minLength":1,"maxLength":40},"system_fault":{"type":"string","minLength":1,"maxLength":40}}},"flags":{"type":"array","maxItems":48,"items":{"type":"object","additionalProperties":false,"required":["column","word"],"properties":{"column":{"type":"string","enum":["base","voltage","current","temperature","cell_voltage","cell_temperature","mosfet_temperature","system"]},"word":{"type":"string","minLength":1,"maxLength":16},"cell":{"type":"integer","minimum":0,"maximum":31}}}},"left_out":{"type":"array","maxItems":12,"items":{"type":"string","enum":["voltage","current","temperature","temperatures","cells","soc","capacity","cycles","health","limits","cell_count"]}},"cells_unread":{"type":"array","maxItems":32,"items":{"type":"integer","minimum":0,"maximum":31}},"manufacturer":{"type":"string","minLength":1,"maxLength":32},"manufacturer_source":{"type":"string","enum":["reported","deduced"]},"serial":{"type":"string","pattern":"^[A-Za-z0-9_-]{1,24}(?![\\s\\S])"},"board":{"type":"string","pattern":"^[A-Za-z0-9._-]{1,16}(?![\\s\\S])"},"chip":{"type":"string","enum":["older","newer","unknown"]},"specification":{"type":"string","minLength":1,"maxLength":24},"boot_version":{"type":"string","minLength":1,"maxLength":24},"comm_version":{"type":"string","minLength":1,"maxLength":24},"release_date":{"type":"string","minLength":1,"maxLength":24},"board_version":{"type":"string","minLength":1,"maxLength":24},"main_soft_version":{"type":"string","minLength":1,"maxLength":24},"soft_version":{"type":"string","minLength":1,"maxLength":24}}}},"manufacturer":{"type":"string","minLength":1,"maxLength":32},"manufacturer_source":{"type":"string","enum":["reported","deduced"]},"model":{"type":"string","minLength":1,"maxLength":24},"capacity_ah":{"type":"number","minimum":0,"maximum":100000},"full_capacity_ah":{"type":"number","minimum":0,"maximum":100000},"energy_kwh":{"type":"number","minimum":0,"maximum":10000},"cycles":{"type":"integer","minimum":0,"maximum":1000000},"health_percent":{"type":"integer","minimum":0,"maximum":100},"power_w":{"type":"number","minimum":-1000000,"maximum":1000000},"balancing":{"type":"integer","minimum":0,"maximum":512},"protecting":{"type":"boolean"},"charge_mos":{"type":"integer","minimum":0,"maximum":255},"discharge_mos":{"type":"integer","minimum":0,"maximum":255},"bms_system":{"type":"object","additionalProperties":false,"properties":{"modules_total":{"type":"integer","minimum":0,"maximum":64},"modules_present":{"type":"integer","minimum":0,"maximum":64},"modules_sleep":{"type":"integer","minimum":0,"maximum":64},"soc_percent":{"type":"integer","minimum":0,"maximum":100},"health_percent":{"type":"integer","minimum":0,"maximum":100},"remaining_ah":{"type":"number","minimum":0,"maximum":100000},"full_capacity_ah":{"type":"number","minimum":0,"maximum":100000},"charge_voltage_v":{"type":"number","minimum":0,"maximum":1000},"discharge_voltage_v":{"type":"number","minimum":0,"maximum":1000},"charge_current_a":{"type":"number","minimum":0,"maximum":16000},"discharge_current_a":{"type":"number","minimum":0,"maximum":16000}}}}}"#,
         "solar_battery_command": #"{"type":"object","additionalProperties":false,"required":["kind","node_id","timestamp_ms","command_id","port","action"],"properties":{"kind":{"type":"string","const":"solar_battery_command"},"node_id":{"type":"string","pattern":"^[a-z0-9][a-z0-9_-]{0,63}(?![\\s\\S])"},"timestamp_ms":{"type":"integer","minimum":0},"command_id":{"type":"string","pattern":"^[0-9a-f]{16}(?![\\s\\S])"},"port":{"type":"integer","minimum":1,"maximum":10},"action":{"type":"string","enum":["arm","execute","cancel","stage"]},"op":{"type":"string","enum":["set_clock","clear_stats","clear_log","clear_data","restart","shutdown","soc_capacity","mosfail_test","soc_reset","pcb_setup","limits_set","limits_default","protections_set","protections_default","output_set","fault_clear","write_barcode","eeprom_erase","firmware_update","expert_command"]},"params":{"type":"object","additionalProperties":false,"properties":{"which":{"type":"string","enum":["event","history"]},"group":{"type":"string","enum":["module_voltage","cell_voltage","temperature"]},"values":{"type":"object","additionalProperties":false,"properties":{"pov":{"type":"integer","minimum":-40000,"maximum":100000},"povr":{"type":"integer","minimum":-40000,"maximum":100000},"phv":{"type":"integer","minimum":-40000,"maximum":100000},"phvr":{"type":"integer","minimum":-40000,"maximum":100000},"plv":{"type":"integer","minimum":-40000,"maximum":100000},"plvr":{"type":"integer","minimum":-40000,"maximum":100000},"puv":{"type":"integer","minimum":-40000,"maximum":100000},"puvr":{"type":"integer","minimum":-40000,"maximum":100000},"pslp":{"type":"integer","minimum":-40000,"maximum":100000},"bov":{"type":"integer","minimum":-40000,"maximum":100000},"bovr":{"type":"integer","minimum":-40000,"maximum":100000},"bhv":{"type":"integer","minimum":-40000,"maximum":100000},"bhvr":{"type":"integer","minimum":-40000,"maximum":100000},"blv":{"type":"integer","minimum":-40000,"maximum":100000},"blvr":{"type":"integer","minimum":-40000,"maximum":100000},"buv":{"type":"integer","minimum":-40000,"maximum":100000},"buvr":{"type":"integer","minimum":-40000,"maximum":100000},"bslp":{"type":"integer","minimum":-40000,"maximum":100000},"cot":{"type":"integer","minimum":-40000,"maximum":100000},"cotr":{"type":"integer","minimum":-40000,"maximum":100000},"cht":{"type":"integer","minimum":-40000,"maximum":100000},"chtr":{"type":"integer","minimum":-40000,"maximum":100000},"clt":{"type":"integer","minimum":-40000,"maximum":100000},"cltr":{"type":"integer","minimum":-40000,"maximum":100000},"cut":{"type":"integer","minimum":-40000,"maximum":100000},"cutr":{"type":"integer","minimum":-40000,"maximum":100000}}},"items":{"type":"object","additionalProperties":false,"properties":{"bov":{"type":"string","enum":["en","dis"]},"bhv":{"type":"string","enum":["en","dis"]},"blv":{"type":"string","enum":["en","dis"]},"buv":{"type":"string","enum":["en","dis"]},"bslp":{"type":"string","enum":["en","dis"]},"pov":{"type":"string","enum":["en","dis"]},"phv":{"type":"string","enum":["en","dis"]},"plv":{"type":"string","enum":["en","dis"]},"puv":{"type":"string","enum":["en","dis"]},"pslp":{"type":"string","enum":["en","dis"]},"coc":{"type":"string","enum":["en","dis"]},"coc2":{"type":"string","enum":["en","dis"]},"doc":{"type":"string","enum":["en","dis"]},"doc2":{"type":"string","enum":["en","dis"]}}},"accept_risk":{"type":"boolean"},"output":{"type":"string","enum":["cfet","dfet","buzz","heat"]},"state":{"type":"string","enum":["on","off"]},"serial":{"type":"string","pattern":"^[A-Za-z0-9_-]{10,24}(?![\\s\\S])"},"restore_barcode":{"type":"boolean"},"image_size":{"type":"integer","minimum":65536,"maximum":524288},"image_crc32":{"type":"integer","minimum":0,"maximum":4294967295},"image_version":{"type":"string","minLength":1,"maxLength":12},"clear_eeprom":{"type":"boolean"},"line":{"type":"string","minLength":1,"maxLength":48}}},"serial":{"type":"string","pattern":"^[A-Za-z0-9_-]{8,24}(?![\\s\\S])"},"token":{"type":"string","pattern":"^[0-9a-f]{32}(?![\\s\\S])"},"stage":{"type":"object","additionalProperties":false,"required":["id","index","total","size","crc32","data"],"properties":{"id":{"type":"string","pattern":"^[a-z0-9]{8,32}(?![\\s\\S])"},"index":{"type":"integer","minimum":0,"maximum":2047},"total":{"type":"integer","minimum":1,"maximum":2048},"size":{"type":"integer","minimum":65536,"maximum":524288},"crc32":{"type":"integer","minimum":0,"maximum":4294967295},"data":{"type":"string","minLength":4,"maxLength":344,"pattern":"^[A-Za-z0-9+/]+={0,2}(?![\\s\\S])"}}}}}"#,
         "solar_battery_result": #"{"type":"object","additionalProperties":false,"required":["kind","node_id","timestamp_ms","command_id","port","action","stage","accepted","refusal"],"properties":{"kind":{"type":"string","const":"solar_battery_result"},"node_id":{"type":"string","pattern":"^[a-z0-9][a-z0-9_-]{0,63}(?![\\s\\S])"},"timestamp_ms":{"type":"integer","minimum":0},"command_id":{"type":"string","pattern":"^[0-9a-f]{16}(?![\\s\\S])"},"port":{"type":"integer","minimum":1,"maximum":10},"action":{"type":"string","enum":["arm","execute","cancel","stage"]},"op":{"type":"string","maxLength":32},"stage":{"type":"string","enum":["armed","started","progress","cancel_requested","final","rejected","staged"]},"accepted":{"type":"boolean"},"refusal":{"type":"string","enum":["none","disabled","invalid_params","unknown_op","not_pylontech","no_battery","unknown_model","unknown_firmware","serial_mismatch","serial_unreadable","not_idle","critical_alarm","busy","cooldown","locked","not_armed","bad_token","expired","chip_unknown","image_missing","image_mismatch","unsupported_model","no_official_value","risk_not_accepted","expert_blocked","no_password","battery_changed","clock_not_set","not_cancellable","no_memory","no_answer","login_failed","preflight_failed","stage_invalid","stage_order","stage_data","stage_size","stage_crc"]},"token":{"type":"string","pattern":"^[0-9a-f]{32}(?![\\s\\S])"},"canonical":{"type":"string","maxLength":600},"summary":{"type":"string","maxLength":300},"risk":{"type":"string","enum":["low","medium","high","irreversible"]},"atomic":{"type":"boolean"},"battery":{"type":"object","additionalProperties":false,"required":["model","serial","soft_version","board"],"properties":{"model":{"type":"string","maxLength":24},"serial":{"type":"string","maxLength":32},"soft_version":{"type":"string","maxLength":24},"board":{"type":"string","maxLength":24},"capacity_ah":{"type":"integer","minimum":0,"maximum":1000}}},"snapshot_before":{"type":"string","maxLength":4000},"outcome":{"type":"string","enum":["running","ok","failed","partial","retry","rejected"]},"code":{"type":"string","maxLength":96},"steps_done":{"type":"integer","minimum":0,"maximum":200},"steps_total":{"type":"integer","minimum":0,"maximum":200},"writes_done":{"type":"integer","minimum":0,"maximum":200},"packets_sent":{"type":"integer","minimum":0,"maximum":2048},"packets_total":{"type":"integer","minimum":0,"maximum":2048},"truncated":{"type":"boolean"},"before":{"type":"string","maxLength":4000},"after":{"type":"string","maxLength":4000},"transcript":{"type":"string","maxLength":8000},"received":{"type":"integer","minimum":0,"maximum":524288}}}"#,
-        "solar_inverter": #"{"type":"object","additionalProperties":false,"required":["kind","node_id","device","timestamp_ms","mode","grid_v","grid_hz","out_v","out_hz","out_va","out_w","load_percent","battery_v","battery_a","battery_percent","pv_v","pv_a","pv_w","heatsink_c","ac_charging","pv_charging","load_on","warnings"],"properties":{"kind":{"type":"string","const":"inverter"},"node_id":{"type":"string","pattern":"^[a-z0-9][a-z0-9_-]{0,63}(?![\\s\\S])"},"device":{"type":"string","pattern":"^[a-z0-9][a-z0-9_-]{0,31}(?![\\s\\S])"},"timestamp_ms":{"type":"integer","minimum":0},"mode":{"type":"string","enum":["power_on","standby","line","battery","fault","power_saving","shutdown","unknown"]},"grid_v":{"type":"number","minimum":0,"maximum":600},"grid_hz":{"type":"number","minimum":0,"maximum":100},"out_v":{"type":"number","minimum":0,"maximum":600},"out_hz":{"type":"number","minimum":0,"maximum":100},"out_va":{"type":"number","minimum":0,"maximum":100000},"out_w":{"type":"number","minimum":0,"maximum":100000},"load_percent":{"type":"number","minimum":0,"maximum":200},"battery_v":{"type":"number","minimum":0,"maximum":1000},"battery_a":{"type":"number","minimum":-1000,"maximum":1000},"battery_percent":{"type":"number","minimum":0,"maximum":100},"pv_v":{"type":"number","minimum":0,"maximum":1500},"pv_a":{"type":"number","minimum":0,"maximum":500},"pv_w":{"type":"number","minimum":0,"maximum":100000},"heatsink_c":{"type":"number","minimum":-50,"maximum":200},"ac_charging":{"type":"boolean"},"pv_charging":{"type":"boolean"},"load_on":{"type":"boolean"},"warnings":{"type":"array","maxItems":32,"items":{"type":"string","pattern":"^[a-z][a-z0-9_]{0,39}(?![\\s\\S])"}},"warnings_known":{"type":"boolean"},"clamped":{"type":"array","maxItems":16,"items":{"type":"string","maxLength":32}},"pv2_v":{"type":"number","minimum":0,"maximum":1500},"pv2_a":{"type":"number","minimum":0,"maximum":500},"pv2_w":{"type":"number","minimum":0,"maximum":100000},"total_out_w":{"type":"number","minimum":0,"maximum":1000000},"total_out_va":{"type":"number","minimum":0,"maximum":1000000},"total_load_percent":{"type":"number","minimum":0,"maximum":200},"total_charging_a":{"type":"number","minimum":0,"maximum":10000},"units":{"type":"array","maxItems":10,"items":{"type":"object","additionalProperties":false,"required":["unit","mode"],"properties":{"unit":{"type":"integer","minimum":0,"maximum":9},"serial":{"type":"string","maxLength":24},"mode":{"type":"string","enum":["power_on","standby","line","battery","fault","power_saving","shutdown","unknown"]},"fault_code":{"type":"string","pattern":"^[0-9]{2}(?![\\s\\S])"},"grid_v":{"type":"number","minimum":0,"maximum":600},"out_v":{"type":"number","minimum":0,"maximum":600},"out_va":{"type":"number","minimum":0,"maximum":100000},"out_w":{"type":"number","minimum":0,"maximum":100000},"load_percent":{"type":"number","minimum":0,"maximum":200},"battery_v":{"type":"number","minimum":0,"maximum":1000},"battery_percent":{"type":"number","minimum":0,"maximum":100},"pv_v":{"type":"number","minimum":0,"maximum":1500},"charging_a":{"type":"number","minimum":0,"maximum":1000}}}},"bus_v":{"type":"number","minimum":0,"maximum":1500},"serial":{"type":"string","pattern":"^[0-9A-Za-z]{8,20}(?![\\s\\S])"},"manufacturer":{"type":"string","minLength":1,"maxLength":32},"manufacturer_source":{"type":"string","enum":["reported","deduced"]},"firmware":{"type":"string","pattern":"^[0-9A-Za-z._-]{1,24}(?![\\s\\S])"},"pv_energy_total_wh":{"type":"number","minimum":0,"maximum":1000000000000.0},"ratings":{"type":"object","additionalProperties":false,"properties":{"grid_rating_v":{"type":"number","minimum":0,"maximum":600},"out_rating_v":{"type":"number","minimum":0,"maximum":600},"out_rating_hz":{"type":"number","minimum":0,"maximum":100},"out_rating_va":{"type":"number","minimum":0,"maximum":1000000},"out_rating_w":{"type":"number","minimum":0,"maximum":1000000},"battery_rating_v":{"type":"number","minimum":0,"maximum":600},"battery_recharge_v":{"type":"number","minimum":0,"maximum":600},"battery_under_v":{"type":"number","minimum":0,"maximum":600},"battery_bulk_v":{"type":"number","minimum":0,"maximum":600},"battery_float_v":{"type":"number","minimum":0,"maximum":600},"max_charge_a":{"type":"number","minimum":0,"maximum":2000},"max_ac_charge_a":{"type":"number","minimum":0,"maximum":2000},"battery_type":{"type":"string","enum":["agm","flooded","user"]},"input_range":{"type":"string","enum":["appliance","ups"]},"output_priority":{"type":"string","enum":["utility_first","solar_first","sbu"]},"charger_priority":{"type":"string","enum":["utility_first","solar_first","solar_and_utility","solar_only"]}}}}}"#,
+        "solar_inverter": #"{"type":"object","additionalProperties":false,"required":["kind","node_id","device","timestamp_ms","mode","grid_v","grid_hz","out_v","out_hz","out_va","out_w","load_percent","battery_v","battery_a","battery_percent","pv_v","pv_a","pv_w","heatsink_c","ac_charging","pv_charging","load_on","warnings"],"properties":{"kind":{"type":"string","const":"inverter"},"node_id":{"type":"string","pattern":"^[a-z0-9][a-z0-9_-]{0,63}(?![\\s\\S])"},"device":{"type":"string","pattern":"^[a-z0-9][a-z0-9_-]{0,31}(?![\\s\\S])"},"timestamp_ms":{"type":"integer","minimum":0},"mode":{"type":"string","enum":["power_on","standby","line","battery","fault","power_saving","shutdown","unknown"]},"grid_v":{"type":"number","minimum":0,"maximum":600},"grid_hz":{"type":"number","minimum":0,"maximum":100},"out_v":{"type":"number","minimum":0,"maximum":600},"out_hz":{"type":"number","minimum":0,"maximum":100},"out_va":{"type":"number","minimum":0,"maximum":100000},"out_w":{"type":"number","minimum":0,"maximum":100000},"load_percent":{"type":"number","minimum":0,"maximum":200},"battery_v":{"type":"number","minimum":0,"maximum":1000},"battery_a":{"type":"number","minimum":-1000,"maximum":1000},"battery_percent":{"type":"number","minimum":0,"maximum":100},"pv_v":{"type":"number","minimum":0,"maximum":1500},"pv_a":{"type":"number","minimum":0,"maximum":500},"pv_w":{"type":"number","minimum":0,"maximum":100000},"heatsink_c":{"type":"number","minimum":-50,"maximum":200},"ac_charging":{"type":"boolean"},"pv_charging":{"type":"boolean"},"load_on":{"type":"boolean"},"warnings":{"type":"array","maxItems":32,"items":{"type":"string","pattern":"^[a-z][a-z0-9_]{0,39}(?![\\s\\S])"}},"warnings_known":{"type":"boolean"},"clamped":{"type":"array","maxItems":16,"items":{"type":"string","maxLength":32}},"pv2_v":{"type":"number","minimum":0,"maximum":1500},"pv2_a":{"type":"number","minimum":0,"maximum":500},"pv2_w":{"type":"number","minimum":0,"maximum":100000},"total_out_w":{"type":"number","minimum":0,"maximum":1000000},"total_out_va":{"type":"number","minimum":0,"maximum":1000000},"total_load_percent":{"type":"number","minimum":0,"maximum":200},"total_charging_a":{"type":"number","minimum":0,"maximum":10000},"units":{"type":"array","maxItems":10,"items":{"type":"object","additionalProperties":false,"required":["unit","mode"],"properties":{"unit":{"type":"integer","minimum":0,"maximum":9},"serial":{"type":"string","maxLength":24},"mode":{"type":"string","enum":["power_on","standby","line","battery","fault","power_saving","shutdown","unknown"]},"fault_code":{"type":"string","pattern":"^[0-9]{2}(?![\\s\\S])"},"grid_v":{"type":"number","minimum":0,"maximum":600},"out_v":{"type":"number","minimum":0,"maximum":600},"out_va":{"type":"number","minimum":0,"maximum":100000},"out_w":{"type":"number","minimum":0,"maximum":100000},"load_percent":{"type":"number","minimum":0,"maximum":200},"battery_v":{"type":"number","minimum":0,"maximum":1000},"battery_percent":{"type":"number","minimum":0,"maximum":100},"pv_v":{"type":"number","minimum":0,"maximum":1500},"charging_a":{"type":"number","minimum":0,"maximum":1000}}}},"bus_v":{"type":"number","minimum":0,"maximum":1500},"serial":{"type":"string","pattern":"^[0-9A-Za-z]{8,20}(?![\\s\\S])"},"manufacturer":{"type":"string","minLength":1,"maxLength":32},"manufacturer_source":{"type":"string","enum":["reported","deduced"]},"firmware":{"type":"string","pattern":"^[0-9A-Za-z._-]{1,24}(?![\\s\\S])"},"pv_energy_total_wh":{"type":"number","minimum":0,"maximum":1000000000000.0},"ratings":{"type":"object","additionalProperties":false,"properties":{"grid_rating_v":{"type":"number","minimum":0,"maximum":600},"out_rating_v":{"type":"number","minimum":0,"maximum":600},"out_rating_hz":{"type":"number","minimum":0,"maximum":100},"out_rating_va":{"type":"number","minimum":0,"maximum":1000000},"out_rating_w":{"type":"number","minimum":0,"maximum":1000000},"battery_rating_v":{"type":"number","minimum":0,"maximum":600},"battery_recharge_v":{"type":"number","minimum":0,"maximum":600},"battery_under_v":{"type":"number","minimum":0,"maximum":600},"battery_bulk_v":{"type":"number","minimum":0,"maximum":600},"battery_float_v":{"type":"number","minimum":0,"maximum":600},"max_charge_a":{"type":"number","minimum":0,"maximum":2000},"max_ac_charge_a":{"type":"number","minimum":0,"maximum":2000},"battery_type":{"type":"string","enum":["agm","flooded","user"]},"input_range":{"type":"string","enum":["appliance","ups"]},"output_priority":{"type":"string","enum":["utility_first","solar_first","sbu"]},"charger_priority":{"type":"string","enum":["utility_first","solar_first","solar_and_utility","solar_only"]}}},"energy":{"type":"object","additionalProperties":false,"properties":{"day":{"type":"string","pattern":"^20[0-9]{6}(?![\\s\\S])"},"pv_today_wh":{"type":"number","minimum":0,"maximum":1000000000000.0},"pv_month_wh":{"type":"number","minimum":0,"maximum":1000000000000.0},"pv_year_wh":{"type":"number","minimum":0,"maximum":1000000000000.0},"load_today_wh":{"type":"number","minimum":0,"maximum":1000000000000.0},"load_month_wh":{"type":"number","minimum":0,"maximum":1000000000000.0},"load_year_wh":{"type":"number","minimum":0,"maximum":1000000000000.0},"load_total_wh":{"type":"number","minimum":0,"maximum":1000000000000.0}}},"options_on":{"type":"array","maxItems":10,"items":{"type":"string","enum":["buzzer","overload_bypass","feed_to_grid","power_saving","lcd_return_default","overload_restart","temperature_restart","lcd_backlight","source_interrupt_alarm","fault_record"]}},"options_off":{"type":"array","maxItems":10,"items":{"type":"string","enum":["buzzer","overload_bypass","feed_to_grid","power_saving","lcd_return_default","overload_restart","temperature_restart","lcd_backlight","source_interrupt_alarm","fault_record"]}},"defaults":{"type":"object","additionalProperties":false,"properties":{"out_rating_v":{"type":"number","minimum":0,"maximum":600},"out_rating_hz":{"type":"number","minimum":0,"maximum":100},"battery_recharge_v":{"type":"number","minimum":0,"maximum":600},"battery_under_v":{"type":"number","minimum":0,"maximum":600},"battery_bulk_v":{"type":"number","minimum":0,"maximum":600},"battery_float_v":{"type":"number","minimum":0,"maximum":600},"max_charge_a":{"type":"number","minimum":0,"maximum":2000},"max_ac_charge_a":{"type":"number","minimum":0,"maximum":2000},"battery_type":{"type":"string","enum":["agm","flooded","user"]},"input_range":{"type":"string","enum":["appliance","ups"]},"output_priority":{"type":"string","enum":["utility_first","solar_first","sbu"]},"charger_priority":{"type":"string","enum":["utility_first","solar_first","solar_and_utility","solar_only"]}}},"charge_current_options_a":{"type":"array","maxItems":32,"items":{"type":"integer","minimum":0,"maximum":2000}},"ac_charge_current_options_a":{"type":"array","maxItems":32,"items":{"type":"integer","minimum":0,"maximum":2000}},"bms":{"type":"object","additionalProperties":false,"properties":{"connected":{"type":"boolean"},"soc_percent":{"type":"integer","minimum":0,"maximum":100},"force_charge":{"type":"boolean"},"stop_discharge":{"type":"boolean"},"stop_charge":{"type":"boolean"},"bulk_v":{"type":"number","minimum":0,"maximum":600},"float_v":{"type":"number","minimum":0,"maximum":600},"cutoff_v":{"type":"number","minimum":0,"maximum":600},"max_charge_a":{"type":"number","minimum":0,"maximum":2000},"max_discharge_a":{"type":"number","minimum":0,"maximum":2000}}}}}"#,
         "solar_system": #"{"type":"object","additionalProperties":false,"required":["kind","node_id","timestamp_ms","inverters","batteries","alerts"],"properties":{"kind":{"type":"string","const":"system"},"node_id":{"type":"string","pattern":"^[a-z0-9][a-z0-9_-]{0,63}(?![\\s\\S])"},"timestamp_ms":{"type":"integer","minimum":0},"inverters":{"type":"integer","minimum":0,"maximum":16},"batteries":{"type":"integer","minimum":0,"maximum":16},"pv_w":{"type":"number","minimum":0,"maximum":1000000},"load_w":{"type":"number","minimum":0,"maximum":1000000},"soc_percent":{"type":"number","minimum":0,"maximum":100},"balance_w":{"type":"number","minimum":-1000000,"maximum":1000000},"alerts":{"type":"array","maxItems":16,"items":{"type":"object","additionalProperties":false,"required":["code","device"],"properties":{"code":{"type":"string","enum":["soc_low","cell_over_voltage","temperature_high","temperature_low"]},"device":{"type":"string","pattern":"^[a-z0-9][a-z0-9_-]{0,31}(?![\\s\\S])"}}}}}}"#,
         "system_event": #"{"type":"object","additionalProperties":false,"required":["id","at","type","category","action"],"properties":{"id":{"type":"integer","minimum":1},"at":{"type":"string","minLength":1,"maxLength":40},"type":{"type":"string","const":"system"},"category":{"type":"string","enum":["node","broker","settings","service","update","alarm","backup","batteries"]},"action":{"type":"string","enum":["appeared","returned","disappeared","firmware_changed","connected","disconnected","created","changed","removed","started","stopped","restarted","checked","installed","rolled_back","armed","disarmed","silenced","acknowledged","arm_requested","disarm_requested","silence_requested","backup_made","backup_restored","battery_requested","battery_operation","control_requested","control_acknowledged","control_refused","control_applied","control_back","control_lost","maintenance_started","maintenance_ended","maintenance_expired","dirty_boot","sensor_bluetooth_open","sensor_bluetooth_closed","radar_event","diagnostic_token_issued","diagnostic_token_revoked","diagnostic_token_used","diagnostic_token_denied"]},"subject":{"type":"string","minLength":1,"maxLength":80},"by":{"type":"string","minLength":1,"maxLength":60},"version":{"type":"string","pattern":"^[0-9]+\\.[0-9]+\\.[0-9]+(\\.[0-9]+)?(?![\\s\\S])"},"previous_version":{"type":"string","pattern":"^[0-9]+\\.[0-9]+\\.[0-9]+(\\.[0-9]+)?(?![\\s\\S])"},"profile":{"type":"string","pattern":"^[a-z0-9][a-z0-9_-]{0,31}(?![\\s\\S])"},"outcome":{"type":"string","enum":["allowed","denied","failed"]}}}"#,
         "telemetry": #"{"type":"object","additionalProperties":false,"required":["node_id","timestamp_ms","lux","targets"],"properties":{"kind":{"type":"string","const":"telemetry"},"node_id":{"type":"string","pattern":"^[a-z0-9][a-z0-9_-]{0,63}(?![\\s\\S])"},"timestamp_ms":{"type":"integer","minimum":0},"lux":{"type":"number","minimum":0,"maximum":200000},"targets":{"type":"array","maxItems":15,"items":{"type":"object","additionalProperties":false,"required":["sensor_id","track_id","x_mm","y_mm","speed_mm_s"],"properties":{"sensor_id":{"type":"integer","minimum":1,"maximum":3},"track_id":{"type":"integer","minimum":1},"x_mm":{"type":"number"},"y_mm":{"type":"number"},"speed_mm_s":{"type":"number"}}}}}}"#,
@@ -349,6 +349,81 @@ public enum Contract {
         }
     }
 
+    public struct SolarInverterEnergy {
+        public var day: String?
+        public var pv_today_wh: Double?
+        public var pv_month_wh: Double?
+        public var pv_year_wh: Double?
+        public var load_today_wh: Double?
+        public var load_month_wh: Double?
+        public var load_year_wh: Double?
+        public var load_total_wh: Double?
+        public init(day: String? = nil, pv_today_wh: Double? = nil, pv_month_wh: Double? = nil, pv_year_wh: Double? = nil, load_today_wh: Double? = nil, load_month_wh: Double? = nil, load_year_wh: Double? = nil, load_total_wh: Double? = nil) {
+            self.day = day
+            self.pv_today_wh = pv_today_wh
+            self.pv_month_wh = pv_month_wh
+            self.pv_year_wh = pv_year_wh
+            self.load_today_wh = load_today_wh
+            self.load_month_wh = load_month_wh
+            self.load_year_wh = load_year_wh
+            self.load_total_wh = load_total_wh
+        }
+    }
+
+    public struct SolarInverterDefaults {
+        public var out_rating_v: Double?
+        public var out_rating_hz: Double?
+        public var battery_recharge_v: Double?
+        public var battery_under_v: Double?
+        public var battery_bulk_v: Double?
+        public var battery_float_v: Double?
+        public var max_charge_a: Double?
+        public var max_ac_charge_a: Double?
+        public var battery_type: String?
+        public var input_range: String?
+        public var output_priority: String?
+        public var charger_priority: String?
+        public init(out_rating_v: Double? = nil, out_rating_hz: Double? = nil, battery_recharge_v: Double? = nil, battery_under_v: Double? = nil, battery_bulk_v: Double? = nil, battery_float_v: Double? = nil, max_charge_a: Double? = nil, max_ac_charge_a: Double? = nil, battery_type: String? = nil, input_range: String? = nil, output_priority: String? = nil, charger_priority: String? = nil) {
+            self.out_rating_v = out_rating_v
+            self.out_rating_hz = out_rating_hz
+            self.battery_recharge_v = battery_recharge_v
+            self.battery_under_v = battery_under_v
+            self.battery_bulk_v = battery_bulk_v
+            self.battery_float_v = battery_float_v
+            self.max_charge_a = max_charge_a
+            self.max_ac_charge_a = max_ac_charge_a
+            self.battery_type = battery_type
+            self.input_range = input_range
+            self.output_priority = output_priority
+            self.charger_priority = charger_priority
+        }
+    }
+
+    public struct SolarInverterBms {
+        public var connected: Bool?
+        public var soc_percent: Int64?
+        public var force_charge: Bool?
+        public var stop_discharge: Bool?
+        public var stop_charge: Bool?
+        public var bulk_v: Double?
+        public var float_v: Double?
+        public var cutoff_v: Double?
+        public var max_charge_a: Double?
+        public var max_discharge_a: Double?
+        public init(connected: Bool? = nil, soc_percent: Int64? = nil, force_charge: Bool? = nil, stop_discharge: Bool? = nil, stop_charge: Bool? = nil, bulk_v: Double? = nil, float_v: Double? = nil, cutoff_v: Double? = nil, max_charge_a: Double? = nil, max_discharge_a: Double? = nil) {
+            self.connected = connected
+            self.soc_percent = soc_percent
+            self.force_charge = force_charge
+            self.stop_discharge = stop_discharge
+            self.stop_charge = stop_charge
+            self.bulk_v = bulk_v
+            self.float_v = float_v
+            self.cutoff_v = cutoff_v
+            self.max_charge_a = max_charge_a
+            self.max_discharge_a = max_discharge_a
+        }
+    }
+
     public struct SolarInverter {
         public var kind: String
         public var node_id: String
@@ -390,7 +465,14 @@ public enum Contract {
         public var firmware: String?
         public var pv_energy_total_wh: Double?
         public var ratings: SolarInverterRatings?
-        public init(kind: String = "inverter", node_id: String, device: String, timestamp_ms: Int64, mode: String, grid_v: Double, grid_hz: Double, out_v: Double, out_hz: Double, out_va: Double, out_w: Double, load_percent: Double, battery_v: Double, battery_a: Double, battery_percent: Double, pv_v: Double, pv_a: Double, pv_w: Double, heatsink_c: Double, ac_charging: Bool, pv_charging: Bool, load_on: Bool, warnings: [String], warnings_known: Bool? = nil, clamped: [String]? = nil, pv2_v: Double? = nil, pv2_a: Double? = nil, pv2_w: Double? = nil, total_out_w: Double? = nil, total_out_va: Double? = nil, total_load_percent: Double? = nil, total_charging_a: Double? = nil, units: [SolarInverterUnits]? = nil, bus_v: Double? = nil, serial: String? = nil, manufacturer: String? = nil, manufacturer_source: String? = nil, firmware: String? = nil, pv_energy_total_wh: Double? = nil, ratings: SolarInverterRatings? = nil) {
+        public var energy: SolarInverterEnergy?
+        public var options_on: [String]?
+        public var options_off: [String]?
+        public var defaults: SolarInverterDefaults?
+        public var charge_current_options_a: [Int64]?
+        public var ac_charge_current_options_a: [Int64]?
+        public var bms: SolarInverterBms?
+        public init(kind: String = "inverter", node_id: String, device: String, timestamp_ms: Int64, mode: String, grid_v: Double, grid_hz: Double, out_v: Double, out_hz: Double, out_va: Double, out_w: Double, load_percent: Double, battery_v: Double, battery_a: Double, battery_percent: Double, pv_v: Double, pv_a: Double, pv_w: Double, heatsink_c: Double, ac_charging: Bool, pv_charging: Bool, load_on: Bool, warnings: [String], warnings_known: Bool? = nil, clamped: [String]? = nil, pv2_v: Double? = nil, pv2_a: Double? = nil, pv2_w: Double? = nil, total_out_w: Double? = nil, total_out_va: Double? = nil, total_load_percent: Double? = nil, total_charging_a: Double? = nil, units: [SolarInverterUnits]? = nil, bus_v: Double? = nil, serial: String? = nil, manufacturer: String? = nil, manufacturer_source: String? = nil, firmware: String? = nil, pv_energy_total_wh: Double? = nil, ratings: SolarInverterRatings? = nil, energy: SolarInverterEnergy? = nil, options_on: [String]? = nil, options_off: [String]? = nil, defaults: SolarInverterDefaults? = nil, charge_current_options_a: [Int64]? = nil, ac_charge_current_options_a: [Int64]? = nil, bms: SolarInverterBms? = nil) {
             self.kind = kind
             self.node_id = node_id
             self.device = device
@@ -431,6 +513,13 @@ public enum Contract {
             self.firmware = firmware
             self.pv_energy_total_wh = pv_energy_total_wh
             self.ratings = ratings
+            self.energy = energy
+            self.options_on = options_on
+            self.options_off = options_off
+            self.defaults = defaults
+            self.charge_current_options_a = charge_current_options_a
+            self.ac_charge_current_options_a = ac_charge_current_options_a
+            self.bms = bms
         }
     }
 
@@ -557,6 +646,33 @@ public enum Contract {
         }
     }
 
+    public struct SolarBatteryBmsSystem {
+        public var modules_total: Int64?
+        public var modules_present: Int64?
+        public var modules_sleep: Int64?
+        public var soc_percent: Int64?
+        public var health_percent: Int64?
+        public var remaining_ah: Double?
+        public var full_capacity_ah: Double?
+        public var charge_voltage_v: Double?
+        public var discharge_voltage_v: Double?
+        public var charge_current_a: Double?
+        public var discharge_current_a: Double?
+        public init(modules_total: Int64? = nil, modules_present: Int64? = nil, modules_sleep: Int64? = nil, soc_percent: Int64? = nil, health_percent: Int64? = nil, remaining_ah: Double? = nil, full_capacity_ah: Double? = nil, charge_voltage_v: Double? = nil, discharge_voltage_v: Double? = nil, charge_current_a: Double? = nil, discharge_current_a: Double? = nil) {
+            self.modules_total = modules_total
+            self.modules_present = modules_present
+            self.modules_sleep = modules_sleep
+            self.soc_percent = soc_percent
+            self.health_percent = health_percent
+            self.remaining_ah = remaining_ah
+            self.full_capacity_ah = full_capacity_ah
+            self.charge_voltage_v = charge_voltage_v
+            self.discharge_voltage_v = discharge_voltage_v
+            self.charge_current_a = charge_current_a
+            self.discharge_current_a = discharge_current_a
+        }
+    }
+
     public struct SolarBattery {
         public var kind: String
         public var node_id: String
@@ -586,7 +702,8 @@ public enum Contract {
         public var protecting: Bool?
         public var charge_mos: Int64?
         public var discharge_mos: Int64?
-        public init(kind: String = "battery", node_id: String, device: String, timestamp_ms: Int64, modules: Int64, state: String? = nil, voltage_v: Double? = nil, current_a: Double? = nil, temperature_min_c: Double? = nil, temperature_max_c: Double? = nil, cell_min_v: Double? = nil, cell_max_v: Double? = nil, soc_percent: Int64? = nil, alarm: Bool? = nil, stack: [SolarModule], manufacturer: String? = nil, manufacturer_source: String? = nil, model: String? = nil, capacity_ah: Double? = nil, full_capacity_ah: Double? = nil, energy_kwh: Double? = nil, cycles: Int64? = nil, health_percent: Int64? = nil, power_w: Double? = nil, balancing: Int64? = nil, protecting: Bool? = nil, charge_mos: Int64? = nil, discharge_mos: Int64? = nil) {
+        public var bms_system: SolarBatteryBmsSystem?
+        public init(kind: String = "battery", node_id: String, device: String, timestamp_ms: Int64, modules: Int64, state: String? = nil, voltage_v: Double? = nil, current_a: Double? = nil, temperature_min_c: Double? = nil, temperature_max_c: Double? = nil, cell_min_v: Double? = nil, cell_max_v: Double? = nil, soc_percent: Int64? = nil, alarm: Bool? = nil, stack: [SolarModule], manufacturer: String? = nil, manufacturer_source: String? = nil, model: String? = nil, capacity_ah: Double? = nil, full_capacity_ah: Double? = nil, energy_kwh: Double? = nil, cycles: Int64? = nil, health_percent: Int64? = nil, power_w: Double? = nil, balancing: Int64? = nil, protecting: Bool? = nil, charge_mos: Int64? = nil, discharge_mos: Int64? = nil, bms_system: SolarBatteryBmsSystem? = nil) {
             self.kind = kind
             self.node_id = node_id
             self.device = device
@@ -615,6 +732,7 @@ public enum Contract {
             self.protecting = protecting
             self.charge_mos = charge_mos
             self.discharge_mos = discharge_mos
+            self.bms_system = bms_system
         }
     }
 
@@ -2964,6 +3082,102 @@ extension Contract.SolarInverterRatings {
     }
 }
 
+extension Contract.SolarInverterEnergy {
+    /// The message from a document that has passed its schema.
+    public init(reading document: [String: Any]) {
+        if document["day"] != nil { self.day = Contract.str(document, "day") } else { self.day = nil }
+        if document["pv_today_wh"] != nil { self.pv_today_wh = Contract.num(document, "pv_today_wh") } else { self.pv_today_wh = nil }
+        if document["pv_month_wh"] != nil { self.pv_month_wh = Contract.num(document, "pv_month_wh") } else { self.pv_month_wh = nil }
+        if document["pv_year_wh"] != nil { self.pv_year_wh = Contract.num(document, "pv_year_wh") } else { self.pv_year_wh = nil }
+        if document["load_today_wh"] != nil { self.load_today_wh = Contract.num(document, "load_today_wh") } else { self.load_today_wh = nil }
+        if document["load_month_wh"] != nil { self.load_month_wh = Contract.num(document, "load_month_wh") } else { self.load_month_wh = nil }
+        if document["load_year_wh"] != nil { self.load_year_wh = Contract.num(document, "load_year_wh") } else { self.load_year_wh = nil }
+        if document["load_total_wh"] != nil { self.load_total_wh = Contract.num(document, "load_total_wh") } else { self.load_total_wh = nil }
+    }
+
+    /// The document the message was read from, with the members the schema names and no other.
+    public func toJSON() -> [String: Any] {
+        var out: [String: Any] = [:]
+        if let value = self.day { out["day"] = value }
+        if let value = self.pv_today_wh { out["pv_today_wh"] = value }
+        if let value = self.pv_month_wh { out["pv_month_wh"] = value }
+        if let value = self.pv_year_wh { out["pv_year_wh"] = value }
+        if let value = self.load_today_wh { out["load_today_wh"] = value }
+        if let value = self.load_month_wh { out["load_month_wh"] = value }
+        if let value = self.load_year_wh { out["load_year_wh"] = value }
+        if let value = self.load_total_wh { out["load_total_wh"] = value }
+        return out
+    }
+}
+
+extension Contract.SolarInverterDefaults {
+    /// The message from a document that has passed its schema.
+    public init(reading document: [String: Any]) {
+        if document["out_rating_v"] != nil { self.out_rating_v = Contract.num(document, "out_rating_v") } else { self.out_rating_v = nil }
+        if document["out_rating_hz"] != nil { self.out_rating_hz = Contract.num(document, "out_rating_hz") } else { self.out_rating_hz = nil }
+        if document["battery_recharge_v"] != nil { self.battery_recharge_v = Contract.num(document, "battery_recharge_v") } else { self.battery_recharge_v = nil }
+        if document["battery_under_v"] != nil { self.battery_under_v = Contract.num(document, "battery_under_v") } else { self.battery_under_v = nil }
+        if document["battery_bulk_v"] != nil { self.battery_bulk_v = Contract.num(document, "battery_bulk_v") } else { self.battery_bulk_v = nil }
+        if document["battery_float_v"] != nil { self.battery_float_v = Contract.num(document, "battery_float_v") } else { self.battery_float_v = nil }
+        if document["max_charge_a"] != nil { self.max_charge_a = Contract.num(document, "max_charge_a") } else { self.max_charge_a = nil }
+        if document["max_ac_charge_a"] != nil { self.max_ac_charge_a = Contract.num(document, "max_ac_charge_a") } else { self.max_ac_charge_a = nil }
+        if document["battery_type"] != nil { self.battery_type = Contract.str(document, "battery_type") } else { self.battery_type = nil }
+        if document["input_range"] != nil { self.input_range = Contract.str(document, "input_range") } else { self.input_range = nil }
+        if document["output_priority"] != nil { self.output_priority = Contract.str(document, "output_priority") } else { self.output_priority = nil }
+        if document["charger_priority"] != nil { self.charger_priority = Contract.str(document, "charger_priority") } else { self.charger_priority = nil }
+    }
+
+    /// The document the message was read from, with the members the schema names and no other.
+    public func toJSON() -> [String: Any] {
+        var out: [String: Any] = [:]
+        if let value = self.out_rating_v { out["out_rating_v"] = value }
+        if let value = self.out_rating_hz { out["out_rating_hz"] = value }
+        if let value = self.battery_recharge_v { out["battery_recharge_v"] = value }
+        if let value = self.battery_under_v { out["battery_under_v"] = value }
+        if let value = self.battery_bulk_v { out["battery_bulk_v"] = value }
+        if let value = self.battery_float_v { out["battery_float_v"] = value }
+        if let value = self.max_charge_a { out["max_charge_a"] = value }
+        if let value = self.max_ac_charge_a { out["max_ac_charge_a"] = value }
+        if let value = self.battery_type { out["battery_type"] = value }
+        if let value = self.input_range { out["input_range"] = value }
+        if let value = self.output_priority { out["output_priority"] = value }
+        if let value = self.charger_priority { out["charger_priority"] = value }
+        return out
+    }
+}
+
+extension Contract.SolarInverterBms {
+    /// The message from a document that has passed its schema.
+    public init(reading document: [String: Any]) {
+        if document["connected"] != nil { self.connected = Contract.flag(document, "connected") } else { self.connected = nil }
+        if document["soc_percent"] != nil { self.soc_percent = Contract.int(document, "soc_percent") } else { self.soc_percent = nil }
+        if document["force_charge"] != nil { self.force_charge = Contract.flag(document, "force_charge") } else { self.force_charge = nil }
+        if document["stop_discharge"] != nil { self.stop_discharge = Contract.flag(document, "stop_discharge") } else { self.stop_discharge = nil }
+        if document["stop_charge"] != nil { self.stop_charge = Contract.flag(document, "stop_charge") } else { self.stop_charge = nil }
+        if document["bulk_v"] != nil { self.bulk_v = Contract.num(document, "bulk_v") } else { self.bulk_v = nil }
+        if document["float_v"] != nil { self.float_v = Contract.num(document, "float_v") } else { self.float_v = nil }
+        if document["cutoff_v"] != nil { self.cutoff_v = Contract.num(document, "cutoff_v") } else { self.cutoff_v = nil }
+        if document["max_charge_a"] != nil { self.max_charge_a = Contract.num(document, "max_charge_a") } else { self.max_charge_a = nil }
+        if document["max_discharge_a"] != nil { self.max_discharge_a = Contract.num(document, "max_discharge_a") } else { self.max_discharge_a = nil }
+    }
+
+    /// The document the message was read from, with the members the schema names and no other.
+    public func toJSON() -> [String: Any] {
+        var out: [String: Any] = [:]
+        if let value = self.connected { out["connected"] = value }
+        if let value = self.soc_percent { out["soc_percent"] = value }
+        if let value = self.force_charge { out["force_charge"] = value }
+        if let value = self.stop_discharge { out["stop_discharge"] = value }
+        if let value = self.stop_charge { out["stop_charge"] = value }
+        if let value = self.bulk_v { out["bulk_v"] = value }
+        if let value = self.float_v { out["float_v"] = value }
+        if let value = self.cutoff_v { out["cutoff_v"] = value }
+        if let value = self.max_charge_a { out["max_charge_a"] = value }
+        if let value = self.max_discharge_a { out["max_discharge_a"] = value }
+        return out
+    }
+}
+
 extension Contract.SolarInverter {
     /// The message from a document that has passed its schema.
     public init(reading document: [String: Any]) {
@@ -3007,6 +3221,13 @@ extension Contract.SolarInverter {
         if document["firmware"] != nil { self.firmware = Contract.str(document, "firmware") } else { self.firmware = nil }
         if document["pv_energy_total_wh"] != nil { self.pv_energy_total_wh = Contract.num(document, "pv_energy_total_wh") } else { self.pv_energy_total_wh = nil }
         if document["ratings"] != nil { self.ratings = Contract.SolarInverterRatings(reading: Contract.objAt(document, "ratings")) } else { self.ratings = nil }
+        if document["energy"] != nil { self.energy = Contract.SolarInverterEnergy(reading: Contract.objAt(document, "energy")) } else { self.energy = nil }
+        if document["options_on"] != nil { self.options_on = Contract.listAt(document, "options_on").map(Contract.asStr) } else { self.options_on = nil }
+        if document["options_off"] != nil { self.options_off = Contract.listAt(document, "options_off").map(Contract.asStr) } else { self.options_off = nil }
+        if document["defaults"] != nil { self.defaults = Contract.SolarInverterDefaults(reading: Contract.objAt(document, "defaults")) } else { self.defaults = nil }
+        if document["charge_current_options_a"] != nil { self.charge_current_options_a = Contract.listAt(document, "charge_current_options_a").map(Contract.asInt) } else { self.charge_current_options_a = nil }
+        if document["ac_charge_current_options_a"] != nil { self.ac_charge_current_options_a = Contract.listAt(document, "ac_charge_current_options_a").map(Contract.asInt) } else { self.ac_charge_current_options_a = nil }
+        if document["bms"] != nil { self.bms = Contract.SolarInverterBms(reading: Contract.objAt(document, "bms")) } else { self.bms = nil }
     }
 
     /// The document the message was read from, with the members the schema names and no other.
@@ -3052,6 +3273,13 @@ extension Contract.SolarInverter {
         if let value = self.firmware { out["firmware"] = value }
         if let value = self.pv_energy_total_wh { out["pv_energy_total_wh"] = value }
         if let value = self.ratings { out["ratings"] = value.toJSON() }
+        if let value = self.energy { out["energy"] = value.toJSON() }
+        if let value = self.options_on { out["options_on"] = value }
+        if let value = self.options_off { out["options_off"] = value }
+        if let value = self.defaults { out["defaults"] = value.toJSON() }
+        if let value = self.charge_current_options_a { out["charge_current_options_a"] = value }
+        if let value = self.ac_charge_current_options_a { out["ac_charge_current_options_a"] = value }
+        if let value = self.bms { out["bms"] = value.toJSON() }
         return out
     }
 }
@@ -3200,6 +3428,40 @@ extension Contract.SolarModule {
     }
 }
 
+extension Contract.SolarBatteryBmsSystem {
+    /// The message from a document that has passed its schema.
+    public init(reading document: [String: Any]) {
+        if document["modules_total"] != nil { self.modules_total = Contract.int(document, "modules_total") } else { self.modules_total = nil }
+        if document["modules_present"] != nil { self.modules_present = Contract.int(document, "modules_present") } else { self.modules_present = nil }
+        if document["modules_sleep"] != nil { self.modules_sleep = Contract.int(document, "modules_sleep") } else { self.modules_sleep = nil }
+        if document["soc_percent"] != nil { self.soc_percent = Contract.int(document, "soc_percent") } else { self.soc_percent = nil }
+        if document["health_percent"] != nil { self.health_percent = Contract.int(document, "health_percent") } else { self.health_percent = nil }
+        if document["remaining_ah"] != nil { self.remaining_ah = Contract.num(document, "remaining_ah") } else { self.remaining_ah = nil }
+        if document["full_capacity_ah"] != nil { self.full_capacity_ah = Contract.num(document, "full_capacity_ah") } else { self.full_capacity_ah = nil }
+        if document["charge_voltage_v"] != nil { self.charge_voltage_v = Contract.num(document, "charge_voltage_v") } else { self.charge_voltage_v = nil }
+        if document["discharge_voltage_v"] != nil { self.discharge_voltage_v = Contract.num(document, "discharge_voltage_v") } else { self.discharge_voltage_v = nil }
+        if document["charge_current_a"] != nil { self.charge_current_a = Contract.num(document, "charge_current_a") } else { self.charge_current_a = nil }
+        if document["discharge_current_a"] != nil { self.discharge_current_a = Contract.num(document, "discharge_current_a") } else { self.discharge_current_a = nil }
+    }
+
+    /// The document the message was read from, with the members the schema names and no other.
+    public func toJSON() -> [String: Any] {
+        var out: [String: Any] = [:]
+        if let value = self.modules_total { out["modules_total"] = value }
+        if let value = self.modules_present { out["modules_present"] = value }
+        if let value = self.modules_sleep { out["modules_sleep"] = value }
+        if let value = self.soc_percent { out["soc_percent"] = value }
+        if let value = self.health_percent { out["health_percent"] = value }
+        if let value = self.remaining_ah { out["remaining_ah"] = value }
+        if let value = self.full_capacity_ah { out["full_capacity_ah"] = value }
+        if let value = self.charge_voltage_v { out["charge_voltage_v"] = value }
+        if let value = self.discharge_voltage_v { out["discharge_voltage_v"] = value }
+        if let value = self.charge_current_a { out["charge_current_a"] = value }
+        if let value = self.discharge_current_a { out["discharge_current_a"] = value }
+        return out
+    }
+}
+
 extension Contract.SolarBattery {
     /// The message from a document that has passed its schema.
     public init(reading document: [String: Any]) {
@@ -3231,6 +3493,7 @@ extension Contract.SolarBattery {
         if document["protecting"] != nil { self.protecting = Contract.flag(document, "protecting") } else { self.protecting = nil }
         if document["charge_mos"] != nil { self.charge_mos = Contract.int(document, "charge_mos") } else { self.charge_mos = nil }
         if document["discharge_mos"] != nil { self.discharge_mos = Contract.int(document, "discharge_mos") } else { self.discharge_mos = nil }
+        if document["bms_system"] != nil { self.bms_system = Contract.SolarBatteryBmsSystem(reading: Contract.objAt(document, "bms_system")) } else { self.bms_system = nil }
     }
 
     /// The document the message was read from, with the members the schema names and no other.
@@ -3264,6 +3527,7 @@ extension Contract.SolarBattery {
         if let value = self.protecting { out["protecting"] = value }
         if let value = self.charge_mos { out["charge_mos"] = value }
         if let value = self.discharge_mos { out["discharge_mos"] = value }
+        if let value = self.bms_system { out["bms_system"] = value.toJSON() }
         return out
     }
 }

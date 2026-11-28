@@ -23,7 +23,7 @@
   <img src="https://img.shields.io/badge/UI-SwiftUI-0a84ff.svg" alt="UI">
   <img src="https://img.shields.io/badge/Languages-8-00E5FF.svg" alt="Idiomas">
   <img src="https://img.shields.io/badge/Tests-555%20passing-2ea44f.svg" alt="Pruebas">
-  <img src="https://img.shields.io/badge/Version-0.0.9-0f6cbd.svg" alt="Versión">
+  <img src="https://img.shields.io/badge/Version-0.1.0-0f6cbd.svg" alt="Versión">
   <img src="https://img.shields.io/badge/Maturity-scaffolding-FFB020.svg" alt="Madurez">
 </p>
 
@@ -37,7 +37,7 @@
 
 | | |
 |---|---|
-| Versión | `0.0.9` |
+| Versión | `0.1.0` |
 | Madurez | Andamiaje |
 | Función | Cliente de operador para iPhone de ARMOR-SERVER (familia: Clients, padre: ARMOR-SERVER) |
 | Tecnología | Swift 5.9+ / SwiftUI, iOS 16+ |
@@ -256,7 +256,7 @@ El README y los textos existen en inglés, español, francés, italiano, alemán
 * **[ARMOR-NODE-ELECTRICAL](https://github.com/JuanenRac/ARMOR-NODE-ELECTRICAL)** - Nodo eléctrico: medidores, el mensaje de las lecturas de la red y las reglas de maniobra
 * **[ARMOR-NODE-ALARM](https://github.com/JuanenRac/ARMOR-NODE-ALARM)** - Nodo y panel de alarma: zonas, armado, retardos, sirena y PIN, con el servidor o sin él
 * **[ARMOR-NODE-HMI](https://github.com/JuanenRac/ARMOR-NODE-HMI)** - Panel táctil: el estado del sistema en una pantalla de pared, armar y reconocer, y el hogar del asistente de voz
-* **[ARMOR-NODE-SOLAR-HMI](https://github.com/JuanenRac/ARMOR-NODE-SOLAR-HMI)** - Pantalla táctil solar: las baterías y los inversores tal como los conoce ARMOR-SERVER (fase inicial: aún sin firmware)
+* **[ARMOR-NODE-SOLAR-HMI](https://github.com/JuanenRac/ARMOR-NODE-SOLAR-HMI)** - Pantalla táctil solar: las baterías y los inversores tal como los conoce ARMOR-SERVER (fase inicial: un firmware compila, nunca ejecutado en una placa)
 * **[ARMOR-NETWORK](https://github.com/JuanenRac/ARMOR-NETWORK)** - La red local: sus dispositivos, internet y lo que cambia
 * **[ARMOR-SERVER](https://github.com/JuanenRac/ARMOR-SERVER)** - Coordinador central: telemetría, alarmas, dispositivos, lecturas solares y cámaras
 * **[ARMOR-STUDIO](https://github.com/JuanenRac/ARMOR-STUDIO)** - Consola web: cámaras, radar, alarmas, energía solar y el diseñador 2D/3D del emplazamiento
