@@ -76,6 +76,7 @@ public final class ArmorApiClient: ArmorApi, @unchecked Sendable {
     }
 
     public func solar(_ origin: String) async throws -> SolarOverview { SolarParser.overview(try await getJson(origin, "/api/v1/solar")) }
+    public func refusedBatteries(_ origin: String) async throws -> [RefusedBattery] { RefusedBattery.fromIngest(try await getJson(origin, "/api/v1/system/ingest")) }
     public func solarHistory(_ origin: String, request: HistoryRequest) async throws -> SolarHistory {
         let module = request.module.map { "&module=" + String($0) } ?? ""
         let query = "node=" + Self.part(request.node) + "&device=" + Self.part(request.device) + "&minutes=" + String(request.minutes) + module

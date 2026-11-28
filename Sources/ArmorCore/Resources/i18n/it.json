@@ -1307,5 +1307,6 @@
  "Límites recomendados": "Limiti consigliati",
  "al cargar %s": "in carica %s",
  "al descargar %s": "in scarica %s",
- "Módulos dormidos": "Moduli in riposo"
+ "Módulos dormidos": "Moduli in riposo",
+ "El servidor rechaza las lecturas que envía %s, así que lo que se ve de él está atrasado o falta. Motivo: %s. Comprueba que el servidor está al día.": "Il server rifiuta le letture inviate da %s, quindi quello che si vede è vecchio o manca. Motivo: %s. Controlla che il server sia aggiornato."
 }

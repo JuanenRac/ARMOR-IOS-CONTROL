@@ -4,6 +4,8 @@ All notable changes to this project are documented here.
 
 ## [Unreleased]
 
+- **The solar screen says when the server is refusing a battery stack's readings:** it names the node and the equipment and gives the server's reason. An older server, or an account that may not ask, shows nothing. Not tried on an iPhone against a refusing server.
+
 - **The solar screen shows what the equipment counts:** the energy of the panels and of the load (today, month, year and total) that an inverter counts, and what a battery stack says of itself with its recommended limits and modules asleep, each only when said.
 
 ## [0.1.0] - The iPhone app compiles again and refuses plain http after https

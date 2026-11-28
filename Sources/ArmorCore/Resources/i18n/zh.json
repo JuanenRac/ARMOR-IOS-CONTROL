@@ -1307,5 +1307,6 @@
  "Límites recomendados": "建议限值",
  "al cargar %s": "充电时 %s",
  "al descargar %s": "放电时 %s",
- "Módulos dormidos": "休眠模块"
+ "Módulos dormidos": "休眠模块",
+ "El servidor rechaza las lecturas que envía %s, así que lo que se ve de él está atrasado o falta. Motivo: %s. Comprueba que el servidor está al día.": "服务器拒收 %s 发送的读数，因此界面上的数据是旧的或缺失的。原因：%s。请确认服务器为最新版本。"
 }

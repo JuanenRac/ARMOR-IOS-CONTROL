@@ -1307,5 +1307,6 @@
  "Límites recomendados": "Limites recommandées",
  "al cargar %s": "en charge %s",
  "al descargar %s": "en décharge %s",
- "Módulos dormidos": "Modules en veille"
+ "Módulos dormidos": "Modules en veille",
+ "El servidor rechaza las lecturas que envía %s, así que lo que se ve de él está atrasado o falta. Motivo: %s. Comprueba que el servidor está al día.": "Le serveur refuse les mesures envoyées par %s : ce qui est affiché est donc ancien ou absent. Motif : %s. Vérifiez que le serveur est à jour."
 }

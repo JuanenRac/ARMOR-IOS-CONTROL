@@ -1307,5 +1307,6 @@
  "Límites recomendados": "Limites recomendados",
  "al cargar %s": "a carregar %s",
  "al descargar %s": "a descarregar %s",
- "Módulos dormidos": "Módulos em repouso"
+ "Módulos dormidos": "Módulos em repouso",
+ "El servidor rechaza las lecturas que envía %s, así que lo que se ve de él está atrasado o falta. Motivo: %s. Comprueba que el servidor está al día.": "O servidor recusa as leituras que %s envia, por isso o que se vê está desatualizado ou em falta. Motivo: %s. Verifique se o servidor está atualizado."
 }
